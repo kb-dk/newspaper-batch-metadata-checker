@@ -6,11 +6,11 @@
 
     <parent>
         <groupId>dk.statsbiblioteket.newspaper</groupId>
-        <artifactId>newspaper-batch-event-framework</artifactId>
+        <artifactId>newspaper-parent</artifactId>
         <version>0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>sample-autonomous-component</artifactId>
+    <artifactId>newspaper-md5-checker</artifactId>
     <version>0.1-SNAPSHOT</version>
 
     <dependencies>
