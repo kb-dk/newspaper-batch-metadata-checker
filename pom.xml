@@ -19,6 +19,11 @@
             <artifactId>autonomous-component</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>dk.statsbiblioteket.newspaper</groupId>
+            <artifactId>tree-processor</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -28,7 +33,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>dk.statsbiblioteket.medieplatform.autonomous.SampleComponent</mainClass>
+                            <mainClass>dk.statsbiblioteket.newspaper.autonomous.md5checker.MD5CheckerComponent</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
