@@ -1,4 +1,4 @@
-package dk.statsbiblioteket.newspaper.autonomous;
+package dk.statsbiblioteket.autonomous.autonomous;
 
 import com.netflix.curator.framework.CuratorFramework;
 import com.netflix.curator.framework.CuratorFrameworkFactory;

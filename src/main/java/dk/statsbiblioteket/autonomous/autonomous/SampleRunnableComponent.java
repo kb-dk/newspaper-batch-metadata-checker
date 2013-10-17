@@ -1,10 +1,10 @@
-package dk.statsbiblioteket.newspaper.autonomous;
+package dk.statsbiblioteket.autonomous.autonomous;
 
 import dk.statsbiblioteket.autonomous.AbstractRunnableComponent;
 import dk.statsbiblioteket.autonomous.ResultCollector;
 import dk.statsbiblioteket.autonomous.iterator.common.ParsingEvent;
 import dk.statsbiblioteket.autonomous.iterator.common.TreeIterator;
-import dk.statsbiblioteket.newspaper.processmonitor.datasources.Batch;
+import dk.statsbiblioteket.autonomous.processmonitor.datasources.Batch;
 
 import java.util.Date;
 import java.util.Properties;
