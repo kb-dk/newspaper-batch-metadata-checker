@@ -42,62 +42,6 @@ public class MD5CheckerComponent
         this.properties = properties;
     }
 
-    public static void main(String[] args)
-            throws
-            Exception {
-
-        Properties properties = parseArgs(args);
-
-        RunnableComponent component = new MD5CheckerComponent(properties);
-
-
-        CuratorFramework lockClient = CuratorFrameworkFactory.newClient(properties.getProperty("lockserver"),
-                                                                        new ExponentialBackoffRetry(1000, 3));
-        lockClient.start();
-        BatchEventClient eventClient = createEventClient(properties);
-        AutonomousComponent autonomous = new AutonomousComponent(component, properties, lockClient, eventClient, 1,
-                                                                  toEvents(properties.getProperty("pastevents")),
-                                                                  toEvents(properties.getProperty("pasteventsExclude")),
-                                                                  toEvents(properties.getProperty("futureEvents")));
-        Map<String, Boolean> result = autonomous.call();
-        //TODO what to do with the result?
-    }
-
-    private static List<EventID> toEvents(String events) {
-        String[] eventSplits = events.split(",");
-        List<EventID> result = new ArrayList<>();
-        for (String eventSplit : eventSplits) {
-            try {
-            result.add(EventID.valueOf(eventSplit.trim()));
-            } catch (IllegalArgumentException e){
-                //TODO log this
-            }
-        }
-        return result;
-    }
-
-    private static BatchEventClient createEventClient(Properties properties) {
-        return new BatchEventClientImpl(properties.getProperty("summa"), properties.getProperty("domsUrl"),
-                                        properties.getProperty("domsUser"), properties.getProperty("domsPass"),
-                                        properties.getProperty("pidGenerator"));
-    }
-
-    private static Properties parseArgs(String[] args)
-            throws
-            IOException {
-        Properties properties = new Properties();
-        for (int i = 0;
-             i < args.length;
-             i++) {
-            String arg = args[i];
-            if (arg.equals("-c")) {
-                String configFile = args[i + 1];
-                properties.load(new FileInputStream(configFile));
-            }
-        }
-        return properties;
-    }
-
     @Override
     public String getComponentName() {
         return "MD5_checker_component";
@@ -128,12 +72,14 @@ public class MD5CheckerComponent
     }
 
     @Override
-    public void doWorkOnBatch(Batch batch,
-                              ResultCollector resultCollector)
-            throws
-            Exception {
+    /**
+     * For each attribute in batch: Calculate checksum and compare with metadata.
+     *
+     * @param batch The batch to check
+     * @param resultCollector Collector to get the result.
+     */
+    public void doWorkOnBatch(Batch batch, ResultCollector resultCollector) throws Exception {
         TreeIterator iterator = createIterator(properties, batch);
-
         resultCollector.setSuccess(true);
         while (iterator.hasNext()) {
             ParsingEvent next = iterator.next();
