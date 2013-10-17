@@ -1,12 +1,10 @@
-package dk.statsbiblioteket.autonomous.autonomous;
+package dk.statsbiblioteket.medieplatform.autonomous;
 
 import com.netflix.curator.framework.CuratorFramework;
 import com.netflix.curator.framework.CuratorFrameworkFactory;
 import com.netflix.curator.retry.ExponentialBackoffRetry;
 import dk.statsbibliokeket.newspaper.batcheventFramework.BatchEventClient;
 import dk.statsbibliokeket.newspaper.batcheventFramework.BatchEventClientImpl;
-import dk.statsbiblioteket.autonomous.AutonomousComponent;
-import dk.statsbiblioteket.autonomous.RunnableComponent;
 
 import java.io.FileInputStream;
 import java.io.IOException;

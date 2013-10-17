@@ -1,21 +1,16 @@
-package dk.statsbiblioteket.autonomous.autonomous;
+package dk.statsbiblioteket.medieplatform.autonomous;
 
-import dk.statsbiblioteket.autonomous.AbstractRunnableComponent;
-import dk.statsbiblioteket.autonomous.ResultCollector;
-import dk.statsbiblioteket.autonomous.iterator.common.ParsingEvent;
-import dk.statsbiblioteket.autonomous.iterator.common.TreeIterator;
-import dk.statsbiblioteket.autonomous.processmonitor.datasources.Batch;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.ParsingEvent;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.TreeIterator;
 
 import java.util.Date;
 import java.util.Properties;
 
 public class SampleRunnableComponent extends AbstractRunnableComponent {
 
-    private Properties properties;
 
     public SampleRunnableComponent(Properties properties) {
-        //To change body of created methods use File | Settings | File Templates.
-        this.properties = properties;
+        super(properties);
     }
 
 
@@ -41,7 +36,7 @@ public class SampleRunnableComponent extends AbstractRunnableComponent {
                               ResultCollector resultCollector)
             throws
             Exception {
-        TreeIterator iterator = createIterator(properties, batch);
+        TreeIterator iterator = createIterator(batch);
 
         int numberOfFiles = 0;
         int numberOfDirectories = 0;
