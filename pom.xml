@@ -33,7 +33,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>dk.statsbiblioteket.newspaper.autonomous.md5checker.MD5CheckerComponent</mainClass>
+                            <mainClass>dk.statsbiblioteket.newspaper.md5checker.MD5CheckerComponent</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

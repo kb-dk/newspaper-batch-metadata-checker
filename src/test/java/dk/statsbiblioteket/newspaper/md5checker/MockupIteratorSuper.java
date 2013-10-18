@@ -1,12 +1,10 @@
-package dk.statsbiblioteket.newspaper.autonomous.md5checker;
+package dk.statsbiblioteket.newspaper.md5checker;
 
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.TreeIterator;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.filesystem.transforming.TransformingIteratorForFileSystems;
-import dk.statsbiblioteket.newspaper.autonomous.md5checker.MD5CheckerComponent;
 
 import java.io.File;
-import java.net.URISyntaxException;
 import java.util.Properties;
 import java.util.regex.Pattern;
 

@@ -1,4 +1,4 @@
-package dk.statsbiblioteket.newspaper.autonomous.md5checker;
+package dk.statsbiblioteket.newspaper.md5checker;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
