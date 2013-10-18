@@ -28,8 +28,8 @@ public class MockupIteratorSuper extends MD5CheckerComponent {
      */
     @Override
     protected TreeIterator createIterator(Batch batch) {
-        File dataDir;
-        dataDir = new File(Thread.currentThread().getContextClassLoader().getResource("scratch").getFile());
-        return new TransformingIteratorForFileSystems(dataDir, Pattern.quote("."),".*\\.jp2$",".md5");
+        File dataDir = new File(Thread.currentThread().getContextClassLoader().getResource("scratch").getFile());
+        File batchDir = new File(dataDir, batch.getFullID());
+        return new TransformingIteratorForFileSystems(batchDir, Pattern.quote("."),".*\\.jp2$",".md5");
     }
 }
