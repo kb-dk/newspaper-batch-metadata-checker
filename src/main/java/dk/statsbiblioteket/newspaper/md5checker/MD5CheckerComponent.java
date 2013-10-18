@@ -24,11 +24,8 @@ public class MD5CheckerComponent
 
     private Logger log = LoggerFactory.getLogger(getClass());
 
-    private Properties properties;
-
     public MD5CheckerComponent(Properties properties) {
         super(properties);
-        this.properties = properties;
     }
 
     @Override
