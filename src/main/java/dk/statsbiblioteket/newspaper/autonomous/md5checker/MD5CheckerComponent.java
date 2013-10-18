@@ -73,8 +73,22 @@ public class MD5CheckerComponent
                 }
                 case Attribute: {
                     AttributeParsingEvent attributeEvent = (AttributeParsingEvent) next;
-                    String checksum = attributeEvent.getChecksum();
-                    String calculatedChecksum = calculateChecksum(attributeEvent.getData());
+                    String checksum;
+                    try {
+                        checksum = attributeEvent.getChecksum();
+                    } catch (IOException e) {
+                        resultCollector.addFailure(attributeEvent.getName(), "checksum", getFullName(),
+                                                   "Error getting checksum: " + e.toString());
+                        break;
+                    }
+                    String calculatedChecksum;
+                    try {
+                        calculatedChecksum = calculateChecksum(attributeEvent.getData());
+                    } catch (IOException e) {
+                        resultCollector.addFailure(attributeEvent.getName(), "checksum", getFullName(),
+                                                   "Error calculating checksum on data: " + e.toString());
+                        break;
+                    }
                     if (!calculatedChecksum.equalsIgnoreCase(checksum)) {
                         resultCollector.addFailure(attributeEvent.getName(), "checksum", getFullName(),
                                                    "Expected checksum " + checksum + ", but was " + calculatedChecksum);
