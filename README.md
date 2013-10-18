@@ -1,5 +1,5 @@
-newspaper-md5-checker
+newspaper-metadata-checker
 ===============================
 
-This is an autonomous component for checking md5sums in the structure.
+This is an autonomous component for checking metadata in the structure.
 

@@ -1,4 +1,4 @@
-package dk.statsbiblioteket.newspaper.md5checker;
+package dk.statsbiblioteket.newspaper.metadatachecker;
 
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.TreeIterator;
@@ -8,7 +8,7 @@ import java.io.File;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
-public class MockupIteratorSuper extends MD5CheckerComponent {
+public class MockupIteratorSuper extends MetadataCheckerComponent {
     /**
      * Constructor matching super. Super requires a properties to be able to initialise the tree iterator, if needed.
      * If you do not need the tree iterator, ignore properties.

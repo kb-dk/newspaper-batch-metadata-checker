@@ -10,7 +10,7 @@
         <version>0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>newspaper-md5-checker</artifactId>
+    <artifactId>newspaper-batch-metadata-checker</artifactId>
     <version>0.1-SNAPSHOT</version>
 
     <dependencies>
@@ -49,7 +49,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>dk.statsbiblioteket.newspaper.md5checker.MD5CheckerComponent</mainClass>
+                            <mainClass>dk.statsbiblioteket.newspaper.metadatachecker.MetadataChecker</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

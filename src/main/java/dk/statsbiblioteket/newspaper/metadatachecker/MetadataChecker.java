@@ -1,4 +1,4 @@
-package dk.statsbiblioteket.newspaper.md5checker;
+package dk.statsbiblioteket.newspaper.metadatachecker;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,10 +10,10 @@ import java.util.Map;
 import java.util.Properties;
 
 /** This is a sample component to serve as a guide to developers */
-public class MD5Checker {
+public class MetadataChecker {
 
 
-    private static Logger log = LoggerFactory.getLogger(MD5Checker.class);
+    private static Logger log = LoggerFactory.getLogger(MetadataChecker.class);
 
     /**
      * The class must have a main method, so it can be started as a command line tool
@@ -32,7 +32,7 @@ public class MD5Checker {
         Properties properties = AutonomousComponentUtils.parseArgs(args);
 
         //make a new runnable component from the properties
-        RunnableComponent component = new MD5CheckerComponent(properties);
+        RunnableComponent component = new MetadataCheckerComponent(properties);
 
         Map<String, Boolean> result = AutonomousComponentUtils.startAutonomousComponent(properties, component);
 
