@@ -77,6 +77,7 @@ public class MD5CheckerComponent
                     try {
                         checksum = attributeEvent.getChecksum();
                     } catch (IOException e) {
+                        log.warn("Error getting checksum in {}", attributeEvent.getName(), e);
                         resultCollector.addFailure(attributeEvent.getName(), "checksum", getFullName(),
                                                    "Error getting checksum: " + e.toString());
                         break;
@@ -85,11 +86,14 @@ public class MD5CheckerComponent
                     try {
                         calculatedChecksum = calculateChecksum(attributeEvent.getData());
                     } catch (IOException e) {
+                        log.warn("Error calculating checksum on data in {}", attributeEvent.getName(), e);
                         resultCollector.addFailure(attributeEvent.getName(), "checksum", getFullName(),
                                                    "Error calculating checksum on data: " + e.toString());
                         break;
                     }
                     if (!calculatedChecksum.equalsIgnoreCase(checksum)) {
+                        log.debug("Expected checksum {}, but was {} in {}", checksum, calculatedChecksum,
+                                  attributeEvent.getName());
                         resultCollector.addFailure(attributeEvent.getName(), "checksum", getFullName(),
                                                    "Expected checksum " + checksum + ", but was " + calculatedChecksum);
                     }
