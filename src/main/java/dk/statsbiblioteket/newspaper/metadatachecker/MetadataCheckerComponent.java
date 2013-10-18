@@ -48,6 +48,8 @@ public class MetadataCheckerComponent
      * @param resultCollector Collector to get the result.
      */
     public void doWorkOnBatch(Batch batch, ResultCollector resultCollector) throws Exception {
+        //TODO: This is probably handled best by using the event framework from Jeppe and Mikis. Move this to framework?
+
         TreeIterator iterator = createIterator(batch);
         while (iterator.hasNext()) {
             ParsingEvent next = iterator.next();
