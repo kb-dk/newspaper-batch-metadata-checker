@@ -1,6 +1,8 @@
-package dk.statsbiblioteket.medieplatform.newspaper;
+package dk.statsbiblioteket.newspaper.metadatachecker;
 
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
+import dk.statsbiblioteket.newspaper.metadatachecker.jpylyzer.SchemaValidator;
+import dk.statsbiblioteket.newspaper.metadatachecker.jpylyzer.Validator;
 import dk.statsbiblioteket.util.Strings;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -10,7 +12,7 @@ public class SchemaValidatorTest {
     public void testValidate()
             throws
             Exception {
-        Validator validator = new SchemaValidator("jpylizer.xsd", null);
+        Validator validator = new SchemaValidator("jpylizer.xsd");
         String jpylizerFile = Strings.flush(Thread.currentThread().getContextClassLoader()
                                                   .getResourceAsStream("valid.xml"));
         ResultCollector results = new ResultCollector("test", "0.1");
@@ -24,7 +26,7 @@ public class SchemaValidatorTest {
        public void testSchemaInvalidValidate()
                throws
                Exception {
-           Validator validator = new SchemaValidator("jpylizer.xsd", null);
+           Validator validator = new SchemaValidator("jpylizer.xsd");
            String jpylizerFile = Strings.flush(Thread.currentThread().getContextClassLoader()
                                                      .getResourceAsStream("schemaInvalid.xml"));
            ResultCollector results = new ResultCollector("test", "0.1");

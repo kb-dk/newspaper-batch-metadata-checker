@@ -18,13 +18,17 @@ import java.util.Properties;
 public class MetadataCheckerComponent
         extends AbstractRunnableComponent {
     private Logger log = LoggerFactory.getLogger(getClass());
+    private boolean atNinestars;
 
     /**
      * Initialise metadata checker component. For used properties {@link AbstractRunnableComponent#createIterator}.
      * @param properties Properties for initialising component.
+     * @param atNinestars
      */
-    public MetadataCheckerComponent(Properties properties) {
+    public MetadataCheckerComponent(Properties properties,
+                                    boolean atNinestars) {
         super(properties);
+        this.atNinestars = atNinestars;
     }
 
     @Override
@@ -52,7 +56,7 @@ public class MetadataCheckerComponent
      */
     public void doWorkOnBatch(Batch batch, ResultCollector resultCollector) throws Exception {
         log.info("Starting validation of '{}'", batch.getFullID());
-        MetadataChecksFactory metadataChecksFactory = new MetadataChecksFactory(resultCollector);
+        MetadataChecksFactory metadataChecksFactory = new MetadataChecksFactory(resultCollector,atNinestars);
         List<TreeEventHandler> eventHandlers = metadataChecksFactory.createEventHandlers();
         EventRunner eventRunner = new EventRunner(createIterator(batch));
         eventRunner.runEvents(eventHandlers);

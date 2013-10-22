@@ -1,6 +1,7 @@
-package dk.statsbiblioteket.medieplatform.newspaper;
+package dk.statsbiblioteket.newspaper.metadatachecker;
 
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
+import dk.statsbiblioteket.newspaper.metadatachecker.jpylyzer.SchematronValidator;
 import dk.statsbiblioteket.util.Strings;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -11,9 +12,8 @@ public class SchematronValidatorTest {
             throws
             Exception {
         String jpylizerFile = Strings.flush(Thread.currentThread().getContextClassLoader()
-                                         .getResourceAsStream(
-                                                 "valid.xml"));
-        SchematronValidator validator = new SchematronValidator("sb-jp2.sch", null);
+                                         .getResourceAsStream("valid.xml"));
+        SchematronValidator validator = new SchematronValidator("sb-jp2.sch");
         ResultCollector results = new ResultCollector("test", "0.1");
         validator.validate("valid.xml",jpylizerFile,results);
         System.out.println(results.toReport());
@@ -29,7 +29,7 @@ public class SchematronValidatorTest {
             Exception {
         String jpylizerFile = Strings.flush(Thread.currentThread().getContextClassLoader()
                                                   .getResourceAsStream("invalid.xml"));
-        SchematronValidator validator = new SchematronValidator("sb-jp2.sch", null);
+        SchematronValidator validator = new SchematronValidator("sb-jp2.sch");
         ResultCollector results = new ResultCollector("test", "0.1");
         validator.validate("invalid.xml",jpylizerFile,results);
         System.out.println(results.toReport());

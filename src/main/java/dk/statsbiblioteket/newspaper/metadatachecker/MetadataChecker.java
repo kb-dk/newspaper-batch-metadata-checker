@@ -23,14 +23,14 @@ public class MetadataChecker {
      * @throws Exception
      * @see AutonomousComponentUtils#parseArgs(String[])
      */
-    public static void main(String[] args) throws Exception {
-        log.info("Starting with args {}", args);
+    public static void main(String... args) throws Exception {
+        log.info("Starting with args {}", new Object[]{args});
 
         //Parse the args to a properties construct
         Properties properties = AutonomousComponentUtils.parseArgs(args);
 
         //make a new runnable component from the properties
-        RunnableComponent component = new MetadataCheckerComponent(properties);
+        RunnableComponent component = new MetadataCheckerComponent(properties, false);
 
         Map<String, Boolean> result = AutonomousComponentUtils.startAutonomousComponent(properties, component);
 

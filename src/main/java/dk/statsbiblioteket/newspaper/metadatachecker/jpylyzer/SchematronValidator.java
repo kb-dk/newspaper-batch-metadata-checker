@@ -1,4 +1,4 @@
-package dk.statsbiblioteket.medieplatform.newspaper;
+package dk.statsbiblioteket.newspaper.metadatachecker.jpylyzer;
 
 import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.schematron.SchematronException;
@@ -13,8 +13,6 @@ import org.oclc.purl.dsdl.svrl.SchematronOutputType;
 import org.oclc.purl.dsdl.svrl.SuccessfulReport;
 import org.w3c.dom.Document;
 
-import java.util.Properties;
-
 /** Validator for Schematron. Validate the given xml against a schematron profile */
 public class SchematronValidator
         implements Validator {
@@ -26,10 +24,9 @@ public class SchematronValidator
      * Create a new schematron validator. Resolve the schematronPath on the classpath
      *
      * @param schematronPath the class path to the schematron profile
-     * @param properties
      */
-    public SchematronValidator(String schematronPath,
-                               Properties properties) {
+    public SchematronValidator(String schematronPath
+                               ) {
         schemaResource = new ClassPathResource(schematronPath);
 
     }

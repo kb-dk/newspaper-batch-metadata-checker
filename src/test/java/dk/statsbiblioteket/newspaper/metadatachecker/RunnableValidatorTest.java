@@ -1,13 +1,7 @@
-package dk.statsbiblioteket.medieplatform.newspaper;
-
-import dk.statsbiblioteket.medieplatform.autonomous.Batch;
-import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
-import junit.framework.Assert;
-import org.testng.annotations.Test;
-
-import java.util.Properties;
+package dk.statsbiblioteket.newspaper.metadatachecker;
 
 public class RunnableValidatorTest {
+/*
     @Test(groups = "integrationTest")
     public void testDoWorkOnBatch()
             throws
@@ -25,4 +19,5 @@ public class RunnableValidatorTest {
         Assert.assertTrue(results.isSuccess());
 
     }
+*/
 }

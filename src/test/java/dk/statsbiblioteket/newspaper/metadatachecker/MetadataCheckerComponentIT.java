@@ -38,8 +38,9 @@ public class MetadataCheckerComponentIT {
         batch.setBatchID(TEST_BATCH_ID);
         batch.setRoundTripNumber(1);
 
-        EventHandlerFactory eventHandlerFactory = new MetadataChecksFactory(resultCollector);
+        EventHandlerFactory eventHandlerFactory = new MetadataChecksFactory(resultCollector,true);
         batchStructureChecker.runEvents(eventHandlerFactory.createEventHandlers());
+        System.out.println(resultCollector.toReport());
         assertTrue(resultCollector.isSuccess());
         //Assert.fail();
     }

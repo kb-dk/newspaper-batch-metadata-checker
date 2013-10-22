@@ -1,4 +1,5 @@
-package dk.statsbiblioteket.medieplatform.newspaper;
+package dk.statsbiblioteket.newspaper.metadatachecker.jpylyzer;
+
 
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 

@@ -13,7 +13,29 @@
     <artifactId>newspaper-batch-metadata-checker</artifactId>
     <version>0.1-SNAPSHOT</version>
 
+
+    <repositories>
+           <repository>
+               <id>phloc.com</id>
+               <url>http://repo.phloc.com/maven2</url>
+               <releases>
+                   <enabled>true</enabled>
+               </releases>
+               <snapshots>
+                   <enabled>true</enabled>
+               </snapshots>
+           </repository>
+       </repositories>
+
+
     <dependencies>
+        <!--schematron. This must be the first dependency, reason unknown-->
+        <dependency>
+            <groupId>com.phloc</groupId>
+            <artifactId>phloc-schematron</artifactId>
+            <version>2.6.2</version>
+        </dependency>
+
         <dependency>
             <groupId>dk.statsbiblioteket.newspaper</groupId>
             <artifactId>autonomous-component</artifactId>
@@ -38,8 +60,6 @@
             <artifactId>jcl-over-slf4j</artifactId>
         </dependency>
 
-
-
     </dependencies>
 
     <build>
@@ -50,6 +70,8 @@
                     <archive>
                         <manifest>
                             <mainClass>dk.statsbiblioteket.newspaper.metadatachecker.MetadataChecker</mainClass>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
                         </manifest>
                     </archive>
                 </configuration>
@@ -89,6 +111,29 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <forkMode>never</forkMode>
+
+                </configuration>
+            </plugin>
+
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <configuration>
+                    <systemPropertyVariables>
+                        <integration.test.newspaper.testdata>${integration.test.newspaper.testdata}
+                        </integration.test.newspaper.testdata>
+                    </systemPropertyVariables>
+                    <forkMode>never</forkMode>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 
