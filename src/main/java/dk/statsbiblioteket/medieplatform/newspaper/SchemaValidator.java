@@ -11,7 +11,7 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.StringReader;
 import java.net.URL;
 
 /**
@@ -40,9 +40,9 @@ public class SchemaValidator
 
     @Override
     public boolean validate(final String reference,
-                            InputStream xml,
+                            String xml,
                             final ResultCollector resultCollector) {
-        Source xmlFile = new StreamSource(xml);
+        Source xmlFile = new StreamSource(new StringReader(xml));
         SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         Schema schema;
         final boolean[] valid = {true};

@@ -13,8 +13,6 @@ import org.oclc.purl.dsdl.svrl.SchematronOutputType;
 import org.oclc.purl.dsdl.svrl.SuccessfulReport;
 import org.w3c.dom.Document;
 
-import java.io.InputStream;
-
 /** Validator for Schematron. Validate the given xml against a schematron profile */
 public class SchematronValidator
         implements Validator {
@@ -34,7 +32,7 @@ public class SchematronValidator
 
     @Override
     public boolean validate(String reference,
-                            InputStream contents,
+                            String contents,
                             ResultCollector resultCollector) {
 
         SchematronResourcePure schematron = new SchematronResourcePure(schemaResource);
@@ -43,7 +41,7 @@ public class SchematronValidator
         }
 
 
-        Document document = DOM.streamToDOM(contents);
+        Document document = DOM.stringToDOM(contents);
 
 
         SchematronOutputType result;

@@ -8,21 +8,34 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.DataFileNode
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.DataFileNodeEndsParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.ParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.TreeIterator;
+import dk.statsbiblioteket.util.Strings;
+import dk.statsbiblioteket.util.console.ProcessRunner;
 import dk.statsbiblioteket.util.xml.DOM;
 import org.w3c.dom.Document;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * The validator as a runnable component
+ */
 public class RunnableValidator
         extends AbstractRunnableComponent {
 
     private final Validator validator;
     private boolean atNinestars = false;
+    private String jpylyzerPath;
 
-    protected RunnableValidator(Properties properties)
+    /**
+     * Create a new runnable validator. It uses the optional property field "controlPolicies" to denote the path to
+     * the control policies
+     * @param properties the properties
+     * @throws FileNotFoundException if the control policies file cannot be read
+     */
+    public RunnableValidator(Properties properties)
             throws
             FileNotFoundException {
         super(properties);
@@ -35,9 +48,18 @@ public class RunnableValidator
         }
         validator = new ValidatorFactory(controlPoliciesDocument).createValidator();
 
+
     }
 
-    protected RunnableValidator(Properties properties,
+    /**
+     * Constructor. Use this to set the atNinestars field
+     * @param properties
+     * @param atNinestars if true, it will attempt to run jpylizer when encountering a .jp2 file, instead of expecting
+     *                    such jpylizer file to be in the tree
+     * @throws FileNotFoundException if the control policies cannot be found
+     * @see #RunnableValidator(java.util.Properties)
+     */
+    public RunnableValidator(Properties properties,
                                 boolean atNinestars)
             throws
             FileNotFoundException {
@@ -87,12 +109,16 @@ public class RunnableValidator
                         AttributeParsingEvent attributeParsingEvent = (AttributeParsingEvent) event;
                         if (event.getName().endsWith("/contents")) {
                             if (atNinestars) {
-                                InputStream jpylizerOutput = jpylize(attributeParsingEvent.getData());
-                                validator.validate(attributeParsingEvent.getName(), jpylizerOutput, resultCollector);
+                                File filePath = new File(getProperties().getProperty("scratch"),
+                                                         attributeParsingEvent.getName());
+                                InputStream jpylizerOutput = jpylize(filePath);
+                                validator.validate(attributeParsingEvent.getName(), Strings.flush(jpylizerOutput), resultCollector);
                             }
                         } else {
                             if (event.getName().endsWith("jpylizer.xml")) {
-                                validator.validate(attributeParsingEvent.getName(), attributeParsingEvent.getData(), resultCollector);
+
+                                validator.validate(attributeParsingEvent.getName(),
+                                                   Strings.flush(attributeParsingEvent.getData()), resultCollector);
                             }
                         }
                     }
@@ -101,7 +127,14 @@ public class RunnableValidator
         }
     }
 
-    private InputStream jpylize(InputStream data) {
-        return Thread.currentThread().getContextClassLoader().getResourceAsStream("jpylizer.xml");
+    private InputStream jpylize(File dataPath) {
+
+        ProcessRunner runner = new ProcessRunner(jpylyzerPath, dataPath.getAbsolutePath());
+        runner.run();
+        if (runner.getReturnCode() == 0){
+            return runner.getProcessOutput();
+        } else {
+            throw new RuntimeException("failed to run jpylyzer, returncode:"+runner.getReturnCode()+", stdOut:"+runner.getProcessOutputAsString()+" stdErr:"+runner.getProcessErrorAsString());
+        }
     }
 }
