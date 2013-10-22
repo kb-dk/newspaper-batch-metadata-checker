@@ -9,7 +9,7 @@
 
         <!-- Valid JP2 test -->
         <s:rule context="/jpylyzer">
-            <s:assert test="isValidJP2 = 'False'">Invalid JP2</s:assert>
+            <s:assert test="isValidJP2 = 'True'">Invalid JP2</s:assert>
         </s:rule>
 
         <!-- Colour space test -->

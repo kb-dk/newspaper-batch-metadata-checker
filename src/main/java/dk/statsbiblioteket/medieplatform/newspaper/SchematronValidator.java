@@ -4,6 +4,7 @@ import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.schematron.SchematronException;
 import com.phloc.schematron.pure.SchematronResourcePure;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
+import dk.statsbiblioteket.util.Strings;
 import dk.statsbiblioteket.util.xml.DOM;
 import org.oclc.purl.dsdl.svrl.ActivePattern;
 import org.oclc.purl.dsdl.svrl.FailedAssert;
@@ -14,21 +15,20 @@ import org.w3c.dom.Document;
 
 import java.io.InputStream;
 
-/**
- * Validator for Schematron. Validate the given xml against a schematron profile
- */
-public class SchematronValidator implements Validator {
+/** Validator for Schematron. Validate the given xml against a schematron profile */
+public class SchematronValidator
+        implements Validator {
 
 
     private final ClassPathResource schemaResource;
 
     /**
      * Create a new schematron validator. Resolve the schematronPath on the classpath
+     *
      * @param schematronPath the class path to the schematron profile
      */
     public SchematronValidator(String schematronPath) {
-        schemaResource =
-                new ClassPathResource(schematronPath);
+        schemaResource = new ClassPathResource(schematronPath);
 
     }
 
@@ -38,10 +38,9 @@ public class SchematronValidator implements Validator {
                             ResultCollector resultCollector) {
 
         SchematronResourcePure schematron = new SchematronResourcePure(schemaResource);
-        if (! schematron.isValidSchematron()){
+        if (!schematron.isValidSchematron()) {
             return false;
         }
-
 
 
         Document document = DOM.streamToDOM(contents);
@@ -51,7 +50,7 @@ public class SchematronValidator implements Validator {
         try {
             result = schematron.applySchematronValidation(document);
         } catch (SchematronException e) {
-            addFailure(resultCollector, e);
+            addFailure(resultCollector, e, null);
             return false;
         }
 
@@ -61,7 +60,12 @@ public class SchematronValidator implements Validator {
                 success = false;
                 FailedAssert failedAssert = (FailedAssert) o;
                 //TODO find a better way to report the errors
-                resultCollector.addFailure(reference,"schema","component",failedAssert.toString());
+                resultCollector.addFailure(reference,
+                                           "content",
+                                           getComponent(),
+                                           failedAssert.getText(),
+                                           failedAssert.getLocation(),
+                                           failedAssert.getTest());
             }
             if (o instanceof ActivePattern) {
                 ActivePattern activePattern = (ActivePattern) o;
@@ -80,7 +84,18 @@ public class SchematronValidator implements Validator {
     }
 
     private void addFailure(ResultCollector resultCollector,
-                            SchematronException e) {
-        //To change body of created methods use File | Settings | File Templates.
+                            SchematronException e,
+                            String reference) {
+        resultCollector.addFailure(reference, "exception", getComponent(), e.getMessage(), Strings.getStackTrace(e));
     }
+
+    /**
+     * Get the name of this component for error reporting purposes
+     *
+     * @return
+     */
+    private String getComponent() {
+        return "JPylizer_content_validator-" + getClass().getPackage().getImplementationVersion();
+    }
+
 }
