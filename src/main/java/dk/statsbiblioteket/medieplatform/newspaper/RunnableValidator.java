@@ -8,23 +8,40 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.DataFileNode
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.DataFileNodeEndsParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.ParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.TreeIterator;
+import dk.statsbiblioteket.util.xml.DOM;
+import org.w3c.dom.Document;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Properties;
 
 public class RunnableValidator
         extends AbstractRunnableComponent {
 
+    private final Validator validator;
     private boolean atNinestars = false;
 
-    protected RunnableValidator(Properties properties) {
+    protected RunnableValidator(Properties properties)
+            throws
+            FileNotFoundException {
         super(properties);
+        String controlPolicies = getProperties().getProperty("controlPolicies");
+        Document controlPoliciesDocument;
+        if (controlPolicies != null){
+            controlPoliciesDocument = DOM.streamToDOM(new FileInputStream(controlPolicies));
+        } else {
+            controlPoliciesDocument = DOM.streamToDOM(Thread.currentThread().getContextClassLoader().getResourceAsStream("defaultControlPolicies.xml"));
+        }
+        validator = new ValidatorFactory(controlPoliciesDocument).createValidator();
 
     }
 
     protected RunnableValidator(Properties properties,
-                                boolean atNinestars) {
-        super(properties);
+                                boolean atNinestars)
+            throws
+            FileNotFoundException {
+        this(properties);
         this.atNinestars = atNinestars;
     }
 
@@ -49,7 +66,7 @@ public class RunnableValidator
             throws
             Exception {
 
-        Validator validator = new ValidatorFactory().createValidator();
+
         TreeIterator iterator = createIterator(batch);
         boolean isInDataFile = false;
         while (iterator.hasNext()) {
