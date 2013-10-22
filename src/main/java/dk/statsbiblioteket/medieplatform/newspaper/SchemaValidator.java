@@ -10,7 +10,6 @@ import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -81,16 +80,7 @@ public class SchemaValidator
         return valid[0];
     }
 
-    @Override
-    public boolean validate(String reference,
-                            String contents,
-                            ResultCollector resultCollector) {
-        try {
-            return validate(reference, new ByteArrayInputStream(contents.getBytes("UTF-8")), resultCollector);
-        } catch (IOException e) {
-            throw new Error("UTF-8 not known");
-        }
-    }
+
 
 
 }

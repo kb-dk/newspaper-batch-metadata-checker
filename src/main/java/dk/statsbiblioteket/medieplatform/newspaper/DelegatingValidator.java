@@ -19,17 +19,6 @@ public class DelegatingValidator
 
     @Override
     public boolean validate(String reference,
-                            String contents,
-                            ResultCollector resultCollector) {
-        boolean result = true;
-        for (Validator delegate : delegates) {
-            result = delegate.validate(reference, contents, resultCollector) & result;
-        }
-        return result;
-    }
-
-    @Override
-    public boolean validate(String reference,
                             InputStream contents,
                             ResultCollector resultCollector) {
         boolean result = true;

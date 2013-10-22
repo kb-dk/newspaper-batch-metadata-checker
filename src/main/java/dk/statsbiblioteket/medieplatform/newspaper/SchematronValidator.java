@@ -13,16 +13,9 @@ import org.oclc.purl.dsdl.svrl.SchematronOutputType;
 import org.oclc.purl.dsdl.svrl.SuccessfulReport;
 import org.w3c.dom.Document;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 public class SchematronValidator implements Validator {
-    @Override
-    public boolean validate(String reference,
-                            String contents,
-                            ResultCollector resultCollector) {
-        return validate(reference, new ByteArrayInputStream(contents.getBytes()), resultCollector);
-    }
 
     @Override
     public boolean validate(String reference,
