@@ -75,6 +75,7 @@ public class SchemaValidatorEventHandler implements TreeEventHandler {
         for (Map.Entry<String, String> entry : POSTFIX_TO_XSD.entrySet()) {
             if (event.getName().endsWith(entry.getKey())) {
                 checkSchema(event, entry.getValue());
+                break;
             }
         }
     }
