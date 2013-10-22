@@ -67,11 +67,15 @@ public class RunnableValidator
                     break;
                 case Attribute:
                     if (isInDataFile) {
+                        AttributeParsingEvent attributeParsingEvent = (AttributeParsingEvent) event;
                         if (event.getName().endsWith("/contents")) {
-                            AttributeParsingEvent attributeParsingEvent = (AttributeParsingEvent) event;
                             if (atNinestars) {
                                 InputStream jpylizerOutput = jpylize(attributeParsingEvent.getData());
                                 validator.validate(attributeParsingEvent.getName(), jpylizerOutput, resultCollector);
+                            }
+                        } else {
+                            if (event.getName().endsWith("jpylizer.xml")) {
+                                validator.validate(attributeParsingEvent.getName(), attributeParsingEvent.getData(), resultCollector);
                             }
                         }
                     }
