@@ -137,9 +137,12 @@ public class SchemaValidatorEventHandler implements TreeEventHandler {
      */
     private synchronized Schema getSchema(String schemaFile) throws SAXException {
         if (schemas.get(schemaFile) == null) {
+            log.debug("Cache miss for schema file {}",schemaFile);
+            long start = System.currentTimeMillis();
             URL schemaUrl = getClass().getClassLoader().getResource(schemaFile);
             Schema schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(schemaUrl);
             schemas.put(schemaFile, schema);
+            log.debug("Loaded schema {} in {} ms",schemaFile,System.currentTimeMillis()-start);
         }
         return schemas.get(schemaFile);
     }
