@@ -22,15 +22,15 @@ public class MetadataCheckerComponentIT {
 
     private final static String TEST_BATCH_ID = "400022028241";
 
-    /**
-     * Tests that the BatchStructureChecker can parse a production like batch.
-     */
+    /** Tests that the BatchStructureChecker can parse a production like batch. */
     @Test(groups = "integrationTest")
-    public void testMetadataCheck() throws Exception {
+    public void testMetadataCheck()
+            throws
+            Exception {
         String pathToProperties = System.getProperty("integration.test.newspaper.properties");
         Properties properties = new Properties();
         properties.load(new FileInputStream(pathToProperties));
-        
+
         TreeIterator iterator = getIterator();
         EventRunner batchStructureChecker = new EventRunner(iterator);
         ResultCollector resultCollector = new ResultCollector("Batch Structure Checker", "v0.1");
@@ -38,7 +38,9 @@ public class MetadataCheckerComponentIT {
         batch.setBatchID(TEST_BATCH_ID);
         batch.setRoundTripNumber(1);
 
-        EventHandlerFactory eventHandlerFactory = new MetadataChecksFactory(resultCollector,true);
+        EventHandlerFactory eventHandlerFactory = new MetadataChecksFactory(resultCollector,
+                                                                            true,
+                                                                            getBatchFolder().getParentFile().getAbsolutePath());
         batchStructureChecker.runEvents(eventHandlerFactory.createEventHandlers());
         System.out.println(resultCollector.toReport());
         assertTrue(resultCollector.isSuccess());
@@ -47,13 +49,20 @@ public class MetadataCheckerComponentIT {
 
     /**
      * Creates and returns a iteration based on the test batch file structure found in the test/ressources folder.
+     *
      * @return A iterator the the test batch
      * @throws URISyntaxException
      */
-    public TreeIterator getIterator() throws URISyntaxException {
-        String pathToTestBatch = System.getProperty("integration.test.newspaper.testdata");
-        File file = new File(pathToTestBatch + "/small-test-batch/");
+    public TreeIterator getIterator()
+            throws
+            URISyntaxException {
+        File file = getBatchFolder();
         System.out.println(file);
-        return new TransformingIteratorForFileSystems(file, "\\.", "\\.jp2$", ".md5");
+        return new TransformingIteratorForFileSystems(file, "\\.", ".*\\.jp2$", ".md5");
+    }
+
+    private File getBatchFolder() {
+        String pathToTestBatch = System.getProperty("integration.test.newspaper.testdata");
+        return new File(pathToTestBatch,"small-test-batch/B"+TEST_BATCH_ID+"-RT1");
     }
 }

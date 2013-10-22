@@ -56,7 +56,7 @@ public class MetadataCheckerComponent
      */
     public void doWorkOnBatch(Batch batch, ResultCollector resultCollector) throws Exception {
         log.info("Starting validation of '{}'", batch.getFullID());
-        MetadataChecksFactory metadataChecksFactory = new MetadataChecksFactory(resultCollector,atNinestars);
+        MetadataChecksFactory metadataChecksFactory = new MetadataChecksFactory(resultCollector,atNinestars,getProperties().getProperty("scratch"));
         List<TreeEventHandler> eventHandlers = metadataChecksFactory.createEventHandlers();
         EventRunner eventRunner = new EventRunner(createIterator(batch));
         eventRunner.runEvents(eventHandlers);

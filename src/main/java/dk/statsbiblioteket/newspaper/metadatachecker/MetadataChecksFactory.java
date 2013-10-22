@@ -15,6 +15,7 @@ public class MetadataChecksFactory
     /** The result collector to collect errors in. */
     private ResultCollector resultCollector;
     private boolean atNinestars = false;
+    private String scratchFolder;
 
     /**
      * Initialise the MetadataChecksFactory with a result collector to collect errors in.
@@ -26,9 +27,11 @@ public class MetadataChecksFactory
     }
 
     public MetadataChecksFactory(ResultCollector resultCollector,
-                                 boolean atNinestars) {
+                                 boolean atNinestars,
+                                 String scratchFolder) {
         this(resultCollector);
         this.atNinestars = atNinestars;
+        this.scratchFolder = scratchFolder;
     }
 
     /**
@@ -42,7 +45,7 @@ public class MetadataChecksFactory
         treeEventHandlers.add(new SchemaValidatorEventHandler(resultCollector));
 
         try {
-            treeEventHandlers.add(new JpylyzerValidatorEventHandler("scratchFolder", resultCollector,
+            treeEventHandlers.add(new JpylyzerValidatorEventHandler(scratchFolder, resultCollector,
                                                                     null,
                                                                     null,
                                                                     atNinestars));

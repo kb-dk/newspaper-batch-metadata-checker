@@ -93,6 +93,7 @@ public class JpylyzerValidatorEventHandler
             if (isInDataFile) {
 
                 if (event.getName().endsWith("/contents")) {
+                    log.debug("Encountered event {}",event.getName());
                     if (atNinestars) {
                         File filePath = new File(scratchFolder, datafile);
                         InputStream jpylizerOutput = jpylize(filePath);
@@ -116,6 +117,7 @@ public class JpylyzerValidatorEventHandler
 
     private InputStream jpylize(File dataPath) {
 
+        log.info("Running jpylyzer on file {}", dataPath);
         ProcessRunner runner = new ProcessRunner(jpylyzerPath, dataPath.getAbsolutePath());
         runner.setOutputCollectionByteSize(Integer.MAX_VALUE);
         runner.run();
