@@ -18,7 +18,7 @@ import static org.testng.Assert.assertTrue;
 
 /**
  */
-public class MetadataStructureCheckerComponentIT {
+public class MetadataCheckerComponentIT {
 
     private final static String TEST_BATCH_ID = "400022028241";
 
