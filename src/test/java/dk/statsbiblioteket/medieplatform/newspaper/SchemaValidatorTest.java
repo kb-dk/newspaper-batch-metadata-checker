@@ -10,10 +10,9 @@ public class SchemaValidatorTest {
     public void testValidate()
             throws
             Exception {
-        Validator validator = new SchemaValidator("jpylizer.xsd");
+        Validator validator = new SchemaValidator("jpylizer.xsd", null);
         String jpylizerFile = Strings.flush(Thread.currentThread().getContextClassLoader()
-                                         .getResourceAsStream(
-                                                 "valid.xml"));
+                                                  .getResourceAsStream("valid.xml"));
         ResultCollector results = new ResultCollector("test", "0.1");
         validator.validate("valid.xml",jpylizerFile,results);
         System.out.println(results.toReport());
@@ -25,10 +24,9 @@ public class SchemaValidatorTest {
        public void testSchemaInvalidValidate()
                throws
                Exception {
-           Validator validator = new SchemaValidator("jpylizer.xsd");
+           Validator validator = new SchemaValidator("jpylizer.xsd", null);
            String jpylizerFile = Strings.flush(Thread.currentThread().getContextClassLoader()
-                                            .getResourceAsStream(
-                                                    "schemaInvalid.xml"));
+                                                     .getResourceAsStream("schemaInvalid.xml"));
            ResultCollector results = new ResultCollector("test", "0.1");
            validator.validate("schemaInvalid.xml",jpylizerFile,results);
            System.out.println(results.toReport());

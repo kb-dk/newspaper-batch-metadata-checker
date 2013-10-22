@@ -13,7 +13,7 @@ public class SchematronValidatorTest {
         String jpylizerFile = Strings.flush(Thread.currentThread().getContextClassLoader()
                                          .getResourceAsStream(
                                                  "valid.xml"));
-        SchematronValidator validator = new SchematronValidator("sb-jp2.sch");
+        SchematronValidator validator = new SchematronValidator("sb-jp2.sch", null);
         ResultCollector results = new ResultCollector("test", "0.1");
         validator.validate("valid.xml",jpylizerFile,results);
         System.out.println(results.toReport());
@@ -28,9 +28,8 @@ public class SchematronValidatorTest {
             throws
             Exception {
         String jpylizerFile = Strings.flush(Thread.currentThread().getContextClassLoader()
-                                         .getResourceAsStream(
-                                                 "invalid.xml"));
-        SchematronValidator validator = new SchematronValidator("sb-jp2.sch");
+                                                  .getResourceAsStream("invalid.xml"));
+        SchematronValidator validator = new SchematronValidator("sb-jp2.sch", null);
         ResultCollector results = new ResultCollector("test", "0.1");
         validator.validate("invalid.xml",jpylizerFile,results);
         System.out.println(results.toReport());

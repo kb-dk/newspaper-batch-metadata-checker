@@ -27,7 +27,7 @@ public class RunnableValidator
 
     private final Validator validator;
     private boolean atNinestars = false;
-    private String jpylyzerPath;
+    private final String jpylyzerPath;
 
     /**
      * Create a new runnable validator. It uses the optional property field "controlPolicies" to denote the path to
@@ -46,7 +46,9 @@ public class RunnableValidator
         } else {
             controlPoliciesDocument = DOM.streamToDOM(Thread.currentThread().getContextClassLoader().getResourceAsStream("defaultControlPolicies.xml"));
         }
-        validator = new ValidatorFactory(controlPoliciesDocument).createValidator();
+        jpylyzerPath = getProperties().getProperty("jpylyzerPath","src/main/extras/jpylyzer-1.10.1/jpylyzer.py");
+
+        validator = new ValidatorFactory(controlPoliciesDocument,properties).createValidator();
 
 
     }
@@ -91,17 +93,20 @@ public class RunnableValidator
 
         TreeIterator iterator = createIterator(batch);
         boolean isInDataFile = false;
+        String datafile = null;
         while (iterator.hasNext()) {
             ParsingEvent event = iterator.next();
             switch (event.getType()) {
                 case NodeBegin:
                     if (event instanceof DataFileNodeBeginsParsingEvent) {
                         isInDataFile = true;
+                        datafile = event.getName();
                     }
                     break;
                 case NodeEnd:
                     if (event instanceof DataFileNodeEndsParsingEvent) {
                         isInDataFile = false;
+                        datafile = null;
                     }
                     break;
                 case Attribute:
@@ -110,14 +115,14 @@ public class RunnableValidator
                         if (event.getName().endsWith("/contents")) {
                             if (atNinestars) {
                                 File filePath = new File(getProperties().getProperty("scratch"),
-                                                         attributeParsingEvent.getName());
+                                                         datafile);
                                 InputStream jpylizerOutput = jpylize(filePath);
-                                validator.validate(attributeParsingEvent.getName(), Strings.flush(jpylizerOutput), resultCollector);
+                                validator.validate(datafile, Strings.flush(jpylizerOutput), resultCollector);
                             }
                         } else {
                             if (event.getName().endsWith("jpylizer.xml")) {
 
-                                validator.validate(attributeParsingEvent.getName(),
+                                validator.validate(datafile,
                                                    Strings.flush(attributeParsingEvent.getData()), resultCollector);
                             }
                         }
@@ -130,6 +135,7 @@ public class RunnableValidator
     private InputStream jpylize(File dataPath) {
 
         ProcessRunner runner = new ProcessRunner(jpylyzerPath, dataPath.getAbsolutePath());
+        runner.setOutputCollectionByteSize(Integer.MAX_VALUE);
         runner.run();
         if (runner.getReturnCode() == 0){
             return runner.getProcessOutput();

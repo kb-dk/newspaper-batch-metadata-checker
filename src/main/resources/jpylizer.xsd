@@ -3,6 +3,11 @@
            elementFormDefault="qualified"
            xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <xs:element name="jpylyzer" type="jpylyzerType"/>
+    <xs:complexType name="uuidBoxType">
+        <xs:sequence>
+            <xs:any processContents="skip" namespace="##any" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
     <xs:complexType name="contiguousCodestreamBoxType">
         <xs:sequence>
             <xs:element type="sizType" name="siz"/>
@@ -17,6 +22,7 @@
             <xs:element type="xs:string" name="signatureBox"/>
             <xs:element type="fileTypeBoxType" name="fileTypeBox"/>
             <xs:element type="jp2HeaderBoxType" name="jp2HeaderBox"/>
+            <xs:element type="uuidBoxType" name="uuidBox" maxOccurs="unbounded" minOccurs="0"/>
             <xs:element type="contiguousCodestreamBoxType" name="contiguousCodestreamBox"/>
             <xs:element type="xs:string" name="compressionRatio"/>
         </xs:sequence>
@@ -31,9 +37,10 @@
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="resolutionBoxType">
-        <xs:sequence>
+        <xs:choice>
+            <xs:element type="displayResolutionBoxType" name="displayResolutionBox"/>
             <xs:element type="captureResolutionBoxType" name="captureResolutionBox"/>
-        </xs:sequence>
+        </xs:choice>
     </xs:complexType>
     <xs:complexType name="fileInfoType">
         <xs:sequence>
@@ -108,6 +115,7 @@
     <xs:complexType name="tilePartType">
         <xs:sequence>
             <xs:element type="sotType" name="sot"/>
+            <xs:element type="xs:string" name="plt" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="comType">
@@ -115,6 +123,20 @@
             <xs:element name="lcom" type="xs:string"/>
             <xs:element type="xs:string" name="rcom"/>
             <xs:element name="comment" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="displayResolutionBoxType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="vRdN"/>
+            <xs:element type="xs:string" name="vRdD"/>
+            <xs:element type="xs:string" name="hRdN"/>
+            <xs:element type="xs:string" name="hRdD"/>
+            <xs:element type="xs:string" name="vRdE"/>
+            <xs:element type="xs:string" name="hRdE"/>
+            <xs:element type="xs:string" name="vResdInPixelsPerMeter"/>
+            <xs:element type="xs:string" name="hResdInPixelsPerMeter"/>
+            <xs:element type="xs:string" name="vResdInPixelsPerInch"/>
+            <xs:element type="xs:string" name="hResdInPixelsPerInch"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="sizType">

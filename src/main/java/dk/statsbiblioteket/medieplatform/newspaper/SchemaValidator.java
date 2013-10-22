@@ -13,6 +13,7 @@ import javax.xml.validation.SchemaFactory;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
+import java.util.Properties;
 
 /**
  * The schema validator. It validates the input against the schema given in the constructor
@@ -25,8 +26,10 @@ public class SchemaValidator
     /**
      * Construct a new schema validator. The schema name is found on the classpath.
      * @param schemaName the classpath address of the schema to use
+     * @param properties
      */
-    public SchemaValidator(String schemaName) {
+    public SchemaValidator(String schemaName,
+                           Properties properties) {
         schemaURL = Thread.currentThread().getContextClassLoader().getResource(schemaName);
     }
 
