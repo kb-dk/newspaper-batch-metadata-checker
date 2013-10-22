@@ -9,7 +9,7 @@ import dk.statsbiblioteket.medieplatform.autonomous.AutonomousComponentUtils;
 import java.util.Map;
 import java.util.Properties;
 
-/** This is a sample component to serve as a guide to developers */
+/** This component checks metadata for validity. */
 public class MetadataChecker {
 
 
