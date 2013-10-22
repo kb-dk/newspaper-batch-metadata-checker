@@ -1,6 +1,5 @@
 package dk.statsbiblioteket.medieplatform.newspaper;
 
-import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.schematron.SchematronException;
 import com.phloc.schematron.pure.SchematronResourcePure;
@@ -15,14 +14,28 @@ import org.w3c.dom.Document;
 
 import java.io.InputStream;
 
+/**
+ * Validator for Schematron. Validate the given xml against a schematron profile
+ */
 public class SchematronValidator implements Validator {
+
+
+    private final ClassPathResource schemaResource;
+
+    /**
+     * Create a new schematron validator. Resolve the schematronPath on the classpath
+     * @param schematronPath the class path to the schematron profile
+     */
+    public SchematronValidator(String schematronPath) {
+        schemaResource =
+                new ClassPathResource(schematronPath);
+
+    }
 
     @Override
     public boolean validate(String reference,
                             InputStream contents,
                             ResultCollector resultCollector) {
-        IReadableResource schemaResource =
-                new ClassPathResource("sb-jp2-demands.sch");
 
         SchematronResourcePure schematron = new SchematronResourcePure(schemaResource);
         if (! schematron.isValidSchematron()){

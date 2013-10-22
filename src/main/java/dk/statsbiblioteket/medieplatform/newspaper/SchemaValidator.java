@@ -14,15 +14,26 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+/**
+ * The schema validator. It validates the input against the schema given in the constructor
+ */
 public class SchemaValidator
         implements Validator {
     private final URL schemaURL;
 
 
-    public SchemaValidator() {
-        schemaURL = Thread.currentThread().getContextClassLoader().getResource("jpylizer.xsd");
+    /**
+     * Construct a new schema validator. The schema name is found on the classpath.
+     * @param schemaName the classpath address of the schema to use
+     */
+    public SchemaValidator(String schemaName) {
+        schemaURL = Thread.currentThread().getContextClassLoader().getResource(schemaName);
     }
 
+    /**
+     * Get the name of this component for error reporting purposes
+     * @return
+     */
     private String getComponent() {
         return "JPylizer_schema_validator-"+ getClass().getPackage().getImplementationVersion();
     }
@@ -33,7 +44,7 @@ public class SchemaValidator
                             final ResultCollector resultCollector) {
         Source xmlFile = new StreamSource(xml);
         SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        Schema schema = null;
+        Schema schema;
         final boolean[] valid = {true};
         try {
             schema = schemaFactory.newSchema(schemaURL);

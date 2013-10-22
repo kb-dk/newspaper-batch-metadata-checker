@@ -11,7 +11,7 @@ public class SchemaValidatorTest {
     public void testValidate()
             throws
             Exception {
-        Validator validator = new SchemaValidator();
+        Validator validator = new SchemaValidator("jpylizer.xsd");
         InputStream jpylizerFile = Thread.currentThread().getContextClassLoader()
                                          .getResourceAsStream(
                                                  "AdresseContoirsEfterretninger-1795-06-13-01-0006.xml");
