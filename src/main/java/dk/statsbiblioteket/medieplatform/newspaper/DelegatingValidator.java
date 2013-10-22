@@ -2,7 +2,6 @@ package dk.statsbiblioteket.medieplatform.newspaper;
 
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +25,7 @@ public class DelegatingValidator
 
     @Override
     public boolean validate(String reference,
-                            InputStream contents,
+                            String contents,
                             ResultCollector resultCollector) {
         boolean result = true;
         for (Validator delegate : delegates) {
