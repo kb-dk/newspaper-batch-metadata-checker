@@ -15,7 +15,7 @@ public class ValidatorFactory {
      */
     public Validator createValidator() {
         return new DelegatingValidator(new SchemaValidator("jpylizer.xsd"),
-                                       new SchematronValidator("sb-jp2-demands.sch"));
+                                       new SchematronValidator("sb-jp2.sch"));
 
     }
 }
