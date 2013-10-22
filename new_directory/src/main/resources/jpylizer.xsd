@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified"
+           elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="jpylyzer" type="jpylyzerType"/>
+    <xs:complexType name="uuidBoxType">
+        <xs:sequence>
+            <xs:any processContents="skip" namespace="##any" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="contiguousCodestreamBoxType">
+        <xs:sequence>
+            <xs:element type="sizType" name="siz"/>
+            <xs:element type="codType" name="cod"/>
+            <xs:element type="qcdType" name="qcd"/>
+            <xs:element type="comType" name="com" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="tilePartsType" name="tileParts"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="propertiesType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="signatureBox"/>
+            <xs:element type="fileTypeBoxType" name="fileTypeBox"/>
+            <xs:element type="jp2HeaderBoxType" name="jp2HeaderBox"/>
+            <xs:element type="uuidBoxType" name="uuidBox" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="contiguousCodestreamBoxType" name="contiguousCodestreamBox"/>
+            <xs:element type="xs:string" name="compressionRatio"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="jpylyzerType">
+        <xs:sequence>
+            <xs:element type="toolInfoType" name="toolInfo"/>
+            <xs:element type="fileInfoType" name="fileInfo"/>
+            <xs:element type="xs:string" name="isValidJP2"/>
+            <xs:element type="xs:string" name="tests"/>
+            <xs:element type="propertiesType" name="properties"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="resolutionBoxType">
+        <xs:choice>
+            <xs:element type="displayResolutionBoxType" name="displayResolutionBox"/>
+            <xs:element type="captureResolutionBoxType" name="captureResolutionBox"/>
+        </xs:choice>
+    </xs:complexType>
+    <xs:complexType name="fileInfoType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="fileName"/>
+            <xs:element type="xs:string" name="filePath"/>
+            <xs:element type="xs:string" name="fileSizeInBytes"/>
+            <xs:element type="xs:string" name="fileLastModified"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="sotType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="lsot"/>
+            <xs:element type="xs:string" name="isot"/>
+            <xs:element type="xs:string" name="psot"/>
+            <xs:element type="xs:string" name="tpsot"/>
+            <xs:element type="xs:string" name="tnsot"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="jp2HeaderBoxType">
+        <xs:sequence>
+            <xs:element type="imageHeaderBoxType" name="imageHeaderBox"/>
+            <xs:element type="colourSpecificationBoxType" name="colourSpecificationBox"/>
+            <xs:element type="resolutionBoxType" name="resolutionBox"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="codType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="lcod"/>
+            <xs:element type="xs:string" name="precincts"/>
+            <xs:element type="xs:string" name="sop"/>
+            <xs:element type="xs:string" name="eph"/>
+            <xs:element type="xs:string" name="order"/>
+            <xs:element type="xs:string" name="layers"/>
+            <xs:element type="xs:string" name="multipleComponentTransformation"/>
+            <xs:element type="xs:string" name="levels"/>
+            <xs:element type="xs:string" name="codeBlockWidth"/>
+            <xs:element type="xs:string" name="codeBlockHeight"/>
+            <xs:element type="xs:string" name="codingBypass"/>
+            <xs:element type="xs:string" name="resetOnBoundaries"/>
+            <xs:element type="xs:string" name="termOnEachPass"/>
+            <xs:element type="xs:string" name="vertCausalContext"/>
+            <xs:element type="xs:string" name="predTermination"/>
+            <xs:element type="xs:string" name="segmentationSymbols"/>
+            <xs:element type="xs:string" name="transformation"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="imageHeaderBoxType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="height"/>
+            <xs:element type="xs:string" name="width"/>
+            <xs:element type="xs:string" name="nC"/>
+            <xs:element type="xs:string" name="bPCSign"/>
+            <xs:element type="xs:string" name="bPCDepth"/>
+            <xs:element type="xs:string" name="c"/>
+            <xs:element type="xs:string" name="unkC"/>
+            <xs:element type="xs:string" name="iPR"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="toolInfoType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="toolName"/>
+            <xs:element type="xs:string" name="toolVersion"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="fileTypeBoxType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="br"/>
+            <xs:element type="xs:string" name="minV"/>
+            <xs:element type="xs:string" name="cL"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="tilePartType">
+        <xs:sequence>
+            <xs:element type="sotType" name="sot"/>
+            <xs:element type="xs:string" name="plt" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="comType">
+        <xs:sequence>
+            <xs:element name="lcom" type="xs:string"/>
+            <xs:element type="xs:string" name="rcom"/>
+            <xs:element name="comment" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="displayResolutionBoxType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="vRdN"/>
+            <xs:element type="xs:string" name="vRdD"/>
+            <xs:element type="xs:string" name="hRdN"/>
+            <xs:element type="xs:string" name="hRdD"/>
+            <xs:element type="xs:string" name="vRdE"/>
+            <xs:element type="xs:string" name="hRdE"/>
+            <xs:element type="xs:string" name="vResdInPixelsPerMeter"/>
+            <xs:element type="xs:string" name="hResdInPixelsPerMeter"/>
+            <xs:element type="xs:string" name="vResdInPixelsPerInch"/>
+            <xs:element type="xs:string" name="hResdInPixelsPerInch"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="sizType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="lsiz"/>
+            <xs:element type="xs:string" name="rsiz"/>
+            <xs:element type="xs:string" name="xsiz"/>
+            <xs:element type="xs:string" name="ysiz"/>
+            <xs:element type="xs:string" name="xOsiz"/>
+            <xs:element type="xs:string" name="yOsiz"/>
+            <xs:element type="xs:string" name="xTsiz"/>
+            <xs:element type="xs:string" name="yTsiz"/>
+            <xs:element type="xs:string" name="xTOsiz"/>
+            <xs:element type="xs:string" name="yTOsiz"/>
+            <xs:element type="xs:string" name="numberOfTiles"/>
+            <xs:element type="xs:string" name="csiz"/>
+            <xs:element type="xs:string" name="ssizSign"/>
+            <xs:element type="xs:string" name="ssizDepth"/>
+            <xs:element type="xs:string" name="xRsiz"/>
+            <xs:element type="xs:string" name="yRsiz"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="qcdType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="lqcd"/>
+            <xs:element type="xs:string" name="qStyle"/>
+            <xs:element type="xs:string" name="guardBits"/>
+            <xs:element name="epsilon" maxOccurs="unbounded" minOccurs="0" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="tilePartsType">
+        <xs:sequence>
+            <xs:element type="tilePartType" name="tilePart" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="captureResolutionBoxType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="vRcN"/>
+            <xs:element type="xs:string" name="vRcD"/>
+            <xs:element type="xs:string" name="hRcN"/>
+            <xs:element type="xs:string" name="hRcD"/>
+            <xs:element type="xs:string" name="vRcE"/>
+            <xs:element type="xs:string" name="hRcE"/>
+            <xs:element type="xs:string" name="vRescInPixelsPerMeter"/>
+            <xs:element type="xs:string" name="hRescInPixelsPerMeter"/>
+            <xs:element type="xs:string" name="vRescInPixelsPerInch"/>
+            <xs:element type="xs:string" name="hRescInPixelsPerInch"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="colourSpecificationBoxType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="meth"/>
+            <xs:element type="xs:string" name="prec"/>
+            <xs:element type="xs:string" name="approx"/>
+            <xs:element type="xs:string" name="enumCS"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
