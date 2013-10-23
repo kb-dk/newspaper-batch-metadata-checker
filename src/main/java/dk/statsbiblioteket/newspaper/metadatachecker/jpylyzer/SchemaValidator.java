@@ -41,7 +41,7 @@ public class SchemaValidator
     public boolean validate(final String reference,
                             String xml,
                             final ResultCollector resultCollector) {
-        log.debug("Validating contents of {} via schema {}", reference, schemaURL.toString());
+        log.debug("Validating jpylyzer profile of '{}' via schema '{}'", reference, schemaURL.getPath());
         final boolean[] valid = {true};
         try {
             Source xmlFile = new StreamSource(new StringReader(xml));
@@ -95,7 +95,7 @@ public class SchemaValidator
             return valid[0];
         } finally {
             if (!valid[0]) {
-                log.warn("Failed validation of {} via schema {}", reference, schemaURL.toString());
+                log.warn("Failed validation of  jpylyzer profile of '{}' via schema '{}'", reference, schemaURL.getPath());
             }
         }
     }

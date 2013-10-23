@@ -37,7 +37,7 @@ public class SchematronValidator
                             String contents,
                             ResultCollector resultCollector) {
 
-        log.debug("Validating contents of {} via schematron {}", reference, schemaResource.getPath());
+        log.debug("Validating contents of '{}' via schematron '{}'", reference, schemaResource.getPath());
 
         boolean success = true;
         try {
@@ -87,7 +87,7 @@ public class SchematronValidator
             return success;
         } finally {
             if (!success) {
-                log.warn("Failed validation of {} via schematron {}", reference, schemaResource.getPath());
+                log.warn("Failed validation of '{}' via schematron '{}'", reference, schemaResource.getPath());
             }
 
         }
