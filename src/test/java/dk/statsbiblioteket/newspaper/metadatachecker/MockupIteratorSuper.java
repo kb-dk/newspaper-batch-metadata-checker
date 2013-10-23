@@ -18,7 +18,7 @@ public class MockupIteratorSuper extends MetadataCheckerComponent {
      * @param properties properties
      */
     public MockupIteratorSuper(Properties properties) {
-        super(properties, false);
+        super(properties);
     }
 
     /**

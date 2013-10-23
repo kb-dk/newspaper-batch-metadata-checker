@@ -30,7 +30,7 @@ public class MetadataChecker {
         Properties properties = AutonomousComponentUtils.parseArgs(args);
 
         //make a new runnable component from the properties
-        RunnableComponent component = new MetadataCheckerComponent(properties, false);
+        RunnableComponent component = new MetadataCheckerComponent(properties);
 
         Map<String, Boolean> result = AutonomousComponentUtils.startAutonomousComponent(properties, component);
 

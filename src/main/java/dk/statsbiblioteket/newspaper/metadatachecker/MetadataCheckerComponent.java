@@ -12,23 +12,18 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Properties;
 
-/**
- * Check Metadata of all nodes.
- */
+/** Check Metadata of all nodes. */
 public class MetadataCheckerComponent
         extends AbstractRunnableComponent {
     private Logger log = LoggerFactory.getLogger(getClass());
-    private boolean atNinestars;
 
     /**
      * Initialise metadata checker component. For used properties {@link AbstractRunnableComponent#createIterator}.
+     *
      * @param properties Properties for initialising component.
-     * @param atNinestars
      */
-    public MetadataCheckerComponent(Properties properties,
-                                    boolean atNinestars) {
+    public MetadataCheckerComponent(Properties properties) {
         super(properties);
-        this.atNinestars = atNinestars;
     }
 
     @Override
@@ -54,9 +49,30 @@ public class MetadataCheckerComponent
      * @param batch The batch to check
      * @param resultCollector Collector to get the result.
      */
-    public void doWorkOnBatch(Batch batch, ResultCollector resultCollector) throws Exception {
+    public void doWorkOnBatch(Batch batch,
+                              ResultCollector resultCollector)
+            throws
+            Exception {
         log.info("Starting validation of '{}'", batch.getFullID());
-        MetadataChecksFactory metadataChecksFactory = new MetadataChecksFactory(resultCollector,atNinestars,getProperties().getProperty("scratch"));
+
+        boolean atNinestars =
+                Boolean.parseBoolean(getProperties().getProperty("atNinestars", Boolean.FALSE.toString()));
+        MetadataChecksFactory metadataChecksFactory;
+        if (atNinestars) {
+            String jpylyzerPath = getProperties().getProperty("jpylyzerPath");
+            String batchFolder = getProperties().getProperty("scratch");
+            String controlPoliciesPath = getProperties().getProperty("controlPolicies");
+            metadataChecksFactory = new MetadataChecksFactory(resultCollector,
+                                                              atNinestars,
+                                                              batchFolder,
+                                                              jpylyzerPath,
+                                                              controlPoliciesPath);
+        } else {
+
+            metadataChecksFactory = new MetadataChecksFactory(resultCollector);
+        }
+
+
         List<TreeEventHandler> eventHandlers = metadataChecksFactory.createEventHandlers();
         EventRunner eventRunner = new EventRunner(createIterator(batch));
         eventRunner.runEvents(eventHandlers);

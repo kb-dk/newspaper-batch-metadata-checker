@@ -40,11 +40,18 @@ public class MetadataCheckerComponentIT {
 
         EventHandlerFactory eventHandlerFactory = new MetadataChecksFactory(resultCollector,
                                                                             true,
-                                                                            getBatchFolder().getParentFile().getAbsolutePath());
+                                                                            getBatchFolder().getParentFile()
+                                                                                    .getAbsolutePath(),
+                                                                            getJpylyzerPath(),
+                                                                            null);
         batchStructureChecker.runEvents(eventHandlerFactory.createEventHandlers());
         System.out.println(resultCollector.toReport());
         assertTrue(resultCollector.isSuccess());
         //Assert.fail();
+    }
+
+    private String getJpylyzerPath() {
+        return "src/main/extras/jpylyzer-1.10.1/jpylyzer.py";
     }
 
     /**
@@ -63,6 +70,6 @@ public class MetadataCheckerComponentIT {
 
     private File getBatchFolder() {
         String pathToTestBatch = System.getProperty("integration.test.newspaper.testdata");
-        return new File(pathToTestBatch,"small-test-batch/B"+TEST_BATCH_ID+"-RT1");
+        return new File(pathToTestBatch, "small-test-batch/B" + TEST_BATCH_ID + "-RT1");
     }
 }

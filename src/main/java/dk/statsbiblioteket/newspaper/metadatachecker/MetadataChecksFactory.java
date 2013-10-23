@@ -16,6 +16,8 @@ public class MetadataChecksFactory
     private ResultCollector resultCollector;
     private boolean atNinestars = false;
     private String scratchFolder;
+    private String jpylyzerPath;
+    private String controlPoliciesPath;
 
     /**
      * Initialise the MetadataChecksFactory with a result collector to collect errors in.
@@ -28,10 +30,14 @@ public class MetadataChecksFactory
 
     public MetadataChecksFactory(ResultCollector resultCollector,
                                  boolean atNinestars,
-                                 String scratchFolder) {
+                                 String scratchFolder,
+                                 String jpylyzerPath,
+                                 String controlPoliciesPath) {
         this(resultCollector);
         this.atNinestars = atNinestars;
         this.scratchFolder = scratchFolder;
+        this.jpylyzerPath = jpylyzerPath;
+        this.controlPoliciesPath = controlPoliciesPath;
     }
 
     /**
@@ -46,8 +52,8 @@ public class MetadataChecksFactory
 
         try {
             treeEventHandlers.add(new JpylyzerValidatorEventHandler(scratchFolder, resultCollector,
-                                                                    null,
-                                                                    null,
+                                                                    controlPoliciesPath,
+                                                                    jpylyzerPath,
                                                                     atNinestars));
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
