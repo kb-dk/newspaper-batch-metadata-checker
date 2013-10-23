@@ -11,13 +11,15 @@ import org.oclc.purl.dsdl.svrl.FailedAssert;
 import org.oclc.purl.dsdl.svrl.FiredRule;
 import org.oclc.purl.dsdl.svrl.SchematronOutputType;
 import org.oclc.purl.dsdl.svrl.SuccessfulReport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 /** Validator for Schematron. Validate the given xml against a schematron profile */
 public class SchematronValidator
         implements Validator {
 
-
+    private final Logger log = LoggerFactory.getLogger(SchematronValidator.class);
     private final ClassPathResource schemaResource;
 
     /**
@@ -25,8 +27,7 @@ public class SchematronValidator
      *
      * @param schematronPath the class path to the schematron profile
      */
-    public SchematronValidator(String schematronPath
-                               ) {
+    public SchematronValidator(String schematronPath) {
         schemaResource = new ClassPathResource(schematronPath);
 
     }
@@ -36,49 +37,60 @@ public class SchematronValidator
                             String contents,
                             ResultCollector resultCollector) {
 
-        SchematronResourcePure schematron = new SchematronResourcePure(schemaResource);
-        if (!schematron.isValidSchematron()) {
-            return false;
-        }
-
-
-        Document document = DOM.stringToDOM(contents);
-
-
-        SchematronOutputType result;
-        try {
-            result = schematron.applySchematronValidation(document);
-        } catch (SchematronException e) {
-            resultCollector.addFailure(reference, "exception", getComponent(), e.getMessage(), Strings.getStackTrace(e));
-            return false;
-        }
+        log.debug("Validating contents of {} via schematron {}", reference, schemaResource.getPath());
 
         boolean success = true;
-        for (Object o : result.getActivePatternAndFiredRuleAndFailedAssert()) {
-            if (o instanceof FailedAssert) {
+        try {
+            SchematronResourcePure schematron = new SchematronResourcePure(schemaResource);
+            if (!schematron.isValidSchematron()) {
                 success = false;
-                FailedAssert failedAssert = (FailedAssert) o;
-                resultCollector.addFailure(reference,
-                                           "jp2file",
-                                           getComponent(),
-                                           failedAssert.getText(),
-                                           failedAssert.getLocation(),
-                                           failedAssert.getTest());
+                return success;
             }
-            if (o instanceof ActivePattern) {
-                ActivePattern activePattern = (ActivePattern) o;
-                //do nothing
+
+            Document document = DOM.stringToDOM(contents);
+
+
+            SchematronOutputType result;
+            try {
+                result = schematron.applySchematronValidation(document);
+            } catch (SchematronException e) {
+                resultCollector
+                        .addFailure(reference, "exception", getComponent(), e.getMessage(), Strings.getStackTrace(e));
+                success = false;
+                return success;
             }
-            if (o instanceof FiredRule) {
-                FiredRule firedRule = (FiredRule) o;
-                //a rule that was run
+
+            for (Object o : result.getActivePatternAndFiredRuleAndFailedAssert()) {
+                if (o instanceof FailedAssert) {
+                    success = false;
+                    FailedAssert failedAssert = (FailedAssert) o;
+                    resultCollector.addFailure(reference,
+                                               "jp2file",
+                                               getComponent(),
+                                               failedAssert.getText(),
+                                               failedAssert.getLocation(),
+                                               failedAssert.getTest());
+                }
+                if (o instanceof ActivePattern) {
+                    ActivePattern activePattern = (ActivePattern) o;
+                    //do nothing
+                }
+                if (o instanceof FiredRule) {
+                    FiredRule firedRule = (FiredRule) o;
+                    //a rule that was run
+                }
+                if (o instanceof SuccessfulReport) {
+                    SuccessfulReport successfulReport = (SuccessfulReport) o;
+                    //ever?
+                }
             }
-            if (o instanceof SuccessfulReport) {
-                SuccessfulReport successfulReport = (SuccessfulReport) o;
-                //ever?
+            return success;
+        } finally {
+            if (!success) {
+                log.warn("Failed validation of {} via schematron {}", reference, schemaResource.getPath());
             }
+
         }
-        return success;
     }
 
     /**
