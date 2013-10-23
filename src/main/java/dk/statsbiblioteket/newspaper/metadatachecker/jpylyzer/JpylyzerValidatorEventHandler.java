@@ -23,6 +23,7 @@ import java.io.InputStream;
 public class JpylyzerValidatorEventHandler
         implements TreeEventHandler {
 
+    public static final String CONTENTS = "/contents";
     private final String scratchFolder;
     /** Logger */
     private final Logger log = LoggerFactory.getLogger(JpylyzerValidatorEventHandler.class);
@@ -92,7 +93,7 @@ public class JpylyzerValidatorEventHandler
         try {
             if (isInDataFile) {
 
-                if (event.getName().endsWith("/contents")) {
+                if (event.getName().endsWith(CONTENTS)) {
                     log.debug("Encountered event {}",event.getName());
                     if (atNinestars) {
                         File filePath = new File(scratchFolder, datafile);
