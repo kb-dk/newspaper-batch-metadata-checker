@@ -33,7 +33,6 @@ public class SchemaValidator
 
     /**
      * Get the name of this component for error reporting purposes
-     * @return
      */
     private String getComponent() {
         return "JPylizer_schema_validator-"+ getClass().getPackage().getImplementationVersion();

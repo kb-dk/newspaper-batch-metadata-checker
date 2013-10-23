@@ -49,7 +49,7 @@ public class SchematronValidator
         try {
             result = schematron.applySchematronValidation(document);
         } catch (SchematronException e) {
-            addFailure(resultCollector, e, null);
+            resultCollector.addFailure(reference, "exception", getComponent(), e.getMessage(), Strings.getStackTrace(e));
             return false;
         }
 
@@ -58,7 +58,6 @@ public class SchematronValidator
             if (o instanceof FailedAssert) {
                 success = false;
                 FailedAssert failedAssert = (FailedAssert) o;
-                //TODO find a better way to report the errors
                 resultCollector.addFailure(reference,
                                            "jp2file",
                                            getComponent(),
@@ -80,12 +79,6 @@ public class SchematronValidator
             }
         }
         return success;
-    }
-
-    private void addFailure(ResultCollector resultCollector,
-                            SchematronException e,
-                            String reference) {
-        resultCollector.addFailure(reference, "exception", getComponent(), e.getMessage(), Strings.getStackTrace(e));
     }
 
     /**
