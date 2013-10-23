@@ -60,7 +60,7 @@ public class SchematronValidator
                 FailedAssert failedAssert = (FailedAssert) o;
                 //TODO find a better way to report the errors
                 resultCollector.addFailure(reference,
-                                           "content",
+                                           "jp2file",
                                            getComponent(),
                                            failedAssert.getText(),
                                            failedAssert.getLocation(),
