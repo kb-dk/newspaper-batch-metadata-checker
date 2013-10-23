@@ -20,6 +20,15 @@ public class MetadataCheckerComponent
     /**
      * Initialise metadata checker component. For used properties {@link AbstractRunnableComponent#createIterator}.
      *
+     * property fiels that are used
+     * <ul>
+     * <li>atNinestars:boolean:default false: indicates if we are at ninestars and jpylyzer should be executed. The
+     * fields below are only relevant if this one is true</li>
+     * <li>jpylyzerPath:String: no default: the path to the jpylyzer executable</li>
+     * <li>scratch: String: no default: Path to the folder containing the batches</li>
+     * <li>controlPolicies: String: default null: The path to the control policies. Optional</li>
+     * </ul>
+     *
      * @param properties Properties for initialising component.
      */
     public MetadataCheckerComponent(Properties properties) {
