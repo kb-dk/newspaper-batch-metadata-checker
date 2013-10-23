@@ -46,18 +46,18 @@ public class JpylyzerValidatorEventHandler
     /**
      * Construct a new JpylyzerValidatorEventHandler.
      *
-     * @param scratchFolder       the folder where the batches live
+     * @param batchFolder       the folder where the batches live
      * @param resultCollector     the result collector
      * @param controlPoliciesPath path to the control policies. If null, use default control policies
      *
      * @throws FileNotFoundException if the control policies point to file that is not found
      */
-    public JpylyzerValidatorEventHandler(String scratchFolder,
+    public JpylyzerValidatorEventHandler(String batchFolder,
                                          ResultCollector resultCollector,
                                          String controlPoliciesPath)
             throws
             FileNotFoundException {
-        this.scratchFolder = scratchFolder;
+        this.scratchFolder = batchFolder;
         this.resultCollector = resultCollector;
 
 
@@ -79,7 +79,7 @@ public class JpylyzerValidatorEventHandler
      * Extended constructor for the validator. This should be used if we want the validator to be able to
      * execute jpylyzer.
      *
-     * @param scratchFolder       the folder where the batches live
+     * @param batchFolder       the folder where the batches live
      * @param resultCollector     the result collector
      * @param controlPoliciesPath path to the control policies. If null, use default control policies
      * @param jpylyzerPath        path to the jpylyzer executable
@@ -88,7 +88,7 @@ public class JpylyzerValidatorEventHandler
      *
      * @throws FileNotFoundException if the control policies point to file that is not found
      */
-    public JpylyzerValidatorEventHandler(String scratchFolder,
+    public JpylyzerValidatorEventHandler(String batchFolder,
                                          ResultCollector resultCollector,
                                          String controlPoliciesPath,
                                          String jpylyzerPath,
@@ -96,7 +96,7 @@ public class JpylyzerValidatorEventHandler
             throws
             FileNotFoundException {
 
-        this(scratchFolder, resultCollector, controlPoliciesPath);
+        this(batchFolder, resultCollector, controlPoliciesPath);
         this.jpylyzerPath = jpylyzerPath;
         this.atNinestars = atNinestars;
     }
