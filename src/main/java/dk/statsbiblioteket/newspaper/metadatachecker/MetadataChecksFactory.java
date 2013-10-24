@@ -28,7 +28,14 @@ public class MetadataChecksFactory
         this.resultCollector = resultCollector;
     }
 
-    //TODO document
+    /**
+     * Construct a metadata checks factory that is usable for ninestars
+     * @param resultCollector the result collector to collect errors in
+     * @param atNinestars should be true, sets the framework to run in the ninestars context
+     * @param scratchFolder the folder where the batches lie
+     * @param jpylyzerPath the path to the jpylyzer executable. If null, jpylyzer will be used from the PATH
+     * @param controlPoliciesPath the control policies for the validators. If null, default values are used
+     */
     public MetadataChecksFactory(ResultCollector resultCollector,
                                  boolean atNinestars,
                                  String scratchFolder,

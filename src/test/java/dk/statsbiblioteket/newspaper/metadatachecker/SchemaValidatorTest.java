@@ -11,8 +11,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-//TODO document
+/**
+ * Schema validator test
+ */
 public class SchemaValidatorTest {
+
+    /**
+     * Test that a valid jpylyzer document validates
+     * @throws Exception
+     */
     @Test
     public void testValidate()
             throws
@@ -34,6 +41,10 @@ public class SchemaValidatorTest {
          return byteStream.toByteArray();
     }
 
+    /**
+     * Test that an invalid jpylyzer document fails to validate
+     * @throws Exception
+     */
     @Test
     public void testSchemaInvalidValidate()
             throws
@@ -45,8 +56,14 @@ public class SchemaValidatorTest {
         attributeValidator.validate("schemaInvalid.xml", jpylizerFile, results);
         System.out.println(results.toReport());
         Assert.assertFalse(results.isSuccess());
-        //TODO assert the specific error, use String.contains
+        Assert.assertTrue(results.toReport().contains("<failure>\n" +
+                                                      "            <filereference>schemaInvalid.xml</filereference>\n" +
+                                                      "            <type>jp2file</type>\n" +
+                                                      "            <component>dk.statsbiblioteket.newspaper.metadatachecker.jpylyzer.SchemaAttributeValidator-null</component>\n"
 
-
+                                                      +
+                                                      "            <description>org.xml.sax.SAXParseException; lineNumber: 3; columnNumber: 15; cvc-complex-type.2.4.a: Invalid content was found starting with element 'fileInfo'. One of '{toolInfo}' is expected.</description>\n"
+                                                      +
+                                                      "        </failure>"));
     }
 }

@@ -34,6 +34,10 @@ public class SchematronAttributeValidator
     public SchematronAttributeValidator(String schematronPath) {
         schemaResource = new ClassPathResource(schematronPath);
         schematron = new SchematronResourcePure(schemaResource);
+        if (!schematron.isValidSchematron()) {
+            throw new RuntimeException("Failed to validate schematron resource as '"+schematronPath+"'");
+        }
+
     }
 
     @Override
@@ -46,11 +50,6 @@ public class SchematronAttributeValidator
         boolean success = true;
         try {
 
-            //TODO move to constructor and runtime exception
-            if (!schematron.isValidSchematron()) {
-                success = false;
-                return success;
-            }
 
             Document document = DOM.streamToDOM(new ByteArrayInputStream(contents));
 
@@ -73,26 +72,24 @@ public class SchematronAttributeValidator
                 if (o instanceof FailedAssert) {
                     success = false;
                     FailedAssert failedAssert = (FailedAssert) o;
-                    resultCollector.addFailure(reference, TYPE,
+                    resultCollector.addFailure(reference,
+                                               TYPE,
                                                getComponent(),
                                                failedAssert.getText(),
-                                               "Location: '"+failedAssert.getLocation()+"'",
-                                               "Test: '"+failedAssert.getTest()+"'");
-                }
-                else if (o instanceof ActivePattern) {
+                                               "Location: '" + failedAssert.getLocation() + "'",
+                                               "Test: '" + failedAssert.getTest() + "'");
+                } else if (o instanceof ActivePattern) {
                     ActivePattern activePattern = (ActivePattern) o;
                     //do nothing
-                }
-                else if (o instanceof FiredRule) {
+                } else if (o instanceof FiredRule) {
                     FiredRule firedRule = (FiredRule) o;
                     //a rule that was run
-                }
-                else if (o instanceof SuccessfulReport) {
+                } else if (o instanceof SuccessfulReport) {
                     SuccessfulReport successfulReport = (SuccessfulReport) o;
                     //ever?
                 } else {
                     //unknown type of o.
-                    throw new RuntimeException("Unknown result from schematron library: "+o.getClass().getName());
+                    throw new RuntimeException("Unknown result from schematron library: " + o.getClass().getName());
                 }
             }
             return success;

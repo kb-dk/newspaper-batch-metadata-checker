@@ -10,8 +10,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-//TODO document
+/**
+ * Schematron validator test
+ */
 public class SchematronValidatorTest {
+
+    /**
+     * Test that a valid jpylyzer document will validate
+     * @throws Exception
+     */
     @Test
     public void testValidateValid()
             throws
@@ -26,6 +33,8 @@ public class SchematronValidatorTest {
 
 
     }
+
+
     private byte[] getByteArrayOutputStream(InputStream jpylizerOutput)
              throws
              IOException {
@@ -34,7 +43,10 @@ public class SchematronValidatorTest {
          return byteStream.toByteArray();
      }
 
-
+    /**
+     * Tests that an invalid jpylyzer document will not validate
+     * @throws Exception
+     */
     @Test
     public void testValidateInvalid()
             throws
@@ -46,7 +58,19 @@ public class SchematronValidatorTest {
         validator.validate("invalid.xml",jpylizerFile,results);
         System.out.println(results.toReport());
         Assert.assertFalse(results.isSuccess());
-        //TODO assert the specific error, use String.contains
+        Assert.assertTrue(results.toReport().contains("<failures>\n" +
+                                                      "        <failure>\n" +
+                                                      "            <filereference>invalid.xml</filereference>\n" +
+                                                      "            <type>jp2file</type>\n" +
+                                                      "            <component>dk.statsbiblioteket.newspaper.metadatachecker.jpylyzer.SchematronAttributeValidator-null</component>\n"
+
+                                                      +
+                                                      "            <description>Invalid JP2</description>\n" +
+                                                      "            <details>Location: '/jpylyzer[0]' Test: " +
+                                                      "'isValidJP2 = 'True''</details>\n"
+                                                      +
+                                                      "        </failure>\n" +
+                                                      "    </failures>"));
 
     }
 
