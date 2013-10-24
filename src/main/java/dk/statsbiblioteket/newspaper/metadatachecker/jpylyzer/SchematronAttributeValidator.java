@@ -15,47 +15,56 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
-/** Validator for Schematron. Validate the given xml against a schematron profile */
-public class SchematronValidator
-        implements Validator {
+import java.io.ByteArrayInputStream;
 
-    private final Logger log = LoggerFactory.getLogger(SchematronValidator.class);
+/** Validator for Schematron. Validate the given xml against a schematron profile */
+public class SchematronAttributeValidator
+        implements AttributeValidator {
+
+    private static final String TYPE = "jp2file";
+    private final Logger log = LoggerFactory.getLogger(SchematronAttributeValidator.class);
     private final ClassPathResource schemaResource;
+    private final SchematronResourcePure schematron;
 
     /**
      * Create a new schematron validator. Resolve the schematronPath on the classpath
      *
      * @param schematronPath the class path to the schematron profile
      */
-    public SchematronValidator(String schematronPath) {
+    public SchematronAttributeValidator(String schematronPath) {
         schemaResource = new ClassPathResource(schematronPath);
-
+        schematron = new SchematronResourcePure(schemaResource);
     }
 
     @Override
     public boolean validate(String reference,
-                            String contents,
+                            byte[] contents,
                             ResultCollector resultCollector) {
 
         log.debug("Validating contents of '{}' via schematron '{}'", reference, schemaResource.getPath());
 
         boolean success = true;
         try {
-            SchematronResourcePure schematron = new SchematronResourcePure(schemaResource);
+
+            //TODO move to constructor and runtime exception
             if (!schematron.isValidSchematron()) {
                 success = false;
                 return success;
             }
 
-            Document document = DOM.stringToDOM(contents);
+            Document document = DOM.streamToDOM(new ByteArrayInputStream(contents));
 
 
             SchematronOutputType result;
             try {
                 result = schematron.applySchematronValidation(document);
             } catch (SchematronException e) {
-                resultCollector
-                        .addFailure(reference, "exception", getComponent(), e.getMessage(), Strings.getStackTrace(e));
+                resultCollector.addFailure(reference,
+                                           TYPE,
+                                           getComponent(),
+                                           "Failed to validate jpylyzer output against schematron. Error was " + e
+                                                   .toString(),
+                                           Strings.getStackTrace(e));
                 success = false;
                 return success;
             }
@@ -64,24 +73,26 @@ public class SchematronValidator
                 if (o instanceof FailedAssert) {
                     success = false;
                     FailedAssert failedAssert = (FailedAssert) o;
-                    resultCollector.addFailure(reference,
-                                               "jp2file",
+                    resultCollector.addFailure(reference, TYPE,
                                                getComponent(),
                                                failedAssert.getText(),
-                                               failedAssert.getLocation(),
-                                               failedAssert.getTest());
+                                               "Location: '"+failedAssert.getLocation()+"'",
+                                               "Test: '"+failedAssert.getTest()+"'");
                 }
-                if (o instanceof ActivePattern) {
+                else if (o instanceof ActivePattern) {
                     ActivePattern activePattern = (ActivePattern) o;
                     //do nothing
                 }
-                if (o instanceof FiredRule) {
+                else if (o instanceof FiredRule) {
                     FiredRule firedRule = (FiredRule) o;
                     //a rule that was run
                 }
-                if (o instanceof SuccessfulReport) {
+                else if (o instanceof SuccessfulReport) {
                     SuccessfulReport successfulReport = (SuccessfulReport) o;
                     //ever?
+                } else {
+                    //unknown type of o.
+                    throw new RuntimeException("Unknown result from schematron library: "+o.getClass().getName());
                 }
             }
             return success;
@@ -99,7 +110,7 @@ public class SchematronValidator
      * @return
      */
     private String getComponent() {
-        return "JPylizer_content_validator-" + getClass().getPackage().getImplementationVersion();
+        return getClass().getName() + "-" + getClass().getPackage().getImplementationVersion();
     }
 
 }

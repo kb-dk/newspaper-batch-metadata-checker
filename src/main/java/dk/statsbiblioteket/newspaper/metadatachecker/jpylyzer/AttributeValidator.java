@@ -5,7 +5,7 @@ import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 /**
  * This is the validator interface. It should be used to validate a file against a set check
  */
-public interface Validator {
+public interface AttributeValidator {
 
     /**
      * Validate the contents of the inputstream. Any problems are reported to the resultCollector. The reference
@@ -17,5 +17,5 @@ public interface Validator {
      * @param resultCollector the result collector to collect the validation errors
      * @return true of no errors were found
      */
-    public boolean validate(String reference, String contents, ResultCollector resultCollector);
+    public boolean validate(String reference, byte[] contents, ResultCollector resultCollector);
 }

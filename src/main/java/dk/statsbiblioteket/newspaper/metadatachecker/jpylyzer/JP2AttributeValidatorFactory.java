@@ -3,7 +3,7 @@ package dk.statsbiblioteket.newspaper.metadatachecker.jpylyzer;
 import org.w3c.dom.Document;
 
 /** Use this class to create new instances of the Validator */
-public class ValidatorFactory {
+public class JP2AttributeValidatorFactory {
 
 
     private final Document controlPolicies;
@@ -13,9 +13,8 @@ public class ValidatorFactory {
      * @param controlPolicies rdf scape control policies detailing the things to validate
      *
      */
-    public ValidatorFactory(Document controlPolicies) {
+    public JP2AttributeValidatorFactory(Document controlPolicies) {
         this.controlPolicies = controlPolicies;
-        ;
     }
 
     /**
@@ -23,9 +22,9 @@ public class ValidatorFactory {
      *
      * @return a new validator
      */
-    public Validator createValidator() {
-        return new DelegatingValidator(new SchemaValidator("jpylizer.xsd"),
-                                       new SchematronValidator("sb-jp2.sch"));
+    public AttributeValidator createValidator() {
+        return new DelegatingAttributeValidator(new SchemaAttributeValidator("jpylizer.xsd"),
+                                       new SchematronAttributeValidator("sb-jp2.sch"));
 
     }
 }

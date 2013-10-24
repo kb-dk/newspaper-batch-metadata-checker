@@ -28,6 +28,7 @@ public class MetadataChecksFactory
         this.resultCollector = resultCollector;
     }
 
+    //TODO document
     public MetadataChecksFactory(ResultCollector resultCollector,
                                  boolean atNinestars,
                                  String scratchFolder,

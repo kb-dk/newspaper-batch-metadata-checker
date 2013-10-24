@@ -7,6 +7,7 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.DataFileNode
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeBeginsParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeEndParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
+import dk.statsbiblioteket.util.Streams;
 import dk.statsbiblioteket.util.Strings;
 import dk.statsbiblioteket.util.console.ProcessRunner;
 import dk.statsbiblioteket.util.xml.DOM;
@@ -14,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -33,7 +35,7 @@ public class JpylyzerValidatorEventHandler
     /** The result collector results are collected in. */
     private final ResultCollector resultCollector;
     //The validator
-    private Validator validator;
+    private AttributeValidator attributeValidator;
     // Double flags indicating if we are in a virtual jp2 folder
     private boolean isInDataFile;
     private String datafile;
@@ -71,7 +73,7 @@ public class JpylyzerValidatorEventHandler
         if (this.jpylyzerPath == null) {
             this.jpylyzerPath = "src/main/extras/jpylyzer-1.10.1/jpylyzer.py";
         }
-        validator = new ValidatorFactory(controlPoliciesDocument).createValidator();
+        attributeValidator = new JP2AttributeValidatorFactory(controlPoliciesDocument).createValidator();
 
     }
 
@@ -142,17 +144,26 @@ public class JpylyzerValidatorEventHandler
                     if (atNinestars) {
                         File filePath = new File(scratchFolder, datafile);
                         InputStream jpylizerOutput = jpylize(filePath);
-                        validator.validate(datafile, Strings.flush(jpylizerOutput), resultCollector);
+
+                        attributeValidator.validate(datafile, getByteArrayOutputStream(jpylizerOutput), resultCollector);
                     }
                 } else {
                     if (event.getName().endsWith("jpylizer.xml")) {
-                        validator.validate(datafile, Strings.flush(event.getData()), resultCollector);
+                        attributeValidator.validate(datafile, getByteArrayOutputStream(event.getData()), resultCollector);
                     }
                 }
             }
         } catch (IOException e) {
             resultCollector.addFailure(event.getName(),"jp2file",getComponent(),e.getMessage(),Strings.getStackTrace(e));
         }
+    }
+
+    private byte[] getByteArrayOutputStream(InputStream jpylizerOutput)
+            throws
+            IOException {
+        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        Streams.pipe(jpylizerOutput, byteStream);
+        return byteStream.toByteArray();
     }
 
     /**
@@ -174,7 +185,9 @@ public class JpylyzerValidatorEventHandler
      * @throws RuntimeException if the execution of jpylyzer failed in some fashion (not invalid file, if the program
      * returned non-zero returncode)
      */
-    private InputStream jpylize(File dataPath) {
+    private InputStream jpylize(File dataPath)
+            throws
+            IOException {
 
         log.info("Running jpylyzer on file {}", dataPath);
         ProcessRunner runner = new ProcessRunner(jpylyzerPath, dataPath.getAbsolutePath());
@@ -187,7 +200,7 @@ public class JpylyzerValidatorEventHandler
         if (runner.getReturnCode() == 0) {
             return runner.getProcessOutput();
         } else {
-            throw new RuntimeException(
+            throw new IOException(
                     "failed to run jpylyzer, returncode:" + runner.getReturnCode() + ", stdOut:" + runner
                             .getProcessOutputAsString() + " stdErr:" + runner.getProcessErrorAsString());
         }
