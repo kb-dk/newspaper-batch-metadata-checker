@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.net.URL;
 
 /** The schema validator. It validates the input against the schema given in the constructor */
+//TODO merge this with MetadataChecksFactory
 public class SchemaAttributeValidator
         implements AttributeValidator {
     private static final String TYPE = "jp2file";
