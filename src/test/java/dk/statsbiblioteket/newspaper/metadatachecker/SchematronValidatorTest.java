@@ -58,19 +58,16 @@ public class SchematronValidatorTest {
         validator.validate("invalid.xml",jpylizerFile,results);
         System.out.println(results.toReport());
         Assert.assertFalse(results.isSuccess());
-        Assert.assertTrue(results.toReport().contains("<failures>\n" +
-                                                      "        <failure>\n" +
+        Assert.assertTrue(results.toReport().contains("<failure>\n" +
                                                       "            <filereference>invalid.xml</filereference>\n" +
                                                       "            <type>jp2file</type>\n" +
                                                       "            <component>dk.statsbiblioteket.newspaper.metadatachecker.jpylyzer.SchematronAttributeValidator-null</component>\n"
 
                                                       +
                                                       "            <description>Invalid JP2</description>\n" +
-                                                      "            <details>Location: '/jpylyzer[0]' Test: " +
-                                                      "'isValidJP2 = 'True''</details>\n"
-                                                      +
-                                                      "        </failure>\n" +
-                                                      "    </failures>"));
+                                                      "            <details>Location: '/jpylyzer[0]'\n" +
+                                                      "Test: 'isValidJP2 = 'True''</details>\n" +
+                                                      "        </failure>"));
 
     }
 

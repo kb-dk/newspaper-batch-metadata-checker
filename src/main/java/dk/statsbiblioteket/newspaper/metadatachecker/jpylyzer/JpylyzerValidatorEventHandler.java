@@ -71,7 +71,7 @@ public class JpylyzerValidatorEventHandler
                                                             .getResourceAsStream("defaultControlPolicies.xml"));
         }
         if (this.jpylyzerPath == null) {
-            this.jpylyzerPath = "src/main/extras/jpylyzer-1.10.1/jpylyzer.py";
+            this.jpylyzerPath = "jpylyzer.py";
         }
         attributeValidator = new JP2AttributeValidatorFactory(controlPoliciesDocument).createValidator();
 
