@@ -139,5 +139,10 @@
         </plugins>
     </build>
 
-
+    <scm>
+        <connection>scm:git:https://github.com/statsbiblioteket/newspaper-batch-metadata-checker</connection>
+        <developerConnection>scm:git:git@github.com:statsbiblioteket/newspaper-batch-metadata-checker</developerConnection>
+        <url>https://github.com/statsbiblioteket/newspaper-batch-event-framework</url>
+      <tag>HEAD</tag>
+    </scm>
 </project>
