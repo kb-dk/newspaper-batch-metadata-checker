@@ -51,7 +51,6 @@ public class SchematronValidatorEventHandler implements TreeEventHandler {
 
     /**
      * Initialise the event handler with the collector to collect results in.
-     * //TODO add batch context parameter when it becomes available
      * @param resultCollector The collector to collect results in.
      */
     public SchematronValidatorEventHandler(ResultCollector resultCollector) {

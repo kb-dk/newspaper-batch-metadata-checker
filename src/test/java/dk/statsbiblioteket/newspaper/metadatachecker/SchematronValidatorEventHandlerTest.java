@@ -34,4 +34,28 @@ public class SchematronValidatorEventHandlerTest {
         System.out.println(resultCollector.toReport());
     }
 
+
+    /**
+     * Test that we can validate a valid page mods file.
+     */
+    @Test
+    public void testPageModsBad() {
+        ResultCollector resultCollector = new ResultCollector("foo", "bar");
+        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector);
+        AttributeParsingEvent modsEvent = new AttributeParsingEvent("AdresseContoirsEfterretninger-1795-06-15-01-0010B.mods.xml") {
+            @Override
+            public InputStream getData() throws IOException {
+                return Thread.currentThread().getContextClassLoader().getResourceAsStream("badData/bad1.mods.xml");
+            }
+
+            @Override
+            public String getChecksum() throws IOException {
+                return null;
+            }
+        };
+        handler.handleAttribute(modsEvent);
+        System.out.println(resultCollector.toReport());
+    }
+
+
 }
