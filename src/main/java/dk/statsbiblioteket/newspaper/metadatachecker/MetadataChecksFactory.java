@@ -66,6 +66,8 @@ public class MetadataChecksFactory
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+        //TODO add the following event handler when it is slightly more mature.
+        //treeEventHandlers.add(new SchematronValidatorEventHandler(resultCollector));
         return treeEventHandlers;
     }
 }
