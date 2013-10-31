@@ -63,7 +63,43 @@
            </s:rule>
     </s:pattern>
 
+    <!--2C-8-->
+    <s:pattern id="pagephotographicquality">
+        <s:rule context="mods:mods">
+            <s:let name="condition" value="mods:relatedItem[@type='original']/mods:physicalDescription/mods:note[@type='photocondition']"/>
+            <s:assert test="$condition">
+                2C-8: Page Photographic Quality element must be present
+            </s:assert>
+            <s:assert test="matches(lower-case($condition),'^not tested|not acceptable|acceptable$')">
+                2C-8: Page Photographic Quality must be one of 'Not Tested', 'Not Acceptable' or 'Acceptable' not
+                <s:value-of select="$condition"/>.
+            </s:assert>
+        </s:rule>
+    </s:pattern>
 
+    <!--2C-9-->
+    <s:pattern id="pagepresentindicator">
+        <s:rule context="mods:mods">
+            <s:let name="note" value="mods:relatedItem/mods:note[@type='noteAboutReproduction' and not(@displayLabel)]"/>
+            <s:assert test="$note">2C-9: Page Present Indicator must be present.</s:assert>
+            <s:assert test="matches(lower-case($note), '^present|not digitised, published|not digitised, not published|not digitised, publication unknown$')">
+                2C-9: Page Present Indicator <s:value-of select="$note"/> must be one of:
+                Present
+                Not digitised, published
+                Not digitised, not published
+                Not digitised, publication unknown
+            </s:assert>
+        </s:rule>
+    </s:pattern>
+
+    <!--2C-10-->
+    <!--There is nothing to test here except that, if present, this element must not be empty. But there is a
+     cross-check between multiple pages implied by the text of the specification. -->
+    <s:pattern id="pagepresentcomment">
+        <s:rule context="mods:mods/mods:relatedItem/mods:note[@type='noteAboutReproduction' and @displayLabel]">
+            <s:assert test="./string-length() > 0">2C-10: If present Page Present Comment must not be empty.</s:assert>
+        </s:rule>
+    </s:pattern>
 
 </s:schema>
 

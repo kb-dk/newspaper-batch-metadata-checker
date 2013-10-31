@@ -6,6 +6,7 @@ import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.EventRunner;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
 
+import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.MfPakConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +17,11 @@ import java.util.Properties;
 public class MetadataCheckerComponent
         extends AbstractRunnableComponent {
     private Logger log = LoggerFactory.getLogger(getClass());
+
+    private final static String MFPAK_DATABASE_URL = "mfpak.postgres.url";
+    private final static String MFPAK_DATABASE_USER = "mfpak.postgres.user";
+    private final static String MFPAK_DATABASE_PASS = "mfpak.postgres.password";
+    private static MfPakConfiguration mfpakConfig;
 
     /**
      * Initialise metadata checker component. For used properties {@link AbstractRunnableComponent#createIterator}.
@@ -33,6 +39,10 @@ public class MetadataCheckerComponent
      */
     public MetadataCheckerComponent(Properties properties) {
         super(properties);
+        mfpakConfig = new MfPakConfiguration();
+        mfpakConfig.setDatabaseUrl(properties.getProperty(MFPAK_DATABASE_URL));
+        mfpakConfig.setDatabaseUser(properties.getProperty(MFPAK_DATABASE_USER));
+        mfpakConfig.setDatabasePassword(properties.getProperty(MFPAK_DATABASE_PASS));
     }
 
     @Override
@@ -75,10 +85,9 @@ public class MetadataCheckerComponent
                                                               atNinestars,
                                                               batchFolder,
                                                               jpylyzerPath,
-                                                              controlPoliciesPath);
+                                                              controlPoliciesPath, mfpakConfig, batch);
         } else {
-
-            metadataChecksFactory = new MetadataChecksFactory(resultCollector);
+            metadataChecksFactory = new MetadataChecksFactory(resultCollector, mfpakConfig, batch);
         }
 
 

@@ -1,5 +1,7 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
+import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.ConfigurationProperties;
+import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.MfPakConfiguration;
 import org.testng.annotations.Test;
 
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
@@ -37,13 +39,18 @@ public class MetadataCheckerComponentIT {
         Batch batch = new Batch();
         batch.setBatchID(TEST_BATCH_ID);
         batch.setRoundTripNumber(1);
-
+        MfPakConfiguration mfPakConfiguration = new MfPakConfiguration();
+        mfPakConfiguration.setDatabaseUrl(properties.getProperty(ConfigurationProperties.DATABASE_URL));
+        mfPakConfiguration.setDatabaseUser(properties.getProperty(ConfigurationProperties.DATABASE_USER));
+        mfPakConfiguration.setDatabasePassword(properties.getProperty(ConfigurationProperties.DATABASE_PASSWORD));
         EventHandlerFactory eventHandlerFactory = new MetadataChecksFactory(resultCollector,
-                                                                            true,
-                                                                            getBatchFolder().getParentFile()
-                                                                                    .getAbsolutePath(),
-                                                                            getJpylyzerPath(),
-                                                                            null);
+                true,
+                getBatchFolder().getParentFile()
+                        .getAbsolutePath(),
+                getJpylyzerPath(),
+                null,
+                mfPakConfiguration,
+                batch);
         batchStructureChecker.runEvents(eventHandlerFactory.createEventHandlers());
         System.out.println(resultCollector.toReport());
         assertTrue(resultCollector.isSuccess());

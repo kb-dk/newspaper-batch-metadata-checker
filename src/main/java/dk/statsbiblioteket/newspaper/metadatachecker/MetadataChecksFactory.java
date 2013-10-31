@@ -1,9 +1,12 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
+import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.EventHandlerFactory;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
 import dk.statsbiblioteket.newspaper.metadatachecker.jpylyzer.JpylyzerValidatorEventHandler;
+import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.MfPakConfiguration;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -18,14 +21,18 @@ public class MetadataChecksFactory
     private String scratchFolder;
     private String jpylyzerPath;
     private String controlPoliciesPath;
+    private MfPakConfiguration mfPakConfiguration;
+    private Batch batch;
 
     /**
      * Initialise the MetadataChecksFactory with a result collector to collect errors in.
      *
      * @param resultCollector The result collector to collect errors in.
      */
-    public MetadataChecksFactory(ResultCollector resultCollector) {
+    public MetadataChecksFactory(ResultCollector resultCollector, MfPakConfiguration mfPakConfiguration, Batch batch) {
         this.resultCollector = resultCollector;
+        this.mfPakConfiguration = mfPakConfiguration;
+        this.batch = batch;
     }
 
     /**
@@ -40,8 +47,8 @@ public class MetadataChecksFactory
                                  boolean atNinestars,
                                  String scratchFolder,
                                  String jpylyzerPath,
-                                 String controlPoliciesPath) {
-        this(resultCollector);
+                                 String controlPoliciesPath, MfPakConfiguration mfPakConfiguration, Batch batch) {
+        this(resultCollector, mfPakConfiguration, batch);
         this.atNinestars = atNinestars;
         this.scratchFolder = scratchFolder;
         this.jpylyzerPath = jpylyzerPath;
@@ -66,8 +73,8 @@ public class MetadataChecksFactory
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        //treeEventHandlers.add(new SchematronValidatorEventHandler(resultCollector));
-        //treeEventHandlers.add(new ModsXPathEventHandler(resultCollector));
+        treeEventHandlers.add(new SchematronValidatorEventHandler(resultCollector));
+        treeEventHandlers.add(new ModsXPathEventHandler(resultCollector, new MfPakDAO(mfPakConfiguration), batch ));
         return treeEventHandlers;
     }
 }

@@ -12,15 +12,15 @@
         </mods:extent>
     </mods:part>
     <mods:relatedItem type="original">
-        <mods:identifier type="reel number">4022028241-14</mods:identifier>
+        <mods:identifier type="reel number">400022041-14</mods:identifier>
         <mods:identifier type="reel sequence number">10X</mods:identifier>
         <mods:physicalDescription>
             <mods:form type="microfi"/>
             <mods:note type="pagecondition">Not testblob</mods:note>
             <mods:note type="photocondition">Now tested</mods:note>
         </mods:physicalDescription>
-      <mods:note type="noteAboutReproduction">present</mods:note>
-      <mods:note type="noteAboutReproduction" displayLabel="">present</mods:note>
+      <mods:note type="noteAboutReproduction">not present</mods:note>
+      <mods:note type="noteAboutReproduction" displayLabel=""></mods:note>
     </mods:relatedItem>
     <mods:relatedItem type="host">
         <mods:titleInfo type="uniform" authority="Statens Avissamling" >

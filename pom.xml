@@ -57,6 +57,11 @@
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
         </dependency>
+        <dependency>
+            <groupId>dk.statsbiblioteket.newspaper</groupId>
+            <artifactId>newspaper-mfpak-integration</artifactId>
+            <version>0.1</version>
+        </dependency>
 
     </dependencies>
 
