@@ -1,23 +1,19 @@
 <mods:mods xmlns:mods="http://www.loc.gov/mods/v3">
-    <!--Use this file for metadata with wrong values -->
-   <mods:part>
+    <mods:part>
         <mods:detail type="sectionLabel">
-            <mods:number></mods:number>
+            <mods:number>Sektion 1</mods:number>
         </mods:detail>
-       <mods:detail type="pageNumber">
-           <mods:number></mods:number>
-       </mods:detail>
         <mods:extent unit="pages">
-            <mods:start>X13</mods:start>
+            <mods:start>13</mods:start>
         </mods:extent>
     </mods:part>
     <mods:relatedItem type="original">
-        <mods:identifier type="reel number">4022028241-14</mods:identifier>
-        <mods:identifier type="reel sequence number">10X</mods:identifier>
+        <mods:identifier type="reel number">400022028241-14</mods:identifier>
+        <mods:identifier type="reel sequence number">10B</mods:identifier>
         <mods:physicalDescription>
-            <mods:form type="microfi"/>
-            <mods:note type="pagecondition">Not testblob</mods:note>
-            <mods:note type="photocondition">Now tested</mods:note>
+            <mods:form type="microfilm"/>
+            <mods:note type="pagecondition">Not tested</mods:note>
+            <mods:note type="photocondition">Not tested</mods:note>
         </mods:physicalDescription>
       <mods:note type="noteAboutReproduction">present</mods:note>
       <mods:note type="noteAboutReproduction" displayLabel="">present</mods:note>
