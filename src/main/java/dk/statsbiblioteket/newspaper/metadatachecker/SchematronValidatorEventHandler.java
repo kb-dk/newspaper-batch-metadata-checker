@@ -41,13 +41,13 @@ public class SchematronValidatorEventHandler extends DefaultTreeEventHandler {
      * Statically initialise the Map to the hardcoded names of the schematron files.
      */
     static {  //TODO uncomment these as they are created
-        Map<String, String> postfixToXsd = new HashMap<>(5);
-        //postfixToXsd.put(".alto.xml", "alto.sch");
-        //postfixToXsd.put(".mix.xml", "mix.sch");
-        postfixToXsd.put(".mods.xml", "mods.sch");
-        //postfixToXsd.put(".edition.xml", "edition-mods.sch");
-        //postfixToXsd.put(".film.xml", "film.sch");
-        POSTFIX_TO_XSD = Collections.unmodifiableMap(postfixToXsd);
+        Map<String, String> postfixToSch = new HashMap<>(5);
+        //postfixToSch.put(".alto.xml", "alto.sch");
+        //postfixToSch.put(".mix.xml", "mix.sch");
+        postfixToSch.put(".mods.xml", "mods.sch");
+        //postfixToSch.put(".edition.xml", "edition-mods.sch");
+        //postfixToSch.put(".film.xml", "film.sch");
+        POSTFIX_TO_XSD = Collections.unmodifiableMap(postfixToSch);
     }
     /** The result collector results are collected in. */
     private final ResultCollector resultCollector;
