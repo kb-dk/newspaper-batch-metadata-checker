@@ -2,6 +2,7 @@ package dk.statsbiblioteket.newspaper.metadatachecker;
 
 import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.ConfigurationProperties;
 import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.MfPakConfiguration;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 import org.testng.annotations.Test;
 
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
@@ -49,7 +50,7 @@ public class MetadataCheckerComponentIT {
                         .getAbsolutePath(),
                 getJpylyzerPath(),
                 null,
-                mfPakConfiguration,
+                new MfPakDAO(mfPakConfiguration),
                 batch);
         batchStructureChecker.runEvents(eventHandlerFactory.createEventHandlers());
         System.out.println(resultCollector.toReport());

@@ -21,7 +21,8 @@ public class MetadataChecksFactory
     private String scratchFolder;
     private String jpylyzerPath;
     private String controlPoliciesPath;
-    private MfPakConfiguration mfPakConfiguration;
+    //private MfPakConfiguration mfPakConfiguration;
+    private MfPakDAO mfPakDAO;
     private Batch batch;
 
     /**
@@ -29,9 +30,9 @@ public class MetadataChecksFactory
      *
      * @param resultCollector The result collector to collect errors in.
      */
-    public MetadataChecksFactory(ResultCollector resultCollector, MfPakConfiguration mfPakConfiguration, Batch batch) {
+    public MetadataChecksFactory(ResultCollector resultCollector, MfPakDAO mfPakDAO, Batch batch) {
         this.resultCollector = resultCollector;
-        this.mfPakConfiguration = mfPakConfiguration;
+        this.mfPakDAO = mfPakDAO;
         this.batch = batch;
     }
 
@@ -47,8 +48,8 @@ public class MetadataChecksFactory
                                  boolean atNinestars,
                                  String scratchFolder,
                                  String jpylyzerPath,
-                                 String controlPoliciesPath, MfPakConfiguration mfPakConfiguration, Batch batch) {
-        this(resultCollector, mfPakConfiguration, batch);
+                                 String controlPoliciesPath, MfPakDAO mfPakDAO, Batch batch) {
+        this(resultCollector, mfPakDAO, batch);
         this.atNinestars = atNinestars;
         this.scratchFolder = scratchFolder;
         this.jpylyzerPath = jpylyzerPath;
@@ -74,7 +75,7 @@ public class MetadataChecksFactory
             throw new RuntimeException(e);
         }
         treeEventHandlers.add(new SchematronValidatorEventHandler(resultCollector));
-        treeEventHandlers.add(new ModsXPathEventHandler(resultCollector, new MfPakDAO(mfPakConfiguration), batch ));
+        treeEventHandlers.add(new ModsXPathEventHandler(resultCollector, mfPakDAO, batch ));
         return treeEventHandlers;
     }
 }

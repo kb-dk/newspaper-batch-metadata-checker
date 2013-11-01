@@ -3,6 +3,8 @@ package dk.statsbiblioteket.newspaper.metadatachecker;
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.TreeIterator;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.filesystem.transforming.TransformingIteratorForFileSystems;
+import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.MfPakConfiguration;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 
 import java.io.File;
 import java.util.Properties;
@@ -17,8 +19,8 @@ public class MockupIteratorSuper extends MetadataCheckerComponent {
      *
      * @param properties properties
      */
-    public MockupIteratorSuper(Properties properties) {
-        super(properties);
+    public MockupIteratorSuper(Properties properties, MfPakDAO mfPakDAO) {
+        super(properties, mfPakDAO);
     }
 
     /**

@@ -69,12 +69,9 @@ public class PageModsTest {
         handler.handleAttribute(modsEvent);
         String report = resultCollector.toReport();
         assertTrue(report.contains("2C-1:"));
-        assertTrue(report.contains("2C-2:"));
         assertTrue(report.contains("2C-3:"));
         assertTrue(report.contains("2C-4:"));
         assertTrue(report.contains("2C-6:"));
-        assertTrue(report.contains("2C-7:"));
-        assertTrue(report.contains("2C-8:"));
         assertTrue(report.contains("2C-9:"));
         assertTrue(report.contains("2C-10:"));
         System.out.println(report);
@@ -101,11 +98,8 @@ public class PageModsTest {
         handler.handleAttribute(modsEvent);
 
         String report = resultCollector.toReport();
-        assertTrue(report.contains("2C-2:"));
         assertTrue(report.contains("2C-4:"));
         assertTrue(report.contains("2C-6:"));
-        assertTrue(report.contains("2C-7:"));
-        assertTrue(report.contains("2C-8:"));
         assertTrue(report.contains("2C-9:"));
 
         System.out.println(report);

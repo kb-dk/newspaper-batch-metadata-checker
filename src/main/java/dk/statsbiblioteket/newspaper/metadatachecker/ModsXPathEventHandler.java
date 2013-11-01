@@ -14,6 +14,7 @@ import dk.statsbiblioteket.util.xml.DOM;
 import dk.statsbiblioteket.util.xml.XPathSelector;
 import org.w3c.dom.Document;
 
+import javax.rmi.CORBA.Util;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -45,6 +46,15 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
         Document doc;
         try {
             doc = DOM.streamToDOM(event.getData());
+            if (doc == null) {
+                resultCollector.addFailure(
+                        event.getName(),
+                        "metadata",
+                        getClass().getName(),
+                        "Could not parse xml from " + event.getName(),
+                        event.getName()
+                );
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -52,7 +62,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
         final String xpath2C4 = "mods:mods/mods:relatedItem[@type='original']/mods:identifier[@type='reel number']";
         String reelNumber = xpath.selectString(doc, xpath2C4);
         String reelNumberPatternString = "^" + batch.getBatchID() + "-" + "[0-9]{2}$";
-        if (!reelNumber.matches(reelNumberPatternString)) {
+        if (reelNumber == null || !reelNumber.matches(reelNumberPatternString)) {
               resultCollector.addFailure(event.getName(),
                                     "metadata",
                                     getClass().getName(),
@@ -64,7 +74,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
         //2C-5
         final String xpath1 = "mods:mods/mods:relatedItem[@type='original']/mods:identifier[@type='reel sequence number']";
         String sequenceNumber = xpath.selectString(doc, xpath1);
-        if (!(event.getName().contains(sequenceNumber))) {
+        if (sequenceNumber == null || !(event.getName().contains(sequenceNumber))) {
             resultCollector.addFailure(event.getName(),
                                     "metadata",
                                     getClass().getName(),

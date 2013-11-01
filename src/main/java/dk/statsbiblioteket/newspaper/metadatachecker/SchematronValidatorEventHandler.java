@@ -82,6 +82,16 @@ public class SchematronValidatorEventHandler implements TreeEventHandler {
         Document doc = null;
         try {
             doc = DOM.streamToDOM(event.getData());
+            if (doc == null) {
+               resultCollector.addFailure(
+                    event.getName(),
+                    "metadata",
+                    getClass().getName(),
+                    "Exception parsing xml metadata from " + event.getName(),
+                    event.getName()
+            );
+            return;
+            }
         } catch (IOException e) {
             resultCollector.addFailure(
                     event.getName(),

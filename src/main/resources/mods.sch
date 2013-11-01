@@ -15,7 +15,7 @@
     </s:pattern>
 
 
-    <!--2C-2 -->
+    <!--2C-2 Option Omitted
     <s:pattern id="pagesequence">
         <s:rule context="mods:mods">
             <s:assert test="mods:part/mods:extent[@unit='pages']/mods:start">2C-2: Page Sequence Number is required.</s:assert>
@@ -25,15 +25,16 @@
             <s:assert test="matches(., '^[0-9]+$')">2C-2: Page Sequence Number is not a number: <s:value-of select="."/></s:assert>
         </s:rule>
     </s:pattern>
+    -->
 
     <!--2C-3-->
     <s:pattern id="pagenumber">
         <s:rule context="mods:mods/mods:part/mods:detail[@type='pageNumber']">
-            <s:assert test="mods:number/string-length()">2C-3: If present, Page Number should not be empty.</s:assert>
+            <s:assert test="mods:number/string-length() > 0">2C-3: If present, Page Number should not be empty.</s:assert>
         </s:rule>
     </s:pattern>
 
-    <!--2C-4 -->
+    <!--2C-4 Full validation in ModsXPathEventHandler.java -->
     <s:pattern id="filmID">
         <s:rule context="mods:mods">
             <s:let name="filmID" value="mods:relatedItem[@type='original']/mods:identifier[@type='reel number']"/>
@@ -42,6 +43,8 @@
         </s:rule>
     </s:pattern>
 
+    <!--2C-5 validation in ModsXPathEventHandler.java -->
+
     <!--2C-6-->
     <s:pattern id="pagephysicaldescription">
         <s:rule context="mods:mods">
@@ -49,7 +52,7 @@
         </s:rule>
     </s:pattern>
 
-    <!--2C-7-->
+    <!--2C-7  Omitted option
     <s:pattern id="pagephysicalcondition">
            <s:rule context="mods:mods">
                <s:let name="condition" value="mods:relatedItem[@type='original']/mods:physicalDescription/mods:note[@type='pagecondition']"/>
@@ -62,8 +65,9 @@
                </s:assert>
            </s:rule>
     </s:pattern>
+    -->
 
-    <!--2C-8-->
+    <!--2C-8 Omitted option
     <s:pattern id="pagephotographicquality">
         <s:rule context="mods:mods">
             <s:let name="condition" value="mods:relatedItem[@type='original']/mods:physicalDescription/mods:note[@type='photocondition']"/>
@@ -76,6 +80,7 @@
             </s:assert>
         </s:rule>
     </s:pattern>
+    -->
 
     <!--2C-9-->
     <s:pattern id="pagepresentindicator">
@@ -98,6 +103,7 @@
     <s:pattern id="pagepresentcomment">
         <s:rule context="mods:mods/mods:relatedItem/mods:note[@type='noteAboutReproduction' and @displayLabel]">
             <s:assert test="./string-length() > 0">2C-10: If present Page Present Comment must not be empty.</s:assert>
+            <s:assert test="./@displayLabel/string-length() > 0">2C-10: displayLabel attribute must not be empty.</s:assert>
         </s:rule>
     </s:pattern>
 

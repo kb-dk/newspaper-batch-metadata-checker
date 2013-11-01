@@ -1,5 +1,8 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
+import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.ConfigurationProperties;
+import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.MfPakConfiguration;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,8 +32,13 @@ public class MetadataChecker {
         //Parse the args to a properties construct
         Properties properties = AutonomousComponentUtils.parseArgs(args);
 
+        MfPakConfiguration mfPakConfiguration = new MfPakConfiguration();
+        mfPakConfiguration.setDatabaseUrl(properties.getProperty(ConfigurationProperties.DATABASE_URL));
+        mfPakConfiguration.setDatabaseUser(properties.getProperty(ConfigurationProperties.DATABASE_USER));
+        mfPakConfiguration.setDatabasePassword(properties.getProperty(ConfigurationProperties.DATABASE_PASSWORD));
+
         //make a new runnable component from the properties
-        RunnableComponent component = new MetadataCheckerComponent(properties);
+        RunnableComponent component = new MetadataCheckerComponent(properties, new MfPakDAO(mfPakConfiguration));
 
         Map<String, Boolean> result = AutonomousComponentUtils.startAutonomousComponent(properties, component);
 

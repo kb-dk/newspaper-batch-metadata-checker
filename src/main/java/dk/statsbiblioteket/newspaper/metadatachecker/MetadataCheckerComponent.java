@@ -7,6 +7,7 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.Event
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
 
 import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.MfPakConfiguration;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +22,7 @@ public class MetadataCheckerComponent
     private final static String MFPAK_DATABASE_URL = "mfpak.postgres.url";
     private final static String MFPAK_DATABASE_USER = "mfpak.postgres.user";
     private final static String MFPAK_DATABASE_PASS = "mfpak.postgres.password";
-    private static MfPakConfiguration mfpakConfig;
+    private final MfPakDAO mfPakDAO;
 
     /**
      * Initialise metadata checker component. For used properties {@link AbstractRunnableComponent#createIterator}.
@@ -37,12 +38,9 @@ public class MetadataCheckerComponent
      *
      * @param properties Properties for initialising component.
      */
-    public MetadataCheckerComponent(Properties properties) {
+    public MetadataCheckerComponent(Properties properties, MfPakDAO mfPakDAO) {
         super(properties);
-        mfpakConfig = new MfPakConfiguration();
-        mfpakConfig.setDatabaseUrl(properties.getProperty(MFPAK_DATABASE_URL));
-        mfpakConfig.setDatabaseUser(properties.getProperty(MFPAK_DATABASE_USER));
-        mfpakConfig.setDatabasePassword(properties.getProperty(MFPAK_DATABASE_PASS));
+        this.mfPakDAO = mfPakDAO;
     }
 
     @Override
@@ -85,9 +83,9 @@ public class MetadataCheckerComponent
                                                               atNinestars,
                                                               batchFolder,
                                                               jpylyzerPath,
-                                                              controlPoliciesPath, mfpakConfig, batch);
+                                                              controlPoliciesPath, mfPakDAO, batch);
         } else {
-            metadataChecksFactory = new MetadataChecksFactory(resultCollector, mfpakConfig, batch);
+            metadataChecksFactory = new MetadataChecksFactory(resultCollector, mfPakDAO, batch);
         }
 
 

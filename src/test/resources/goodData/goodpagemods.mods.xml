@@ -16,7 +16,7 @@
             <mods:note type="photocondition">Not tested</mods:note>
         </mods:physicalDescription>
         <mods:note type="noteAboutReproduction">present</mods:note>
-        <mods:note type="noteAboutReproduction" displayLabel="">present</mods:note>
+        <mods:note type="noteAboutReproduction" displayLabel="foobar">present</mods:note>
     </mods:relatedItem>
     <mods:relatedItem type="host">
         <mods:titleInfo type="uniform" authority="Statens Avissamling" >
