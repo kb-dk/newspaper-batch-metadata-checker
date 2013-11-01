@@ -29,6 +29,8 @@ public class MetadataChecksFactory
      * Initialise the MetadataChecksFactory with a result collector to collect errors in.
      *
      * @param resultCollector The result collector to collect errors in.
+     * @param mfPakDAO a DAO object from which one can read relevant external properties of a batch.
+     * @param batch a batch object representing the batch being analysed.
      */
     public MetadataChecksFactory(ResultCollector resultCollector, MfPakDAO mfPakDAO, Batch batch) {
         this.resultCollector = resultCollector;
@@ -43,6 +45,8 @@ public class MetadataChecksFactory
      * @param scratchFolder the folder where the batches lie
      * @param jpylyzerPath the path to the jpylyzer executable. If null, jpylyzer will be used from the PATH
      * @param controlPoliciesPath the control policies for the validators. If null, default values are used
+     * @param mfPakDAO a DAO object from which one can read relevant external properties of a batch.
+     * @param batch a batch object representing the batch being analysed.
      */
     public MetadataChecksFactory(ResultCollector resultCollector,
                                  boolean atNinestars,

@@ -7,6 +7,7 @@ import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeBeginsParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeEndParsingEvent;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.DefaultTreeEventHandler;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
 import dk.statsbiblioteket.util.Strings;
 import dk.statsbiblioteket.util.xml.DOM;
@@ -28,12 +29,17 @@ import java.util.Map;
 /**
  * Check xml data against the detailed schematron specifications.
  */
-public class SchematronValidatorEventHandler implements TreeEventHandler {
+public class SchematronValidatorEventHandler extends DefaultTreeEventHandler {
 
     /** Logger */
     private final Logger log = LoggerFactory.getLogger(getClass());
+
     /** A map from file postfix to a known schema for that file. */
     private static final Map<String, String> POSTFIX_TO_XSD;
+
+    /**
+     * Statically initialise the Map to the hardcoded names of the schematron files.
+     */
     static {  //TODO uncomment these as they are created
         Map<String, String> postfixToXsd = new HashMap<>(5);
         //postfixToXsd.put(".alto.xml", "alto.sch");
@@ -59,16 +65,6 @@ public class SchematronValidatorEventHandler implements TreeEventHandler {
     }
 
     @Override
-    public void handleNodeBegin(NodeBeginsParsingEvent event) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void handleNodeEnd(NodeEndParsingEvent event) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
     public void handleAttribute(AttributeParsingEvent event) {
         for (Map.Entry<String, String> entry : POSTFIX_TO_XSD.entrySet()) {
                if (event.getName().endsWith(entry.getKey())) {
@@ -84,12 +80,12 @@ public class SchematronValidatorEventHandler implements TreeEventHandler {
             doc = DOM.streamToDOM(event.getData());
             if (doc == null) {
                resultCollector.addFailure(
-                    event.getName(),
-                    "metadata",
-                    getClass().getName(),
-                    "Exception parsing xml metadata from " + event.getName(),
-                    event.getName()
-            );
+                       event.getName(),
+                       "metadata",
+                       getClass().getName(),
+                       "Exception parsing xml metadata from " + event.getName(),
+                       event.getName()
+               );
             return;
             }
         } catch (IOException e) {
@@ -127,22 +123,15 @@ public class SchematronValidatorEventHandler implements TreeEventHandler {
                         failedAssert.getText(),
                         "Location: '" + failedAssert.getLocation() + "'",
                         "Test: '" + failedAssert.getTest() + "'");
-            } else if (o instanceof ActivePattern) {
-                ActivePattern activePattern = (ActivePattern) o;
-                //do nothing
-            } else if (o instanceof FiredRule) {
-                FiredRule firedRule = (FiredRule) o;
-                //a rule that was run
-            } else if (o instanceof SuccessfulReport) {
-                SuccessfulReport successfulReport = (SuccessfulReport) o;
-                //ever?
-            } else {
-                //unknown type of o.
-                throw new RuntimeException("Unknown result from schematron library: " + o.getClass().getName());
             }
         }
     }
 
+    /**
+     * Lazy initialiser for the Schematron instances we need.
+     * @param schematronFile the file to read from.
+     * @return The resulting Schematron.
+     */
     private SchematronResourcePure getSchematron(String schematronFile) {
         if (schematrons.get(schematronFile) == null) {
             ClassPathResource schemaResource = new ClassPathResource(schematronFile);
@@ -151,9 +140,4 @@ public class SchematronValidatorEventHandler implements TreeEventHandler {
         return schematrons.get(schematronFile);
     }
 
-
-    @Override
-    public void handleFinish() {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
 }

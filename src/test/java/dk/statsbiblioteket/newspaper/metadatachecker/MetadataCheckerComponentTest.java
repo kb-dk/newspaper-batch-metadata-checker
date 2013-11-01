@@ -11,18 +11,14 @@ public class MetadataCheckerComponentTest {
 
     @Test
     /**
-     * Test checking metadata on two batches.
-     * One that fails on one of each type of metadata, and one that succeeds.
+     * Test checking metadata on a "bad" batch.
      */
-    public void testDoWorkOnBatchBad()
-            throws
-            Exception {
+    public void testDoWorkOnBatchBad() throws Exception {
 
 
         MetadataCheckerComponent metadataCheckerComponent = new MockupIteratorSuper(System.getProperties(),
                 new PageModsTest.StubMfPakDAO(new MfPakConfiguration()));
 
-        // Run on first batch 1
         TestResultCollector result = new TestResultCollector(metadataCheckerComponent.getComponentName(),
                 metadataCheckerComponent.getComponentVersion());
         Batch batch = new Batch("400022028241");
@@ -56,28 +52,20 @@ public class MetadataCheckerComponentTest {
 
     @Test
     /**
-     * Test checking metadata on two batches.
-     * One that fails on one of each type of metadata, and one that succeeds.
+     * Test checking on a "good" batch.
      */
-    public void testDoWorkOnBatchGood()
-            throws
-            Exception {
-
-
+    public void testDoWorkOnBatchGood() throws Exception {
         final PageModsTest.StubMfPakDAO mfPakDAO = new PageModsTest.StubMfPakDAO(new MfPakConfiguration());
+        //Use the stub DAO and set the avisID to the value in the actual mods files.
         mfPakDAO.setNewspaperID("adressecontoirsefterretninger");
         MetadataCheckerComponent metadataCheckerComponent = new MockupIteratorSuper(System.getProperties(),
                 mfPakDAO);
-
         // Run on first batch 1
         TestResultCollector result = new TestResultCollector(metadataCheckerComponent.getComponentName(),
                 metadataCheckerComponent.getComponentVersion());
         Batch batch = new Batch("400022028241");
         batch.setRoundTripNumber(2);
         metadataCheckerComponent.doWorkOnBatch(batch, result);
-
-
-        // Assert no errors
         Assert.assertTrue(result.isSuccess(), result.toReport() + "\n");
     }
 

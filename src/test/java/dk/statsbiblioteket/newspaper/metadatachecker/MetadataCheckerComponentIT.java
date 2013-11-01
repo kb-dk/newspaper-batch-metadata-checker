@@ -32,6 +32,8 @@ public class MetadataCheckerComponentIT {
             Exception {
         String pathToProperties = System.getProperty("integration.test.newspaper.properties");
         Properties properties = new Properties();
+
+
         properties.load(new FileInputStream(pathToProperties));
 
         TreeIterator iterator = getIterator();

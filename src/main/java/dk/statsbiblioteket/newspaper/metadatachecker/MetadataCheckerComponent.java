@@ -18,10 +18,6 @@ import java.util.Properties;
 public class MetadataCheckerComponent
         extends AbstractRunnableComponent {
     private Logger log = LoggerFactory.getLogger(getClass());
-
-    private final static String MFPAK_DATABASE_URL = "mfpak.postgres.url";
-    private final static String MFPAK_DATABASE_USER = "mfpak.postgres.user";
-    private final static String MFPAK_DATABASE_PASS = "mfpak.postgres.password";
     private final MfPakDAO mfPakDAO;
 
     /**
@@ -37,6 +33,7 @@ public class MetadataCheckerComponent
      * </ul>
      *
      * @param properties Properties for initialising component.
+     * @param mfPakDAO a DAO object from which one can read relevant external properties of a batch.
      */
     public MetadataCheckerComponent(Properties properties, MfPakDAO mfPakDAO) {
         super(properties);
@@ -87,8 +84,6 @@ public class MetadataCheckerComponent
         } else {
             metadataChecksFactory = new MetadataChecksFactory(resultCollector, mfPakDAO, batch);
         }
-
-
         List<TreeEventHandler> eventHandlers = metadataChecksFactory.createEventHandlers();
         EventRunner eventRunner = new EventRunner(createIterator(batch));
         eventRunner.runEvents(eventHandlers);

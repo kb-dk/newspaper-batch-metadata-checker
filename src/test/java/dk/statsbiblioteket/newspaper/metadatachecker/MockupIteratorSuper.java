@@ -11,13 +11,15 @@ import java.util.Properties;
 import java.util.regex.Pattern;
 
 public class MockupIteratorSuper extends MetadataCheckerComponent {
+
     /**
      * Constructor matching super. Super requires a properties to be able to initialise the tree iterator, if needed.
      * If you do not need the tree iterator, ignore properties.
      *
      * You can use properties for your own stuff as well
      *
-     * @param properties properties
+     * @param properties properties.
+     * @param mfPakDAO a DAO or stub.
      */
     public MockupIteratorSuper(Properties properties, MfPakDAO mfPakDAO) {
         super(properties, mfPakDAO);

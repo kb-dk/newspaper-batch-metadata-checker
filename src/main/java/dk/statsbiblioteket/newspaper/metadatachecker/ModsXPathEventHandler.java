@@ -28,6 +28,12 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
     private MfPakDAO mfPakDAO;
     private Batch batch;
 
+    /**
+     * Constructor for this class.
+     * @param resultCollector the result collector to collect errors in
+     * @param mfPakDAO a DAO object from which one can read relevant external properties of a batch.
+     * @param batch a batch object representing the batch being analysed.
+     */
     public ModsXPathEventHandler(ResultCollector resultCollector, MfPakDAO mfPakDAO, Batch batch) {
         this.resultCollector = resultCollector;
         this.mfPakDAO = mfPakDAO;
@@ -54,6 +60,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
                         "Could not parse xml from " + event.getName(),
                         event.getName()
                 );
+                return;
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -74,11 +81,12 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
         //2C-5
         final String xpath1 = "mods:mods/mods:relatedItem[@type='original']/mods:identifier[@type='reel sequence number']";
         String sequenceNumber = xpath.selectString(doc, xpath1);
-        if (sequenceNumber == null || !(event.getName().contains(sequenceNumber))) {
+        String namePattern = ".*-[0]*" + sequenceNumber + ".mods.xml";
+        if (sequenceNumber == null || !(event.getName().matches(namePattern))) {
             resultCollector.addFailure(event.getName(),
                                     "metadata",
                                     getClass().getName(),
-                                    "2C-5: " + sequenceNumber + " not found in file name",
+                                    "2C-5: " + sequenceNumber + " not found in file name. Should match " + namePattern + ".",
                                     xpath1
                                     );
         }
