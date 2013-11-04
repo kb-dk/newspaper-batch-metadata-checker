@@ -25,23 +25,36 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Check xml data of known file postfixes against xsd schemas.
- */
-public class SchemaValidatorEventHandler implements TreeEventHandler {
-    /** Logger */
-    private final Logger log = LoggerFactory.getLogger(getClass());
+/** Check xml data of known file postfixes against xsd schemas. */
+public class SchemaValidatorEventHandler
+        implements TreeEventHandler {
     /** A map from file postfix to a known schema for that file. */
     private static final Map<String, String> POSTFIX_TO_XSD;
+
+    private static final Map<String, String> POSTFIX_TO_TYPE;
+
     static {
-        Map<String, String> postfixToXsd = new HashMap<>(5);
+        Map<String, String> postfixToXsd = new HashMap<>();
         postfixToXsd.put(".alto.xml", "alto-v2.0.xsd");
         postfixToXsd.put(".mix.xml", "mix.xsd");
         postfixToXsd.put(".mods.xml", "mods-3-1.xsd");
         postfixToXsd.put(".edition.xml", "mods-3-1.xsd");
         postfixToXsd.put(".film.xml", "film.xsd");
+        postfixToXsd.put(".jpylyzer.xml", "jpylyzer.xsd");
         POSTFIX_TO_XSD = Collections.unmodifiableMap(postfixToXsd);
+
+        Map<String, String> postfixToType = new HashMap<>();
+        postfixToType.put(".alto.xml", "metadata");
+        postfixToType.put(".mix.xml", "metadata");
+        postfixToType.put(".mods.xml", "metadata");
+        postfixToType.put(".edition.xml", "metadata");
+        postfixToType.put(".film.xml", "metadata");
+        postfixToType.put(".jpylyzer.xml", "jp2file");
+        POSTFIX_TO_TYPE = Collections.unmodifiableMap(postfixToType);
     }
+
+    /** Logger */
+    private final Logger log = LoggerFactory.getLogger(getClass());
     /** The result collector results are collected in. */
     private final ResultCollector resultCollector;
     /** A map of parsed schemas for a given schema file name. */
@@ -49,6 +62,7 @@ public class SchemaValidatorEventHandler implements TreeEventHandler {
 
     /**
      * Initialise the event handler with the collector to collect results in.
+     *
      * @param resultCollector The collector to collect results in.
      */
     public SchemaValidatorEventHandler(ResultCollector resultCollector) {
@@ -81,49 +95,79 @@ public class SchemaValidatorEventHandler implements TreeEventHandler {
     }
 
     /**
-     * Given an attribute parsing event and a schema file name, extract the data from the event, and validate it against
+     * Given an attribute parsing event and a schema file name, extract the data from the event, and validate it
+     * against
      * the schema.
-     * @param event The attribute parsing event containing the data.
+     *
+     * @param event      The attribute parsing event containing the data.
      * @param schemaFile The file name of the schema to check the data against.
      */
-    private void checkSchema(AttributeParsingEvent event, String schemaFile) {
+    private void checkSchema(AttributeParsingEvent event,
+                             String schemaFile) {
         log.debug("Checking '{}' with schema '{}'", event.getName(), schemaFile);
         try {
             InputStream data = event.getData();
             Validator validator = createValidator(schemaFile);
             validator.validate(new StreamSource(data));
         } catch (SAXParseException e) {
-            resultCollector.addFailure(event.getName(), "metadata", "Metadata_checker_component",
-                                       "Failure validating XML data from '" + event.getName() + "': Line "
-                                               + e.getLineNumber() + " Column " + e.getColumnNumber() + ": "
-                                               + e.getMessage());
-            log.debug("Error validating '{}' with schema '{}': Line {} Column {}: {}", event.getName(), schemaFile,
-                      e.getLineNumber(), e.getColumnNumber(), e.getMessage(), e);
+            resultCollector.addFailure(event.getName(),
+                                       getType(event.getName()),
+                                       "Metadata_checker_component",
+                                       "Failure validating XML data from '" + event.getName() + "': Line " + e
+                                               .getLineNumber() + " Column " + e.getColumnNumber() + ": " + e
+                                               .getMessage());
+            log.debug("Error validating '{}' with schema '{}': Line {} Column {}: {}",
+                      event.getName(),
+                      schemaFile,
+                      e.getLineNumber(),
+                      e.getColumnNumber(),
+                      e.getMessage(),
+                      e);
         } catch (SAXException e) {
-            resultCollector.addFailure(event.getName(), "metadata", "Metadata_checker_component",
+            resultCollector.addFailure(event.getName(),
+                                       getType(event.getName()),
+                                       "Metadata_checker_component",
                                        "Failure validating XML data from '" + event.getName() + "': " + e.getMessage());
             log.debug("Error validating '{}' with schema '{}': {}", event.getName(), schemaFile, e.getMessage(), e);
         } catch (IOException e) {
-            resultCollector.addFailure(event.getName(), "metadata", "Metadata_checker_component",
+            resultCollector.addFailure(event.getName(),
+                                       getType(event.getName()),
+                                       "Metadata_checker_component",
                                        "Failure reading data from '" + event.getName() + "': " + e.toString());
             log.debug("IO error reading '{}' while validating with schema '{}'", event.getName(), schemaFile, e);
         } catch (Exception e) {
             StringWriter sw = new StringWriter();
             e.printStackTrace(new PrintWriter(sw));
-            resultCollector.addFailure(event.getName(), "metadata", "Metadata_checker_component",
+            resultCollector.addFailure(event.getName(),
+                                       getType(event.getName()),
+                                       "Metadata_checker_component",
                                        "Unexpected failure processing data from '" + event.getName() + "': " + e
-                                               .toString(), sw.toString());
+                                               .toString(),
+                                       sw.toString());
             log.error("Unexpected error while validating '{}' with schema '{}'", event.getName(), schemaFile, e);
         }
     }
 
+    private String getType(String name) {
+        for (Map.Entry<String, String> stringStringEntry : POSTFIX_TO_TYPE.entrySet()) {
+            if (name.endsWith(stringStringEntry.getKey())){
+                return stringStringEntry.getValue();
+            }
+        }
+        return null;
+    }
+
     /**
      * Create a new validator for the schema in the given schema file. Note: Validators are not thread safe!
+     *
      * @param schemaFile The file name of the schema to get a validator for.
+     *
      * @return A validator for the given schema.
      * @throws SAXException If the schema fails to parse.
      */
-    private Validator createValidator(String schemaFile) throws SAXException {
+    private Validator createValidator(String schemaFile)
+            throws
+            SAXException {
         Schema schema = getSchema(schemaFile);
         return schema.newValidator();
     }
@@ -131,18 +175,22 @@ public class SchemaValidatorEventHandler implements TreeEventHandler {
     /**
      * Given a schema file name, get a parsed version of the schema from the classpath. Note that parsed schemas are
      * cached.
+     *
      * @param schemaFile The filename of the schema.
+     *
      * @return The parsed schema.
      * @throws SAXException If the schema fails to parse.
      */
-    private synchronized Schema getSchema(String schemaFile) throws SAXException {
+    private synchronized Schema getSchema(String schemaFile)
+            throws
+            SAXException {
         if (schemas.get(schemaFile) == null) {
-            log.debug("Cache miss for schema file {}",schemaFile);
+            log.debug("Cache miss for schema file {}", schemaFile);
             long start = System.currentTimeMillis();
             URL schemaUrl = getClass().getClassLoader().getResource(schemaFile);
             Schema schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(schemaUrl);
             schemas.put(schemaFile, schema);
-            log.debug("Loaded schema {} in {} ms",schemaFile,System.currentTimeMillis()-start);
+            log.debug("Loaded schema {} in {} ms", schemaFile, System.currentTimeMillis() - start);
         }
         return schemas.get(schemaFile);
     }

@@ -4,11 +4,9 @@ import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.EventHandlerFactory;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
-import dk.statsbiblioteket.newspaper.metadatachecker.jpylyzer.JpylyzerValidatorEventHandler;
-import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.MfPakConfiguration;
+import dk.statsbiblioteket.newspaper.metadatachecker.jpylyzer.JpylyzingEventHandler;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,10 +27,12 @@ public class MetadataChecksFactory
      * Initialise the MetadataChecksFactory with a result collector to collect errors in.
      *
      * @param resultCollector The result collector to collect errors in.
-     * @param mfPakDAO a DAO object from which one can read relevant external properties of a batch.
-     * @param batch a batch object representing the batch being analysed.
+     * @param mfPakDAO        a DAO object from which one can read relevant external properties of a batch.
+     * @param batch           a batch object representing the batch being analysed.
      */
-    public MetadataChecksFactory(ResultCollector resultCollector, MfPakDAO mfPakDAO, Batch batch) {
+    public MetadataChecksFactory(ResultCollector resultCollector,
+                                 MfPakDAO mfPakDAO,
+                                 Batch batch) {
         this.resultCollector = resultCollector;
         this.mfPakDAO = mfPakDAO;
         this.batch = batch;
@@ -40,19 +40,22 @@ public class MetadataChecksFactory
 
     /**
      * Construct a metadata checks factory that is usable for ninestars
-     * @param resultCollector the result collector to collect errors in
-     * @param atNinestars should be true, sets the framework to run in the ninestars context
-     * @param scratchFolder the folder where the batches lie
-     * @param jpylyzerPath the path to the jpylyzer executable. If null, jpylyzer will be used from the PATH
+     *
+     * @param resultCollector     the result collector to collect errors in
+     * @param atNinestars         should be true, sets the framework to run in the ninestars context
+     * @param scratchFolder       the folder where the batches lie
+     * @param jpylyzerPath        the path to the jpylyzer executable. If null, jpylyzer will be used from the PATH
      * @param controlPoliciesPath the control policies for the validators. If null, default values are used
-     * @param mfPakDAO a DAO object from which one can read relevant external properties of a batch.
-     * @param batch a batch object representing the batch being analysed.
+     * @param mfPakDAO            a DAO object from which one can read relevant external properties of a batch.
+     * @param batch               a batch object representing the batch being analysed.
      */
     public MetadataChecksFactory(ResultCollector resultCollector,
                                  boolean atNinestars,
                                  String scratchFolder,
                                  String jpylyzerPath,
-                                 String controlPoliciesPath, MfPakDAO mfPakDAO, Batch batch) {
+                                 String controlPoliciesPath,
+                                 MfPakDAO mfPakDAO,
+                                 Batch batch) {
         this(resultCollector, mfPakDAO, batch);
         this.atNinestars = atNinestars;
         this.scratchFolder = scratchFolder;
@@ -68,18 +71,12 @@ public class MetadataChecksFactory
     @Override
     public List<TreeEventHandler> createEventHandlers() {
         ArrayList<TreeEventHandler> treeEventHandlers = new ArrayList<>();
-        treeEventHandlers.add(new SchemaValidatorEventHandler(resultCollector));
-
-        try {
-            treeEventHandlers.add(new JpylyzerValidatorEventHandler(scratchFolder, resultCollector,
-                                                                    controlPoliciesPath,
-                                                                    jpylyzerPath,
-                                                                    atNinestars));
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+        if (atNinestars) { //This thing adds virtual jpylyzer.xml nodes
+            treeEventHandlers.add(new JpylyzingEventHandler(resultCollector, scratchFolder, jpylyzerPath));
         }
-        treeEventHandlers.add(new SchematronValidatorEventHandler(resultCollector));
-        treeEventHandlers.add(new ModsXPathEventHandler(resultCollector, mfPakDAO, batch ));
+        treeEventHandlers.add(new SchemaValidatorEventHandler(resultCollector));
+        treeEventHandlers.add(new SchematronValidatorEventHandler(resultCollector, controlPoliciesPath));
+        //treeEventHandlers.add(new ModsXPathEventHandler(resultCollector, mfPakDAO, batch));
         return treeEventHandlers;
     }
 }

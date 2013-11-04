@@ -4,43 +4,39 @@ import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.DataFileNodeBeginsParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.DataFileNodeEndsParsingEvent;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.InMemoryAttributeParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeBeginsParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeEndParsingEvent;
-import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.InjectingTreeEventHandler;
+import dk.statsbiblioteket.util.Bytes;
 import dk.statsbiblioteket.util.Streams;
 import dk.statsbiblioteket.util.Strings;
 import dk.statsbiblioteket.util.console.ProcessRunner;
-import dk.statsbiblioteket.util.xml.DOM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /** The jpylyzer metadata content checker checker */
-public class JpylyzerValidatorEventHandler
-        implements TreeEventHandler {
+public class JpylyzingEventHandler
+        extends InjectingTreeEventHandler {
 
     //Name of content file in jp2 virtual folder
     public static final String CONTENTS = "/contents";
     //Folder where the batch lives. Used because jpylyzer must work on the absolute path to the file
-    private final String scratchFolder;
+    private final String batchFolder;
     /** Logger */
-    private final Logger log = LoggerFactory.getLogger(JpylyzerValidatorEventHandler.class);
+    private final Logger log = LoggerFactory.getLogger(JpylyzingEventHandler.class);
     /** The result collector results are collected in. */
     private final ResultCollector resultCollector;
-    //The validator
-    private AttributeValidator attributeValidator;
     // Double flags indicating if we are in a virtual jp2 folder
     private boolean isInDataFile;
     private String datafile;
-    //If true, we will not expect to find a jpylyzer output file and will run jpylyzer instead
-    private boolean atNinestars = false;
     //Path to the jpylyzer executable
     private String jpylyzerPath;
 
@@ -48,63 +44,47 @@ public class JpylyzerValidatorEventHandler
     /**
      * Construct a new JpylyzerValidatorEventHandler.
      *
-     * @param batchFolder       the folder where the batches live
-     * @param resultCollector     the result collector
-     * @param controlPoliciesPath path to the control policies. If null, use default control policies
+     * @param resultCollector the result collector
+     * @param batchFolder     the folder where the batches live
      *
-     * @throws FileNotFoundException if the control policies point to file that is not found
+     * @throws RuntimeException if the control policies point to file that is not found
      */
-    public JpylyzerValidatorEventHandler(String batchFolder,
-                                         ResultCollector resultCollector,
-                                         String controlPoliciesPath)
+    public JpylyzingEventHandler(ResultCollector resultCollector,
+                                 String batchFolder)
             throws
-            FileNotFoundException {
-        this.scratchFolder = batchFolder;
+            RuntimeException {
+        this.batchFolder = batchFolder;
         this.resultCollector = resultCollector;
 
 
-        Document controlPoliciesDocument;
-        if (controlPoliciesPath != null) {
-            controlPoliciesDocument = DOM.streamToDOM(new FileInputStream(controlPoliciesPath));
-        } else {
-            controlPoliciesDocument = DOM.streamToDOM(Thread.currentThread().getContextClassLoader()
-                                                            .getResourceAsStream("defaultControlPolicies.xml"));
-        }
         if (this.jpylyzerPath == null) {
             this.jpylyzerPath = "jpylyzer.py";
         }
-        attributeValidator = new JP2AttributeValidatorFactory(controlPoliciesDocument).createValidator();
-
     }
 
     /**
      * Extended constructor for the validator. This should be used if we want the validator to be able to
      * execute jpylyzer.
      *
-     * @param batchFolder       the folder where the batches live
-     * @param resultCollector     the result collector
-     * @param controlPoliciesPath path to the control policies. If null, use default control policies
-     * @param jpylyzerPath        path to the jpylyzer executable
-     * @param atNinestars         if true, we will not look for a jpylyzer metadata file, and will instead execute
-     *                            jpylyzer
      *
-     * @throws FileNotFoundException if the control policies point to file that is not found
+     * @param resultCollector the result collector
+     * @param batchFolder     the folder where the batches live
+     * @param jpylyzerPath    path to the jpylyzer executable
+     * @throws RuntimeException if the control policies point to file that is not found
      */
-    public JpylyzerValidatorEventHandler(String batchFolder,
-                                         ResultCollector resultCollector,
-                                         String controlPoliciesPath,
-                                         String jpylyzerPath,
-                                         boolean atNinestars)
+    public JpylyzingEventHandler(ResultCollector resultCollector,
+                                 String batchFolder,
+                                 String jpylyzerPath)
             throws
-            FileNotFoundException {
+            RuntimeException {
 
-        this(batchFolder, resultCollector, controlPoliciesPath);
+        this(resultCollector, batchFolder);
         this.jpylyzerPath = jpylyzerPath;
-        this.atNinestars = atNinestars;
     }
 
     /**
      * Node begins. Sets the isInDataFile flag if this node is a data file node
+     *
      * @param event the node begins event
      */
     @Override
@@ -117,6 +97,7 @@ public class JpylyzerValidatorEventHandler
 
     /**
      * Node ends. Clears the isInDataFile flag if this node is a data file node.
+     *
      * @param event the node ends event
      */
     @Override
@@ -132,6 +113,7 @@ public class JpylyzerValidatorEventHandler
      * If we are in a data file node, and the event is for a file called "/contents" and the flag "atNinestars" is set
      * we will run jpylyzer and validate the output.
      * If we are in a data file node, and the event is for a file called "*.jpylyzer.xml", validate the contents
+     *
      * @param event the attribute event
      */
     @Override
@@ -141,24 +123,34 @@ public class JpylyzerValidatorEventHandler
 
                 if (event.getName().endsWith(CONTENTS)) {
                     log.debug("Encountered event {}", event.getName());
-                    if (atNinestars) {
-                        File filePath = new File(scratchFolder, datafile);
-                        InputStream jpylizerOutput = jpylize(filePath);
 
-                        attributeValidator.validate(datafile, getByteArrayOutputStream(jpylizerOutput), resultCollector);
-                    }
-                } else {
-                    if (event.getName().endsWith("jpylizer.xml")) {
-                        attributeValidator.validate(datafile, getByteArrayOutputStream(event.getData()), resultCollector);
-                    }
+                    File filePath = new File(batchFolder, datafile);
+                    byte[] jpylizerOutput = toByteArray(jpylize(filePath));
+                    pushInjectedEvent(new InMemoryAttributeParsingEvent(getJpylyzerName(datafile),
+                                                                        jpylizerOutput,
+                                                                        md5sum(jpylizerOutput)));
+
                 }
             }
         } catch (IOException e) {
-            resultCollector.addFailure(event.getName(),"jp2file",getComponent(),e.getMessage(),Strings.getStackTrace(e));
+            resultCollector
+                    .addFailure(event.getName(), "jp2file", getComponent(), e.getMessage(), Strings.getStackTrace(e));
         }
     }
 
-    private byte[] getByteArrayOutputStream(InputStream jpylizerOutput)
+    private String getJpylyzerName(String jp2Name) {
+        return jp2Name.replaceFirst("\\.jp2$", ".jpylyzer.xml");
+    }
+
+    private String md5sum(byte[] bytes) {
+        try {
+            return Bytes.toHex(MessageDigest.getInstance("MD5").digest(bytes)).toLowerCase();
+        } catch (NoSuchAlgorithmException e) {
+            throw new Error("MD5 not known");
+        }
+    }
+
+    private byte[] toByteArray(InputStream jpylizerOutput)
             throws
             IOException {
         ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
@@ -166,9 +158,7 @@ public class JpylyzerValidatorEventHandler
         return byteStream.toByteArray();
     }
 
-    /**
-     * Get the component name
-     */
+    /** Get the component name */
     private String getComponent() {
         return "jpylyzerprofile" + getClass().getPackage().getImplementationVersion();
     }
@@ -180,10 +170,12 @@ public class JpylyzerValidatorEventHandler
 
     /**
      * run jpylyzer on the given file and return the xml report as an inputstream.
+     *
      * @param dataPath the path to the jp2 file
+     *
      * @return the jpylyzer xml report
      * @throws RuntimeException if the execution of jpylyzer failed in some fashion (not invalid file, if the program
-     * returned non-zero returncode)
+     *                          returned non-zero returncode)
      */
     private InputStream jpylize(File dataPath)
             throws
@@ -200,9 +192,8 @@ public class JpylyzerValidatorEventHandler
         if (runner.getReturnCode() == 0) {
             return runner.getProcessOutput();
         } else {
-            throw new IOException(
-                    "failed to run jpylyzer, returncode:" + runner.getReturnCode() + ", stdOut:" + runner
-                            .getProcessOutputAsString() + " stdErr:" + runner.getProcessErrorAsString());
+            throw new IOException("failed to run jpylyzer, returncode:" + runner.getReturnCode() + ", stdOut:" + runner
+                    .getProcessOutputAsString() + " stdErr:" + runner.getProcessErrorAsString());
         }
     }
 
