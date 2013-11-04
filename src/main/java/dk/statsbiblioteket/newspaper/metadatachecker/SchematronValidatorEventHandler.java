@@ -45,7 +45,7 @@ public class SchematronValidatorEventHandler extends DefaultTreeEventHandler {
         //postfixToSch.put(".alto.xml", "alto.sch");
         //postfixToSch.put(".mix.xml", "mix.sch");
         postfixToSch.put(".mods.xml", "mods.sch");
-        //postfixToSch.put(".edition.xml", "edition-mods.sch");
+        postfixToSch.put(".edition.xml", "edition-mods.sch");
         //postfixToSch.put(".film.xml", "film.sch");
         POSTFIX_TO_XSD = Collections.unmodifiableMap(postfixToSch);
     }
