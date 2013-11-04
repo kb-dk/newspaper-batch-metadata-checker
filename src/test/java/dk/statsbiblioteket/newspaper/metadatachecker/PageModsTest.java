@@ -27,7 +27,7 @@ public class PageModsTest {
     /**
      * Test that we can validate a valid page mods file.
      */
-    @Test(enabled = false)
+    @Test
     public void testPageModsGoodSch() {
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
         SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
@@ -51,7 +51,7 @@ public class PageModsTest {
     /**
      * Test that we test an invalid page mods file.
      */
-    @Test(enabled = false)
+    @Test
     public void testPageModsBad1Sch() {
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
         SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
@@ -80,7 +80,7 @@ public class PageModsTest {
     /**
      * Test that we test an invalid page mods file.
      */
-    @Test(enabled = false)
+    @Test
     public void testPageModsBad2Sch() {
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
         SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);

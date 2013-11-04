@@ -36,8 +36,8 @@ public class SchematronValidatorEventHandler
         Map<String, String> postfixToSch = new HashMap<>();
         //postfixToSch.put(".alto.xml", "alto.sch");
         //postfixToSch.put(".mix.xml", "mix.sch");
-        //postfixToSch.put(".mods.xml", "mods.sch");
-        //postfixToSch.put(".edition.xml", "edition-mods.sch");
+        postfixToSch.put(".mods.xml", "mods.sch");
+        postfixToSch.put(".edition.xml", "edition-mods.sch");
         //postfixToSch.put(".film.xml", "film.sch");
         postfixToSch.put(".jpylyzer.xml", "sb-jp2.sch");
         POSTFIX_TO_XSD = Collections.unmodifiableMap(postfixToSch);
