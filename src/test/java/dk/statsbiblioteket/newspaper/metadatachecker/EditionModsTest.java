@@ -21,7 +21,7 @@ public class EditionModsTest {
     @Test
     public void testEditionModsGood() {
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
-        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector);
+        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
         AttributeParsingEvent editionEvent = new AttributeParsingEvent(
                 "B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01.edition.xml") {
             @Override
