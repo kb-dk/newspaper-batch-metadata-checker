@@ -40,4 +40,8 @@ public class EditionModsTest {
         assertTrue(resultCollector.isSuccess());
     }
 
+    /**
+     * TODO Test that we catch invalid edition xml (mods) files
+     */
+
 }
