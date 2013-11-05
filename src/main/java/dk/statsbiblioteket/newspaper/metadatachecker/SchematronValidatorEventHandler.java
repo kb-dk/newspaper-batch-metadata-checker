@@ -22,8 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /** Check xml data against the detailed schematron specifications. */
-public class SchematronValidatorEventHandler
-        extends DefaultTreeEventHandler {
+public class SchematronValidatorEventHandler extends DefaultTreeEventHandler {
 
     /** A map from file postfix to a known schema for that file. */
     private static final Map<String, String> POSTFIX_TO_XSD;
@@ -62,7 +61,7 @@ public class SchematronValidatorEventHandler
     /**
      * Initialise the event handler with the collector to collect results in.
      *
-     * @param resultCollector The collector to collect results in.
+     * @param resultCollector     The collector to collect results in.
      * @param controlPoliciesPath path to the control policies. If null, use default control policies
      */
     public SchematronValidatorEventHandler(ResultCollector resultCollector,

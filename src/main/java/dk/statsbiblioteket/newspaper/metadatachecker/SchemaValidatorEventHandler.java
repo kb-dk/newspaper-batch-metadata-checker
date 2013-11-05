@@ -26,11 +26,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /** Check xml data of known file postfixes against xsd schemas. */
-public class SchemaValidatorEventHandler
-        implements TreeEventHandler {
+public class SchemaValidatorEventHandler implements TreeEventHandler {
     /** A map from file postfix to a known schema for that file. */
     private static final Map<String, String> POSTFIX_TO_XSD;
-
     private static final Map<String, String> POSTFIX_TO_TYPE;
 
     static {
@@ -113,9 +111,8 @@ public class SchemaValidatorEventHandler
             resultCollector.addFailure(event.getName(),
                                        getType(event.getName()),
                                        "Metadata_checker_component",
-                                       "Failure validating XML data from '" + event.getName() + "': Line " + e
-                                               .getLineNumber() + " Column " + e.getColumnNumber() + ": " + e
-                                               .getMessage());
+                                       "Failure validating XML data from '" + event.getName() + "': Line " +
+                                       e.getLineNumber() + " Column " + e.getColumnNumber() + ": " + e.getMessage());
             log.debug("Error validating '{}' with schema '{}': Line {} Column {}: {}",
                       event.getName(),
                       schemaFile,
@@ -141,8 +138,8 @@ public class SchemaValidatorEventHandler
             resultCollector.addFailure(event.getName(),
                                        getType(event.getName()),
                                        "Metadata_checker_component",
-                                       "Unexpected failure processing data from '" + event.getName() + "': " + e
-                                               .toString(),
+                                       "Unexpected failure processing data from '" + event.getName() + "': " +
+                                       e.toString(),
                                        sw.toString());
             log.error("Unexpected error while validating '{}' with schema '{}'", event.getName(), schemaFile, e);
         }
@@ -150,7 +147,7 @@ public class SchemaValidatorEventHandler
 
     private String getType(String name) {
         for (Map.Entry<String, String> stringStringEntry : POSTFIX_TO_TYPE.entrySet()) {
-            if (name.endsWith(stringStringEntry.getKey())){
+            if (name.endsWith(stringStringEntry.getKey())) {
                 return stringStringEntry.getValue();
             }
         }
@@ -165,9 +162,7 @@ public class SchemaValidatorEventHandler
      * @return A validator for the given schema.
      * @throws SAXException If the schema fails to parse.
      */
-    private Validator createValidator(String schemaFile)
-            throws
-            SAXException {
+    private Validator createValidator(String schemaFile) throws SAXException {
         Schema schema = getSchema(schemaFile);
         return schema.newValidator();
     }
@@ -181,9 +176,7 @@ public class SchemaValidatorEventHandler
      * @return The parsed schema.
      * @throws SAXException If the schema fails to parse.
      */
-    private synchronized Schema getSchema(String schemaFile)
-            throws
-            SAXException {
+    private synchronized Schema getSchema(String schemaFile) throws SAXException {
         if (schemas.get(schemaFile) == null) {
             log.debug("Cache miss for schema file {}", schemaFile);
             long start = System.currentTimeMillis();

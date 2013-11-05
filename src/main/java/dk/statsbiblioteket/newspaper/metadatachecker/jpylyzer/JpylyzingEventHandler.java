@@ -23,21 +23,20 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /** The jpylyzer metadata content checker checker */
-public class JpylyzingEventHandler
-        extends InjectingTreeEventHandler {
+public class JpylyzingEventHandler extends InjectingTreeEventHandler {
 
-    //Name of content file in jp2 virtual folder
+    /**Name of content file in jp2 virtual folder*/
     public static final String CONTENTS = "/contents";
-    //Folder where the batch lives. Used because jpylyzer must work on the absolute path to the file
+    /*8Folder where the batch lives. Used because jpylyzer must work on the absolute path to the file*/
     private final String batchFolder;
     /** Logger */
     private final Logger log = LoggerFactory.getLogger(JpylyzingEventHandler.class);
     /** The result collector results are collected in. */
     private final ResultCollector resultCollector;
-    // Double flags indicating if we are in a virtual jp2 folder
+    /** Double flags indicating if we are in a virtual jp2 folder*/
     private boolean isInDataFile;
     private String datafile;
-    //Path to the jpylyzer executable
+    /**Path to the jpylyzer executable*/
     private String jpylyzerPath;
 
 
@@ -47,12 +46,9 @@ public class JpylyzingEventHandler
      * @param resultCollector the result collector
      * @param batchFolder     the folder where the batches live
      *
-     * @throws RuntimeException if the control policies point to file that is not found
      */
     public JpylyzingEventHandler(ResultCollector resultCollector,
-                                 String batchFolder)
-            throws
-            RuntimeException {
+                                 String batchFolder) {
         this.batchFolder = batchFolder;
         this.resultCollector = resultCollector;
 
@@ -66,24 +62,20 @@ public class JpylyzingEventHandler
      * Extended constructor for the validator. This should be used if we want the validator to be able to
      * execute jpylyzer.
      *
-     *
      * @param resultCollector the result collector
      * @param batchFolder     the folder where the batches live
      * @param jpylyzerPath    path to the jpylyzer executable
-     * @throws RuntimeException if the control policies point to file that is not found
-     */
+  */
     public JpylyzingEventHandler(ResultCollector resultCollector,
                                  String batchFolder,
-                                 String jpylyzerPath)
-            throws
-            RuntimeException {
+                                 String jpylyzerPath) {
 
         this(resultCollector, batchFolder);
         this.jpylyzerPath = jpylyzerPath;
     }
 
     /**
-     * Node begins. Sets the isInDataFile flag if this node is a data file node
+     * Node begins. Sets the isInDataFile flag and the "datafile" if this node is a data file node
      *
      * @param event the node begins event
      */
@@ -134,7 +126,7 @@ public class JpylyzingEventHandler
             }
         } catch (IOException e) {
             resultCollector
-                    .addFailure(event.getName(), "jp2file", getComponent(), e.getMessage(), Strings.getStackTrace(e));
+                    .addFailure(event.getName(), "jp2file", getComponentName(), e.getMessage(), Strings.getStackTrace(e));
         }
     }
 
@@ -150,16 +142,14 @@ public class JpylyzingEventHandler
         }
     }
 
-    private byte[] toByteArray(InputStream jpylizerOutput)
-            throws
-            IOException {
+    private byte[] toByteArray(InputStream jpylizerOutput) throws IOException {
         ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
         Streams.pipe(jpylizerOutput, byteStream);
         return byteStream.toByteArray();
     }
 
     /** Get the component name */
-    private String getComponent() {
+    private String getComponentName() {
         return "jpylyzerprofile" + getClass().getPackage().getImplementationVersion();
     }
 
@@ -174,12 +164,10 @@ public class JpylyzingEventHandler
      * @param dataPath the path to the jp2 file
      *
      * @return the jpylyzer xml report
-     * @throws RuntimeException if the execution of jpylyzer failed in some fashion (not invalid file, if the program
+     * @throws IOException if the execution of jpylyzer failed in some fashion (not invalid file, if the program
      *                          returned non-zero returncode)
      */
-    private InputStream jpylize(File dataPath)
-            throws
-            IOException {
+    private InputStream jpylize(File dataPath) throws IOException {
 
         log.info("Running jpylyzer on file {}", dataPath);
         ProcessRunner runner = new ProcessRunner(jpylyzerPath, dataPath.getAbsolutePath());
