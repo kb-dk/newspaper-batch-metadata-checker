@@ -34,8 +34,8 @@ public class SchematronValidatorEventHandler
      */
     static {  //TODO uncomment these as they are created
         Map<String, String> postfixToSch = new HashMap<>();
-        //postfixToSch.put(".alto.xml", "alto.sch");
-        //postfixToSch.put(".mix.xml", "mix.sch");
+        //postfixToSch.put(".alto.xml", "alto.sch.xml");
+        postfixToSch.put(".mix.xml", "mix.sch");
         postfixToSch.put(".mods.xml", "mods.sch");
         postfixToSch.put(".edition.xml", "edition-mods.sch");
         //postfixToSch.put(".film.xml", "film.sch");
