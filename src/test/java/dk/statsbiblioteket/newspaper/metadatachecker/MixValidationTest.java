@@ -1,5 +1,6 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
+import static org.testng.AssertJUnit.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
@@ -54,7 +55,7 @@ public class MixValidationTest {
     	
         setUp();
         handleTestEvent(input, resultCollector);
-        assertTrue(!resultCollector.isSuccess());
+        assertFalse(resultCollector.isSuccess());
     }
 
     @Test
@@ -71,7 +72,7 @@ public class MixValidationTest {
     	
         setUp();
         handleTestEvent(input, resultCollector);
-        assertTrue(!resultCollector.isSuccess());
+        assertFalse(resultCollector.isSuccess());
     }
 
     @Test
@@ -88,7 +89,7 @@ public class MixValidationTest {
     	
         setUp();
         handleTestEvent(input, resultCollector);
-        assertTrue(!resultCollector.isSuccess());
+        assertFalse(resultCollector.isSuccess());
     }
 
     @Test
@@ -105,7 +106,7 @@ public class MixValidationTest {
     	
         setUp();
         handleTestEvent(input, resultCollector);
-        assertTrue(!resultCollector.isSuccess());
+        assertFalse(resultCollector.isSuccess());
     }
 
     @Test
@@ -121,7 +122,7 @@ public class MixValidationTest {
     	
         setUp();
         handleTestEvent(input, resultCollector);
-        assertTrue(!resultCollector.isSuccess());
+        assertFalse(resultCollector.isSuccess());
     }
 
     @Test
@@ -137,7 +138,7 @@ public class MixValidationTest {
     	
         setUp();
         handleTestEvent(input, resultCollector);
-        assertTrue(!resultCollector.isSuccess());
+        assertFalse(resultCollector.isSuccess());
     }
 
     @Test
@@ -154,7 +155,7 @@ public class MixValidationTest {
     	
         setUp();
         handleTestEvent(input, resultCollector);
-        assertTrue(!resultCollector.isSuccess());
+        assertFalse(resultCollector.isSuccess());
     }
 
     @Test
@@ -171,7 +172,7 @@ public class MixValidationTest {
     	
         setUp();
         handleTestEvent(input, resultCollector);
-        assertTrue(!resultCollector.isSuccess());
+        assertFalse(resultCollector.isSuccess());
     }
 
     @Test
@@ -188,7 +189,7 @@ public class MixValidationTest {
     	
         setUp();
         handleTestEvent(input, resultCollector);
-        assertTrue(!resultCollector.isSuccess());
+        assertFalse(resultCollector.isSuccess());
     }
 
     @Test
@@ -205,7 +206,7 @@ public class MixValidationTest {
     	
         setUp();
         handleTestEvent(input, resultCollector);
-        assertTrue(!resultCollector.isSuccess());
+        assertFalse(resultCollector.isSuccess());
     }
 
     @Test
@@ -223,7 +224,7 @@ public class MixValidationTest {
     	
         setUp();
         handleTestEvent(input, resultCollector);
-        assertTrue(!resultCollector.isSuccess());
+        assertFalse(resultCollector.isSuccess());
     }
 
     @Test
@@ -241,7 +242,7 @@ public class MixValidationTest {
     	
         setUp();
         handleTestEvent(input, resultCollector);
-        assertTrue(!resultCollector.isSuccess());
+        assertFalse(resultCollector.isSuccess());
     }
 
     @Test
@@ -257,7 +258,7 @@ public class MixValidationTest {
     	
         setUp();
         handleTestEvent(input, resultCollector);
-        assertTrue(!resultCollector.isSuccess());
+        assertFalse(resultCollector.isSuccess());
     }
 
     @Test
@@ -273,7 +274,7 @@ public class MixValidationTest {
     	
         setUp();
         handleTestEvent(input, resultCollector);
-        assertTrue(!resultCollector.isSuccess());
+        assertFalse(resultCollector.isSuccess());
     }
 
     @Test
@@ -289,7 +290,7 @@ public class MixValidationTest {
     	
         setUp();
         handleTestEvent(input, resultCollector);
-        assertTrue(!resultCollector.isSuccess());
+        assertFalse(resultCollector.isSuccess());
     }
 
     @Test
@@ -305,7 +306,7 @@ public class MixValidationTest {
     	
         setUp();
         handleTestEvent(input, resultCollector);
-        assertTrue(!resultCollector.isSuccess());
+        assertFalse(resultCollector.isSuccess());
     }
 
     @Test
@@ -330,7 +331,7 @@ public class MixValidationTest {
     	
         setUp();
         handleTestEvent(input, resultCollector);
-        assertTrue(!resultCollector.isSuccess());
+        assertFalse(resultCollector.isSuccess());
     }
 
     @Test
@@ -355,7 +356,7 @@ public class MixValidationTest {
     	
         setUp();
         handleTestEvent(input, resultCollector);
-        assertTrue(!resultCollector.isSuccess());
+        assertFalse(resultCollector.isSuccess());
     }
 
     @Test
@@ -380,7 +381,7 @@ public class MixValidationTest {
     	
         setUp();
         handleTestEvent(input, resultCollector);
-        assertTrue(!resultCollector.isSuccess());
+        assertFalse(resultCollector.isSuccess());
     }
 
     @Test
@@ -405,7 +406,7 @@ public class MixValidationTest {
     	
         setUp();
         handleTestEvent(input, resultCollector);
-        assertTrue(!resultCollector.isSuccess());
+        assertFalse(resultCollector.isSuccess());
     }
 
     @Test
@@ -430,7 +431,7 @@ public class MixValidationTest {
     	
         setUp();
         handleTestEvent(input, resultCollector);
-        assertTrue(!resultCollector.isSuccess());
+        assertFalse(resultCollector.isSuccess());
     }
 
     @Test
@@ -455,7 +456,7 @@ public class MixValidationTest {
     	
         setUp();
         handleTestEvent(input, resultCollector);
-        assertTrue(!resultCollector.isSuccess());
+        assertFalse(resultCollector.isSuccess());
     }
 
     @Test
@@ -466,6 +467,7 @@ public class MixValidationTest {
     			+ "    <mix:ImageColorEncoding>"
     			+ "      <mix:BitsPerSample>"
     			+ "        <mix:bitsPerSampleValue></mix:bitsPerSampleValue>"
+                + "        <mix:bitsPerSampleUnit>integer</mix:bitsPerSampleUnit>"
     			+ "      </mix:BitsPerSample>"
     			+ "      <mix:samplesPerPixel>1</mix:samplesPerPixel>"
     			+ "    </mix:ImageColorEncoding>"
@@ -474,7 +476,7 @@ public class MixValidationTest {
     	
         setUp();
         handleTestEvent(input, resultCollector);
-        assertTrue(!resultCollector.isSuccess());
+        assertFalse(resultCollector.isSuccess());
     }
 
     @Test
@@ -485,6 +487,7 @@ public class MixValidationTest {
     			+ "    <mix:ImageColorEncoding>"
     			+ "      <mix:BitsPerSample>"
     			+ "        <mix:bitsPerSampleValue>Wrong bits per sample value</mix:bitsPerSampleValue>"
+                + "        <mix:bitsPerSampleUnit>integer</mix:bitsPerSampleUnit>"
     			+ "      </mix:BitsPerSample>"
     			+ "      <mix:samplesPerPixel>1</mix:samplesPerPixel>"
     			+ "    </mix:ImageColorEncoding>"
@@ -493,7 +496,47 @@ public class MixValidationTest {
     	
         setUp();
         handleTestEvent(input, resultCollector);
-        assertTrue(!resultCollector.isSuccess());
+        assertFalse(resultCollector.isSuccess());
+    }
+
+    @Test
+    public void shouldFailDueToMissingBitsPerSampleUnit() {
+    	final String input = "" 
+    			+ "<mix:mix xmlns:mix='http://www.loc.gov/mix/v20'>"
+    		    + "  <mix:ImageAssessmentMetadata>"
+    			+ "    <mix:ImageColorEncoding>"
+    			+ "      <mix:BitsPerSample>"
+    			+ "        <mix:bitsPerSampleValue>8</mix:bitsPerSampleValue>"
+                + "        <mix:bitsPerSampleUnit></mix:bitsPerSampleUnit>"
+    			+ "      </mix:BitsPerSample>"
+    			+ "      <mix:samplesPerPixel>1</mix:samplesPerPixel>"
+    			+ "    </mix:ImageColorEncoding>"
+    			+ "  </mix:ImageAssessmentMetadata>"
+    			+ "</mix:mix>";
+    	
+        setUp();
+        handleTestEvent(input, resultCollector);
+        assertFalse(resultCollector.isSuccess());
+    }
+
+    @Test
+    public void shouldFailDueToWrongBitsPerSampleUnit() {
+    	final String input = "" 
+    			+ "<mix:mix xmlns:mix='http://www.loc.gov/mix/v20'>"
+    		    + "  <mix:ImageAssessmentMetadata>"
+    			+ "    <mix:ImageColorEncoding>"
+    			+ "      <mix:BitsPerSample>"
+    			+ "        <mix:bitsPerSampleValue>8</mix:bitsPerSampleValue>"
+                + "        <mix:bitsPerSampleUnit>Wrong bits per sample unit</mix:bitsPerSampleUnit>"
+    			+ "      </mix:BitsPerSample>"
+    			+ "      <mix:samplesPerPixel>1</mix:samplesPerPixel>"
+    			+ "    </mix:ImageColorEncoding>"
+    			+ "  </mix:ImageAssessmentMetadata>"
+    			+ "</mix:mix>";
+    	
+        setUp();
+        handleTestEvent(input, resultCollector);
+        assertFalse(resultCollector.isSuccess());
     }
 
     @Test
@@ -512,7 +555,7 @@ public class MixValidationTest {
     	
         setUp();
         handleTestEvent(input, resultCollector);
-        assertTrue(!resultCollector.isSuccess());
+        assertFalse(resultCollector.isSuccess());
     }
 
     @Test
@@ -531,7 +574,7 @@ public class MixValidationTest {
     	
         setUp();
         handleTestEvent(input, resultCollector);
-        assertTrue(!resultCollector.isSuccess());
+        assertFalse(resultCollector.isSuccess());
     }
 
     private void handleTestEvent(final String input, ResultCollector resultCollector) {

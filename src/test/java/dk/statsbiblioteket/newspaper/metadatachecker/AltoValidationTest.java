@@ -277,29 +277,6 @@ public class AltoValidationTest {
     }
     
     @Test
-    public void shouldFailDueToStringHeightAttributeContainingLetters() {
-    	final String input = ""
-    			+ "<?xml version='1.0' encoding='UTF-8'?>"
-    			+ "<alto xmlns='http://www.loc.gov/standards/alto/ns-v2#' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/standards/alto alto-v2.0.xsd'>"
-    			+ "  <Layout>"
-    			+ "    <Page HEIGHT='11408' WIDTH='9304'>"
-    			+ "      <PrintSpace>"
-    			+ "        <TextBlock language='dan'>"
-    			+ "          <TextLine>"
-    			+ "            <String CONTENT='Ao.' HEIGHT='1a' WIDTH='480' HPOS='584' VPOS='1000' />"
-    			+ "          </TextLine>"
-    			+ "        </TextBlock>"
-    			+ "      </PrintSpace>"
-    			+ "    </Page>"
-    			+ "  </Layout>"
-    			+ "</alto>";
-    	
-        setUp();
-        handleTestEvent(input, resultCollector);
-        assertFalse(resultCollector.isSuccess());
-    }
-    
-    @Test
     public void shouldFailDueToMissingStringWidthAttribute() {
     	final String input = ""
     			+ "<?xml version='1.0' encoding='UTF-8'?>"
@@ -333,29 +310,6 @@ public class AltoValidationTest {
     			+ "        <TextBlock language='dan'>"
     			+ "          <TextLine>"
     			+ "            <String CONTENT='Ao.' HEIGHT='296' WIDTH='' HPOS='584' VPOS='1000' />"
-    			+ "          </TextLine>"
-    			+ "        </TextBlock>"
-    			+ "      </PrintSpace>"
-    			+ "    </Page>"
-    			+ "  </Layout>"
-    			+ "</alto>";
-    	
-        setUp();
-        handleTestEvent(input, resultCollector);
-        assertFalse(resultCollector.isSuccess());
-    }
-
-    @Test
-    public void shouldFailDueToStringWidthAttributeContainingLetters() {
-    	final String input = ""
-    			+ "<?xml version='1.0' encoding='UTF-8'?>"
-    			+ "<alto xmlns='http://www.loc.gov/standards/alto/ns-v2#' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/standards/alto alto-v2.0.xsd'>"
-    			+ "  <Layout>"
-    			+ "    <Page HEIGHT='11408' WIDTH='9304'>"
-    			+ "      <PrintSpace>"
-    			+ "        <TextBlock language='dan'>"
-    			+ "          <TextLine>"
-    			+ "            <String CONTENT='Ao.' HEIGHT='296' WIDTH='1a' HPOS='584' VPOS='1000' />"
     			+ "          </TextLine>"
     			+ "        </TextBlock>"
     			+ "      </PrintSpace>"
@@ -415,29 +369,6 @@ public class AltoValidationTest {
     }
 
     @Test
-    public void shouldFailDueToStringHPosAttributeContainingLetters() {
-    	final String input = ""
-    			+ "<?xml version='1.0' encoding='UTF-8'?>"
-    			+ "<alto xmlns='http://www.loc.gov/standards/alto/ns-v2#' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/standards/alto alto-v2.0.xsd'>"
-    			+ "  <Layout>"
-    			+ "    <Page HEIGHT='11408' WIDTH='9304'>"
-    			+ "      <PrintSpace>"
-    			+ "        <TextBlock language='dan'>"
-    			+ "          <TextLine>"
-    			+ "            <String CONTENT='Ao.' HEIGHT='296' WIDTH='480' HPOS='1a' VPOS='1000' />"
-    			+ "          </TextLine>"
-    			+ "        </TextBlock>"
-    			+ "      </PrintSpace>"
-    			+ "    </Page>"
-    			+ "  </Layout>"
-    			+ "</alto>";
-    	
-        setUp();
-        handleTestEvent(input, resultCollector);
-        assertFalse(resultCollector.isSuccess());
-    }
-
-    @Test
     public void shouldFailDueToMissingStringVPosAttribute() {
     	final String input = ""
     			+ "<?xml version='1.0' encoding='UTF-8'?>"
@@ -471,29 +402,6 @@ public class AltoValidationTest {
     			+ "        <TextBlock language='dan'>"
     			+ "          <TextLine>"
     			+ "            <String CONTENT='Ao.' HEIGHT='296' WIDTH='480' HPOS='584' VPOS='' />"
-    			+ "          </TextLine>"
-    			+ "        </TextBlock>"
-    			+ "      </PrintSpace>"
-    			+ "    </Page>"
-    			+ "  </Layout>"
-    			+ "</alto>";
-    	
-        setUp();
-        handleTestEvent(input, resultCollector);
-        assertFalse(resultCollector.isSuccess());
-    }
-
-    @Test
-    public void shouldFailDueToStringVPosAttributeContainingLetters() {
-    	final String input = ""
-    			+ "<?xml version='1.0' encoding='UTF-8'?>"
-    			+ "<alto xmlns='http://www.loc.gov/standards/alto/ns-v2#' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/standards/alto alto-v2.0.xsd'>"
-    			+ "  <Layout>"
-    			+ "    <Page HEIGHT='11408' WIDTH='9304'>"
-    			+ "      <PrintSpace>"
-    			+ "        <TextBlock language='dan'>"
-    			+ "          <TextLine>"
-    			+ "            <String CONTENT='Ao.' HEIGHT='296' WIDTH='480' HPOS='584' VPOS='1a' />"
     			+ "          </TextLine>"
     			+ "        </TextBlock>"
     			+ "      </PrintSpace>"
