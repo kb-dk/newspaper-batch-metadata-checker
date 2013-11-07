@@ -13,7 +13,7 @@
         <mods:dateIssued encoding="iso8601">1795-06-15</mods:dateIssued>
     </mods:originInfo>
     <mods:note type="noteAboutReproduction">present</mods:note>
-    <mods:note type="noteAboutReproduction" displayLabel="comment concerning label">present</mods:note>
+    <mods:note type="noteAboutReproduction" displayLabel="comment concerning label">Not digitised, not published</mods:note>
     <mods:relatedItem type="host">
         <mods:part>
             <mods:detail type="volume">
