@@ -171,6 +171,7 @@ public class JpylyzingEventHandler extends InjectingTreeEventHandler {
 
         log.info("Running jpylyzer on file {}", dataPath);
         ProcessRunner runner = new ProcessRunner("python",jpylyzerPath, dataPath.getAbsolutePath());
+        runner.setEnviroment(System.getenv());
         runner.setOutputCollectionByteSize(Integer.MAX_VALUE);
 
         //this call is blocking
