@@ -29,8 +29,8 @@
     <!--Page height attribute-->
     <!--Page width attribute-->
     <s:rule context="alto:alto/alto:Layout/alto:Page">
-      <s:assert test="matches(@HEIGHT, '^[0-9]+$')">Page should have HEIGHT attribute <s:value-of select="@HEIGHT"/></s:assert>
-      <s:assert test="matches(@WIDTH, '^[0-9]+$')">Page should have WIDTH attribute <s:value-of select="@WIDTH"/></s:assert>
+      <s:assert test="@HEIGHT/string-length() > 0">Page should have HEIGHT attribute <s:value-of select="@HEIGHT"/></s:assert>
+      <s:assert test="@WIDTH/string-length() > 0">Page should have WIDTH attribute <s:value-of select="@WIDTH"/></s:assert>
     </s:rule>
     
     <!--String element must have HEIGHT attribute-->
@@ -38,10 +38,10 @@
     <!--String element must have HPOS attribute-->
     <!--String element must have VPOS attribute-->
     <s:rule context="alto:alto/alto:Layout/alto:Page/alto:PrintSpace/alto:TextBlock/alto:TextLine/alto:String">
-      <s:assert test="matches(@HEIGHT, '^[0-9]+$')">String should have HEIGHT attribute <s:value-of select="@HEIGHT"/></s:assert>
-      <s:assert test="matches(@WIDTH, '^[0-9]+$')">String should have WIDTH attribute <s:value-of select="@WIDTH"/></s:assert>
-      <s:assert test="matches(@HPOS, '^[0-9]+$')">String should have HPOS attribute <s:value-of select="@HPOS"/></s:assert>
-      <s:assert test="matches(@VPOS, '^[0-9]+$')">String should have VPOS attribute <s:value-of select="@VPOS"/></s:assert>
+      <s:assert test="@HEIGHT/string-length() > 0">String should have HEIGHT attribute <s:value-of select="@HEIGHT"/></s:assert>
+      <s:assert test="@WIDTH/string-length() > 0">String should have WIDTH attribute <s:value-of select="@WIDTH"/></s:assert>
+      <s:assert test="@HPOS/string-length() > 0">String should have HPOS attribute <s:value-of select="@HPOS"/></s:assert>
+      <s:assert test="@VPOS/string-length() > 0">String should have VPOS attribute <s:value-of select="@VPOS"/></s:assert>
       <s:assert test="matches(@CONTENT, '^\s*\S+\s*$')">String should have CONTENT attribute <s:value-of select="@CONTENT"/></s:assert>
     </s:rule>
     
