@@ -19,7 +19,6 @@
             <includes>
                 <include>*:*</include>
             </includes>
-            <scope>runtime</scope>
         </dependencySet>
     </dependencySets>
     <fileSets>
