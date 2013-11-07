@@ -26,7 +26,7 @@
     <!--Organisation which calculated the checksum-->
     <s:rule context="mix:mix/mix:BasicDigitalObjectInformation/mix:Fixity">
       <s:assert test="mix:messageDigestAlgorithm = 'MD5'">Checksum algorithm should match MD5</s:assert>
-        <s:assert test="mix:messageDigestOriginator = 'Ninestars'"></s:assert>
+      <s:assert test="mix:messageDigestOriginator = 'Ninestars'">Organisation should match Ninestars</s:assert>
     </s:rule>
 
     <!--colorSpace-->
