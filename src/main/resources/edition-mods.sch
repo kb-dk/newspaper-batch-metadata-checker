@@ -38,8 +38,8 @@
                 2D-7: Issue Present Comment <s:value-of select="@displayLabel"/> cannot be empty.
             </s:assert>
             <s:assert test="matches(lower-case(text()), '^not digitised, published|not digitised, not published|not digitised, publication unknown$')">
-                2D-7: If Issue Present Comment <s:value-of select="@displayLabel"/> present,
-                Issue Present Indicator <s:value-of select="text()"/> must be one of:
+                2D-7: If Issue Present Comment '<s:value-of select="@displayLabel"/>' present,
+                Issue Present Indicator '<s:value-of select="text()"/>' must be one of:
                 Not digitised, published
                 Not digitised, not published
                 Not digitised, publication unknown
