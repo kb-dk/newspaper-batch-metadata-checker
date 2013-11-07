@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import dk.statsbiblioteket.medieplatform.autonomous.RunnableComponent;
 import dk.statsbiblioteket.medieplatform.autonomous.AutonomousComponentUtils;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
 
@@ -27,6 +28,10 @@ public class MetadataChecker {
      * @see AutonomousComponentUtils#parseArgs(String[])
      */
     public static void main(String... args) throws Exception {
+        doMain(args);
+    }
+
+    private static void doMain(String[] args) throws IOException {
         log.info("Starting with args {}", new Object[]{args});
 
         //Parse the args to a properties construct
