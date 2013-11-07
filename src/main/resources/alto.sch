@@ -33,10 +33,11 @@
       <s:assert test="@WIDTH/string-length() > 0">Page should have WIDTH attribute <s:value-of select="@WIDTH"/></s:assert>
     </s:rule>
     
-    <!--String element must have HEIGHT attribute-->
-    <!--String element must have WIDTH attribute-->
-    <!--String element must have HPOS attribute-->
-    <!--String element must have VPOS attribute-->
+    <!--String element must have HEIGHT attribute, assuming content syntax is verified by schema check-->
+    <!--String element must have WIDTH attribute, assuming content syntax is verified by schema check-->
+    <!--String element must have HPOS attribute, assuming content syntax is verified by schema check-->
+    <!--String element must have VPOS attribute, assuming content syntax is verified by schema check-->
+    <!--String element must have CONTENT attribute-->
     <s:rule context="alto:alto/alto:Layout/alto:Page/alto:PrintSpace/alto:TextBlock/alto:TextLine/alto:String">
       <s:assert test="@HEIGHT/string-length() > 0">String should have HEIGHT attribute <s:value-of select="@HEIGHT"/></s:assert>
       <s:assert test="@WIDTH/string-length() > 0">String should have WIDTH attribute <s:value-of select="@WIDTH"/></s:assert>
