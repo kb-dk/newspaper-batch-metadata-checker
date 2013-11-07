@@ -1,4 +1,4 @@
-<mods:mods xmlns:mods="http://www.loc.gov/mods/v3">
+<mods:mods xmlns:mods="http://www.loc.gov/mods/v3x">
     <mods:titleInfo>
         <mods:title>Adresse Contoirs Efterretninger</mods:title>
     </mods:titleInfo>
@@ -14,7 +14,7 @@
         <mods:dateIssued encoding="iso8601" qualifier="questionable">1795-06-31</mods:dateIssued>
     </mods:originInfo>
     <mods:note type="noteAboutReproduction">present</mods:note>
-    <mods:note type="noteAboutReproduction" displayLabel="comment concerning label">Not digitised, published</mods:note>
+    <mods:note type="noteAboutReproduction" displayLabel="comment concerning label">present</mods:note>
     <mods:relatedItem type="host">
         <mods:part>
             <mods:detail type="volume">
