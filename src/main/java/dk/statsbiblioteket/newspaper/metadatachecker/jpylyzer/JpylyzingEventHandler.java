@@ -21,11 +21,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 
 /** The jpylyzer metadata content checker checker */
 public class JpylyzingEventHandler extends InjectingTreeEventHandler {
 
-    /**Name of content file in jp2 virtual folder*/
+    /** Name of content file in jp2 virtual folder */
     public static final String CONTENTS = "/contents";
     /*8Folder where the batch lives. Used because jpylyzer must work on the absolute path to the file*/
     private final String batchFolder;
@@ -33,10 +34,10 @@ public class JpylyzingEventHandler extends InjectingTreeEventHandler {
     private final Logger log = LoggerFactory.getLogger(JpylyzingEventHandler.class);
     /** The result collector results are collected in. */
     private final ResultCollector resultCollector;
-    /** Double flags indicating if we are in a virtual jp2 folder*/
+    /** Double flags indicating if we are in a virtual jp2 folder */
     private boolean isInDataFile;
     private String datafile;
-    /**Path to the jpylyzer executable*/
+    /** Path to the jpylyzer executable */
     private String jpylyzerPath;
 
 
@@ -45,7 +46,6 @@ public class JpylyzingEventHandler extends InjectingTreeEventHandler {
      *
      * @param resultCollector the result collector
      * @param batchFolder     the folder where the batches live
-     *
      */
     public JpylyzingEventHandler(ResultCollector resultCollector,
                                  String batchFolder) {
@@ -65,7 +65,7 @@ public class JpylyzingEventHandler extends InjectingTreeEventHandler {
      * @param resultCollector the result collector
      * @param batchFolder     the folder where the batches live
      * @param jpylyzerPath    path to the jpylyzer executable
-  */
+     */
     public JpylyzingEventHandler(ResultCollector resultCollector,
                                  String batchFolder,
                                  String jpylyzerPath) {
@@ -125,8 +125,11 @@ public class JpylyzingEventHandler extends InjectingTreeEventHandler {
                 }
             }
         } catch (IOException e) {
-            resultCollector
-                    .addFailure(event.getName(), "jp2file", getComponentName(), e.getMessage(), Strings.getStackTrace(e));
+            resultCollector.addFailure(event.getName(),
+                                       "jp2file",
+                                       getComponentName(),
+                                       e.getMessage(),
+                                       Strings.getStackTrace(e));
         }
     }
 
@@ -165,13 +168,17 @@ public class JpylyzingEventHandler extends InjectingTreeEventHandler {
      *
      * @return the jpylyzer xml report
      * @throws IOException if the execution of jpylyzer failed in some fashion (not invalid file, if the program
-     *                          returned non-zero returncode)
+     *                     returned non-zero returncode)
      */
     private InputStream jpylize(File dataPath) throws IOException {
 
+
         log.info("Running jpylyzer on file {}", dataPath);
+
+
         ProcessRunner runner = new ProcessRunner(jpylyzerPath, dataPath.getAbsolutePath());
-        runner.setEnviroment(System.getenv());
+        Map<String, String> myEnv = getJenkinsEnvironment();
+        runner.setEnviroment(myEnv);
         runner.setOutputCollectionByteSize(Integer.MAX_VALUE);
 
         //this call is blocking
@@ -181,10 +188,14 @@ public class JpylyzingEventHandler extends InjectingTreeEventHandler {
         if (runner.getReturnCode() == 0) {
             return runner.getProcessOutput();
         } else {
-            throw new IOException("failed to run jpylyzer, returncode:" + runner.getReturnCode() + ", stdOut:" + runner
-                    .getProcessOutputAsString() + " stdErr:" + runner.getProcessErrorAsString());
+            throw new IOException("failed to run jpylyzer, returncode:" + runner.getReturnCode() + ", stdOut:"
+                                  + runner.getProcessOutputAsString() + " stdErr:" + runner.getProcessErrorAsString());
         }
     }
 
+    private Map<String, String> getJenkinsEnvironment() {
+        Map<String, String> sysEnv = System.getenv();
+        return sysEnv;
+    }
 
 }

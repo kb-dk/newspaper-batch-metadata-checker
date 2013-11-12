@@ -55,8 +55,8 @@
 
     <s:pattern id="editionLabel">
         <s:rule context="/mods:mods/mods:relatedItem[@type='host']/mods:part/mods:detail[@type='edition']/mods:caption">
-            <s:assert test="matches(text(), '^[a-zA-Z0-9 æøåÆØÅ]+$')">2D-10: Edition Label <s:value-of select="text()"/>
-                contains unexpected characters.</s:assert>
+            <s:assert test="matches(text(), '^[a-zA-Z0-9 æøåÆØÅ]+$')">
+                2D-10: Edition Label '<s:value-of select="text()"/>' contains unexpected characters.</s:assert>
         </s:rule>
     </s:pattern>
 
