@@ -169,7 +169,14 @@ public class JpylyzingEventHandler extends InjectingTreeEventHandler {
      */
     private InputStream jpylize(File dataPath) throws IOException {
 
+
+
         log.info("Running jpylyzer on file {}", dataPath);
+
+        ProcessRunner whichPython = new ProcessRunner("python", "-V");
+        whichPython.run();
+        System.out.println(whichPython.getProcessOutputAsString());
+        System.out.println(whichPython.getProcessErrorAsString());
         ProcessRunner runner = new ProcessRunner(jpylyzerPath, dataPath.getAbsolutePath());
         runner.setEnviroment(System.getenv());
         runner.setOutputCollectionByteSize(Integer.MAX_VALUE);
