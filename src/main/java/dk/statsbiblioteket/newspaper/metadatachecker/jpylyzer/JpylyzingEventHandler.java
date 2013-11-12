@@ -196,7 +196,7 @@ public class JpylyzingEventHandler extends InjectingTreeEventHandler {
 
     private Map<String, String> getJenkinsEnvironment() {
         Map<String, String> sysEnv = System.getenv();
-        if (sysEnv.containsKey("JENKINS_HOME")) {
+        if (sysEnv.containsKey("JENKINS_HACKISH_HOME")) {
             HashMap<String, String> myEnv = new HashMap<>();
 
             myEnv.putAll(sysEnv);
