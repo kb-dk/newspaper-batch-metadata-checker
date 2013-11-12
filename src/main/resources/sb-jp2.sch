@@ -26,9 +26,9 @@
         </s:rule>
     
         <!-- No metadata should be present in the JP2 file-->
-        <s:rule context="com">
+        <!--<s:rule context="com">
             <s:assert test="false()">No comments (metadata) allowed</s:assert>
-        </s:rule>
+        </s:rule>-->
 
         <!-- Transformation/compression test + Coding style tests -->
         <s:rule context="/jpylyzer/properties/contiguousCodestreamBox/cod">
