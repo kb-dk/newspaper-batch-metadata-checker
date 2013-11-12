@@ -24,6 +24,11 @@
         <s:rule context="/jpylyzer/properties/jp2HeaderBox/imageHeaderBox">
             <s:assert test="bPCDepth = '8'">Colour depth different from 8.</s:assert>
         </s:rule>
+    
+        <!-- No metadata should be present in the JP2 file-->
+        <s:rule context="com">
+            <s:assert test="false()">No comments (metadata) allowed</s:assert>
+        </s:rule>
 
         <!-- Transformation/compression test + Coding style tests -->
         <s:rule context="/jpylyzer/properties/contiguousCodestreamBox/cod">
@@ -40,8 +45,9 @@
             <s:assert test="order = 'RPCL'">Wrong progression order</s:assert>
         </s:rule>
 
-        <!-- Tile size tests -->
+        <!-- Tile size tests + encoding-->
         <s:rule context="/jpylyzer/properties/contiguousCodestreamBox/siz">
+            <s:assert test="rsiz = 'ISO/IEC 15444-1'">Decoder capabilities should be ISO/IEC 15444-1</s:assert>
             <s:assert test="xTsiz = '1024'">Horizontal tile size different from 1024.</s:assert>
             <s:assert test="yTsiz = '1024'">Vertical tile size different from 1024.</s:assert>
             <s:assert test="ssizDepth = '8'">Colour depth different from 8.</s:assert>
