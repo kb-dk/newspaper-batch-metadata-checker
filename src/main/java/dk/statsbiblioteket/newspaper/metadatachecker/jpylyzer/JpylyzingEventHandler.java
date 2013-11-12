@@ -27,7 +27,7 @@ import java.util.Map;
 /** The jpylyzer metadata content checker checker */
 public class JpylyzingEventHandler extends InjectingTreeEventHandler {
 
-    /**Name of content file in jp2 virtual folder*/
+    /** Name of content file in jp2 virtual folder */
     public static final String CONTENTS = "/contents";
     /*8Folder where the batch lives. Used because jpylyzer must work on the absolute path to the file*/
     private final String batchFolder;
@@ -35,10 +35,10 @@ public class JpylyzingEventHandler extends InjectingTreeEventHandler {
     private final Logger log = LoggerFactory.getLogger(JpylyzingEventHandler.class);
     /** The result collector results are collected in. */
     private final ResultCollector resultCollector;
-    /** Double flags indicating if we are in a virtual jp2 folder*/
+    /** Double flags indicating if we are in a virtual jp2 folder */
     private boolean isInDataFile;
     private String datafile;
-    /**Path to the jpylyzer executable*/
+    /** Path to the jpylyzer executable */
     private String jpylyzerPath;
 
 
@@ -47,7 +47,6 @@ public class JpylyzingEventHandler extends InjectingTreeEventHandler {
      *
      * @param resultCollector the result collector
      * @param batchFolder     the folder where the batches live
-     *
      */
     public JpylyzingEventHandler(ResultCollector resultCollector,
                                  String batchFolder) {
@@ -67,7 +66,7 @@ public class JpylyzingEventHandler extends InjectingTreeEventHandler {
      * @param resultCollector the result collector
      * @param batchFolder     the folder where the batches live
      * @param jpylyzerPath    path to the jpylyzer executable
-  */
+     */
     public JpylyzingEventHandler(ResultCollector resultCollector,
                                  String batchFolder,
                                  String jpylyzerPath) {
@@ -127,8 +126,11 @@ public class JpylyzingEventHandler extends InjectingTreeEventHandler {
                 }
             }
         } catch (IOException e) {
-            resultCollector
-                    .addFailure(event.getName(), "jp2file", getComponentName(), e.getMessage(), Strings.getStackTrace(e));
+            resultCollector.addFailure(event.getName(),
+                                       "jp2file",
+                                       getComponentName(),
+                                       e.getMessage(),
+                                       Strings.getStackTrace(e));
         }
     }
 
@@ -167,31 +169,16 @@ public class JpylyzingEventHandler extends InjectingTreeEventHandler {
      *
      * @return the jpylyzer xml report
      * @throws IOException if the execution of jpylyzer failed in some fashion (not invalid file, if the program
-     *                          returned non-zero returncode)
+     *                     returned non-zero returncode)
      */
     private InputStream jpylize(File dataPath) throws IOException {
 
 
-
         log.info("Running jpylyzer on file {}", dataPath);
-
-        ProcessRunner whichPython = new ProcessRunner("python", "-V");
-        whichPython.run();
-        System.out.println(whichPython.getProcessOutputAsString());
-        System.out.println(whichPython.getProcessErrorAsString());
-        for (Map.Entry<String, String> stringStringEntry : System.getenv().entrySet()) {
-            System.out.println(stringStringEntry.getKey() + "="+stringStringEntry.getValue());
-        }
 
 
         ProcessRunner runner = new ProcessRunner(jpylyzerPath, dataPath.getAbsolutePath());
-        HashMap<String, String> myEnv = new HashMap<>();
-        myEnv.putAll(System.getenv());
-        myEnv.put("PATH","/opt/rh/python27/root/usr/bin:/home/cibuild01/tools/Maven/Maven3/bin:/home/cibuild01/tools/JDK/Java7/bin:/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin");
-        myEnv.put("LD_LIBRARY_PATH","/opt/rh/python27/root/usr/lib64:/usr/lib/jvm/java-1.6.0-sun-1.6.0.15/jre/lib/i386/client:/usr/lib/jvm/java-1.6.0-sun-1.6.0.15/jre/lib/i386:/usr/lib/jvm/java-1.6.0-sun-1.6.0.15/jre/../lib/i386");
-        myEnv.put("MANPATH","/opt/rh/python27/root/usr/share/man:");
-        myEnv.put("XDG_DATA_DIRS","/opt/rh/python27/root/usr/share");
-        myEnv.put("PKG_CONFIG_PATH","/opt/rh/python27/root/usr/lib64/pkgconfig");
+        Map<String, String> myEnv = getJenkinsEnvironment();
         runner.setEnviroment(myEnv);
         runner.setOutputCollectionByteSize(Integer.MAX_VALUE);
 
@@ -202,8 +189,30 @@ public class JpylyzingEventHandler extends InjectingTreeEventHandler {
         if (runner.getReturnCode() == 0) {
             return runner.getProcessOutput();
         } else {
-            throw new IOException("failed to run jpylyzer, returncode:" + runner.getReturnCode() + ", stdOut:" + runner
-                    .getProcessOutputAsString() + " stdErr:" + runner.getProcessErrorAsString());
+            throw new IOException("failed to run jpylyzer, returncode:" + runner.getReturnCode() + ", stdOut:"
+                                  + runner.getProcessOutputAsString() + " stdErr:" + runner.getProcessErrorAsString());
+        }
+    }
+
+    private Map<String, String> getJenkinsEnvironment() {
+        Map<String, String> sysEnv = System.getenv();
+        if (sysEnv.containsKey("JENKINS_HOME")) {
+            HashMap<String, String> myEnv = new HashMap<>();
+
+            myEnv.putAll(sysEnv);
+            myEnv.put("PATH",
+                      "/opt/rh/python27/root/usr/bin:/home/cibuild01/tools/Maven/Maven3/bin:/home/cibuild01/tools/JDK" +
+                      "/Java7/bin:/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin");
+            myEnv.put("LD_LIBRARY_PATH",
+                      "/opt/rh/python27/root/usr/lib64:/usr/lib/jvm/java-1.6.0-sun-1.6.0" +
+                      ".15/jre/lib/i386/client:/usr/lib/jvm/java-1.6.0-sun-1.6.0.15/jre/lib/i386:/usr/lib/jvm/java-1" +
+                      ".6.0-sun-1.6.0.15/jre/../lib/i386");
+            myEnv.put("MANPATH", "/opt/rh/python27/root/usr/share/man:");
+            myEnv.put("XDG_DATA_DIRS", "/opt/rh/python27/root/usr/share");
+            myEnv.put("PKG_CONFIG_PATH", "/opt/rh/python27/root/usr/lib64/pkgconfig");
+            return myEnv;
+        } else {
+            return sysEnv;
         }
     }
 

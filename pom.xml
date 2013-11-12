@@ -131,13 +131,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
-                    <environmentVariables>
-                        <PATH>/opt/rh/python27/root/usr/bin:/home/cibuild01/tools/Maven/Maven3/bin:/home/cibuild01/tools/JDK/Java7/bin:/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin</PATH>
-                        <LD_LIBRARY_PATH>/opt/rh/python27/root/usr/lib64:/usr/lib/jvm/java-1.6.0-sun-1.6.0.15/jre/lib/i386/client:/usr/lib/jvm/java-1.6.0-sun-1.6.0.15/jre/lib/i386:/usr/lib/jvm/java-1.6.0-sun-1.6.0.15/jre/../lib/i386</LD_LIBRARY_PATH>
-                        <MANPATH>/opt/rh/python27/root/usr/share/man:</MANPATH>
-                        <XDG_DATA_DIRS>/opt/rh/python27/root/usr/share</XDG_DATA_DIRS>
-                        <PKG_CONFIG_PATH>/opt/rh/python27/root/usr/lib64/pkgconfig</PKG_CONFIG_PATH>
-                    </environmentVariables>
                     <systemPropertyVariables>
                         <integration.test.newspaper.testdata>${integration.test.newspaper.testdata}
                         </integration.test.newspaper.testdata>
