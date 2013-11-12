@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
 import java.util.Map;
 
 /** The jpylyzer metadata content checker checker */
@@ -196,25 +195,7 @@ public class JpylyzingEventHandler extends InjectingTreeEventHandler {
 
     private Map<String, String> getJenkinsEnvironment() {
         Map<String, String> sysEnv = System.getenv();
-        if (sysEnv.containsKey("JENKINS_HACKISH_HOME")) {
-            HashMap<String, String> myEnv = new HashMap<>();
-
-            myEnv.putAll(sysEnv);
-            myEnv.put("PATH",
-                      "/opt/rh/python27/root/usr/bin:/home/cibuild01/tools/Maven/Maven3/bin:/home/cibuild01/tools/JDK" +
-                      "/Java7/bin:/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin");
-            myEnv.put("LD_LIBRARY_PATH",
-                      "/opt/rh/python27/root/usr/lib64:/usr/lib/jvm/java-1.6.0-sun-1.6.0" +
-                      ".15/jre/lib/i386/client:/usr/lib/jvm/java-1.6.0-sun-1.6.0.15/jre/lib/i386:/usr/lib/jvm/java-1" +
-                      ".6.0-sun-1.6.0.15/jre/../lib/i386");
-            myEnv.put("MANPATH", "/opt/rh/python27/root/usr/share/man:");
-            myEnv.put("XDG_DATA_DIRS", "/opt/rh/python27/root/usr/share");
-            myEnv.put("PKG_CONFIG_PATH", "/opt/rh/python27/root/usr/lib64/pkgconfig");
-            return myEnv;
-        } else {
-            return sysEnv;
-        }
+        return sysEnv;
     }
-
 
 }
