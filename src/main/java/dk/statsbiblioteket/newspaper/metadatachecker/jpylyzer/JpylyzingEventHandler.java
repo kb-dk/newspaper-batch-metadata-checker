@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 
 /** The jpylyzer metadata content checker checker */
 public class JpylyzingEventHandler extends InjectingTreeEventHandler {
@@ -177,6 +178,9 @@ public class JpylyzingEventHandler extends InjectingTreeEventHandler {
         whichPython.run();
         System.out.println(whichPython.getProcessOutputAsString());
         System.out.println(whichPython.getProcessErrorAsString());
+        for (Map.Entry<String, String> stringStringEntry : System.getenv().entrySet()) {
+            System.out.println(stringStringEntry.getKey() + "="+stringStringEntry.getValue());
+        }
         ProcessRunner runner = new ProcessRunner(jpylyzerPath, dataPath.getAbsolutePath());
         runner.setEnviroment(System.getenv());
         runner.setOutputCollectionByteSize(Integer.MAX_VALUE);
