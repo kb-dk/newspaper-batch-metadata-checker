@@ -25,7 +25,7 @@
                 <xsd:element name="startDate" type="xsd:date" minOccurs="1" maxOccurs="1"/>
                 <!--End date of the issues on this reel. Use this particular ISO 8601 style: YYYY-MM-DD -->
                 <xsd:element name="endDate" type="xsd:date" minOccurs="1" maxOccurs="1"/>
-                <!-- The barcode from the batch this reel is a part ofid of the film-->
+                <!-- The barcode from the batch this reel is a part of id of the film-->
                 <xsd:element name="batchIdFilmId" type="xsd:string" minOccurs="1" maxOccurs="1"/>
                 <xsd:element name="numberOfPictures" type="xsd:int" minOccurs="1" maxOccurs="1"/>
                 <xsd:element name="position" type="positionType" minOccurs="0" maxOccurs="0"/>
@@ -39,7 +39,7 @@
                 <xsd:element name="dateMicrofilmCreated" type="xsd:string" minOccurs="1" maxOccurs="1"/>
                 <!--true if the microfilm was created from loose leaves-->
                 <xsd:element name="looseLeavesFlag" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
-                <!--True if the microfilm was createed from a bound volume-->
+                <!--True if the microfilm was created from a bound volume-->
                 <xsd:element name="boundVolumeFlag" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
                 <!--Resolution of the duplicate negative used for digitization. -->
                 <xsd:element name="resolutionOfDuplicateNegative" type="xsd:float" minOccurs="1" maxOccurs="1"/>

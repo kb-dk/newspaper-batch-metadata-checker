@@ -5,12 +5,13 @@ import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.EventRunner;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
-
-import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.MfPakConfiguration;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+import dk.statsbiblioteket.util.Streams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
 
@@ -58,6 +59,15 @@ public class MetadataCheckerComponent
             Exception {
         log.info("Starting validation of '{}'", batch.getFullID());
 
+        InputStream batchXmlStructureStream = retrieveBatchStructure(batch);
+
+        if (batchXmlStructureStream == null){
+            throw new RuntimeException("Failed to resolve batch manifest from data collector");
+        }
+        ByteArrayOutputStream temp = new ByteArrayOutputStream();
+        Streams.pipe(batchXmlStructureStream,temp);
+        String batchXmlManifest = new String(temp.toByteArray(), "UTF-8");
+
         boolean atNinestars =
                 Boolean.parseBoolean(getProperties().getProperty("atNinestars", Boolean.FALSE.toString()));
         MetadataChecksFactory metadataChecksFactory;
@@ -69,9 +79,9 @@ public class MetadataCheckerComponent
                                                               atNinestars,
                                                               batchFolder,
                                                               jpylyzerPath,
-                                                              controlPoliciesPath, mfPakDAO, batch);
+                                                              controlPoliciesPath, mfPakDAO, batch,batchXmlManifest);
         } else {
-            metadataChecksFactory = new MetadataChecksFactory(resultCollector, mfPakDAO, batch);
+            metadataChecksFactory = new MetadataChecksFactory(resultCollector, mfPakDAO, batch,batchXmlManifest);
         }
         List<TreeEventHandler> eventHandlers = metadataChecksFactory.createEventHandlers();
         EventRunner eventRunner = new EventRunner(createIterator(batch));

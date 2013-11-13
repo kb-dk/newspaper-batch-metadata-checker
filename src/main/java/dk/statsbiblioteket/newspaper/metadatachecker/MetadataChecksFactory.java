@@ -16,7 +16,7 @@ public class MetadataChecksFactory
     /** The result collector to collect errors in. */
     private ResultCollector resultCollector;
     private boolean atNinestars = false;
-    private String scratchFolder;
+    private String batchFolder;
     private String jpylyzerPath;
     private String controlPoliciesPath;
     //private MfPakConfiguration mfPakConfiguration;
@@ -32,7 +32,8 @@ public class MetadataChecksFactory
      */
     public MetadataChecksFactory(ResultCollector resultCollector,
                                  MfPakDAO mfPakDAO,
-                                 Batch batch) {
+                                 Batch batch,
+                                 String batchXmlManifest) {
         this.resultCollector = resultCollector;
         this.mfPakDAO = mfPakDAO;
         this.batch = batch;
@@ -43,25 +44,28 @@ public class MetadataChecksFactory
      *
      * @param resultCollector     the result collector to collect errors in
      * @param atNinestars         should be true, sets the framework to run in the ninestars context
-     * @param scratchFolder       the folder where the batches lie
+     * @param batchFolder         the folder where the batches lie
      * @param jpylyzerPath        the path to the jpylyzer executable. If null, jpylyzer will be used from the PATH
      * @param controlPoliciesPath the control policies for the validators. If null, default values are used
      * @param mfPakDAO            a DAO object from which one can read relevant external properties of a batch.
      * @param batch               a batch object representing the batch being analysed.
      */
     public MetadataChecksFactory(ResultCollector resultCollector,
-                                 boolean atNinestars,
-                                 String scratchFolder,
-                                 String jpylyzerPath,
-                                 String controlPoliciesPath,
-                                 MfPakDAO mfPakDAO,
-                                 Batch batch) {
-        this(resultCollector, mfPakDAO, batch);
+                                    boolean atNinestars,
+                                    String batchFolder,
+                                    String jpylyzerPath,
+                                    String controlPoliciesPath,
+                                    MfPakDAO mfPakDAO,
+                                    Batch batch,
+                                    String batchXmlManifest) {
+        this(resultCollector, mfPakDAO, batch,batchXmlManifest);
         this.atNinestars = atNinestars;
-        this.scratchFolder = scratchFolder;
+        this.batchFolder = batchFolder;
         this.jpylyzerPath = jpylyzerPath;
         this.controlPoliciesPath = controlPoliciesPath;
     }
+
+
 
     /**
      * Add all metadata checking event handlers.
@@ -72,7 +76,7 @@ public class MetadataChecksFactory
     public List<TreeEventHandler> createEventHandlers() {
         ArrayList<TreeEventHandler> treeEventHandlers = new ArrayList<>();
         if (atNinestars) { //This thing adds virtual jpylyzer.xml nodes
-            treeEventHandlers.add(new JpylyzingEventHandler(resultCollector, scratchFolder, jpylyzerPath));
+            treeEventHandlers.add(new JpylyzingEventHandler(resultCollector, batchFolder, jpylyzerPath));
         }
         treeEventHandlers.add(new SchemaValidatorEventHandler(resultCollector));
         treeEventHandlers.add(new SchematronValidatorEventHandler(resultCollector, controlPoliciesPath));

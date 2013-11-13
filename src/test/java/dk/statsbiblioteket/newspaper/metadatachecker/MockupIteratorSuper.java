@@ -3,10 +3,11 @@ package dk.statsbiblioteket.newspaper.metadatachecker;
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.TreeIterator;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.filesystem.transforming.TransformingIteratorForFileSystems;
-import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.MfPakConfiguration;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
@@ -35,5 +36,10 @@ public class MockupIteratorSuper extends MetadataCheckerComponent {
         File dataDir = new File(Thread.currentThread().getContextClassLoader().getResource("scratch").getFile());
         File batchDir = new File(dataDir, batch.getFullID());
         return new TransformingIteratorForFileSystems(batchDir, Pattern.quote("."),".*\\.jp2$",".md5");
+    }
+
+    @Override
+    public InputStream retrieveBatchStructure(Batch batch) throws IOException {
+        return Thread.currentThread().getContextClassLoader().getResourceAsStream("assumed-valid-structure.xml");
     }
 }
