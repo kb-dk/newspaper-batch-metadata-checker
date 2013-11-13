@@ -3,7 +3,8 @@
     <Description>
         <MeasurementUnit>inch1200</MeasurementUnit>
         <sourceImageInformation>
-            <fileName>B400022028241-RT2\400022028241-14\1795-06-15-01\AdresseContoirsEfterretninger-1795-06-15-01-0012B.jp2</fileName>
+            <!--2J-3: this file path is not correct ("22"->"44") -->
+            <fileName>B400044028241-RT2\400022028241-14\1795-06-15-01\AdresseContoirsEfterretninger-1795-06-15-01-0012B.jp2</fileName>
         </sourceImageInformation>
         <OCRProcessing ID="OCR1">
             <ocrProcessingStep>
@@ -93,6 +94,7 @@
                         <String ID="S31" CONTENT="47." WC="1" CC="9 9 9" HEIGHT="184" WIDTH="232" HPOS="6276" VPOS="2772"/>
                     </TextLine>
                     <ComposedBlock ID="string" STYLEREFS="string" HEIGHT="3" WIDTH="3" HPOS="3" VPOS="3" ROTATION="1.5E2" IDNEXT="string">
+                        <!--2J16: language changes from dan to klingon -->
                       <TextBlock ID="string" STYLEREFS="string string" HEIGHT="3" WIDTH="3" HPOS="3" VPOS="3" ROTATION="1.5E2" IDNEXT="string" language="klingon">
                         <TextLine ID="string" STYLEREFS="string" HEIGHT="1.5E2" WIDTH="1.5E2" HPOS="1.5E2" VPOS="1.5E2" BASELINE="1.5E2" CS="true">
                           <String ID="string" STYLEREFS="string" HEIGHT="1.5E2" WIDTH="1.5E2" HPOS="1.5E2" VPOS="1.5E2" CONTENT="string" STYLE="smallcaps italics" SUBS_TYPE="HypPart2" SUBS_CONTENT="string" WC="1.5E2" CC="string">

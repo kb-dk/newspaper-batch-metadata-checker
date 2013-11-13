@@ -7,6 +7,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import dk.statsbiblioteket.medieplatform.autonomous.Batch;
+import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.MfPakConfiguration;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -21,6 +23,62 @@ public class AltoValidationTest {
 	public void setUp() {
 		resultCollector = new ResultCollector("test", "test");
 	}
+
+    /**
+     * Test success for 2J3 - filepath in alto file matches actual file path
+     */
+    @Test
+    public void testGood2J3() {
+        ResultCollector resultCollector = new ResultCollector("foo", "bar");
+        MfPakConfiguration configuration = new MfPakConfiguration();
+        Batch batch = new Batch();
+        batch.setBatchID("400022028241");
+        batch.setRoundTripNumber(10);
+        PageModsTest.StubMfPakDAO dao = new PageModsTest.StubMfPakDAO(configuration);
+        AltoXPathEventHandler handler = new AltoXPathEventHandler(resultCollector, dao, batch);
+        AttributeParsingEvent altoEvent = new AttributeParsingEvent("B400022028241-RT2/400022028241-14/1795-06-15-01/AdresseContoirsEfterretninger-1795-06-15-01-0012B.alto.xml") {
+            @Override
+            public InputStream getData() throws IOException {
+                return Thread.currentThread().getContextClassLoader().getResourceAsStream("goodData/good.alto.xml");
+
+            }
+
+            @Override
+            public String getChecksum() throws IOException {
+                return null;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+        } ;
+        handler.handleAttribute(altoEvent);
+        assertTrue(resultCollector.isSuccess(), "Unexpected failure: " + resultCollector.toReport());
+    }
+
+    /**
+         * Test failure for 2J3 - filepath in alto file matches actual file path
+         */
+        @Test
+        public void testBad2J3() {
+            ResultCollector resultCollector = new ResultCollector("foo", "bar");
+            MfPakConfiguration configuration = new MfPakConfiguration();
+            Batch batch = new Batch();
+            batch.setBatchID("400022028241");
+            batch.setRoundTripNumber(10);
+            PageModsTest.StubMfPakDAO dao = new PageModsTest.StubMfPakDAO(configuration);
+            AltoXPathEventHandler handler = new AltoXPathEventHandler(resultCollector, dao, batch);
+            AttributeParsingEvent altoEvent = new AttributeParsingEvent("B400022028241-RT2/400022028241-14/1795-06-15-01/AdresseContoirsEfterretninger-1795-06-15-01-0012B.alto.xml") {
+                @Override
+                public InputStream getData() throws IOException {
+                    return Thread.currentThread().getContextClassLoader().getResourceAsStream("badData/bad1.alto.xml");
+                }
+
+                @Override
+                public String getChecksum() throws IOException {
+                    return null;  //To change body of implemented methods use File | Settings | File Templates.
+                }
+            } ;
+            handler.handleAttribute(altoEvent);
+            assertFalse("Unexpected success: " + resultCollector.toReport(), resultCollector.isSuccess());
+            assertTrue(resultCollector.toReport().contains("2J-3"));
+        }
 
     /**
      * Tests success for 2J16 - nested textblocks with the same language.

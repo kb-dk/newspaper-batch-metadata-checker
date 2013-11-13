@@ -169,7 +169,7 @@ public class PageModsTest {
 
 
 
-    static class StubMfPakDAO extends MfPakDAO {
+    public static class StubMfPakDAO extends MfPakDAO {
 
         private String newspaperID;
 

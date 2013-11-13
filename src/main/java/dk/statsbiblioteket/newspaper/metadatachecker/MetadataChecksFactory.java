@@ -76,7 +76,8 @@ public class MetadataChecksFactory
         }
         treeEventHandlers.add(new SchemaValidatorEventHandler(resultCollector));
         treeEventHandlers.add(new SchematronValidatorEventHandler(resultCollector, controlPoliciesPath));
-        //treeEventHandlers.add(new ModsXPathEventHandler(resultCollector, mfPakDAO, batch));
+        treeEventHandlers.add(new ModsXPathEventHandler(resultCollector, mfPakDAO, batch));
+        treeEventHandlers.add(new AltoXPathEventHandler(resultCollector, mfPakDAO, batch));
         return treeEventHandlers;
     }
 }
