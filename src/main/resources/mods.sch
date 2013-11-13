@@ -10,7 +10,8 @@
     <!--2C-1-->
     <s:pattern id="sectionlabel">
         <s:rule context="mods:mods/mods:part/mods:detail[@type='sectionLabel']">
-            <s:assert test="mods:number/string-length() > 0">2C-1: If present, Section Label should not be empty.</s:assert>
+            <s:assert test="mods:number/string-length() > 0">2C-1: If present, Section Label should not be empty.
+            </s:assert>
         </s:rule>
     </s:pattern>
 
@@ -30,7 +31,8 @@
     <!--2C-3-->
     <s:pattern id="pagenumber">
         <s:rule context="mods:mods/mods:part/mods:detail[@type='pageNumber']">
-            <s:assert test="mods:number/string-length() > 0">2C-3: If present, Page Number should not be empty.</s:assert>
+            <s:assert test="mods:number/string-length() > 0">2C-3: If present, Page Number should not be empty.
+            </s:assert>
         </s:rule>
     </s:pattern>
 
@@ -39,7 +41,10 @@
         <s:rule context="mods:mods">
             <s:let name="filmID" value="mods:relatedItem[@type='original']/mods:identifier[@type='reel number']"/>
             <s:assert test="$filmID">Reel number (filmID) must be specified</s:assert>
-            <s:assert test="matches($filmID, '^[0-9]{12}-[0-9]{2}$')">2C-4: Reel number <s:value-of select="$filmID"/> does not match expected pattern</s:assert>
+            <s:assert test="matches($filmID, '^[0-9]{12}-[0-9]{2}$')">2C-4: Reel number
+                <s:value-of select="$filmID"/>
+                does not match expected pattern
+            </s:assert>
         </s:rule>
     </s:pattern>
 
@@ -48,7 +53,9 @@
     <!--2C-6-->
     <s:pattern id="pagephysicaldescription">
         <s:rule context="mods:mods">
-            <s:assert test="mods:relatedItem[@type='original']/mods:physicalDescription/mods:form[@type='microfilm']">2C-6: mods:form element of type 'microfilm' must be present</s:assert>
+            <s:assert test="mods:relatedItem[@type='original']/mods:physicalDescription/mods:form[@type='microfilm']">
+                2C-6: mods:form element of type 'microfilm' must be present
+            </s:assert>
         </s:rule>
     </s:pattern>
 
@@ -87,14 +94,19 @@
         <s:rule context="mods:mods">
             <s:let name="note" value="mods:relatedItem/mods:note[@type='noteAboutReproduction']"/>
             <s:assert test="count($note) = 1">2C-9: Page Present Indicator must be present exactly once.</s:assert>
-            <s:assert test="matches(lower-case($note), '^present|not digitised, published|not digitised, not published|not digitised, publication unknown$')">
-                2C-9: Page Present Indicator <s:value-of select="$note"/> must be one of:
+        </s:rule>
+        <s:rule context="mods:mods/mods:relatedItem/mods:note[@type='noteAboutReproduction']">
+            <s:assert test="matches(lower-case(text()), '^present|not digitised, published|not digitised, not published|not digitised, publication unknown$')">
+                2C-9: Page Present Indicator
+                <s:value-of select="text()"/>
+                must be one of:
                 Present
                 Not digitised, published
                 Not digitised, not published
                 Not digitised, publication unknown
             </s:assert>
         </s:rule>
+
     </s:pattern>
 
     <!--2C-10-->
@@ -102,7 +114,8 @@
      cross-check between multiple pages implied by the text of the specification. -->
     <s:pattern id="pagepresentcomment">
         <s:rule context="mods:mods/mods:relatedItem/mods:note[@type='noteAboutReproduction']/@displayLabel">
-            <s:assert test="./string-length() > 0">2C-10: displayLabel attribute (if present) must not be empty.</s:assert>
+            <s:assert test="./string-length() > 0">2C-10: displayLabel attribute (if present) must not be empty.
+            </s:assert>
         </s:rule>
     </s:pattern>
 
