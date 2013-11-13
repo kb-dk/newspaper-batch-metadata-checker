@@ -59,7 +59,7 @@ public class MetadataCheckerComponent
             Exception {
         log.info("Starting validation of '{}'", batch.getFullID());
 
-        InputStream batchXmlStructureStream = retrieveBatchStructure();
+        InputStream batchXmlStructureStream = retrieveBatchStructure(batch);
 
         if (batchXmlStructureStream == null){
             throw new RuntimeException("Failed to resolve batch manifest from data collector");

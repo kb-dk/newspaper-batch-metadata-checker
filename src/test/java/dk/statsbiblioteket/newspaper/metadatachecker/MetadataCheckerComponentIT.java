@@ -3,6 +3,7 @@ package dk.statsbiblioteket.newspaper.metadatachecker;
 import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.ConfigurationProperties;
 import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.MfPakConfiguration;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+import dk.statsbiblioteket.util.Streams;
 import org.testng.annotations.Test;
 
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
@@ -12,8 +13,10 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.Event
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.EventRunner;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.filesystem.transforming.TransformingIteratorForFileSystems;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.Properties;
 
@@ -27,9 +30,7 @@ public class MetadataCheckerComponentIT {
 
     /** Tests that the BatchStructureChecker can parse a production like batch. */
     @Test(groups = "integrationTest")
-    public void testMetadataCheck()
-            throws
-            Exception {
+    public void testMetadataCheck() throws Exception {
         String pathToProperties = System.getProperty("integration.test.newspaper.properties");
         Properties properties = new Properties();
 
@@ -42,22 +43,36 @@ public class MetadataCheckerComponentIT {
         Batch batch = new Batch();
         batch.setBatchID(TEST_BATCH_ID);
         batch.setRoundTripNumber(1);
+        InputStream batchXmlStructureStream = retrieveBatchStructure(batch);
+
+        if (batchXmlStructureStream == null) {
+            throw new RuntimeException("Failed to resolve batch manifest from data collector");
+        }
+        ByteArrayOutputStream temp = new ByteArrayOutputStream();
+        Streams.pipe(batchXmlStructureStream, temp);
+        String batchXmlManifest = new String(temp.toByteArray(), "UTF-8");
+
         MfPakConfiguration mfPakConfiguration = new MfPakConfiguration();
         mfPakConfiguration.setDatabaseUrl(properties.getProperty(ConfigurationProperties.DATABASE_URL));
         mfPakConfiguration.setDatabaseUser(properties.getProperty(ConfigurationProperties.DATABASE_USER));
         mfPakConfiguration.setDatabasePassword(properties.getProperty(ConfigurationProperties.DATABASE_PASSWORD));
         EventHandlerFactory eventHandlerFactory = new MetadataChecksFactory(resultCollector,
-                true,
-                getBatchFolder().getParentFile()
-                        .getAbsolutePath(),
-                getJpylyzerPath(),
-                null,
-                new MfPakDAO(mfPakConfiguration),
-                batch);
+                                                                            true,
+                                                                            getBatchFolder().getParentFile()
+                                                                                    .getAbsolutePath(),
+                                                                            getJpylyzerPath(),
+                                                                            null,
+                                                                            new MfPakDAO(mfPakConfiguration),
+                                                                            batch,
+                                                                            batchXmlManifest);
         batchStructureChecker.runEvents(eventHandlerFactory.createEventHandlers());
         System.out.println(resultCollector.toReport());
         assertTrue(resultCollector.isSuccess());
         //Assert.fail();
+    }
+
+    private InputStream retrieveBatchStructure(Batch batch) {
+        return Thread.currentThread().getContextClassLoader().getResourceAsStream("assumed-valid-structure.xml");
     }
 
     private String getJpylyzerPath() {
@@ -70,9 +85,7 @@ public class MetadataCheckerComponentIT {
      * @return A iterator the the test batch
      * @throws URISyntaxException
      */
-    public TreeIterator getIterator()
-            throws
-            URISyntaxException {
+    public TreeIterator getIterator() throws URISyntaxException {
         File file = getBatchFolder();
         System.out.println(file);
         return new TransformingIteratorForFileSystems(file, "\\.", ".*\\.jp2$", ".md5");
