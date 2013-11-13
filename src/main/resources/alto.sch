@@ -48,5 +48,13 @@
     
 <!--     /alto:altox/alto:Layout/alto:Page/alto:PrintSpace/alto:TextBlock[@language] -->
 
+      <!--App 2J-16: nested textblocks must have the same language -->
+     <s:rule context="alto:TextBlock/descendant::alto:TextBlock">
+         <s:let name="desLang" value="@language"/>
+         <s:let name="ancLang" value="ancestor::alto:TextBlock/@language"/>
+          <s:assert test="$desLang = $ancLang">2J-16: Nested TextBlocks should have the same language.
+              Changed from '<s:value-of select="$ancLang"/>' to '<s:value-of select="$desLang"/>' </s:assert>
+     </s:rule>
+
   </s:pattern>
 </s:schema>

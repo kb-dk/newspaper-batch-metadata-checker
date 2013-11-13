@@ -18,6 +18,8 @@ import javax.rmi.CORBA.Util;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import static dk.statsbiblioteket.util.Strings.getStackTrace;
+
 /**
  * This class uses xpath to validate metadata requirements for mods files that do no otherwise fit into the schematron
  * paradigm.
@@ -43,7 +45,17 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
     @Override
     public void handleAttribute(AttributeParsingEvent event) {
         if (event.getName().endsWith("mods.xml")) {
-           doValidate(event);
+            try {
+                doValidate(event);
+            } catch (Exception e) {    //Fault Barrier
+                resultCollector.addFailure(
+                        event.getName(),
+                        "metadata",
+                        getClass().getName(),
+                        "Error processing page-MODS metadata.",
+                        getStackTrace(e)
+                );
+            }
         }
     }
 
@@ -79,15 +91,15 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
         }
 
         //2C-5
-        final String xpath1 = "mods:mods/mods:relatedItem[@type='original']/mods:identifier[@type='reel sequence number']";
-        String sequenceNumber = xpath.selectString(doc, xpath1);
+        final String xpath2C5 = "mods:mods/mods:relatedItem[@type='original']/mods:identifier[@type='reel sequence number']";
+        String sequenceNumber = xpath.selectString(doc, xpath2C5);
         String namePattern = ".*-[0]*" + sequenceNumber + ".mods.xml";
         if (sequenceNumber == null || !(event.getName().matches(namePattern))) {
             resultCollector.addFailure(event.getName(),
                                     "metadata",
                                     getClass().getName(),
                                     "2C-5: " + sequenceNumber + " not found in file name. Should match " + namePattern + ".",
-                                    xpath1
+                                    xpath2C5
                                     );
         }
         //2C-11
@@ -109,7 +121,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
                                     "metadata",
                                     getClass().getName(),
                                     "2C-11: Couldn't read avisId from mfpak.",
-                                    e.getMessage()
+                                    getStackTrace(e)
                                     );
         }
     }

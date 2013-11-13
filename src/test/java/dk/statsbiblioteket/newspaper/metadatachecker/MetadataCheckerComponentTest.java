@@ -60,7 +60,6 @@ public class MetadataCheckerComponentTest {
         mfPakDAO.setNewspaperID("adressecontoirsefterretninger");
         MetadataCheckerComponent metadataCheckerComponent = new MockupIteratorSuper(System.getProperties(),
                 mfPakDAO);
-        // Run on first batch 1
         TestResultCollector result = new TestResultCollector(metadataCheckerComponent.getComponentName(),
                 metadataCheckerComponent.getComponentVersion());
         Batch batch = new Batch("400022028241");

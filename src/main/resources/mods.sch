@@ -48,7 +48,7 @@
     <!--2C-6-->
     <s:pattern id="pagephysicaldescription">
         <s:rule context="mods:mods">
-            <s:assert test="mods:relatedItem[@type='original']/mods:physicalDescription/mods:form[@type='microfilm']">2C-6: mods:form element of type 'micorfilm' must be present</s:assert>
+            <s:assert test="mods:relatedItem[@type='original']/mods:physicalDescription/mods:form[@type='microfilm']">2C-6: mods:form element of type 'microfilm' must be present</s:assert>
         </s:rule>
     </s:pattern>
 
@@ -106,6 +106,8 @@
             <s:assert test="./@displayLabel/string-length() > 0">2C-10: displayLabel attribute must not be empty.</s:assert>
         </s:rule>
     </s:pattern>
+
+    <!--2C-11 validation in ModsXPathEventHandler.java -->
 
 </s:schema>
 
