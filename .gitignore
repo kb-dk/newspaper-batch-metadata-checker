@@ -1,4 +1,4 @@
-target/
+arget/
 *.ipr
 .idea/
 *.iws
@@ -7,3 +7,7 @@ target/
 **/*~
 *~
 *.pyc
+.classpath
+.settings/*
+.project
+target/*

@@ -23,7 +23,7 @@ public class MetadataCheckerComponent
     /**
      * Initialise metadata checker component. For used properties {@link AbstractRunnableComponent#createIterator}.
      *
-     * property fiels that are used
+     * property fields that are used
      * <ul>
      * <li>atNinestars:boolean:default false: indicates if we are at ninestars and jpylyzer should be executed. The
      * fields below are only relevant if this one is true</li>
@@ -38,17 +38,6 @@ public class MetadataCheckerComponent
     public MetadataCheckerComponent(Properties properties, MfPakDAO mfPakDAO) {
         super(properties);
         this.mfPakDAO = mfPakDAO;
-    }
-
-    @Override
-    public String getComponentName() {
-        return "Metadata_checker_component";
-
-    }
-
-    @Override
-    public String getComponentVersion() {
-        return "0.1";
     }
 
     @Override
