@@ -85,8 +85,8 @@
     <!--2C-9-->
     <s:pattern id="pagepresentindicator">
         <s:rule context="mods:mods">
-            <s:let name="note" value="mods:relatedItem/mods:note[@type='noteAboutReproduction' and not(@displayLabel)]"/>
-            <s:assert test="$note">2C-9: Page Present Indicator must be present.</s:assert>
+            <s:let name="note" value="mods:relatedItem/mods:note[@type='noteAboutReproduction']"/>
+            <s:assert test="count($note) = 1">2C-9: Page Present Indicator must be present exactly once.</s:assert>
             <s:assert test="matches(lower-case($note), '^present|not digitised, published|not digitised, not published|not digitised, publication unknown$')">
                 2C-9: Page Present Indicator <s:value-of select="$note"/> must be one of:
                 Present
@@ -101,9 +101,8 @@
     <!--There is nothing to test here except that, if present, this element must not be empty. But there is a
      cross-check between multiple pages implied by the text of the specification. -->
     <s:pattern id="pagepresentcomment">
-        <s:rule context="mods:mods/mods:relatedItem/mods:note[@type='noteAboutReproduction' and @displayLabel]">
-            <s:assert test="./string-length() > 0">2C-10: If present Page Present Comment must not be empty.</s:assert>
-            <s:assert test="./@displayLabel/string-length() > 0">2C-10: displayLabel attribute must not be empty.</s:assert>
+        <s:rule context="mods:mods/mods:relatedItem/mods:note[@type='noteAboutReproduction']/@displayLabel">
+            <s:assert test="./string-length() > 0">2C-10: displayLabel attribute (if present) must not be empty.</s:assert>
         </s:rule>
     </s:pattern>
 
