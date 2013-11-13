@@ -41,12 +41,6 @@ public class MetadataCheckerComponent
     }
 
     @Override
-    public String getComponentName() {
-        return "Metadata_checker_component";
-
-    }
-
-    @Override
     public String getEventID() {
         return "Metadata_checked";
     }
