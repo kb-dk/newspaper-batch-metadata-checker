@@ -39,7 +39,7 @@
                 <xsd:element name="dateMicrofilmCreated" type="xsd:string" minOccurs="1" maxOccurs="1"/>
                 <!--true if the microfilm was created from loose leaves-->
                 <xsd:element name="looseLeavesFlag" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
-                <!--True if the microfilm was createed from a bound volume-->
+                <!--True if the microfilm was created from a bound volume-->
                 <xsd:element name="boundVolumeFlag" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
                 <!--Resolution of the duplicate negative used for digitization. -->
                 <xsd:element name="resolutionOfDuplicateNegative" type="xsd:float" minOccurs="1" maxOccurs="1"/>
