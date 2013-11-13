@@ -32,7 +32,7 @@ public class AltoValidationTest {
                AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006.alto.xml") {
                    @Override
                    public InputStream getData() throws IOException {
-                       return Thread.currentThread().getContextClassLoader().getResourceAsStream("goodData/j16.good.alto.xml");
+                       return Thread.currentThread().getContextClassLoader().getResourceAsStream("goodData/good.alto.xml");
                    }
 
                    @Override
@@ -54,7 +54,7 @@ public class AltoValidationTest {
                AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006.alto.xml") {
                    @Override
                    public InputStream getData() throws IOException {
-                       return Thread.currentThread().getContextClassLoader().getResourceAsStream("badData/j16.bad.alto.xml");
+                       return Thread.currentThread().getContextClassLoader().getResourceAsStream("badData/bad1.alto.xml");
                    }
 
                    @Override
