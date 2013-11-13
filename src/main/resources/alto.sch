@@ -53,7 +53,7 @@
          <s:let name="desLang" value="@language"/>
          <s:let name="ancLang" value="ancestor::alto:TextBlock/@language"/>
           <s:assert test="$desLang = $ancLang">2J-16: Nested TextBlocks should have the same language.
-              Changed from '<s:value-of select="$ancLang"/>' to '<s:value-of select="$desLang"/>' </s:assert>
+              Changed from '<s:value-of select="$ancLang"/>' to '<s:value-of select="$desLang"/>' at TextBlock with ID=<s:value-of select="@ID"/> </s:assert>
      </s:rule>
 
   </s:pattern>
