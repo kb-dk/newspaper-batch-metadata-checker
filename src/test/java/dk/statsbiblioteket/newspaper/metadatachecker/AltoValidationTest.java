@@ -21,7 +21,53 @@ public class AltoValidationTest {
 	public void setUp() {
 		resultCollector = new ResultCollector("test", "test");
 	}
-	
+
+    /**
+     * Tests success for 2J16 - nested textblocks with the same language.
+     */
+    @Test
+    public void shouldSucceed2J16() {
+        setUp();
+               SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
+               AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006.alto.xml") {
+                   @Override
+                   public InputStream getData() throws IOException {
+                       return Thread.currentThread().getContextClassLoader().getResourceAsStream("goodData/j16.good.alto.xml");
+                   }
+
+                   @Override
+                   public String getChecksum() throws IOException {
+                       return null;
+                   }
+               };
+               handler.handleAttribute(event);
+               assertTrue(resultCollector.isSuccess());
+    }
+
+    /**
+     * Tests failure for 2J16 - nested textblocks with different languages
+     */
+    @Test
+    public void shouldFail2J16() {
+        setUp();
+               SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
+               AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006.alto.xml") {
+                   @Override
+                   public InputStream getData() throws IOException {
+                       return Thread.currentThread().getContextClassLoader().getResourceAsStream("badData/j16.bad.alto.xml");
+                   }
+
+                   @Override
+                   public String getChecksum() throws IOException {
+                       return null;
+                   }
+               };
+               handler.handleAttribute(event);
+               assertFalse(resultCollector.isSuccess());
+               assertTrue(resultCollector.toReport().contains("2J-16"));
+               assertTrue(resultCollector.toReport().contains("klingon"));
+    }
+
     @Test
     public void shouldSucceed() {
         setUp();
