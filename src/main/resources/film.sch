@@ -7,5 +7,10 @@
 
     <s:title>Schematron checks for film metadata files (SB inspired by ndnp).</s:title>
 
-
+    <s:pattern>
+        <!--Negative resolution-->
+        <s:rule context="avis:reelMetadata">
+          <s:assert test="avis:resolutionOfDuplicateNegative >= '4.5'">Negative resolution should be 4.5 or higher.</s:assert>
+        </s:rule>
+    </s:pattern>
 </s:schema>
