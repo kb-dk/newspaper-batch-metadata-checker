@@ -1,19 +1,18 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
-import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.ConfigurationProperties;
-import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.MfPakConfiguration;
-import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
-import dk.statsbiblioteket.util.Streams;
-import org.testng.annotations.Test;
-
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.TreeIterator;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.EventHandlerFactory;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.EventRunner;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.filesystem.transforming.TransformingIteratorForFileSystems;
+import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.ConfigurationProperties;
+import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.MfPakConfiguration;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+import dk.statsbiblioteket.util.xml.DOM;
+import org.testng.annotations.Test;
+import org.w3c.dom.Document;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -48,9 +47,7 @@ public class MetadataCheckerComponentIT {
         if (batchXmlStructureStream == null) {
             throw new RuntimeException("Failed to resolve batch manifest from data collector");
         }
-        ByteArrayOutputStream temp = new ByteArrayOutputStream();
-        Streams.pipe(batchXmlStructureStream, temp);
-        String batchXmlManifest = new String(temp.toByteArray(), "UTF-8");
+        Document batchXmlManifest = DOM.streamToDOM(batchXmlStructureStream);
 
         MfPakConfiguration mfPakConfiguration = new MfPakConfiguration();
         mfPakConfiguration.setDatabaseUrl(properties.getProperty(ConfigurationProperties.DATABASE_URL));
