@@ -5,12 +5,20 @@ import dk.statsbiblioteket.medieplatform.autonomous.Event;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
 import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.MfPakConfiguration;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.InconsistentDatabaseException;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperBatchOptions;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperDateRange;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperEntity;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperTitle;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import static org.testng.Assert.assertTrue;
@@ -199,6 +207,34 @@ public class PageModsTest {
 
         @Override
         public Event getEvent(String batchBarcode, String eventStatus) throws SQLException {
+            return null;
+        }
+
+        @Override
+        public NewspaperEntity getNewspaperEntity(String newspaperID, Date date) throws
+                                                                                 SQLException,
+                                                                                 InconsistentDatabaseException {
+            return null;
+        }
+
+        @Override
+        public List<NewspaperDateRange> getBatchDateRanges(String batchID) throws SQLException {
+            return new ArrayList<>(Arrays.asList(new NewspaperDateRange(new Date(0),new Date())));
+
+        }
+
+        @Override
+        public List<NewspaperTitle> getBatchNewspaperTitles(String batchID) throws SQLException {
+            NewspaperTitle title = new NewspaperTitle();
+            title.setTitle("Adresse Contoirs Efterretninger");
+            title.setDateRange(new NewspaperDateRange(new Date(Long.MIN_VALUE),new Date()));
+            return Arrays.asList(title);
+        }
+
+        @Override
+        public NewspaperBatchOptions getBatchOptions(String batchID) throws
+                                                                     SQLException,
+                                                                     InconsistentDatabaseException {
             return null;
         }
     }
