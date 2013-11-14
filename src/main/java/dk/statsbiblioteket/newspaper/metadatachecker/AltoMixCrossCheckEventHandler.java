@@ -15,9 +15,7 @@ import java.util.ArrayDeque;
 
 import static dk.statsbiblioteket.util.Strings.getStackTrace;
 
-/**
- * This class tests that the mix and alto files agree on the image size
- */
+/** This class tests that the mix and alto files agree on the image size */
 public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
 
 
@@ -35,6 +33,7 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
 
     /**
      * Push a sizes object onto the stack
+     *
      * @param event
      */
     @Override
@@ -44,6 +43,7 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
 
     /**
      * Pop the stack and verify that the sizes match for that folder
+     *
      * @param event
      */
     @Override
@@ -55,7 +55,8 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
     /**
      * Compare the alto sizes and the mix sizes, if both are > 0. If less than 0, we assume that they have not been
      * set (ie. there was no alto file or something)
-     * @param sizes the store of sizes
+     *
+     * @param sizes           the store of sizes
      * @param resultCollector the result collector
      */
     private void verify(Sizes sizes, ResultCollector resultCollector) {
@@ -96,11 +97,11 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
             if (event.getName()
                      .endsWith(".alto.xml")) {
 
-                extractAltoSizes(asDom(event.getData()), sizes);
+                extractAltoSizes(asDom(event.getData()), sizes, event.getName());
 
             } else if (event.getName()
                             .endsWith(".mix.xml")) {
-                extractMixSizes(asDom(event.getData()), sizes);
+                extractMixSizes(asDom(event.getData()), sizes, event.getName());
 
             }
         } catch (IOException e) {
@@ -113,22 +114,45 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
         return DOM.streamToDOM(data, true);
     }
 
-    private void extractMixSizes(Document data, Sizes sizes) {
+    private void extractMixSizes(Document data, Sizes sizes, String name) {
         Integer width = xpath.selectInteger(
                 data, "/mix:mix/mix:BasicImageInformation/mix:BasicImageCharacteristics/mix:imageWidth");
-        sizes.setMixWidth(width);
+        if (width == null) {
+            resultCollector.addFailure(
+                    name, "metadata", getClass().getName(), "Failed to read page width from mix file");
+        } else {
+            sizes.setMixWidth(width);
+        }
 
         Integer height = xpath.selectInteger(
                 data, "/mix:mix/mix:BasicImageInformation/mix:BasicImageCharacteristics/mix:imageHeight");
-        sizes.setMixHeight(height);
+        if (height == null) {
+            resultCollector.addFailure(
+                    name, "metadata", getClass().getName(), "Failed to read page height from mix file");
+        } else {
+
+            sizes.setMixHeight(height);
+        }
     }
 
-    private void extractAltoSizes(Document data, Sizes sizes) {
+    private void extractAltoSizes(Document data, Sizes sizes, String reference) {
 
         Integer height = xpath.selectInteger(data, "/a:alto/a:Layout/a:Page/@HEIGHT");
-        sizes.setAltoHeight(height);
+        if (height == null) {
+            resultCollector.addFailure(
+                    reference, "metadata", getClass().getName(), "Failed to read page height from alto");
+
+        } else {
+            sizes.setAltoHeight(height);
+        }
         Integer width = xpath.selectInteger(data, "/a:alto/a:Layout/a:Page/@WIDTH");
-        sizes.setAltoWidth(width);
+        if (width == null) {
+            resultCollector.addFailure(
+                    reference, "metadata", getClass().getName(), "Failed to read page width from alto");
+        } else {
+
+            sizes.setAltoWidth(width);
+        }
     }
 
     private class Sizes {
