@@ -37,11 +37,11 @@ public class MixValidationTest {
     public void shouldSucceed() {
         setUp();
         SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
-        AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006.mix.xml") {
+        AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-1/1795-06-13-01/adresseavisen1759-1795-06-13-01-0006.mix.xml") {
             @Override
             public InputStream getData() throws IOException {
                 return Thread.currentThread().getContextClassLoader().getResourceAsStream(
-                        "scratch/B400022028240-RT1/400022028240-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006.mix.xml");
+                        "scratch/B400022028241-RT1/400022028241-1/1795-06-13-01/adresseavisen1759-1795-06-13-01-0006.mix.xml");
             }
 
             @Override
@@ -605,6 +605,7 @@ public class MixValidationTest {
         handler.handleAttribute(event);
 	}
 
+    @Test
     public void testXpathValidation() throws ParseException, SQLException {
         setUp();
         MfPakDAO mfpakDao = mock(MfPakDAO.class);
@@ -616,10 +617,10 @@ public class MixValidationTest {
         batch.setRoundTripNumber(10);
         MixXPathEventHandler handler = new MixXPathEventHandler(resultCollector,mfpakDao, batch);
         
-        AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006.mix.xml") {
+        AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-1/1795-06-13-01/adresseavisen1759-1795-06-13-01-0006.mix.xml") {
             @Override
             public InputStream getData() throws IOException {
-                return Thread.currentThread().getContextClassLoader().getResourceAsStream("scratch/B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006.mix.xml");
+                return Thread.currentThread().getContextClassLoader().getResourceAsStream("scratch/B400022028241-RT1/400022028241-1/1795-06-13-01/adresseavisen1759-1795-06-13-01-0006.mix.xml");
             }
 
             @Override
@@ -632,6 +633,7 @@ public class MixValidationTest {
         assertTrue(resultCollector.isSuccess(), report);
     }
     
+    @Test
     public void testXpathValidationScannedBeforeShipment() throws ParseException, SQLException {
         setUp();
         MfPakDAO mfpakDao = mock(MfPakDAO.class);
@@ -644,10 +646,10 @@ public class MixValidationTest {
         batch.setRoundTripNumber(10);
         MixXPathEventHandler handler = new MixXPathEventHandler(resultCollector,mfpakDao, batch);
         
-        AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006.mix.xml") {
+        AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-1/1795-06-13-01/adresseavisen1759-1795-06-13-01-0006.mix.xml") {
             @Override
             public InputStream getData() throws IOException {
-                return Thread.currentThread().getContextClassLoader().getResourceAsStream("scratch/B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006.mix.xml");
+                return Thread.currentThread().getContextClassLoader().getResourceAsStream("scratch/B400022028241-RT1/400022028241-1/1795-06-13-01/adresseavisen1759-1795-06-13-01-0006.mix.xml");
             }
 
             @Override

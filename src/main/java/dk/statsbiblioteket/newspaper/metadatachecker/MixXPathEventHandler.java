@@ -19,7 +19,7 @@ import java.text.SimpleDateFormat;
 import static dk.statsbiblioteket.util.Strings.getStackTrace;
 
 /**
- *
+ *  Class to handle MIX crosschecks
  */
 public class MixXPathEventHandler extends DefaultTreeEventHandler {
 
@@ -41,7 +41,7 @@ public class MixXPathEventHandler extends DefaultTreeEventHandler {
 
     @Override
     public void handleAttribute(AttributeParsingEvent event) {
-        if (event.getName().endsWith("mix.xml")) {
+        if (event.getName().endsWith(".mix.xml")) {
             try {
                 doValidate(event);
             } catch (Exception e) {    //Fault Barrier
@@ -54,7 +54,7 @@ public class MixXPathEventHandler extends DefaultTreeEventHandler {
         XPathSelector xpath = DOM.createXPathSelector("mix", "http://www.loc.gov/mix/v20");
         Document doc;
         try {
-            doc = DOM.streamToDOM(event.getData());
+            doc = DOM.streamToDOM(event.getData(), true);
             if (doc == null) {
                 addFailure(event.getName(), 
                         "Could not parse xml from " + event.getName(),
@@ -73,7 +73,7 @@ public class MixXPathEventHandler extends DefaultTreeEventHandler {
         }
         final String xpath2K1 = "/mix:mix/mix:ImageCaptureMetadata/mix:GeneralCaptureInformation/mix:dateTimeCreated";
         final String mixDateFormat = "yyyy-MM-dd'T'HH:mm:ss";
-        SimpleDateFormat formatter = new SimpleDateFormat(mixDateFormat);
+        final SimpleDateFormat formatter = new SimpleDateFormat(mixDateFormat);
         String scannedDateInMix = xpath.selectString(doc, xpath2K1);
         if(scannedDateInMix == null) {
             addFailure(event.getName(),
@@ -94,8 +94,8 @@ public class MixXPathEventHandler extends DefaultTreeEventHandler {
         
         if(scannedDate.before(shipmentDate)) {
             addFailure(event.getName(),
-                    "2K-1: The scanned (" + scannedDate + ") is before "
-                            + "the batch was shipped from SB (" + shipmentDate + ").",
+                    "2K-1: The scanned '" + scannedDate + "' is before "
+                            + "the batch was shipped from SB '" + shipmentDate + "'.",
                     event.getName());
         }
 
