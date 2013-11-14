@@ -6,12 +6,19 @@ import static org.testng.Assert.assertTrue;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+import static org.mockito.Mockito.*;
 
 public class MixValidationTest {
 	
@@ -593,22 +600,30 @@ public class MixValidationTest {
         handler.handleAttribute(event);
 	}
 
-//    public void testXpathValidation() throws URISyntaxException {
-//        setUp();
-//        MixXPathValidationEventHandler handler = new MixXPathValidationEventHandler(resultCollector);
-//        AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006.mix.xml") {
-//            @Override
-//            public InputStream getData() throws IOException {
-//                return Thread.currentThread().getContextClassLoader().getResourceAsStream("scratch/B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006.mix.xml");
-//            }
-//
-//            @Override
-//            public String getChecksum() throws IOException {
-//                return null;
-//            }
-//        };
-//        handler.handleAttribute(event);
-//        String report = resultCollector.toReport();
-//        assertTrue(resultCollector.isSuccess(), report);
-//    }
+    public void testXpathValidation() throws ParseException, SQLException {
+        setUp();
+        MfPakDAO mfpakDao = mock(MfPakDAO.class);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date shipmentDate = formatter.parse("2010-01-02");
+        when(mfpakDao.getBatchShipmentDate("400022028241")).thenReturn(shipmentDate);
+        Batch batch = new Batch();
+        batch.setBatchID("400022028241");
+        batch.setRoundTripNumber(10);
+        MixXPathEventHandler handler = new MixXPathEventHandler(resultCollector,mfpakDao, batch);
+        
+        AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006.mix.xml") {
+            @Override
+            public InputStream getData() throws IOException {
+                return Thread.currentThread().getContextClassLoader().getResourceAsStream("scratch/B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006.mix.xml");
+            }
+
+            @Override
+            public String getChecksum() throws IOException {
+                return null;
+            }
+        };
+        handler.handleAttribute(event);
+        String report = resultCollector.toReport();
+        assertTrue(resultCollector.isSuccess(), report);
+    }
 }
