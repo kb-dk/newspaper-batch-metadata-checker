@@ -6,6 +6,7 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.Event
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
 import dk.statsbiblioteket.newspaper.metadatachecker.jpylyzer.JpylyzingEventHandler;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+import org.w3c.dom.Document;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ public class MetadataChecksFactory
     //private MfPakConfiguration mfPakConfiguration;
     private MfPakDAO mfPakDAO;
     private Batch batch;
+    private Document batchXmlManifest;
 
     /**
      * Initialise the MetadataChecksFactory with a result collector to collect errors in.
@@ -33,10 +35,11 @@ public class MetadataChecksFactory
     public MetadataChecksFactory(ResultCollector resultCollector,
                                  MfPakDAO mfPakDAO,
                                  Batch batch,
-                                 String batchXmlManifest) {
+                                 Document batchXmlManifest) {
         this.resultCollector = resultCollector;
         this.mfPakDAO = mfPakDAO;
         this.batch = batch;
+        this.batchXmlManifest = batchXmlManifest;
     }
 
     /**
@@ -57,7 +60,7 @@ public class MetadataChecksFactory
                                     String controlPoliciesPath,
                                     MfPakDAO mfPakDAO,
                                     Batch batch,
-                                    String batchXmlManifest) {
+                                    Document batchXmlManifest) {
         this(resultCollector, mfPakDAO, batch,batchXmlManifest);
         this.atNinestars = atNinestars;
         this.batchFolder = batchFolder;

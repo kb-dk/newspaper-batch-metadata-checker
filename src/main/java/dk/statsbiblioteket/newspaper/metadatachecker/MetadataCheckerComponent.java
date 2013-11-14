@@ -6,11 +6,11 @@ import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.EventRunner;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
-import dk.statsbiblioteket.util.Streams;
+import dk.statsbiblioteket.util.xml.DOM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
 
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
@@ -60,13 +60,12 @@ public class MetadataCheckerComponent
         log.info("Starting validation of '{}'", batch.getFullID());
 
         InputStream batchXmlStructureStream = retrieveBatchStructure(batch);
-
         if (batchXmlStructureStream == null){
             throw new RuntimeException("Failed to resolve batch manifest from data collector");
         }
-        ByteArrayOutputStream temp = new ByteArrayOutputStream();
-        Streams.pipe(batchXmlStructureStream,temp);
-        String batchXmlManifest = new String(temp.toByteArray(), "UTF-8");
+
+        Document batchXmlManifest = DOM.streamToDOM(batchXmlStructureStream);
+
 
         boolean atNinestars =
                 Boolean.parseBoolean(getProperties().getProperty("atNinestars", Boolean.FALSE.toString()));
