@@ -1,10 +1,19 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
-import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.MfPakConfiguration;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.util.Arrays;
+import java.util.Date;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperDateRange;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperTitle;
 
 /** Test Metadata checker */
 public class MetadataCheckerComponentTest {
@@ -16,8 +25,7 @@ public class MetadataCheckerComponentTest {
     public void testDoWorkOnBatchBad() throws Exception {
 
 
-        PageModsTest.StubMfPakDAO mfPakDAO = new PageModsTest.StubMfPakDAO(
-                new MfPakConfiguration());
+        MfPakDAO mfPakDAO = mock(MfPakDAO.class);
         MetadataCheckerComponent metadataCheckerComponent = new MockupIteratorSuper(
                 System.getProperties(), mfPakDAO);
 
@@ -86,9 +94,14 @@ public class MetadataCheckerComponentTest {
      * Test checking on a "good" batch.
      */
     public void testDoWorkOnBatchGood() throws Exception {
-        final PageModsTest.StubMfPakDAO mfPakDAO = new PageModsTest.StubMfPakDAO(new MfPakConfiguration());
-        //Use the stub DAO and set the avisID to the value in the actual mods files.
-        mfPakDAO.setNewspaperID("adresseavisen1759");
+        MfPakDAO mfPakDAO = mock(MfPakDAO.class);
+        when(mfPakDAO.getNewspaperID(anyString())).thenReturn("adresseavisen1759");
+        
+        NewspaperTitle title = new NewspaperTitle();
+        title.setTitle("Kiøbenhavns Kongelig alene priviligerede Adresse-Contoirs Efterretninger");
+        title.setDateRange(new NewspaperDateRange(new Date(Long.MIN_VALUE),new Date()));
+        when(mfPakDAO.getBatchNewspaperTitles(anyString())).thenReturn(Arrays.asList(title));
+
         MetadataCheckerComponent metadataCheckerComponent = new MockupIteratorSuper(System.getProperties(), mfPakDAO);
         TestResultCollector result = new TestResultCollector(
                 metadataCheckerComponent.getComponentName(), metadataCheckerComponent.getComponentVersion());
