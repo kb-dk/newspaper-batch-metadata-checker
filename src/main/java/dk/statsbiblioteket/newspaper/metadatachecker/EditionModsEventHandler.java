@@ -64,12 +64,10 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        check2D_1(event, xpath, doc);
-        check2D_2(event, xpath, doc);
+        String avisID = check2D_1(event, xpath, doc);
+        Date editionDate = check2D_2(event, xpath, doc);
+        check2D_3(event, xpath, doc, avisID, editionDate);
 
-
-        //TODO
-        /** 2D-3 Check Publication Location against MFpak */
 
         /** 2D-4 Check Issue Date against event.getName() (file structure),
          * and check within expected interval against MFpak?
@@ -82,7 +80,13 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
 
     }
 
-    private void check2D_2(AttributeParsingEvent event, XPathSelector xpath, Document doc) {
+    private void check2D_3(AttributeParsingEvent event, XPathSelector xpath, Document doc, String avisID, Date editionDate) {
+        //mfPakDAO.getNewspaperEntity()
+        /** 2D-3 Check Publication Location against MFpak */
+
+    }
+
+    private Date check2D_2(AttributeParsingEvent event, XPathSelector xpath, Document doc) {
         /** 2D-2
          * Check Title (Newspaper title (MARC 245$a). Provided by the State and University Library, title may be
          * different for different periods in time, which will be specified by the State and University Library.
@@ -92,17 +96,18 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
          */
 
 
-        //TODO also existence checks
         Date editionDate = null;
         try {
             editionDate = getDateFromName(event.getName());
         } catch (ParseException e) {
             resultCollector.addFailure(
                     event.getName(), "metadata", getClass().getName(), "2D-2: No edition date found in this file");
+            return null;
         }
         if (editionDate == null) {
             resultCollector.addFailure(
                     event.getName(), "metadata", getClass().getName(), "2D-2: No edition date found in this file");
+            return null;
         } else {
             try {
                 List<NewspaperTitle> titles = mfPakDAO.getBatchNewspaperTitles(batch.getBatchID());
@@ -133,8 +138,9 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
                                     getClass().getName(),
                                     "2D-2: title "
                                     + avisTitle
-                                    + " does not match title in MFPak"
-                                    + selected.getTitle());
+                                    + " does not match title in MFPak '"
+                                    + selected.getTitle()
+                                                      + "'");
                         }
                     }
                 }
@@ -147,12 +153,13 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
                         getClass().getName(),
                         "Could not connect to MFPak",
                         event.getName());
-                return;
+                return editionDate;
             }
         }
+        return editionDate;
     }
 
-    private void check2D_1(AttributeParsingEvent event, XPathSelector xpath, Document doc) {
+    private String check2D_1(AttributeParsingEvent event, XPathSelector xpath, Document doc) {
         /** 2D-1
          * Check avisID (The unique ID for the newspaper concerned provided by the State and University Library)
          * mods:mods/mods:titleInfo/mods:title [@type=”uniform” authority=”Statens Avissamling”]
@@ -161,6 +168,11 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
         final String xpath2D1
                 = "/mods:mods/mods:titleInfo[@type='uniform'][@authority='Statens Avissamling']/mods:title";
         String avisID = xpath.selectString(doc, xpath2D1);
+        if (avisID == null) {
+            resultCollector.addFailure(
+                    event.getName(), "metadata", getClass().getName(), "2D-1: No avisID found in this file");
+            return null;
+        }
         String avisIDfromFileStructure = getAvisIDfromName(event.getName());
         String avisIDfromMFPak;
         try {
@@ -168,31 +180,32 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
         } catch (SQLException e) {
             resultCollector.addFailure(
                     event.getName(), "metadata", getClass().getName(), "Could not connect to MFPak", event.getName());
-            return;
+            return avisID;
         }
         //TODO also existence checks
-        if (avisID != null) {
-            if (!avisID.equals(avisIDfromFileStructure)) {
-                resultCollector.addFailure(
-                        event.getName(),
-                        "metadata",
-                        getClass().getName(),
-                        "2D-1: avisID "
-                        + avisID
-                        + " does not match avisID in file structure '"
-                        + avisIDfromFileStructure
-                        + "'",
-                        xpath2D1);
-            }
-            if (!avisID.equals(avisIDfromMFPak)) {
-                resultCollector.addFailure(
-                        event.getName(),
-                        "metadata",
-                        getClass().getName(),
-                        "2D-1: avisID " + avisID + " does not match avisID in MFPak '" + avisIDfromMFPak + "'",
-                        xpath2D1);
-            }
+
+        if (!avisID.equals(avisIDfromFileStructure)) {
+            resultCollector.addFailure(
+                    event.getName(),
+                    "metadata",
+                    getClass().getName(),
+                    "2D-1: avisID "
+                    + avisID
+                    + " does not match avisID in file structure '"
+                    + avisIDfromFileStructure
+                    + "'",
+                    xpath2D1);
         }
+        if (!avisID.equals(avisIDfromMFPak)) {
+            resultCollector.addFailure(
+                    event.getName(),
+                    "metadata",
+                    getClass().getName(),
+                    "2D-1: avisID " + avisID + " does not match avisID in MFPak '" + avisIDfromMFPak + "'",
+                    xpath2D1);
+        }
+
+        return avisID;
 
     }
 
