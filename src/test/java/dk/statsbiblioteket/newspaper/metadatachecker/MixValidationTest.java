@@ -1,17 +1,16 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
-import static org.testng.AssertJUnit.assertFalse;
-import static org.testng.Assert.assertTrue;
+import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
-
-import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
-import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
+import static org.testng.Assert.assertTrue;
+import static org.testng.AssertJUnit.assertFalse;
 
 public class MixValidationTest {
 	
@@ -29,7 +28,8 @@ public class MixValidationTest {
         AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006.mix.xml") {
             @Override
             public InputStream getData() throws IOException {
-                return Thread.currentThread().getContextClassLoader().getResourceAsStream("scratch/B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006.mix.xml");
+                return Thread.currentThread().getContextClassLoader().getResourceAsStream(
+                        "scratch/B400022028240-RT1/400022028240-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006.mix.xml");
             }
 
             @Override
