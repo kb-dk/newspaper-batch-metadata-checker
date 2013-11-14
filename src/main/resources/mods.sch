@@ -41,7 +41,7 @@
         <s:rule context="mods:mods">
             <s:let name="filmID" value="mods:relatedItem[@type='original']/mods:identifier[@type='reel number']"/>
             <s:assert test="$filmID">Reel number (filmID) must be specified</s:assert>
-            <s:assert test="matches($filmID, '^[0-9]{12}-[0-9]{2}$')">2C-4: Reel number
+            <s:assert test="matches($filmID, '^[0-9]{12}-[0-9]+$')">2C-4: Reel number
                 <s:value-of select="$filmID"/>
                 does not match expected pattern
             </s:assert>
