@@ -1,5 +1,12 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.util.Properties;
+
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.TreeIterator;
@@ -9,15 +16,10 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.filesystem.transfor
 import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.ConfigurationProperties;
 import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.MfPakConfiguration;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+import dk.statsbiblioteket.util.Streams;
 import dk.statsbiblioteket.util.xml.DOM;
 import org.testng.annotations.Test;
 import org.w3c.dom.Document;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.util.Properties;
 
 import static org.testng.Assert.assertTrue;
 
@@ -47,21 +49,24 @@ public class MetadataCheckerComponentIT {
         if (batchXmlStructureStream == null) {
             throw new RuntimeException("Failed to resolve batch manifest from data collector");
         }
+        ByteArrayOutputStream temp = new ByteArrayOutputStream();
+        Streams.pipe(batchXmlStructureStream, temp);
+
         Document batchXmlManifest = DOM.streamToDOM(batchXmlStructureStream);
 
         MfPakConfiguration mfPakConfiguration = new MfPakConfiguration();
         mfPakConfiguration.setDatabaseUrl(properties.getProperty(ConfigurationProperties.DATABASE_URL));
         mfPakConfiguration.setDatabaseUser(properties.getProperty(ConfigurationProperties.DATABASE_USER));
         mfPakConfiguration.setDatabasePassword(properties.getProperty(ConfigurationProperties.DATABASE_PASSWORD));
-        EventHandlerFactory eventHandlerFactory = new MetadataChecksFactory(resultCollector,
-                                                                            true,
-                                                                            getBatchFolder().getParentFile()
-                                                                                    .getAbsolutePath(),
-                                                                            getJpylyzerPath(),
-                                                                            null,
-                                                                            new MfPakDAO(mfPakConfiguration),
-                                                                            batch,
-                                                                            batchXmlManifest);
+        EventHandlerFactory eventHandlerFactory = new MetadataChecksFactory(
+                resultCollector,
+                true,
+                getBatchFolder().getParentFile().getAbsolutePath(),
+                getJpylyzerPath(),
+                null,
+                new MfPakDAO(mfPakConfiguration),
+                batch,
+                batchXmlManifest);
         batchStructureChecker.runEvents(eventHandlerFactory.createEventHandlers());
         System.out.println(resultCollector.toReport());
         assertTrue(resultCollector.isSuccess());
