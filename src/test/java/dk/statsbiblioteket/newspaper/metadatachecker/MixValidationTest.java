@@ -1,7 +1,9 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
-import static org.testng.AssertJUnit.assertFalse;
+//import static org.testng.AssertJUnit.assertFalse;
 import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.assertFalse;
+
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -625,5 +627,34 @@ public class MixValidationTest {
         handler.handleAttribute(event);
         String report = resultCollector.toReport();
         assertTrue(resultCollector.isSuccess(), report);
+    }
+    
+    public void testXpathValidationScannedBeforeShipment() throws ParseException, SQLException {
+        setUp();
+        MfPakDAO mfpakDao = mock(MfPakDAO.class);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        // The in the mix file is 2010-11-11
+        Date shipmentDate = formatter.parse("2012-06-02");
+        when(mfpakDao.getBatchShipmentDate("400022028241")).thenReturn(shipmentDate);
+        Batch batch = new Batch();
+        batch.setBatchID("400022028241");
+        batch.setRoundTripNumber(10);
+        MixXPathEventHandler handler = new MixXPathEventHandler(resultCollector,mfpakDao, batch);
+        
+        AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006.mix.xml") {
+            @Override
+            public InputStream getData() throws IOException {
+                return Thread.currentThread().getContextClassLoader().getResourceAsStream("scratch/B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006.mix.xml");
+            }
+
+            @Override
+            public String getChecksum() throws IOException {
+                return null;
+            }
+        };
+        handler.handleAttribute(event);
+        String report = resultCollector.toReport();
+        assertFalse(resultCollector.isSuccess(), report);
+        assertTrue(report.contains("2K-1:"));
     }
 }
