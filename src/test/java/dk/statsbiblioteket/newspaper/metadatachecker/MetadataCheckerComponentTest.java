@@ -23,7 +23,7 @@ public class MetadataCheckerComponentTest {
 
         TestResultCollector result = new TestResultCollector(
                 metadataCheckerComponent.getComponentName(), metadataCheckerComponent.getComponentVersion());
-        Batch batch = new Batch("400022028241");
+        Batch batch = new Batch("400022028240");
         batch.setRoundTripNumber(1);
         metadataCheckerComponent.doWorkOnBatch(batch, result);
 
@@ -34,7 +34,7 @@ public class MetadataCheckerComponentTest {
                       .contains(
                               "Failure validating XML data from "
                               +
-                              "'B400022028241-RT1/400022028241-14/AdresseContoirsEfterretninger-400022028241-14.film.xml': Line 27 "
+                              "'B400022028240-RT1/400022028240-14/AdresseContoirsEfterretninger-400022028240-14.film.xml': Line 27 "
                               +
                               "Column 21: Content is not allowed in trailing section."));
         Assert.assertTrue(
@@ -42,7 +42,7 @@ public class MetadataCheckerComponentTest {
                       .contains(
                               "Failure validating XML data from "
                               +
-                              "'B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01.edition"
+                              "'B400022028240-RT1/400022028240-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01.edition"
                               +
                               ".xml': Line 1 Column 53: cvc-elt.1: Cannot find the declaration "
                               +
@@ -52,7 +52,7 @@ public class MetadataCheckerComponentTest {
                       .contains(
                               "Failure validating XML data from "
                               +
-                              "'B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006"
+                              "'B400022028240-RT1/400022028240-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006"
                               +
                               ".alto.xml': Line 2 Column 180: cvc-elt.1: Cannot find the "
                               +
@@ -62,7 +62,7 @@ public class MetadataCheckerComponentTest {
                       .contains(
                               "Failure validating XML data from "
                               +
-                              "'B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006"
+                              "'B400022028240-RT1/400022028240-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006"
                               +
                               ".mods.xml': Line 9 Column 16: The end-tag for element type "
                               +
@@ -74,7 +74,7 @@ public class MetadataCheckerComponentTest {
                       .contains(
                               "Failure validating XML data from "
                               +
-                              "'B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006"
+                              "'B400022028240-RT1/400022028240-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006"
                               +
                               ".mix.xml': Line 63 Column 52: cvc-datatype-valid.1.2.1: 'hest' is"
                               +
@@ -93,7 +93,7 @@ public class MetadataCheckerComponentTest {
         TestResultCollector result = new TestResultCollector(
                 metadataCheckerComponent.getComponentName(), metadataCheckerComponent.getComponentVersion());
         Batch batch = new Batch("400022028241");
-        batch.setRoundTripNumber(2);
+        batch.setRoundTripNumber(1);
         metadataCheckerComponent.doWorkOnBatch(batch, result);
         Assert.assertTrue(result.isSuccess(), result.toReport() + "\n");
     }

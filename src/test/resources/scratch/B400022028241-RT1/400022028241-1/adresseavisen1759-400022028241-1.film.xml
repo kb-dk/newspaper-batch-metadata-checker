@@ -1,0 +1,28 @@
+<avis:reelMetadata xmlns:avis="http://www.statsbiblioteket.dk/avisdigitalisering/microfilm/1/0/">
+    <avis:titles>Adresse Contoirs Efterretninger</avis:titles>
+    <avis:startDate>1795-06-13</avis:startDate>
+    <avis:endDate>1795-06-15</avis:endDate>
+    <avis:batchIdFilmId>400022028241-1</avis:batchIdFilmId>
+    <avis:numberOfPictures>14</avis:numberOfPictures>
+    <avis:reductionRatio>15x</avis:reductionRatio>
+    <avis:captureResolutionOriginal measurement="pixels/inch">400</avis:captureResolutionOriginal>
+    <avis:captureResolutionFilm measurement="pixels/inch">6000</avis:captureResolutionFilm>
+    <avis:dateMicrofilmCreated>1970-06-05</avis:dateMicrofilmCreated>
+    <avis:looseLeavesFlag>true</avis:looseLeavesFlag>
+	<avis:boundVolumeFlag>false</avis:boundVolumeFlag>
+    <avis:resolutionOfDuplicateNegative>6.3</avis:resolutionOfDuplicateNegative>
+    <avis:resolutionCommentDuplicateNegative>No comments</avis:resolutionCommentDuplicateNegative>
+    <avis:densityReadingDuplicateNegative>0.11</avis:densityReadingDuplicateNegative>
+    <avis:densityReadingDuplicateNegative>0.12</avis:densityReadingDuplicateNegative>
+    <avis:densityReadingDuplicateNegative>0.12</avis:densityReadingDuplicateNegative>
+    <avis:densityReadingDuplicateNegative>0.12</avis:densityReadingDuplicateNegative>
+    <avis:densityReadingDuplicateNegative>0.12</avis:densityReadingDuplicateNegative>
+    <avis:densityReadingDuplicateNegative>0.13</avis:densityReadingDuplicateNegative>
+    <avis:densityReadingDuplicateNegative>0.12</avis:densityReadingDuplicateNegative>
+    <avis:densityReadingDuplicateNegative>0.12</avis:densityReadingDuplicateNegative>
+    <avis:densityReadingDuplicateNegative>0.12</avis:densityReadingDuplicateNegative>
+    <avis:densityReadingDuplicateNegative>0.12</avis:densityReadingDuplicateNegative>
+    <avis:averageDensityDuplicateNegative>0.12</avis:averageDensityDuplicateNegative>
+    <avis:dminDuplicateNegative>0.12</avis:dminDuplicateNegative>
+</avis:reelMetadata>
+

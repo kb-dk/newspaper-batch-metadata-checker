@@ -226,7 +226,7 @@ public class PageModsTest {
         @Override
         public List<NewspaperTitle> getBatchNewspaperTitles(String batchID) throws SQLException {
             NewspaperTitle title = new NewspaperTitle();
-            title.setTitle("Adresse Contoirs Efterretninger");
+            title.setTitle("Kiøbenhavns Kongelig alene priviligerede Adresse-Contoirs Efterretninger");
             title.setDateRange(new NewspaperDateRange(new Date(Long.MIN_VALUE),new Date()));
             return Arrays.asList(title);
         }
