@@ -1,8 +1,5 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.EventHandlerFactory;
@@ -11,6 +8,9 @@ import dk.statsbiblioteket.newspaper.metadatachecker.crosscheck.FilmDateConsiste
 import dk.statsbiblioteket.newspaper.metadatachecker.jpylyzer.JpylyzingEventHandler;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 import org.w3c.dom.Document;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /** A factory for checks to do on metadata. */
 public class MetadataChecksFactory
@@ -90,6 +90,7 @@ public class MetadataChecksFactory
         treeEventHandlers.add(new AltoMixCrossCheckEventHandler(resultCollector));
         treeEventHandlers.add(new EditionModsEventHandler(resultCollector,mfPakDAO,batch));
         treeEventHandlers.add(new FilmDateConsistentcyChecker(resultCollector, batchXmlManifest, batch));
+        treeEventHandlers.add(new MixXPathEventHandler(resultCollector,mfPakDAO,batch));
         return treeEventHandlers;
     }
 }
