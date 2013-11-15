@@ -32,11 +32,11 @@
             <mix:sourceType>microfilm</mix:sourceType>
             <mix:SourceID>
                 <mix:sourceIDType>Microfilm reel barcode #</mix:sourceIDType>
-                <mix:sourceIDValue>123456789-12</mix:sourceIDValue>
+                <mix:sourceIDValue>000001</mix:sourceIDValue>
             </mix:SourceID>
             <mix:SourceID>
                 <mix:sourceIDType>Location on microfilm</mix:sourceIDType>
-                <mix:sourceIDValue>0000</mix:sourceIDValue>
+                <mix:sourceIDValue>0001</mix:sourceIDValue>
             </mix:SourceID>
         </mix:SourceInformation>
         <mix:GeneralCaptureInformation>

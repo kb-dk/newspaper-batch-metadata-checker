@@ -1,5 +1,6 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -15,6 +16,7 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.filesystem.transfor
 import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.ConfigurationProperties;
 import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.MfPakConfiguration;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+import dk.statsbiblioteket.util.Streams;
 import dk.statsbiblioteket.util.xml.DOM;
 import org.testng.annotations.Test;
 import org.w3c.dom.Document;

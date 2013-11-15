@@ -41,6 +41,10 @@ public class MixXPathEventHandler extends DefaultTreeEventHandler {
         this.batch = batch;
     }
 
+    /**
+     * Hooks on
+     * @param event
+     */
     @Override
     public void handleAttribute(AttributeParsingEvent event) {
         if (event.getName().endsWith(".mix.xml")) {
@@ -68,7 +72,7 @@ public class MixXPathEventHandler extends DefaultTreeEventHandler {
         }
         
         validateScannedDate(doc, xpath, event);
-
+        validateAgainstFilepath(doc, xpath, event);
 
     }
     
@@ -109,6 +113,72 @@ public class MixXPathEventHandler extends DefaultTreeEventHandler {
                             + "the batch was shipped from SB '" + shipmentDate + "'.",
                     event.getName());
         }
+    }
+    
+    /**
+     * Validate that the objectIdentifier is of the form [Film-id]-[Billed-id] 
+     */
+    private void validateAgainstFilepath(Document doc, XPathSelector xpath, AttributeParsingEvent event) {
+        final String xpath2K2 = "/mix:mix/mix:BasicDigitalObjectInformation/mix:ObjectIdentifier"
+                + "[mix:objectIdentifierType='Image Unique ID']/mix:objectIdentifierValue";
+        
+        final String xpath2K3 = "/mix:mix/mix:ImageCaptureMetadata/mix:SourceInformation/mix:SourceID"
+                + "[mix:sourceIDType='Microfilm reel barcode #']/mix:sourceIDValue";
+        
+        final String xpath2K4 = "/mix:mix/mix:ImageCaptureMetadata/mix:SourceInformation/mix:SourceID"
+                + "[mix:sourceIDType='Location on microfilm']/mix:sourceIDValue";
+        
+        String objectIdentifier = xpath.selectString(doc, xpath2K2);
+        String mixFilmID = xpath.selectString(doc, xpath2K3);
+        String mixBilledeID = xpath.selectString(doc, xpath2K4);
+        String filmID = getFilmIDFromEvent(event);
+        String billedID = getBilledIDFromEvent(event);
+        String identifierFromPath = filmID + "-" + billedID;
+        //TODO here it fails
+        if(!objectIdentifier.equals(identifierFromPath)) {
+            addFailure(event.getName(),
+                    "2K-2: ObjectIdentifier does not match the location in the tree. "
+                    + "Expected '" + objectIdentifier + "' got '" + identifierFromPath + "'.",
+                    event.getName());
+        }
+        
+        if(!mixFilmID.equals(filmID)) {
+            addFailure(event.getName(),
+                    "2K-3: FilmID does not match the location in the tree. "
+                    + "Expected '" + mixFilmID + "' got '" + filmID + "'.",
+                    event.getName());
+        }
+        
+        if(!mixBilledeID.equals(billedID)) {
+            addFailure(event.getName(),
+                    "2K-4: Location on film does not match the location in the tree. "
+                    + "Expected '" + mixBilledeID + "' got '" + billedID + "'.",
+                    event.getName());
+        }
+        
+        
+        
+    }
+    
+    private String getBilledIDFromEvent(AttributeParsingEvent event) {
+        return event.getName().substring(event.getName().lastIndexOf("-")+1).split(".mix.xml")[0];
+    }
+    
+    private String getFilmIDFromEvent(AttributeParsingEvent event) {
+        String filmID = null;
+        if(event.getName().contains("WORKSHIFT-ISO-TARGET")) {
+            /* WORKSHIFT-ISO-TARGET is special in the sense that it does not belong to a film. 
+               The 'filmID' here is based on the running number that is in the filename just
+               before the 'billedID' */
+            String filename = event.getName().substring(event.getName().lastIndexOf("/"));
+            filmID = filename.split("-")[1];
+        } else {
+            /* The event.getName should return something like: /batchID/filmID/dir/pagedir/page.xml
+               We want the filmID part, which should be the 2. (index 1) part */
+            String[] pathParts = event.getName().split("/");
+            filmID = pathParts[1];
+        }
+        return filmID;
     }
     
     private void addFailure(String reference, String description, String details) {
