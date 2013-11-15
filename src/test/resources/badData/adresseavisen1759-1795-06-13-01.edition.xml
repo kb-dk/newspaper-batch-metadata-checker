@@ -7,10 +7,10 @@
     </mods:titleInfo>
     <mods:originInfo>
         <mods:place>
-            <mods:placeTerm type="text">København</mods:placeTerm>
+            <mods:placeTerm type="text">Kobenhavn</mods:placeTerm>
         </mods:place>
         <!--required-->
-        <mods:dateIssued encoding="iso8601">1795-06-13</mods:dateIssued>
+        <mods:dateIssued encoding="iso8601">1795-06-14</mods:dateIssued>
         <mods:dateIssued encoding="iso8601" qualifier="questionable">1795-06-31</mods:dateIssued>
     </mods:originInfo>
     <mods:note type="noteAboutReproduction" displayLabel="comment concerning label">Present</mods:note>

@@ -5,6 +5,7 @@ import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.DefaultTreeEventHandler;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperEntity;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperTitle;
 import dk.statsbiblioteket.util.xml.DOM;
 import dk.statsbiblioteket.util.xml.XPathSelector;
@@ -22,6 +23,7 @@ import java.util.List;
  * the schematron paradigm.
  */
 public class EditionModsEventHandler extends DefaultTreeEventHandler {
+    private static final String YYYY_MM_DD = "yyyy-MM-dd";
     private ResultCollector resultCollector;
     private MfPakDAO mfPakDAO;
     private Batch batch;
@@ -64,15 +66,24 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        String avisID = check2D_1(event, xpath, doc);
-        Date editionDate = check2D_2(event, xpath, doc);
-        check2D_3(event, xpath, doc, avisID, editionDate);
+        try {
+            String avisID = check2D_1(event, xpath, doc);
+            Date editionDate = check2D_2(event, xpath, doc);
+            check2D_3(event, xpath, doc, avisID, editionDate);
+            check2D_4(event, xpath, doc, avisID, editionDate);
+            check2D_9(event, xpath, doc, avisID, editionDate);
+
+        } catch (SQLException e) {
+            resultCollector.addFailure(
+                    event.getName(), "metadata", getClass().getName(), "Could not connect to MFPak", event.getName());
+        }
 
 
-        /** 2D-4 Check Issue Date against event.getName() (file structure),
-         * and check within expected interval against MFpak?
-         */
+    }
 
+    //TODO
+    private void check2D_9(AttributeParsingEvent event, XPathSelector xpath, Document doc, String avisID,
+                           Date editionDate) {
         /** 2D-9 Check Edition Order against event.getName() (file structure),
          * and cross correlate with sibling editions that the numbers are sequential.
          */
@@ -80,21 +91,79 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
 
     }
 
-    private void check2D_3(AttributeParsingEvent event, XPathSelector xpath, Document doc, String avisID, Date editionDate) {
-        //mfPakDAO.getNewspaperEntity()
-        /** 2D-3 Check Publication Location against MFpak */
+    /** 2D-4 Check Issue Date against event.getName() (file structure), */
+    private void check2D_4(AttributeParsingEvent event, XPathSelector xpath, Document doc, String avisID,
+                           Date editionDate) {
+        String dateIssuedString = xpath.selectString(doc, "/mods:mods/mods:originInfo/mods:dateIssued");
+        try {
+            Date dateIssued = new SimpleDateFormat(YYYY_MM_DD).parse(dateIssuedString);
+            if (!dateIssued.equals(editionDate)) {
+                resultCollector.addFailure(
+                        event.getName(),
+                        "metadata",
+                        getClass().getName(),
+                        "2D-4: Date issued from file does not correspond to date in filename");
+            }
+        } catch (ParseException e) {
+            resultCollector.addFailure(
+                    event.getName(),
+                    "metadata",
+                    getClass().getName(),
+                    "2D-4: Date issued from file is not of the form '" + YYYY_MM_DD + "'");
+
+        }
+
 
     }
 
-    private Date check2D_2(AttributeParsingEvent event, XPathSelector xpath, Document doc) {
-        /** 2D-2
-         * Check Title (Newspaper title (MARC 245$a). Provided by the State and University Library, title may be
-         * different for different periods in time, which will be specified by the State and University Library.
-         * mods:mods/mods:titleInfo/mods:title
-         * matches the titles we have shipped according to the lists we have delivered.
-         * Check against MFpak.
-         */
+    /**
+     * 2D-3 Check Publication Location against MFpak
+     *
+     * @param event the parsing event
+     * @param xpath the xpath selector
+     * @param doc the edition mods document
+     * @param avisID the avisID
+     * @param editionDate the editionDate
+     *
+     * @throws SQLException if communication with MFPak failed
+     */
+    private void check2D_3(AttributeParsingEvent event, XPathSelector xpath, Document doc, String avisID,
+                           Date editionDate) throws SQLException {
 
+        NewspaperEntity newspaperEntity = mfPakDAO.getNewspaperEntity(avisID, editionDate);
+        if (newspaperEntity == null) {
+            resultCollector.addFailure(
+                    event.getName(),
+                    "metadata",
+                    getClass().getName(),
+                    "2D-3: Failed to retrieve a publication location from MFPak for this batch");
+            return;
+        }
+        String editionLocation = xpath.selectString(doc, "/mods:mods/mods:originInfo/mods:place/mods:placeTerm");
+        if (editionLocation == null) {
+            resultCollector.addFailure(
+                    event.getName(), "metadata", getClass().getName(), "2D-3: Failed to resolve publication location");
+        }
+        if (!newspaperEntity.getPublicationLocation()
+                            .equals(editionLocation)) {
+            resultCollector.addFailure(
+                    event.getName(),
+                    "metadata",
+                    getClass().getName(),
+                    "2D-3: Publication location '"
+                    + editionLocation
+                    + "' does not match value '"
+                    + newspaperEntity.getPublicationLocation()
+                    + "' from MFPak");
+        }
+
+    }
+
+    /** 2D-2
+     * Check edition date against MFPak.
+     * Check that the full title matches the value from MFPak
+     */
+    private Date check2D_2(AttributeParsingEvent event, XPathSelector xpath, Document doc) throws SQLException {
 
         Date editionDate = null;
         try {
@@ -109,62 +178,54 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
                     event.getName(), "metadata", getClass().getName(), "2D-2: No edition date found in this file");
             return null;
         } else {
-            try {
-                List<NewspaperTitle> titles = mfPakDAO.getBatchNewspaperTitles(batch.getBatchID());
-                NewspaperTitle selected = null;
-                for (NewspaperTitle title : titles) {
-                    if (title.getDateRange()
-                             .isIncluded(editionDate)) {
-                        selected = title;
-                        break;
-                    }
-                }
-                if (selected == null) {
-                    resultCollector.addFailure(
-                            event.getName(),
-                            "metadata",
-                            getClass().getName(),
-                            "2D-2: No title found in MFPak for this file");
-                } else {
-                    String avisTitle = xpath.selectString(doc, "/mods:mods/mods:titleInfo/mods:title");
-                    if (avisTitle == null) {
-                        resultCollector.addFailure(
-                                event.getName(), "metadata", getClass().getName(), "2D-2: Title should exist");
-                    } else {
-                        if (!avisTitle.equals(selected.getTitle())) {
-                            resultCollector.addFailure(
-                                    event.getName(),
-                                    "metadata",
-                                    getClass().getName(),
-                                    "2D-2: title "
-                                    + avisTitle
-                                    + " does not match title in MFPak '"
-                                    + selected.getTitle()
-                                                      + "'");
-                        }
-                    }
-                }
 
-
-            } catch (SQLException e) {
+            List<NewspaperTitle> titles = mfPakDAO.getBatchNewspaperTitles(batch.getBatchID());
+            NewspaperTitle selected = null;
+            for (NewspaperTitle title : titles) {
+                if (title.getDateRange()
+                         .isIncluded(editionDate)) {
+                    selected = title;
+                    break;
+                }
+            }
+            if (selected == null) {
                 resultCollector.addFailure(
                         event.getName(),
                         "metadata",
                         getClass().getName(),
-                        "Could not connect to MFPak",
-                        event.getName());
-                return editionDate;
+                        "2D-2: No title found in MFPak for this file");
+            } else {
+                String avisTitle = xpath.selectString(doc, "/mods:mods/mods:titleInfo/mods:title");
+                if (avisTitle == null) {
+                    resultCollector.addFailure(
+                            event.getName(), "metadata", getClass().getName(), "2D-2: Title should exist");
+                } else {
+                    if (!avisTitle.equals(selected.getTitle())) {
+                        resultCollector.addFailure(
+                                event.getName(),
+                                "metadata",
+                                getClass().getName(),
+                                "2D-2: title "
+                                + avisTitle
+                                + " does not match title in MFPak '"
+                                + selected.getTitle()
+                                + "'");
+                    }
+                }
             }
+
+
         }
         return editionDate;
     }
 
-    private String check2D_1(AttributeParsingEvent event, XPathSelector xpath, Document doc) {
-        /** 2D-1
-         * Check avisID (The unique ID for the newspaper concerned provided by the State and University Library)
-         * mods:mods/mods:titleInfo/mods:title [@type=”uniform” authority=”Statens Avissamling”]
-         * matches the ID in the file structure (event.getName()).
-         */
+    /** 2D-1
+     * Check avisID (The unique ID for the newspaper concerned provided by the State and University Library)
+     * mods:mods/mods:titleInfo/mods:title [@type=”uniform” authority=”Statens Avissamling”]
+     * matches the ID in the file structure (event.getName()).
+     * Check avisID matches the avisID in MFPak.
+     */
+    private String check2D_1(AttributeParsingEvent event, XPathSelector xpath, Document doc) throws SQLException {
         final String xpath2D1
                 = "/mods:mods/mods:titleInfo[@type='uniform'][@authority='Statens Avissamling']/mods:title";
         String avisID = xpath.selectString(doc, xpath2D1);
@@ -175,14 +236,9 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
         }
         String avisIDfromFileStructure = getAvisIDfromName(event.getName());
         String avisIDfromMFPak;
-        try {
-            avisIDfromMFPak = mfPakDAO.getNewspaperID(batch.getBatchID());
-        } catch (SQLException e) {
-            resultCollector.addFailure(
-                    event.getName(), "metadata", getClass().getName(), "Could not connect to MFPak", event.getName());
-            return avisID;
-        }
-        //TODO also existence checks
+
+        avisIDfromMFPak = mfPakDAO.getNewspaperID(batch.getBatchID());
+
 
         if (!avisID.equals(avisIDfromFileStructure)) {
             resultCollector.addFailure(
@@ -209,15 +265,26 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
 
     }
 
+    /**
+     * Get the edition date from the name of a edition.xml file
+     * @param name the name of the edition xml file
+     * @return the edition date
+     * @throws ParseException
+     */
     private Date getDateFromName(String name) throws ParseException {
 
         //B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01.edition.xml
         String[] splits = name.split("/");
         String file = splits[2];
-        final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        final SimpleDateFormat dateFormat = new SimpleDateFormat(YYYY_MM_DD);
         return dateFormat.parse(file);
     }
 
+    /**
+     * Get the avisID from the edition.xml name
+     * @param name the edition.xml file name
+     * @return the avisID
+     */
     private String getAvisIDfromName(String name) {
         //B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01.edition.xml
         String[] splits = name.split("/");
