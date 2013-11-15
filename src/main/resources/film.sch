@@ -15,6 +15,10 @@
             <!--Reduction ratio-->
             <s:assert test="matches(avis:reductionRatio, '^\s*([1-9]|1[0-9])x\s*$')">Should be a integer number (19 or lower) followed by an x (no leading zeroes)</s:assert>
 
+            <!--Original newspaper resolution-->
+            <s:assert test="matches(avis:captureResolutionOriginal, '^\s*[1-9][0-9]*\s*$')">Must be an integer number</s:assert>
+            <s:report test="avis:captureResolutionOriginal < 300">Original newspaper resolution must be 300 pixels per inch or higher</s:assert>
+
         </s:rule>
     </s:pattern>
 </s:schema>
