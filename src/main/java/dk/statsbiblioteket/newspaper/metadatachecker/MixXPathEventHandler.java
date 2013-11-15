@@ -20,6 +20,8 @@ import static dk.statsbiblioteket.util.Strings.getStackTrace;
 
 /**
  *  Class to handle MIX crosschecks
+ *  Checks that:
+ *  1. The scanned date is after the date that it was shipped from SB.
  */
 public class MixXPathEventHandler extends DefaultTreeEventHandler {
 
@@ -65,6 +67,15 @@ public class MixXPathEventHandler extends DefaultTreeEventHandler {
             throw new RuntimeException(e);
         }
         
+        validateScannedDate(doc, xpath, event);
+
+
+    }
+    
+    /**
+     * Validates the scanned date is after the batch was sent from SB. 
+     */
+    private void validateScannedDate(Document doc, XPathSelector xpath, AttributeParsingEvent event) {
         Date shipmentDate = null;
         try {
             shipmentDate = mfPakDAO.getBatchShipmentDate(batch.getBatchID());
@@ -98,7 +109,6 @@ public class MixXPathEventHandler extends DefaultTreeEventHandler {
                             + "the batch was shipped from SB '" + shipmentDate + "'.",
                     event.getName());
         }
-
     }
     
     private void addFailure(String reference, String description, String details) {
