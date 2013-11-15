@@ -41,6 +41,10 @@ public class MixXPathEventHandler extends DefaultTreeEventHandler {
         this.batch = batch;
     }
 
+    /**
+     * Hooks on
+     * @param event
+     */
     @Override
     public void handleAttribute(AttributeParsingEvent event) {
         if (event.getName().endsWith(".mix.xml")) {
@@ -119,7 +123,7 @@ public class MixXPathEventHandler extends DefaultTreeEventHandler {
                 + "[mix:objectIdentifierType='Image Unique ID']/mix:objectIdentifierValue";
         
         final String xpath2K3 = "/mix:mix/mix:ImageCaptureMetadata/mix:SourceInformation/mix:SourceID"
-                + "[mix:sourceIDType='Microfilm reel barcode#']/mix:sourceIDValue";
+                + "[mix:sourceIDType='Microfilm reel barcode #']/mix:sourceIDValue";
         
         final String xpath2K4 = "/mix:mix/mix:ImageCaptureMetadata/mix:SourceInformation/mix:SourceID"
                 + "[mix:sourceIDType='Location on microfilm']/mix:sourceIDValue";
@@ -130,6 +134,7 @@ public class MixXPathEventHandler extends DefaultTreeEventHandler {
         String filmID = getFilmIDFromEvent(event);
         String billedID = getBilledIDFromEvent(event);
         String identifierFromPath = filmID + "-" + billedID;
+        //TODO here it fails
         if(!objectIdentifier.equals(identifierFromPath)) {
             addFailure(event.getName(),
                     "2K-2: ObjectIdentifier does not match the location in the tree. "
@@ -139,14 +144,14 @@ public class MixXPathEventHandler extends DefaultTreeEventHandler {
         
         if(!mixFilmID.equals(filmID)) {
             addFailure(event.getName(),
-                    "2K-2: FilmID does not match the location in the tree. "
+                    "2K-3: FilmID does not match the location in the tree. "
                     + "Expected '" + mixFilmID + "' got '" + filmID + "'.",
                     event.getName());
         }
         
         if(!mixBilledeID.equals(billedID)) {
             addFailure(event.getName(),
-                    "2K-2: Location on film does not match the location in the tree. "
+                    "2K-4: Location on film does not match the location in the tree. "
                     + "Expected '" + mixBilledeID + "' got '" + billedID + "'.",
                     event.getName());
         }
