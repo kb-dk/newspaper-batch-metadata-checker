@@ -40,7 +40,7 @@ public class MetadataCheckerComponentIT {
 
         TreeIterator iterator = getIterator();
         EventRunner batchStructureChecker = new EventRunner(iterator);
-        ResultCollector resultCollector = new ResultCollector("Batch Structure Checker", "v0.1");
+        ResultCollector resultCollector = new ResultCollector(getClass().getSimpleName(), "v0.1");
         Batch batch = new Batch();
         batch.setBatchID(TEST_BATCH_ID);
         batch.setRoundTripNumber(1);
@@ -49,9 +49,6 @@ public class MetadataCheckerComponentIT {
         if (batchXmlStructureStream == null) {
             throw new RuntimeException("Failed to resolve batch manifest from data collector");
         }
-        ByteArrayOutputStream temp = new ByteArrayOutputStream();
-        Streams.pipe(batchXmlStructureStream, temp);
-
         Document batchXmlManifest = DOM.streamToDOM(batchXmlStructureStream);
 
         MfPakConfiguration mfPakConfiguration = new MfPakConfiguration();
