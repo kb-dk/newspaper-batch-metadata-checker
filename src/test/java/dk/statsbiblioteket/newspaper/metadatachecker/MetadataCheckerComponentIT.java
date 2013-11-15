@@ -1,6 +1,5 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -16,7 +15,6 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.filesystem.transfor
 import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.ConfigurationProperties;
 import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.MfPakConfiguration;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
-import dk.statsbiblioteket.util.Streams;
 import dk.statsbiblioteket.util.xml.DOM;
 import org.testng.annotations.Test;
 import org.w3c.dom.Document;
@@ -40,7 +38,7 @@ public class MetadataCheckerComponentIT {
 
         TreeIterator iterator = getIterator();
         EventRunner batchStructureChecker = new EventRunner(iterator);
-        ResultCollector resultCollector = new ResultCollector("Batch Structure Checker", "v0.1");
+        ResultCollector resultCollector = new ResultCollector(getClass().getSimpleName(), "v0.1");
         Batch batch = new Batch();
         batch.setBatchID(TEST_BATCH_ID);
         batch.setRoundTripNumber(1);
@@ -49,9 +47,6 @@ public class MetadataCheckerComponentIT {
         if (batchXmlStructureStream == null) {
             throw new RuntimeException("Failed to resolve batch manifest from data collector");
         }
-        ByteArrayOutputStream temp = new ByteArrayOutputStream();
-        Streams.pipe(batchXmlStructureStream, temp);
-
         Document batchXmlManifest = DOM.streamToDOM(batchXmlStructureStream);
 
         MfPakConfiguration mfPakConfiguration = new MfPakConfiguration();
