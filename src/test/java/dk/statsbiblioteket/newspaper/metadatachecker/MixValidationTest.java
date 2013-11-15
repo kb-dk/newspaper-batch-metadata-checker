@@ -1,9 +1,12 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
 
-import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.assertFalse;
-
+import dk.statsbiblioteket.medieplatform.autonomous.Batch;
+import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -13,15 +16,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
-
-import dk.statsbiblioteket.medieplatform.autonomous.Batch;
-import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
-import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
-import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 
 public class MixValidationTest {
@@ -639,7 +637,7 @@ public class MixValidationTest {
         MfPakDAO mfpakDao = mock(MfPakDAO.class);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         // The in the mix file is 2010-11-11
-        Date shipmentDate = formatter.parse("2012-06-02");
+        Date shipmentDate = new Date();
         when(mfpakDao.getBatchShipmentDate("400022028241")).thenReturn(shipmentDate);
         Batch batch = new Batch();
         batch.setBatchID("400022028241");
