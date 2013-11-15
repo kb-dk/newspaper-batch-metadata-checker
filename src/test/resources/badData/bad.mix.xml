@@ -2,9 +2,9 @@
     <mix:BasicDigitalObjectInformation>
         <mix:ObjectIdentifier>
             <mix:objectIdentifierType>Image Unique ID</mix:objectIdentifierType>
-            <mix:objectIdentifierValue>400022028241-1-0004</mix:objectIdentifierValue>
+            <mix:objectIdentifierValue>400022028241-14-0006</mix:objectIdentifierValue>
         </mix:ObjectIdentifier>
-        <mix:fileSize>3539818</mix:fileSize>
+        <mix:fileSize>3662332</mix:fileSize>
         <mix:FormatDesignation>
             <mix:formatName>JPEG2000 – part 1</mix:formatName>
             <mix:formatVersion>ISO-IEC 15444-1:2004</mix:formatVersion>
@@ -14,14 +14,14 @@
         </mix:Compression>
         <mix:Fixity>
             <mix:messageDigestAlgorithm>MD5</mix:messageDigestAlgorithm>
-            <mix:messageDigest>0BEC6B48E365B6B4A9953D6C6FB51306</mix:messageDigest>
+            <mix:messageDigest>7ED748249DEF3BCAADD825AE17DC817A</mix:messageDigest>
             <mix:messageDigestOriginator>Ninestars</mix:messageDigestOriginator>
         </mix:Fixity>
     </mix:BasicDigitalObjectInformation>
     <mix:BasicImageInformation>
         <mix:BasicImageCharacteristics>
-            <mix:imageWidth>9092</mix:imageWidth>
-            <mix:imageHeight>11120</mix:imageHeight>
+            <mix:imageWidth>9144</mix:imageWidth>
+            <mix:imageHeight>11456</mix:imageHeight>
             <mix:PhotometricInterpretation>
                 <mix:colorSpace>greyscale</mix:colorSpace>
             </mix:PhotometricInterpretation>
@@ -32,11 +32,11 @@
             <mix:sourceType>microfilm</mix:sourceType>
             <mix:SourceID>
                 <mix:sourceIDType>Microfilm reel barcode #</mix:sourceIDType>
-                <mix:sourceIDValue>400022028241-1</mix:sourceIDValue>
+                <mix:sourceIDValue>123456789-12</mix:sourceIDValue>
             </mix:SourceID>
             <mix:SourceID>
                 <mix:sourceIDType>Location on microfilm</mix:sourceIDType>
-                <mix:sourceIDValue>0004</mix:sourceIDValue>
+                <mix:sourceIDValue>0006</mix:sourceIDValue>
             </mix:SourceID>
         </mix:SourceInformation>
         <mix:GeneralCaptureInformation>
