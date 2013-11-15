@@ -17,7 +17,7 @@
 
             <!--Original newspaper resolution-->
             <s:assert test="matches(avis:captureResolutionOriginal, '^\s*[1-9][0-9]*\s*$')">Must be an integer number</s:assert>
-            <s:report test="avis:captureResolutionOriginal < 300">Original newspaper resolution must be 300 pixels per inch or higher</s:report>
+            <s:report test="avis:captureResolutionOriginal &lt; 300">Original newspaper resolution must be 300 pixels per inch or higher</s:report>
 
             <!--Original resolution unit-->
             <!--<s:assert test=""></s:assert>-->
