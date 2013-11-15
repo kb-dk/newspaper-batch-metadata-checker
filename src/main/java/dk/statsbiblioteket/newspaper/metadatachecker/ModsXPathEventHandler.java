@@ -3,18 +3,12 @@ package dk.statsbiblioteket.newspaper.metadatachecker;
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
-import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeBeginsParsingEvent;
-import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeEndParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.DefaultTreeEventHandler;
-import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
-import dk.statsbiblioteket.medieplatform.autonomous.iterator.filesystem.FileAttributeParsingEvent;
-import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.MfPakConfiguration;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 import dk.statsbiblioteket.util.xml.DOM;
 import dk.statsbiblioteket.util.xml.XPathSelector;
 import org.w3c.dom.Document;
 
-import javax.rmi.CORBA.Util;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -80,12 +74,12 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
         //2C-4
         final String xpath2C4 = "mods:mods/mods:relatedItem[@type='original']/mods:identifier[@type='reel number']";
         String reelNumber = xpath.selectString(doc, xpath2C4);
-        String reelNumberPatternString = "^" + batch.getBatchID() + "-" + "[0-9]{2}$";
+        String reelNumberPatternString = "^" + batch.getBatchID() + "-" + "[0-9]+$";
         if (reelNumber == null || !reelNumber.matches(reelNumberPatternString)) {
               resultCollector.addFailure(event.getName(),
                                     "metadata",
                                     getClass().getName(),
-                                    "2C-4: reel number " + reelNumber + " does not match expected pattern " + reelNumberPatternString,
+                                    "2C-4: reel number " + reelNumber + " does not match expected pattern '" + reelNumberPatternString+"'",
                                     xpath2C4
                                     );
         }

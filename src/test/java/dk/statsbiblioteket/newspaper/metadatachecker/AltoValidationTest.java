@@ -1,19 +1,20 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
-import static org.testng.AssertJUnit.assertFalse;
+import static org.mockito.Mockito.mock;
 import static org.testng.Assert.assertTrue;
+import static org.testng.AssertJUnit.assertFalse;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import dk.statsbiblioteket.medieplatform.autonomous.Batch;
-import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.MfPakConfiguration;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 
 public class AltoValidationTest {
 
@@ -30,11 +31,10 @@ public class AltoValidationTest {
     @Test
     public void testGood2J3() {
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
-        MfPakConfiguration configuration = new MfPakConfiguration();
         Batch batch = new Batch();
         batch.setBatchID("400022028241");
         batch.setRoundTripNumber(10);
-        PageModsTest.StubMfPakDAO dao = new PageModsTest.StubMfPakDAO(configuration);
+        MfPakDAO dao = mock(MfPakDAO.class);
         AltoXPathEventHandler handler = new AltoXPathEventHandler(resultCollector, dao, batch);
         AttributeParsingEvent altoEvent = new AttributeParsingEvent("B400022028241-RT2/400022028241-14/1795-06-15-01/AdresseContoirsEfterretninger-1795-06-15-01-0012B.alto.xml") {
             @Override
@@ -58,11 +58,10 @@ public class AltoValidationTest {
     @Test
     public void testBad2J3() {
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
-        MfPakConfiguration configuration = new MfPakConfiguration();
         Batch batch = new Batch();
         batch.setBatchID("400022028241");
         batch.setRoundTripNumber(10);
-        PageModsTest.StubMfPakDAO dao = new PageModsTest.StubMfPakDAO(configuration);
+        MfPakDAO dao = mock(MfPakDAO.class);
         AltoXPathEventHandler handler = new AltoXPathEventHandler(resultCollector, dao, batch);
         AttributeParsingEvent altoEvent = new AttributeParsingEvent("B400022028241-RT2/400022028241-14/1795-06-15-01/AdresseContoirsEfterretninger-1795-06-15-01-0012B.alto.xml") {
             @Override
@@ -158,7 +157,8 @@ public class AltoValidationTest {
         AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006.alto.xml") {
             @Override
             public InputStream getData() throws IOException {
-                return Thread.currentThread().getContextClassLoader().getResourceAsStream("scratch/B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006.alto.xml");
+                return Thread.currentThread().getContextClassLoader().getResourceAsStream(
+                        "scratch/B400022028240-RT1/400022028240-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006.alto.xml");
             }
 
             @Override

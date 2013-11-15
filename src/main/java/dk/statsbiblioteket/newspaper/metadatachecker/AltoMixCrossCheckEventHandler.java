@@ -21,7 +21,7 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
 
     private final ResultCollector resultCollector;
     private XPathSelector xpath;
-    private ArrayDeque<Sizes> sizesStack = new ArrayDeque<>();
+    private ArrayDeque<SizePair> sizesStack = new ArrayDeque<>();
 
     public AltoMixCrossCheckEventHandler(ResultCollector resultCollector) {
         this.resultCollector = resultCollector;
@@ -38,7 +38,7 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
      */
     @Override
     public void handleNodeBegin(NodeBeginsParsingEvent event) {
-        sizesStack.push(new Sizes(event.getName()));
+        sizesStack.push(new SizePair(event.getName()));
     }
 
     /**
@@ -48,7 +48,7 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
      */
     @Override
     public void handleNodeEnd(NodeEndParsingEvent event) {
-        Sizes sizes = sizesStack.pop();
+        SizePair sizes = sizesStack.pop();
         verify(sizes, resultCollector);
     }
 
@@ -59,49 +59,47 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
      * @param sizes           the store of sizes
      * @param resultCollector the result collector
      */
-    private void verify(Sizes sizes, ResultCollector resultCollector) {
-        if (sizes.getAltoHeight() > 0 && sizes.getMixHeight() > 0) {
-            if (sizes.getAltoHeight() != sizes.getMixHeight()) {
-                resultCollector.addFailure(
-                        sizes.getFolder(),
-                        "metadata",
-                        getClass().getName(),
-                        "2J-7: The file '"
-                        + sizes.getFolder()
-                        + ".mix.xml' and file '"
-                        + sizes.getFolder()
-                        + ".alto.xml' should agree on height");
-            }
-        }
-        if (sizes.getAltoWidth() > 0 && sizes.getMixWidth() > 0) {
-            if (sizes.getAltoWidth() != sizes.getMixWidth()) {
-                resultCollector.addFailure(
-                        sizes.getFolder(),
-                        "metadata",
-                        getClass().getName(),
-                        "2J-7: The file '"
-                        + sizes.getFolder()
-                        + ".mix.xml' and file '"
-                        + sizes.getFolder()
-                        + ".alto.xml' should agree on width");
-            }
-        }
+    private void verify(SizePair sizes, ResultCollector resultCollector) {
+        if (!sizes.getMixSize()
+                 .equalWidth(sizes.getAltoSize())) {
+            resultCollector.addFailure(
+                    sizes.getFolder(),
+                    "metadata",
+                    getClass().getName(),
+                    "2J-7: The file '"
+                    + sizes.getFolder()
+                    + ".mix.xml' and file '"
+                    + sizes.getFolder()
+                    + ".alto.xml' should agree on height");
 
+        }
+        if (!sizes.getMixSize()
+                 .equalHeight(sizes.getAltoSize())) {
+            resultCollector.addFailure(
+                    sizes.getFolder(),
+                    "metadata",
+                    getClass().getName(),
+                    "2J-7: The file '"
+                    + sizes.getFolder()
+                    + ".mix.xml' and file '"
+                    + sizes.getFolder()
+                    + ".alto.xml' should agree on width");
+        }
     }
 
     @Override
     public void handleAttribute(AttributeParsingEvent event) {
 
-        Sizes sizes = sizesStack.peek();
+        SizePair sizes = sizesStack.peek();
         try {
             if (event.getName()
                      .endsWith(".alto.xml")) {
 
-                extractAltoSizes(asDom(event.getData()), sizes, event.getName());
+                extractAltoSizes(asDom(event.getData()), sizes.getAltoSize(), event.getName());
 
             } else if (event.getName()
                             .endsWith(".mix.xml")) {
-                extractMixSizes(asDom(event.getData()), sizes, event.getName());
+                extractMixSizes(asDom(event.getData()), sizes.getMixSize(), event.getName());
 
             }
         } catch (IOException e) {
@@ -114,14 +112,14 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
         return DOM.streamToDOM(data, true);
     }
 
-    private void extractMixSizes(Document data, Sizes sizes, String name) {
+    private void extractMixSizes(Document data, Size size, String name) {
         Integer width = xpath.selectInteger(
                 data, "/mix:mix/mix:BasicImageInformation/mix:BasicImageCharacteristics/mix:imageWidth");
         if (width == null) {
             resultCollector.addFailure(
                     name, "metadata", getClass().getName(), "Failed to read page width from mix file");
         } else {
-            sizes.setMixWidth(width);
+            size.setWidth(width);
         }
 
         Integer height = xpath.selectInteger(
@@ -131,11 +129,11 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
                     name, "metadata", getClass().getName(), "Failed to read page height from mix file");
         } else {
 
-            sizes.setMixHeight(height);
+            size.setHeight(height);
         }
     }
 
-    private void extractAltoSizes(Document data, Sizes sizes, String reference) {
+    private void extractAltoSizes(Document data, Size size, String reference) {
 
         Integer height = xpath.selectInteger(data, "/a:alto/a:Layout/a:Page/@HEIGHT");
         if (height == null) {
@@ -143,7 +141,7 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
                     reference, "metadata", getClass().getName(), "Failed to read page height from alto");
 
         } else {
-            sizes.setAltoHeight(height);
+            size.setHeight(height);
         }
         Integer width = xpath.selectInteger(data, "/a:alto/a:Layout/a:Page/@WIDTH");
         if (width == null) {
@@ -151,59 +149,67 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
                     reference, "metadata", getClass().getName(), "Failed to read page width from alto");
         } else {
 
-            sizes.setAltoWidth(width);
+            size.setWidth(width);
         }
     }
 
-    private class Sizes {
+    private class Size {
 
-        private int altoWidth;
-        private int altoHeight;
-        private int mixWidth;
-        private int mixHeight;
+        private int width = -1;
+        private int height = -1;
+
+        public boolean equalHeight(Size that) {
+            if (this.getHeight() > 0 && that.getHeight() > 0) {
+                return this.getHeight() == that.getHeight();
+            } else {
+                return true;
+            }
+        }
+
+        public boolean equalWidth(Size that) {
+            if (this.getWidth() > 0 && that.getWidth() > 0){
+                return this.getWidth() == that.getWidth();
+            } else {
+                return true;
+            }
+        }
+
+        private int getWidth() {
+            return width;
+        }
+
+        private void setWidth(int width) {
+            this.width = width;
+        }
+
+        private int getHeight() {
+            return height;
+        }
+
+        private void setHeight(int height) {
+            this.height = height;
+        }
+
+    }
+
+    private class SizePair {
+
+        private Size altoSize;
+        private Size mixSize;
         private String folder;
 
-        private Sizes(String folder) {
+        private SizePair(String folder) {
+            this.altoSize = new Size();
+            this.mixSize = new Size();
             this.folder = folder;
         }
 
-        private void reset() {
-            altoWidth = -1;
-            altoHeight = -1;
-            mixWidth = -1;
-            mixHeight = -1;
+        private Size getAltoSize() {
+            return altoSize;
         }
 
-        private int getAltoWidth() {
-            return altoWidth;
-        }
-
-        private void setAltoWidth(int altoWidth) {
-            this.altoWidth = altoWidth;
-        }
-
-        private int getAltoHeight() {
-            return altoHeight;
-        }
-
-        private void setAltoHeight(int altoHeight) {
-            this.altoHeight = altoHeight;
-        }
-
-        private int getMixWidth() {
-            return mixWidth;
-        }
-
-        private void setMixWidth(int mixWidth) {
-            this.mixWidth = mixWidth;
-        }
-
-        private int getMixHeight() {
-            return mixHeight;
-        }
-
-        private void setMixHeight(int mixHeight) {
-            this.mixHeight = mixHeight;
+        private Size getMixSize() {
+            return mixSize;
         }
 
         private String getFolder() {
