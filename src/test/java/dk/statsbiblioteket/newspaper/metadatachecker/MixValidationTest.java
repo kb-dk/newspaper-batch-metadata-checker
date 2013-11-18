@@ -5,8 +5,10 @@ import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+import dk.statsbiblioteket.util.xml.DOM;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+import org.w3c.dom.Document;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -630,7 +632,12 @@ public class MixValidationTest {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date shipmentDate = formatter.parse("2010-01-02");
         when(mfpakDao.getBatchShipmentDate(batchId)).thenReturn(shipmentDate);
-        MixXPathEventHandler handler = new MixXPathEventHandler(resultCollector, mfpakDao, batch);
+        Document batchXmlStructure = DOM.streamToDOM(
+                        Thread.currentThread()
+                              .getContextClassLoader()
+                              .getResourceAsStream("assumed-valid-structure.xml"));
+
+        MixXPathEventHandler handler = new MixXPathEventHandler(resultCollector, mfpakDao, batch, batchXmlStructure);
 
         handler.handleAttribute(event);
         String report = resultCollector.toReport();
@@ -660,7 +667,12 @@ public class MixValidationTest {
         // The in the mix file is 2010-11-11
         Date shipmentDate = new Date();
         when(mfpakDao.getBatchShipmentDate(batchId)).thenReturn(shipmentDate);
-        MixXPathEventHandler handler = new MixXPathEventHandler(resultCollector, mfpakDao, batch);
+        Document batchXmlStructure = DOM.streamToDOM(
+                Thread.currentThread()
+                      .getContextClassLoader()
+                      .getResourceAsStream("assumed-valid-structure.xml"));
+
+        MixXPathEventHandler handler = new MixXPathEventHandler(resultCollector, mfpakDao, batch, batchXmlStructure);
 
 
         handler.handleAttribute(event);
@@ -692,7 +704,12 @@ public class MixValidationTest {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date shipmentDate = formatter.parse("2010-01-02");
         when(mfpakDao.getBatchShipmentDate("400022028241")).thenReturn(shipmentDate);
-        MixXPathEventHandler handler = new MixXPathEventHandler(resultCollector, mfpakDao, batch);
+        Document batchXmlStructure = DOM.streamToDOM(
+                Thread.currentThread()
+                      .getContextClassLoader()
+                      .getResourceAsStream("assumed-valid-structure.xml"));
+
+        MixXPathEventHandler handler = new MixXPathEventHandler(resultCollector, mfpakDao, batch, batchXmlStructure);
 
 
         handler.handleAttribute(event);

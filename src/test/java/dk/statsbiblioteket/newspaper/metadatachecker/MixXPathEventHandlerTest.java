@@ -4,7 +4,9 @@ import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
+import dk.statsbiblioteket.util.xml.DOM;
 import org.testng.annotations.Test;
+import org.w3c.dom.Document;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,10 +19,15 @@ public class MixXPathEventHandlerTest {
 
     /** Test that we can validate a valid edition xml (mods) file. */
       @Test
-      public void testEditionModsGood() throws SQLException {
+      public void testMixGood() throws SQLException {
           ResultCollector resultCollector = new ResultCollector("foo", "bar");
           SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
-          TreeEventHandler mixXPathEventHandler = new MixXPathEventHandler(resultCollector, MFPakMocker.getMFPak(), getBatch());
+          Document batchXmlStructure = DOM.streamToDOM(
+                  Thread.currentThread()
+                        .getContextClassLoader()
+                        .getResourceAsStream("assumed-valid-structure.xml"));
+          TreeEventHandler mixXPathEventHandler = new MixXPathEventHandler(resultCollector, MFPakMocker.getMFPak(), getBatch(),
+                  batchXmlStructure);
           AttributeParsingEvent editionEvent = new AttributeParsingEvent(
                   "B400022028241-RT1/400022028241-1/1795-06-13-01/adresseavisen1759-1795-06-13-01-0006.mix.xml") {
               @Override
