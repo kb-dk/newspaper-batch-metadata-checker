@@ -89,7 +89,7 @@ public class MetadataChecksFactory
         treeEventHandlers.add(new AltoXPathEventHandler(resultCollector, mfPakDAO, batch));
         treeEventHandlers.add(new AltoMixCrossCheckEventHandler(resultCollector));
         treeEventHandlers.add(new EditionModsEventHandler(resultCollector,mfPakDAO,batch));
-        treeEventHandlers.add(new FilmDateConsistentcyChecker(resultCollector, batchXmlManifest, batch));
+        treeEventHandlers.add(new FilmDateConsistentcyChecker(resultCollector, batchXmlManifest));
         return treeEventHandlers;
     }
 }

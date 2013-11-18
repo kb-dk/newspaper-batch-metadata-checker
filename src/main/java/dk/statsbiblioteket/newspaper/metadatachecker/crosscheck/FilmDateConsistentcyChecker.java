@@ -2,7 +2,6 @@ package dk.statsbiblioteket.newspaper.metadatachecker.crosscheck;
 
 import java.io.IOException;
 
-import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.DefaultTreeEventHandler;
@@ -14,13 +13,11 @@ import org.w3c.dom.NodeList;
 public class FilmDateConsistentcyChecker extends DefaultTreeEventHandler {
     private final ResultCollector resultCollector;
     private final Document batchXmlStructure;
-    private final Batch batch;
     private final XPathSelector xpath;
 
-    public FilmDateConsistentcyChecker(ResultCollector resultCollector, Document batchXmlStructure, Batch batch) {
+    public FilmDateConsistentcyChecker(ResultCollector resultCollector, Document batchXmlStructure) {
         this.resultCollector = resultCollector;
         this.batchXmlStructure = batchXmlStructure;
-        this.batch = batch;
         xpath = DOM.createXPathSelector("avis",
                 "http://www.statsbiblioteket.dk/avisdigitalisering/microfilm/1/0/");
     }
@@ -40,7 +37,7 @@ public class FilmDateConsistentcyChecker extends DefaultTreeEventHandler {
             }
             String filmStartdate = xpath.selectString(filmMetaData, "/avis:reelMetadata/avis:startDate");
             String filmEnddate = xpath.selectString(filmMetaData, "/avis:reelMetadata/avis:endDate");
-            String filmID = event.getName().split("/")[1];
+            String filmID = event.getName().split("/")[1].replace(".film.xml","");
             NodeList editions = xpath.selectNodeList(batchXmlStructure,
                     "/node/node[@shortName='" + filmID + "']/node[@shortName!='FILM-ISO-target'][@shortName!='UNMATCHED']");
             for (int index = 0 ; index < editions.getLength() ; index++) {
