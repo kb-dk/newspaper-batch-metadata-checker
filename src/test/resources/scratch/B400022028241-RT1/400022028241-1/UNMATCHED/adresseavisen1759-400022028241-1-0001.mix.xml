@@ -14,7 +14,7 @@
         </mix:Compression>
         <mix:Fixity>
             <mix:messageDigestAlgorithm>MD5</mix:messageDigestAlgorithm>
-            <mix:messageDigest>7E3FD545A69F324D8810ADFC982149B3</mix:messageDigest>
+            <mix:messageDigest>724f04357caf4cb1d6879a8d5b8433d8</mix:messageDigest>
             <mix:messageDigestOriginator>Ninestars</mix:messageDigestOriginator>
         </mix:Fixity>
     </mix:BasicDigitalObjectInformation>
