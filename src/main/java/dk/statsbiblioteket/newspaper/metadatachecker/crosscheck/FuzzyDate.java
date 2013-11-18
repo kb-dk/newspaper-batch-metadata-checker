@@ -1,5 +1,10 @@
 package dk.statsbiblioteket.newspaper.metadatachecker.crosscheck;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Implements functionality for working with ISO format dates without full precision. This means the dates can be
  * instantiate with the follow formats: <ol>
@@ -33,6 +38,38 @@ public final class FuzzyDate implements Comparable<FuzzyDate> {
     public int compareTo(FuzzyDate date) {
         int minPrecisionIndex = Math.min(myPrecision, date.getPrecision());
         return asString(minPrecisionIndex).compareTo(date.asString(minPrecisionIndex));
+    }
+
+
+    /**
+     * 0 if the argument Date is equal to this Date; a value less than 0 if this Date is before the Date argument and a
+     * value greater than 0 if this Date is after the Date argument.<p>
+     * @param date the date to compare this to
+     */
+    public int compareTo(Date date)  {
+        DateFormat dateFormat = getDateFormat();
+        Date thisAsDate = null;
+        try {
+            thisAsDate = dateFormat.parse(asString());
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("The datestring '"+dateString+"' is invalid",e);
+        }
+        return thisAsDate.compareTo(date);
+    }
+
+    /**
+     * Get the appropriate date format, according to the precision of the date string
+     * @return a date format
+     */
+    private DateFormat getDateFormat() {
+        if (getPrecision() > 9 ){
+            return new SimpleDateFormat("yyyy-MM-dd");
+        } else if (getPrecision() > 5 ){
+            return new SimpleDateFormat("yyyy-MM");
+        } else {
+            return new SimpleDateFormat("yyyy");
+
+        }
     }
 
     /**
@@ -80,5 +117,33 @@ public final class FuzzyDate implements Comparable<FuzzyDate> {
             throw new IllegalArgumentException("Invalide date format " + dateString +
                     ", the date must be of the format yyyy-MM-dd (-MM or -MM-dd are optional)");
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof FuzzyDate)) {
+            return false;
+        }
+
+        FuzzyDate fuzzyDate = (FuzzyDate) o;
+
+        if (myPrecision != fuzzyDate.myPrecision) {
+            return false;
+        }
+        if (!dateString.equals(fuzzyDate.dateString)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = dateString.hashCode();
+        result = 31 * result + myPrecision;
+        return result;
     }
 }
