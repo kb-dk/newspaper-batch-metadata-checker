@@ -80,27 +80,27 @@ public class FilmDateConsistentcyCheckerTest {
     @Test
     public void verifyEditionDateContainmentGoodcaseTest() {
         FilmDateConsistentcyChecker checker = new FilmDateConsistentcyChecker(resultCollector, null);
-        checker.verifyEditionDateContainment("2013-10-10", "2013-10-12", "2013-10-11-1");
+        checker.verifyEditionDateContainment("2013-10-10", "2013-10-12", "2013-10-11-1", "filmID");
         verifyNoMoreInteractions(resultCollector);
-        checker.verifyEditionDateContainment("2013-10-10", "2013-10-12", "2013-10-10-1");
+        checker.verifyEditionDateContainment("2013-10-10", "2013-10-12", "2013-10-10-1", "filmID");
         verifyNoMoreInteractions(resultCollector);
-        checker.verifyEditionDateContainment("2013-10-10", "2013-10-12", "2013-10-12-1");
+        checker.verifyEditionDateContainment("2013-10-10", "2013-10-12", "2013-10-12-1", "filmID");
         verifyNoMoreInteractions(resultCollector);
     }
 
     @Test
     public void verifyEditionDateContainmentFuzzyTest() {
         FilmDateConsistentcyChecker checker = new FilmDateConsistentcyChecker(resultCollector, null);
-        checker.verifyEditionDateContainment("2013-10-10", "2013-10-12", "2013-10-00-1");
+        checker.verifyEditionDateContainment("2013-10-10", "2013-10-12", "2013-10-00-1", "filmID");
         verifyNoMoreInteractions(resultCollector);
-        checker.verifyEditionDateContainment("2013-10-10", "2013-10-12", "2013-00-00-1");
+        checker.verifyEditionDateContainment("2013-10-10", "2013-10-12", "2013-00-00-1", "filmID");
         verifyNoMoreInteractions(resultCollector);
     }
 
     @Test
     public void verifyEditionDateContainmentBadcaseTest() {
         FilmDateConsistentcyChecker checker = new FilmDateConsistentcyChecker(resultCollector, null);
-        checker.verifyEditionDateContainment("2013-10-10", "2013-10-12", "2013-10-14-1");
+        checker.verifyEditionDateContainment("2013-10-10", "2013-10-12", "2013-10-14-1", "filmID");
         verify(resultCollector).addFailure(anyString(), anyString(), anyString(), anyString());
         verifyNoMoreInteractions(resultCollector);
     }

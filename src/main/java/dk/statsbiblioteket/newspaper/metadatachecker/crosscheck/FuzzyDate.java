@@ -8,17 +8,19 @@ package dk.statsbiblioteket.newspaper.metadatachecker.crosscheck;
  *     <li>Year precision: yyyy-00-00.</li>
  * </ol>
  */
-public class FuzzyDate implements Comparable<FuzzyDate> {
+public final class FuzzyDate implements Comparable<FuzzyDate> {
     private final String dateString;
+    private final int myPrecision;
 
     public FuzzyDate(String dateString) {
         validateFormat(dateString);
         this.dateString = dateString;
+        myPrecision = findPrecisionIndex(this.dateString);
     }
 
     /**
-     * Return 1 if the supplied date is before this date, 0 if equal to and -1 if after. This is done by
-     * converting the dates to dates with the least precision of the two dates and comparing these.<p>
+     * 0 if the argument Date is equal to this Date; a value less than 0 if this Date is before the Date argument and a
+     * value greater than 0 if this Date is after the Date argument.<p>
      *     Examples: <ol>
      *        <li>FuzzyDate(2012-03-03).compareTo(FuzzyDate(2012-03-02)) will return 1.</li>
      *        <li>FuzzyDate(2012-03-00).compareTo(FuzzyDate(2012-03-02)) will return 0.</li>
@@ -29,11 +31,8 @@ public class FuzzyDate implements Comparable<FuzzyDate> {
      * @param date The date to compare this date to.
      */
     public int compareTo(FuzzyDate date) {
-        int myPrecision = findPrecisionIndex(this.dateString);
-        int theirPrecision = findPrecisionIndex(date.asString());
-        int minPrecisionIndex = Math.min(myPrecision, theirPrecision);
-        return this.dateString.substring(0, minPrecisionIndex).compareTo(
-                date.asString().substring(0, minPrecisionIndex));
+        int minPrecisionIndex = Math.min(myPrecision, date.getPrecision());
+        return this.asString(minPrecisionIndex).compareTo(date.asString(minPrecisionIndex));
     }
 
     /**
@@ -44,13 +43,25 @@ public class FuzzyDate implements Comparable<FuzzyDate> {
     }
 
     /**
+     * Return the string value of this fuzzy date, where the characters outside of the indicated index are thrown away.
+     * @param precisionIndex Specifies the precision the string should be trimmed to.
+     */
+    protected String asString(int precisionIndex) {
+        return dateString.substring(0, precisionIndex);
+    }
+
+    /**
      * Will calculate the index for the date string, where the rest of the string is just padding '00's.
      */
-    private static int findPrecisionIndex(String date) {
+    protected static int findPrecisionIndex(String date) {
         final int MONTH_START_INDEX = 4;
         final int FULL_PRECISION_INDEX = 10;
         int datePrecisionIndex = date.indexOf("00", MONTH_START_INDEX);
         return datePrecisionIndex != -1 ? datePrecisionIndex : FULL_PRECISION_INDEX;
+    }
+
+    protected int getPrecision() {
+        return myPrecision;
     }
 
     private void validateFormat(String dateString) {

@@ -24,7 +24,7 @@ public class MetadataChecksFactory
     //private MfPakConfiguration mfPakConfiguration;
     private MfPakDAO mfPakDAO;
     private Batch batch;
-    private Document batchXmlManifest;
+    private Document batchXmlStructure;
 
     /**
      * Initialise the MetadataChecksFactory with a result collector to collect errors in.
@@ -36,11 +36,11 @@ public class MetadataChecksFactory
     public MetadataChecksFactory(ResultCollector resultCollector,
                                  MfPakDAO mfPakDAO,
                                  Batch batch,
-                                 Document batchXmlManifest) {
+                                 Document batchXmlStructure) {
         this.resultCollector = resultCollector;
         this.mfPakDAO = mfPakDAO;
         this.batch = batch;
-        this.batchXmlManifest = batchXmlManifest;
+        this.batchXmlStructure = batchXmlStructure;
     }
 
     /**
@@ -61,13 +61,13 @@ public class MetadataChecksFactory
                                     String controlPoliciesPath,
                                     MfPakDAO mfPakDAO,
                                     Batch batch,
-                                    Document batchXmlManifest) {
-        this(resultCollector, mfPakDAO, batch,batchXmlManifest);
+                                    Document batchXmlStructure) {
+        this(resultCollector, mfPakDAO, batch,batchXmlStructure);
         this.atNinestars = atNinestars;
         this.batchFolder = batchFolder;
         this.jpylyzerPath = jpylyzerPath;
         this.controlPoliciesPath = controlPoliciesPath;
-        this.batchXmlManifest = batchXmlManifest;
+        this.batchXmlStructure = batchXmlStructure;
     }
 
 
@@ -89,7 +89,7 @@ public class MetadataChecksFactory
         treeEventHandlers.add(new AltoXPathEventHandler(resultCollector, mfPakDAO, batch));
         treeEventHandlers.add(new AltoMixCrossCheckEventHandler(resultCollector));
         treeEventHandlers.add(new EditionModsEventHandler(resultCollector,mfPakDAO,batch));
-        treeEventHandlers.add(new FilmDateConsistentcyChecker(resultCollector, batchXmlManifest));
+        treeEventHandlers.add(new FilmDateConsistentcyChecker(resultCollector, batchXmlStructure));
         treeEventHandlers.add(new MixXPathEventHandler(resultCollector,mfPakDAO,batch));
         return treeEventHandlers;
     }
