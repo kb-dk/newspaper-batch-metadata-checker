@@ -6,7 +6,6 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributePar
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.DefaultTreeEventHandler;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperEntity;
-import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperTitle;
 import dk.statsbiblioteket.util.xml.DOM;
 import dk.statsbiblioteket.util.xml.XPathSelector;
 import org.w3c.dom.Document;
@@ -55,12 +54,7 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
         try {
             doc = DOM.streamToDOM(event.getData(), true);
             if (doc == null) {
-                resultCollector.addFailure(
-                        event.getName(),
-                        "metadata",
-                        getClass().getName(),
-                        "Could not parse xml from " + event.getName(),
-                        event.getName());
+                addFailure(event, "Could not parse xml from " + event.getName());
                 return;
             }
         } catch (IOException e) {
@@ -74,8 +68,7 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
             check2D_9(event, xpath, doc, avisID, editionDate);
 
         } catch (SQLException e) {
-            resultCollector.addFailure(
-                    event.getName(), "metadata", getClass().getName(), "Could not connect to MFPak", event.getName());
+            addFailure(event, "Problem with communication with MFPak");
         }
 
 
@@ -98,31 +91,28 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
         try {
             Date dateIssued = new SimpleDateFormat(YYYY_MM_DD).parse(dateIssuedString);
             if (!dateIssued.equals(editionDate)) {
-                resultCollector.addFailure(
-                        event.getName(),
-                        "metadata",
-                        getClass().getName(),
-                        "2D-4: Date issued from file does not correspond to date in filename");
+                addFailure(event, "2D-4: Date issued from file does not correspond to date in filename");
             }
         } catch (ParseException e) {
-            resultCollector.addFailure(
-                    event.getName(),
-                    "metadata",
-                    getClass().getName(),
-                    "2D-4: Date issued from file is not of the form '" + YYYY_MM_DD + "'");
+            addFailure(event, "2D-4: Date issued from file is not of the form '" + YYYY_MM_DD + "'");
 
         }
 
 
     }
 
+    private void addFailure(AttributeParsingEvent event, String description) {
+        resultCollector.addFailure(
+                event.getName(), "metadata", getClass().getName(), description);
+    }
+
     /**
      * 2D-3 Check Publication Location against MFpak
      *
-     * @param event the parsing event
-     * @param xpath the xpath selector
-     * @param doc the edition mods document
-     * @param avisID the avisID
+     * @param event       the parsing event
+     * @param xpath       the xpath selector
+     * @param doc         the edition mods document
+     * @param avisID      the avisID
      * @param editionDate the editionDate
      *
      * @throws SQLException if communication with MFPak failed
@@ -132,34 +122,25 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
 
         NewspaperEntity newspaperEntity = mfPakDAO.getNewspaperEntity(avisID, editionDate);
         if (newspaperEntity == null) {
-            resultCollector.addFailure(
-                    event.getName(),
-                    "metadata",
-                    getClass().getName(),
-                    "2D-3: Failed to retrieve a publication location from MFPak for this batch");
+            addFailure(event, "2D-3: Failed to retrieve a publication location from MFPak for this batch");
             return;
         }
         String editionLocation = xpath.selectString(doc, "/mods:mods/mods:originInfo/mods:place/mods:placeTerm");
         if (editionLocation == null) {
-            resultCollector.addFailure(
-                    event.getName(), "metadata", getClass().getName(), "2D-3: Failed to resolve publication location");
+            addFailure(event, "2D-3: Failed to resolve publication location");
         }
         if (!newspaperEntity.getPublicationLocation()
                             .equals(editionLocation)) {
-            resultCollector.addFailure(
-                    event.getName(),
-                    "metadata",
-                    getClass().getName(),
-                    "2D-3: Publication location '"
-                    + editionLocation
-                    + "' does not match value '"
-                    + newspaperEntity.getPublicationLocation()
-                    + "' from MFPak");
+
+            addFailure(
+                    event,
+                    "2D-3: Publication location '" + editionLocation + "' does not match value '" + newspaperEntity.getPublicationLocation() + "' from MFPak");
         }
 
     }
 
-    /** 2D-2
+    /**
+     * 2D-2
      * Check edition date against MFPak.
      * Check that the full title matches the value from MFPak
      */
@@ -169,13 +150,11 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
         try {
             editionDate = getDateFromName(event.getName());
         } catch (ParseException e) {
-            resultCollector.addFailure(
-                    event.getName(), "metadata", getClass().getName(), "2D-2: No edition date found in this file");
+            addFailure(event, "2D-2: No edition date found in this file");
             return null;
         }
         if (editionDate == null) {
-            resultCollector.addFailure(
-                    event.getName(), "metadata", getClass().getName(), "2D-2: No edition date found in this file");
+            addFailure(event, "2D-2: No edition date found in this file");
             return null;
         } else {
 
@@ -189,27 +168,16 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
                 }
             }
             if (selected == null) {
-                resultCollector.addFailure(
-                        event.getName(),
-                        "metadata",
-                        getClass().getName(),
-                        "2D-2: No title found in MFPak for this file");
+                addFailure(event, "2D-2: No title found in MFPak for this file");
             } else {
                 String avisTitle = xpath.selectString(doc, "/mods:mods/mods:titleInfo/mods:title");
                 if (avisTitle == null) {
-                    resultCollector.addFailure(
-                            event.getName(), "metadata", getClass().getName(), "2D-2: Title should exist");
+                    addFailure(event, "2D-2: Title should exist");
                 } else {
                     if (!avisTitle.equals(selected.getNewspaperTitle())) {
-                        resultCollector.addFailure(
-                                event.getName(),
-                                "metadata",
-                                getClass().getName(),
-                                "2D-2: title "
-                                + avisTitle
-                                + " does not match title in MFPak '"
-                                + selected.getNewspaperTitle()
-                                + "'");
+                        addFailure(
+                                event,
+                                "2D-2: title " + avisTitle + " does not match title in MFPak '" + selected.getNewspaperTitle() + "'");
                     }
                 }
             }
@@ -219,7 +187,8 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
         return editionDate;
     }
 
-    /** 2D-1
+    /**
+     * 2D-1
      * Check avisID (The unique ID for the newspaper concerned provided by the State and University Library)
      * mods:mods/mods:titleInfo/mods:title [@type=”uniform” authority=”Statens Avissamling”]
      * matches the ID in the file structure (event.getName()).
@@ -230,8 +199,7 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
                 = "/mods:mods/mods:titleInfo[@type='uniform'][@authority='Statens Avissamling']/mods:title";
         String avisID = xpath.selectString(doc, xpath2D1);
         if (avisID == null) {
-            resultCollector.addFailure(
-                    event.getName(), "metadata", getClass().getName(), "2D-1: No avisID found in this file");
+            addFailure(event, "2D-1: No avisID found in this file");
             return null;
         }
         String avisIDfromFileStructure = getAvisIDfromName(event.getName());
@@ -241,24 +209,12 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
 
 
         if (!avisID.equals(avisIDfromFileStructure)) {
-            resultCollector.addFailure(
-                    event.getName(),
-                    "metadata",
-                    getClass().getName(),
-                    "2D-1: avisID "
-                    + avisID
-                    + " does not match avisID in file structure '"
-                    + avisIDfromFileStructure
-                    + "'",
-                    xpath2D1);
+            addFailure(
+                    event,
+                    "2D-1: avisID " + avisID + " does not match avisID in file structure '" + avisIDfromFileStructure + "'");
         }
         if (!avisID.equals(avisIDfromMFPak)) {
-            resultCollector.addFailure(
-                    event.getName(),
-                    "metadata",
-                    getClass().getName(),
-                    "2D-1: avisID " + avisID + " does not match avisID in MFPak '" + avisIDfromMFPak + "'",
-                    xpath2D1);
+            addFailure(event, "2D-1: avisID " + avisID + " does not match avisID in MFPak '" + avisIDfromMFPak + "'");
         }
 
         return avisID;
@@ -267,7 +223,9 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
 
     /**
      * Get the edition date from the name of a edition.xml file
+     *
      * @param name the name of the edition xml file
+     *
      * @return the edition date
      * @throws ParseException
      */
@@ -282,7 +240,9 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
 
     /**
      * Get the avisID from the edition.xml name
+     *
      * @param name the edition.xml file name
+     *
      * @return the avisID
      */
     private String getAvisIDfromName(String name) {

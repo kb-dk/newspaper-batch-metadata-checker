@@ -7,8 +7,6 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeE
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperDateRange;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperEntity;
-import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperTitle;
-
 import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
@@ -22,8 +20,8 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
-import static org.testng.AssertJUnit.assertFalse;
 
 /**
  * Tests that the checks that the metadata for the edition follows the specification
@@ -55,11 +53,7 @@ public class EditionModsTest {
         handler.handleAttribute(editionEvent);
         editionModsEventHandler.handleAttribute(editionEvent);
 
-        if ( ! resultCollector.isSuccess()){
-            System.out
-                  .println(resultCollector.toReport());
-        }
-        assertTrue(resultCollector.isSuccess());
+        assertTrue(resultCollector.isSuccess(), resultCollector.toReport());
     }
 
     /** Test that we can validate a valid edition xml (mods) file. */
@@ -95,7 +89,7 @@ public class EditionModsTest {
         AssertJUnit.assertTrue(report,report.contains("<description>2D-4: Date issued from file does not correspond to date in filename</description>"));
 
 
-        assertFalse(resultCollector.isSuccess());
+        assertFalse(resultCollector.isSuccess(),resultCollector.toReport());
 
     }
 
