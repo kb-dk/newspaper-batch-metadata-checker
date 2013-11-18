@@ -1,5 +1,9 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
+import java.io.InputStream;
+import java.util.List;
+import java.util.Properties;
+
 import dk.statsbiblioteket.medieplatform.autonomous.AbstractRunnableComponent;
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
@@ -10,10 +14,6 @@ import dk.statsbiblioteket.util.xml.DOM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
-
-import java.io.InputStream;
-import java.util.List;
-import java.util.Properties;
 
 /** Check Metadata of all nodes. */
 public class MetadataCheckerComponent
@@ -64,7 +64,7 @@ public class MetadataCheckerComponent
             throw new RuntimeException("Failed to resolve batch manifest from data collector");
         }
 
-        Document batchXmlManifest = DOM.streamToDOM(batchXmlStructureStream);
+        Document batchXmlStructure = DOM.streamToDOM(batchXmlStructureStream);
 
 
         boolean atNinestars =
@@ -78,9 +78,9 @@ public class MetadataCheckerComponent
                                                               atNinestars,
                                                               batchFolder,
                                                               jpylyzerPath,
-                                                              controlPoliciesPath, mfPakDAO, batch,batchXmlManifest);
+                                                              controlPoliciesPath, mfPakDAO, batch, batchXmlStructure);
         } else {
-            metadataChecksFactory = new MetadataChecksFactory(resultCollector, mfPakDAO, batch,batchXmlManifest);
+            metadataChecksFactory = new MetadataChecksFactory(resultCollector, mfPakDAO, batch, batchXmlStructure);
         }
         List<TreeEventHandler> eventHandlers = metadataChecksFactory.createEventHandlers();
         EventRunner eventRunner = new EventRunner(createIterator(batch));
