@@ -1,9 +1,5 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
-import java.io.InputStream;
-import java.util.List;
-import java.util.Properties;
-
 import dk.statsbiblioteket.medieplatform.autonomous.AbstractRunnableComponent;
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
@@ -14,6 +10,10 @@ import dk.statsbiblioteket.util.xml.DOM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
+
+import java.io.InputStream;
+import java.util.List;
+import java.util.Properties;
 
 /** Check Metadata of all nodes. */
 public class MetadataCheckerComponent
