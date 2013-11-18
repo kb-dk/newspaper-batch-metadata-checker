@@ -20,15 +20,17 @@ public class MFPakMocker {
 
         MfPakDAO mfPakDAO = mock(MfPakDAO.class);
         when(mfPakDAO.getNewspaperID(anyString())).thenReturn("adresseavisen1759");
-        NewspaperTitle title = new NewspaperTitle();
-        title.setTitle("Kiøbenhavns Kongelig alene priviligerede Adresse-Contoirs Efterretninger");
-        title.setDateRange(new NewspaperDateRange(new Date(Long.MIN_VALUE), new Date()));
-        when(mfPakDAO.getBatchNewspaperTitles(anyString())).thenReturn(Arrays.asList(title));
         NewspaperEntity entity = new NewspaperEntity();
-        entity.setPublicationLocation("København");
-        entity.setNewspaperID("adresseavisen1759");
         entity.setNewspaperTitle("Kiøbenhavns Kongelig alene priviligerede Adresse-Contoirs Efterretninger");
-        when(mfPakDAO.getNewspaperEntity(anyString(), any(Date.class))).thenReturn(entity);
+        entity.setNewspaperID("adresseavisen1759");
+        entity.setPublicationLocation("København");
+        entity.setNewspaperDateRange(new NewspaperDateRange(new Date(Long.MIN_VALUE), new Date()));
+        when(mfPakDAO.getBatchNewspaperEntities(anyString())).thenReturn(Arrays.asList(entity));
+        NewspaperEntity entity2 = new NewspaperEntity();
+        entity2.setPublicationLocation("København");
+        entity2.setNewspaperID("adresseavisen1759");
+        entity2.setNewspaperTitle("Kiøbenhavns Kongelig alene priviligerede Adresse-Contoirs Efterretninger");
+        when(mfPakDAO.getNewspaperEntity(anyString(), any(Date.class))).thenReturn(entity2);
         when(mfPakDAO.getBatchShipmentDate(anyString())).thenReturn(new Date(0));
         return mfPakDAO;
 

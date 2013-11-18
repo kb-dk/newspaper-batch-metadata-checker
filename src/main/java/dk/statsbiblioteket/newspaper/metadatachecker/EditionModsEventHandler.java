@@ -179,10 +179,10 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
             return null;
         } else {
 
-            List<NewspaperTitle> titles = mfPakDAO.getBatchNewspaperTitles(batch.getBatchID());
-            NewspaperTitle selected = null;
-            for (NewspaperTitle title : titles) {
-                if (title.getDateRange()
+            List<NewspaperEntity> titles = mfPakDAO.getBatchNewspaperEntities(batch.getBatchID());
+            NewspaperEntity selected = null;
+            for (NewspaperEntity title : titles) {
+                if (title.getNewspaperDateRange()
                          .isIncluded(editionDate)) {
                     selected = title;
                     break;
@@ -200,7 +200,7 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
                     resultCollector.addFailure(
                             event.getName(), "metadata", getClass().getName(), "2D-2: Title should exist");
                 } else {
-                    if (!avisTitle.equals(selected.getTitle())) {
+                    if (!avisTitle.equals(selected.getNewspaperTitle())) {
                         resultCollector.addFailure(
                                 event.getName(),
                                 "metadata",
@@ -208,7 +208,7 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
                                 "2D-2: title "
                                 + avisTitle
                                 + " does not match title in MFPak '"
-                                + selected.getTitle()
+                                + selected.getNewspaperTitle()
                                 + "'");
                     }
                 }
