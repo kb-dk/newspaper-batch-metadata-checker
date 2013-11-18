@@ -20,8 +20,8 @@
     </mix:BasicDigitalObjectInformation>
     <mix:BasicImageInformation>
         <mix:BasicImageCharacteristics>
-            <mix:imageWidth>9092</mix:imageWidth>
-            <mix:imageHeight>11120</mix:imageHeight>
+            <mix:imageWidth>2273</mix:imageWidth>
+            <mix:imageHeight>2780</mix:imageHeight>
             <mix:PhotometricInterpretation>
                 <mix:colorSpace>greyscale</mix:colorSpace>
             </mix:PhotometricInterpretation>

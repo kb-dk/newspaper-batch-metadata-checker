@@ -38,7 +38,7 @@ public class JpylyzingEventHandler extends InjectingTreeEventHandler {
     private boolean isInDataFile;
     private String datafile;
     /** Path to the jpylyzer executable */
-    private String jpylyzerPath;
+    private final String jpylyzerPath;
 
 
     /**
@@ -51,11 +51,8 @@ public class JpylyzingEventHandler extends InjectingTreeEventHandler {
                                  String batchFolder) {
         this.batchFolder = batchFolder;
         this.resultCollector = resultCollector;
+        jpylyzerPath = "jpylyzer.py";
 
-
-        if (this.jpylyzerPath == null) {
-            this.jpylyzerPath = "jpylyzer.py";
-        }
     }
 
     /**
@@ -70,8 +67,13 @@ public class JpylyzingEventHandler extends InjectingTreeEventHandler {
                                  String batchFolder,
                                  String jpylyzerPath) {
 
-        this(resultCollector, batchFolder);
+        this.batchFolder = batchFolder;
+        this.resultCollector = resultCollector;
+        if (jpylyzerPath != null){
         this.jpylyzerPath = jpylyzerPath;
+        } else {
+            this.jpylyzerPath = "jpylyzer.py";
+        }
     }
 
     /**

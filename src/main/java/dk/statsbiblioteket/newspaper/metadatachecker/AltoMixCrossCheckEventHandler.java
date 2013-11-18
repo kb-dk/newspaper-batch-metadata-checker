@@ -2,9 +2,12 @@ package dk.statsbiblioteket.newspaper.metadatachecker;
 
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.DataFileNodeBeginsParsingEvent;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.DataFileNodeEndsParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeBeginsParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeEndParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.DefaultTreeEventHandler;
+import dk.statsbiblioteket.util.Strings;
 import dk.statsbiblioteket.util.xml.DOM;
 import dk.statsbiblioteket.util.xml.XPathSelector;
 import org.w3c.dom.Document;
@@ -21,7 +24,7 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
 
     private final ResultCollector resultCollector;
     private XPathSelector xpath;
-    private ArrayDeque<SizePair> sizesStack = new ArrayDeque<>();
+    private ArrayDeque<SizeSet> sizesStack = new ArrayDeque<>();
 
     public AltoMixCrossCheckEventHandler(ResultCollector resultCollector) {
         this.resultCollector = resultCollector;
@@ -38,7 +41,9 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
      */
     @Override
     public void handleNodeBegin(NodeBeginsParsingEvent event) {
-        sizesStack.push(new SizePair(event.getName()));
+        if (!(event instanceof DataFileNodeBeginsParsingEvent)) {
+            sizesStack.push(new SizeSet(event.getName()));
+        }
     }
 
     /**
@@ -48,8 +53,10 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
      */
     @Override
     public void handleNodeEnd(NodeEndParsingEvent event) {
-        SizePair sizes = sizesStack.pop();
-        verify(sizes, resultCollector);
+        if (!(event instanceof DataFileNodeEndsParsingEvent)) {
+            SizeSet sizes = sizesStack.pop();
+            verify(sizes, resultCollector);
+        }
     }
 
     /**
@@ -59,38 +66,30 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
      * @param sizes           the store of sizes
      * @param resultCollector the result collector
      */
-    private void verify(SizePair sizes, ResultCollector resultCollector) {
+    private void verify(SizeSet sizes, ResultCollector resultCollector) {
         if (!sizes.getMixSize()
-                 .equalWidth(sizes.getAltoSize())) {
+                  .equalWidth(sizes.getAltoSize())) {
             resultCollector.addFailure(
                     sizes.getFolder(),
                     "metadata",
                     getClass().getName(),
-                    "2J-7: The file '"
-                    + sizes.getFolder()
-                    + ".mix.xml' and file '"
-                    + sizes.getFolder()
-                    + ".alto.xml' should agree on height");
+                    "2J-7: The file '" + sizes.getFolder() + ".mix.xml' and file '" + sizes.getFolder() + ".alto.xml' should agree on height");
 
         }
         if (!sizes.getMixSize()
-                 .equalHeight(sizes.getAltoSize())) {
+                  .equalHeight(sizes.getAltoSize())) {
             resultCollector.addFailure(
                     sizes.getFolder(),
                     "metadata",
                     getClass().getName(),
-                    "2J-7: The file '"
-                    + sizes.getFolder()
-                    + ".mix.xml' and file '"
-                    + sizes.getFolder()
-                    + ".alto.xml' should agree on width");
+                    "2J-7: The file '" + sizes.getFolder() + ".mix.xml' and file '" + sizes.getFolder() + ".alto.xml' should agree on width");
         }
     }
 
     @Override
     public void handleAttribute(AttributeParsingEvent event) {
 
-        SizePair sizes = sizesStack.peek();
+        SizeSet sizes = sizesStack.peek();
         try {
             if (event.getName()
                      .endsWith(".alto.xml")) {
@@ -102,10 +101,21 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
                 extractMixSizes(asDom(event.getData()), sizes.getMixSize(), event.getName());
 
             }
+
+
         } catch (IOException e) {
             resultCollector.addFailure(
                     event.getName(), "metadata", getClass().getName(), "Error processing metadata.", getStackTrace(e));
+
+        } catch (NumberFormatException e) {
+            resultCollector.addFailure(
+                    event.getName(),
+                    "metadata",
+                    getClass().getName(),
+                    "Failed to parse integer '" + e.getMessage(),
+                    Strings.getStackTrace(e));
         }
+
     }
 
     private Document asDom(InputStream data) {
@@ -113,14 +123,19 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
     }
 
     private void extractMixSizes(Document data, Size size, String name) {
+        Integer xResolution = xpath.selectInteger(
+                data, "/mix:mix/mix:ImageAssessmentMetadata/mix:SpatialMetrics/mix:xSamplingFrequency/mix:numerator");
         Integer width = xpath.selectInteger(
                 data, "/mix:mix/mix:BasicImageInformation/mix:BasicImageCharacteristics/mix:imageWidth");
         if (width == null) {
             resultCollector.addFailure(
                     name, "metadata", getClass().getName(), "Failed to read page width from mix file");
         } else {
-            size.setWidth(width);
+            size.setWidth(width * 1200 / xResolution);
         }
+
+        Integer yResolution = xpath.selectInteger(
+                data, "/mix:mix/mix:ImageAssessmentMetadata/mix:SpatialMetrics/mix:ySamplingFrequency/mix:numerator");
 
         Integer height = xpath.selectInteger(
                 data, "/mix:mix/mix:BasicImageInformation/mix:BasicImageCharacteristics/mix:imageHeight");
@@ -129,8 +144,9 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
                     name, "metadata", getClass().getName(), "Failed to read page height from mix file");
         } else {
 
-            size.setHeight(height);
+            size.setHeight(height * 1200 / yResolution);
         }
+
     }
 
     private void extractAltoSizes(Document data, Size size, String reference) {
@@ -167,7 +183,7 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
         }
 
         public boolean equalWidth(Size that) {
-            if (this.getWidth() > 0 && that.getWidth() > 0){
+            if (this.getWidth() > 0 && that.getWidth() > 0) {
                 return this.getWidth() == that.getWidth();
             } else {
                 return true;
@@ -192,13 +208,14 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
 
     }
 
-    private class SizePair {
+    private class SizeSet {
 
         private Size altoSize;
         private Size mixSize;
+        private Size jpylyzerSize;
         private String folder;
 
-        private SizePair(String folder) {
+        private SizeSet(String folder) {
             this.altoSize = new Size();
             this.mixSize = new Size();
             this.folder = folder;
@@ -214,6 +231,10 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
 
         private String getFolder() {
             return folder;
+        }
+
+        private Size getJpylyzerSize() {
+            return jpylyzerSize;
         }
     }
 }
