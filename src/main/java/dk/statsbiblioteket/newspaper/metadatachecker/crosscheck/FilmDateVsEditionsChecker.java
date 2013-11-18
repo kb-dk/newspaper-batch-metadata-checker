@@ -10,12 +10,12 @@ import dk.statsbiblioteket.util.xml.XPathSelector;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
-public class FilmDateConsistentcyChecker extends DefaultTreeEventHandler {
+public class FilmDateVsEditionsChecker extends DefaultTreeEventHandler {
     private final ResultCollector resultCollector;
     private final Document batchXmlStructure;
     private final XPathSelector xpath;
 
-    public FilmDateConsistentcyChecker(ResultCollector resultCollector, Document batchXmlStructure) {
+    public FilmDateVsEditionsChecker(ResultCollector resultCollector, Document batchXmlStructure) {
         this.resultCollector = resultCollector;
         this.batchXmlStructure = batchXmlStructure;
         xpath = DOM.createXPathSelector("avis",
