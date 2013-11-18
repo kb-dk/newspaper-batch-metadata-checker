@@ -16,7 +16,7 @@ public class FuzzyDateTest {
     }
 
     @Test
-    public void validFuzzyStringTest() {
+    public void validPaddedFuzzyStringTest() {
         String dateString = "2013-00-00";
         FuzzyDate fuzzyDate = new FuzzyDate(dateString);
         assertEquals(fuzzyDate.asString(), dateString);
@@ -27,42 +27,43 @@ public class FuzzyDateTest {
     }
 
     @Test
+    public void validFuzzyStringTest() {
+        String dateString = "2013";
+        FuzzyDate fuzzyDate = new FuzzyDate(dateString);
+        assertEquals(fuzzyDate.asString(), dateString);
+
+        dateString = "2013-01";
+        fuzzyDate = new FuzzyDate(dateString);
+        assertEquals(fuzzyDate.asString(), dateString);
+    }
+
+    @Test
     public void invalidStringTest() {
-        String dateString = "2013-09-10-12";
+        String dateString = "2013-09--10";
         try {
             new FuzzyDate(dateString);
             fail("Invalid string " + dateString + " shouldn't be accepted");
-        } catch ( RuntimeException e ) {}
-        dateString = "2013-09--10";
-        try {
-            new FuzzyDate(dateString);
-            fail("Invalid string " + dateString + " shouldn't be accepted");
-        } catch ( RuntimeException e ) {}
-        dateString = "2013-09";
-        try {
-            new FuzzyDate(dateString);
-            fail("Invalid string " + dateString + " shouldn't be accepted");
-        } catch ( RuntimeException e ) {}
+        } catch ( IllegalArgumentException e ) {}
         dateString = "2013-13-10";
         try {
             new FuzzyDate(dateString);
             fail("Invalid string " + dateString + " shouldn't be accepted");
-        } catch ( RuntimeException e ) {}
+        } catch ( IllegalArgumentException e ) {}
         dateString = "2013-12-32";
         try {
             new FuzzyDate(dateString);
             fail("Invalid string " + dateString + " shouldn't be accepted");
-        } catch ( RuntimeException e ) {}
+        } catch ( IllegalArgumentException e ) {}
         dateString = "2013-12-AA";
         try {
             new FuzzyDate(dateString);
             fail("Invalid string " + dateString + " shouldn't be accepted");
-        } catch ( RuntimeException e ) {}
+        } catch ( IllegalArgumentException e ) {}
         dateString = "201312-10";
         try {
             new FuzzyDate(dateString);
             fail("Invalid string " + dateString + " shouldn't be accepted");
-        } catch ( RuntimeException e ) {}
+        } catch ( IllegalArgumentException e ) {}
     }
 
     @Test
@@ -122,7 +123,7 @@ public class FuzzyDateTest {
     }
 
     @Test
-    public void fuzzyAfterTest() {
+    public void fuzzyPaddingAfterTest() {
         FuzzyDate strictReferenceDate = new FuzzyDate("2013-09-09");
         assertTrue(strictReferenceDate.compareTo(new FuzzyDate("2013-10-00")) < 0);
         assertTrue(strictReferenceDate.compareTo(new FuzzyDate("2014-00-00")) < 0);
@@ -136,5 +137,57 @@ public class FuzzyDateTest {
         FuzzyDate fuzzyMonthReferenceDate = new FuzzyDate("2013-00-00");
         assertTrue(fuzzyMonthReferenceDate.compareTo(new FuzzyDate("2014-10-00")) < 0);
         assertTrue(fuzzyMonthReferenceDate.compareTo(new FuzzyDate("2014-00-00")) < 0);
+    }
+
+
+    @Test
+    public void fuzzyPaddingBeforeTest() {
+        FuzzyDate strictReferenceDate = new FuzzyDate("2013-09-12");
+        assertTrue(strictReferenceDate.compareTo(new FuzzyDate("2013-08")) > 0);
+        assertTrue(strictReferenceDate.compareTo(new FuzzyDate("2012")) > 0);
+
+        FuzzyDate fuzzyDayReferenceDate = new FuzzyDate("2013-09");
+        assertTrue(fuzzyDayReferenceDate.compareTo(new FuzzyDate("2013-08-10")) > 0);
+        assertTrue(fuzzyDayReferenceDate.compareTo(new FuzzyDate("2013-08")) > 0);
+        assertTrue(fuzzyDayReferenceDate.compareTo(new FuzzyDate("2012-09")) > 0);
+        assertTrue(fuzzyDayReferenceDate.compareTo(new FuzzyDate("2012")) > 0);
+
+        FuzzyDate fuzzyMonthReferenceDate = new FuzzyDate("2013");
+        assertTrue(fuzzyMonthReferenceDate.compareTo(new FuzzyDate("2012-09")) > 0);
+        assertTrue(fuzzyMonthReferenceDate.compareTo(new FuzzyDate("2012")) > 0);
+    }
+
+    @Test
+    public void fuzzyPaddingEqualTest() {
+        FuzzyDate strictReferenceDate = new FuzzyDate("2013-09-12");
+        assertTrue(strictReferenceDate.compareTo(new FuzzyDate("2013-09")) == 0);
+        assertTrue(strictReferenceDate.compareTo(new FuzzyDate("2013")) == 0);
+
+        FuzzyDate fuzzyDayReferenceDate = new FuzzyDate("2013-09");
+        assertTrue(fuzzyDayReferenceDate.compareTo(new FuzzyDate("2013-09-10")) == 0);
+        assertTrue(fuzzyDayReferenceDate.compareTo(new FuzzyDate("2013-09")) == 0);
+        assertTrue(fuzzyDayReferenceDate.compareTo(new FuzzyDate("2013")) == 0);
+
+        FuzzyDate fuzzyMonthReferenceDate = new FuzzyDate("2013-00-00");
+        assertTrue(fuzzyMonthReferenceDate.compareTo(new FuzzyDate("2013-09-10")) == 0);
+        assertTrue(fuzzyMonthReferenceDate.compareTo(new FuzzyDate("2013-09")) == 0);
+        assertTrue(fuzzyMonthReferenceDate.compareTo(new FuzzyDate("2013")) == 0);
+    }
+
+    @Test
+    public void fuzzyAfterTest() {
+        FuzzyDate strictReferenceDate = new FuzzyDate("2013-09-09");
+        assertTrue(strictReferenceDate.compareTo(new FuzzyDate("2013-10")) < 0);
+        assertTrue(strictReferenceDate.compareTo(new FuzzyDate("2014")) < 0);
+
+        FuzzyDate fuzzyDayReferenceDate = new FuzzyDate("2013-09");
+        assertTrue(fuzzyDayReferenceDate.compareTo(new FuzzyDate("2013-10-10")) < 0);
+        assertTrue(fuzzyDayReferenceDate.compareTo(new FuzzyDate("2013-10")) < 0);
+        assertTrue(fuzzyDayReferenceDate.compareTo(new FuzzyDate("2014")) < 0);
+        assertTrue(fuzzyDayReferenceDate.compareTo(new FuzzyDate("2014-01")) < 0);
+
+        FuzzyDate fuzzyMonthReferenceDate = new FuzzyDate("2013");
+        assertTrue(fuzzyMonthReferenceDate.compareTo(new FuzzyDate("2014-10")) < 0);
+        assertTrue(fuzzyMonthReferenceDate.compareTo(new FuzzyDate("2014")) < 0);
     }
 }

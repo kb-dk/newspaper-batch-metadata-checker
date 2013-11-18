@@ -32,7 +32,7 @@ public final class FuzzyDate implements Comparable<FuzzyDate> {
      */
     public int compareTo(FuzzyDate date) {
         int minPrecisionIndex = Math.min(myPrecision, date.getPrecision());
-        return this.asString(minPrecisionIndex).compareTo(date.asString(minPrecisionIndex));
+        return asString(minPrecisionIndex).compareTo(date.asString(minPrecisionIndex));
     }
 
     /**
@@ -55,9 +55,8 @@ public final class FuzzyDate implements Comparable<FuzzyDate> {
      */
     protected static int findPrecisionIndex(String date) {
         final int MONTH_START_INDEX = 4;
-        final int FULL_PRECISION_INDEX = 10;
         int datePrecisionIndex = date.indexOf("00", MONTH_START_INDEX);
-        return datePrecisionIndex != -1 ? datePrecisionIndex : FULL_PRECISION_INDEX;
+        return datePrecisionIndex != -1 ? datePrecisionIndex : date.length();
     }
 
     protected int getPrecision() {
@@ -67,13 +66,19 @@ public final class FuzzyDate implements Comparable<FuzzyDate> {
     private void validateFormat(String dateString) {
         String[] dateParts= dateString.split("-");
         try {
-        assert dateParts.length == 3;
         Integer.parseInt(dateParts[0]);
-        assert Integer.parseInt(dateParts[1]) <= 12;
-        assert Integer.parseInt(dateParts[2]) <= 31;
+        if (Integer.parseInt(dateParts[0]) > 9999) {
+            throw new IllegalArgumentException("Year part of date string can not be more than 9999, was " + dateParts[0]);
+        }
+        if (dateParts.length >= 2 && Integer.parseInt(dateParts[1]) > 12) {
+            throw new IllegalArgumentException("Month part of date string can not be more than 12, was " + dateParts[1]);
+        }
+        if (dateParts.length >= 3 && Integer.parseInt(dateParts[2]) > 31) {
+            throw new IllegalArgumentException("Month part of date string can not be more than 31, was " + dateParts[2]);
+        }
         } catch (Throwable t) {
-            throw new RuntimeException("Invalide date format " + dateString +
-                    ", the date must be of the format yyyy-MM-dd");
+            throw new IllegalArgumentException("Invalide date format " + dateString +
+                    ", the date must be of the format yyyy-MM-dd (-MM or -MM-dd are optional)");
         }
     }
 }
