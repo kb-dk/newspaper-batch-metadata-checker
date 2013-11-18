@@ -67,6 +67,18 @@ public class MetadataCheckerComponent
         Document batchXmlStructure = DOM.streamToDOM(batchXmlStructureStream);
 
 
+        MetadataChecksFactory metadataChecksFactory = getMetadataChecksFactory(
+                batch,
+                resultCollector,
+                batchXmlStructure);
+        List<TreeEventHandler> eventHandlers = metadataChecksFactory.createEventHandlers();
+        EventRunner eventRunner = new EventRunner(createIterator(batch));
+        eventRunner.runEvents(eventHandlers);
+        log.info("Done validating '{}', success: {}", batch.getFullID(), resultCollector.isSuccess());
+    }
+
+    protected MetadataChecksFactory getMetadataChecksFactory(Batch batch, ResultCollector resultCollector,
+                                                           Document batchXmlStructure) {
         boolean atNinestars =
                 Boolean.parseBoolean(getProperties().getProperty("atNinestars", Boolean.FALSE.toString()));
         MetadataChecksFactory metadataChecksFactory;
@@ -82,10 +94,7 @@ public class MetadataCheckerComponent
         } else {
             metadataChecksFactory = new MetadataChecksFactory(resultCollector, mfPakDAO, batch, batchXmlStructure);
         }
-        List<TreeEventHandler> eventHandlers = metadataChecksFactory.createEventHandlers();
-        EventRunner eventRunner = new EventRunner(createIterator(batch));
-        eventRunner.runEvents(eventHandlers);
-        log.info("Done validating '{}', success: {}", batch.getFullID(), resultCollector.isSuccess());
+        return metadataChecksFactory;
     }
 
 }

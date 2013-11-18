@@ -5,6 +5,8 @@ import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.Properties;
+
 import static org.mockito.Mockito.mock;
 
 /** Test Metadata checker */
@@ -86,8 +88,11 @@ public class MetadataCheckerComponentTest {
      * Test checking on a "good" batch.
      */
     public void testDoWorkOnBatchGood() throws Exception {
+        Properties properties = new Properties(System.getProperties());
+        properties.setProperty("atNinestars","true");
+        properties.setProperty("jpylyzerPath",getJpylyzerPath());
         MfPakDAO mfPakDAO = MFPakMocker.getMFPak();
-        MetadataCheckerComponent metadataCheckerComponent = new MockupIteratorSuper(System.getProperties(), mfPakDAO);
+        MetadataCheckerComponent metadataCheckerComponent = new MockupIteratorSuper(properties, mfPakDAO);
         TestResultCollector result = new TestResultCollector(
                 metadataCheckerComponent.getComponentName(), metadataCheckerComponent.getComponentVersion());
         Batch batch = new Batch("400022028241");
@@ -96,4 +101,8 @@ public class MetadataCheckerComponentTest {
         Assert.assertTrue(result.isSuccess(), result.toReport() + "\n");
     }
 
+
+    private String getJpylyzerPath() {
+          return "src/main/extras/jpylyzer-1.10.1/jpylyzer.py";
+      }
 }
