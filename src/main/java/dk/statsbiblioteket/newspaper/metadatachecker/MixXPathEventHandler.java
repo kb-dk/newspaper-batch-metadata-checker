@@ -116,12 +116,7 @@ public class MixXPathEventHandler extends DefaultTreeEventHandler {
 
 
         /*
-        mix:mix/mix:BasicDigitalObjectInformation/mix:Fixity/mix:messageDigest
-        J – skal sammenlignes med filstrukturen
 
-mix:mix/mix:BasicDigitalObjectInformation/mix:Fixity/mix:messageDigestOriginator
-J – skal altid være det samme
-– ikke relevant
 
 
 
@@ -137,6 +132,10 @@ J – skal sammenlignes med en karakterisering af filen
 
     private void validateAgainstTree(Document doc, XPathSelector xpath, AttributeParsingEvent event,
                                      Document batchXmlStructure) {
+        //        mix:mix/mix:BasicDigitalObjectInformation/mix:Fixity/mix:messageDigest
+        //       J – skal sammenlignes med filstrukturen
+
+
         final String xpath2KX = "mix:mix/mix:BasicDigitalObjectInformation/mix:Fixity/mix:messageDigest";
 
         String mixMd5sum = XPATH.selectString(doc, xpath2KX);
