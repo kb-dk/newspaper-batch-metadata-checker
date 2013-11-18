@@ -36,11 +36,11 @@
             </mix:SourceID>
             <mix:SourceID>
                 <mix:sourceIDType>Location on microfilm</mix:sourceIDType>
-                <mix:sourceIDValue>0015B</mix:sourceIDValue>
+                <mix:sourceIDValue>0005B</mix:sourceIDValue>
             </mix:SourceID>
         </mix:SourceInformation>
         <mix:GeneralCaptureInformation>
-            <mix:dateTimeCreated>2010-03-02T11:48:06</mix:dateTimeCreated>
+            <mix:dateTimeCreated>2013-11-12T11:48:06</mix:dateTimeCreated>
             <mix:imageProducer>Ninestars</mix:imageProducer>
         </mix:GeneralCaptureInformation>
         <mix:ScannerCapture>

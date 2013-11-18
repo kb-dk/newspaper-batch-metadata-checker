@@ -2,7 +2,7 @@
     <mix:BasicDigitalObjectInformation>
         <mix:ObjectIdentifier>
             <mix:objectIdentifierType>Image Unique ID</mix:objectIdentifierType>
-            <mix:objectIdentifierValue>400022028241-1-0015B</mix:objectIdentifierValue>
+            <mix:objectIdentifierValue>400022028241-1-0005-brik</mix:objectIdentifierValue>
         </mix:ObjectIdentifier>
         <mix:fileSize>574607</mix:fileSize>
         <mix:FormatDesignation>
@@ -36,11 +36,11 @@
             </mix:SourceID>
             <mix:SourceID>
                 <mix:sourceIDType>Location on microfilm</mix:sourceIDType>
-                <mix:sourceIDValue>0015B</mix:sourceIDValue>
+                <mix:sourceIDValue>0005-brik</mix:sourceIDValue>
             </mix:SourceID>
         </mix:SourceInformation>
         <mix:GeneralCaptureInformation>
-            <mix:dateTimeCreated>2010-03-02T11:48:06</mix:dateTimeCreated>
+            <mix:dateTimeCreated>2013-11-12T11:48:06</mix:dateTimeCreated>
             <mix:imageProducer>Ninestars</mix:imageProducer>
         </mix:GeneralCaptureInformation>
         <mix:ScannerCapture>
