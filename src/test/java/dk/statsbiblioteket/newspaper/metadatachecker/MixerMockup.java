@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
 public class MixerMockup {
-    static AttributeParsingEvent getMixPageAttributeParsingEvent(final String film, final String avisID,
+    public static AttributeParsingEvent getMixPageAttributeParsingEvent(final String film, final String avisID,
                                                                  final String publishDate, 
                                                                  final String pictureNumber,
                                                                  final Batch batch,
@@ -36,7 +36,7 @@ public class MixerMockup {
         };
     }
 
-    static AttributeParsingEvent getMixWorkshiftIso(final String workshift, final String pictureNumber,
+    public static AttributeParsingEvent getMixWorkshiftIso(final String workshift, final String pictureNumber,
                                                     final Batch batch,
                                                     final String checksum) {
         return new AttributeParsingEvent(

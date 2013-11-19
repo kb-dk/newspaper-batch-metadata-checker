@@ -114,7 +114,7 @@ public final class FuzzyDate implements Comparable<FuzzyDate> {
             throw new IllegalArgumentException("Month part of date string can not be more than 31, was " + dateParts[2]);
         }
         } catch (Throwable t) {
-            throw new IllegalArgumentException("Invalide date format " + dateString +
+            throw new IllegalArgumentException("Invalid date format " + dateString +
                     ", the date must be of the format yyyy-MM-dd (-MM or -MM-dd are optional)");
         }
     }

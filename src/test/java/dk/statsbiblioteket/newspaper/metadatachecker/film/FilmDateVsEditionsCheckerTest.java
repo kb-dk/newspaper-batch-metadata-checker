@@ -1,11 +1,8 @@
 package dk.statsbiblioteket.newspaper.metadatachecker.film;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
-import dk.statsbiblioteket.newspaper.metadatachecker.checker.MetadataFailureType;
+import dk.statsbiblioteket.newspaper.metadatachecker.checker.FailureType;
 import dk.statsbiblioteket.util.xml.DOM;
 import dk.statsbiblioteket.util.xml.XPathSelector;
 import org.testng.annotations.BeforeMethod;
@@ -14,9 +11,14 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 public class FilmDateVsEditionsCheckerTest {
     private ResultCollector resultCollector;
@@ -151,7 +153,7 @@ public class FilmDateVsEditionsCheckerTest {
     }
 
     private void verifyFailure(String eventName) {
-        verify(resultCollector).addFailure(eq(eventName), eq(MetadataFailureType.METADATA.value()),
+        verify(resultCollector).addFailure(eq(eventName), eq(FailureType.METADATA.value()),
                 eq(FilmDateVsEditionsChecker.class.getName()), anyString());
     }
 

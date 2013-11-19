@@ -2,6 +2,8 @@ package dk.statsbiblioteket.newspaper.metadatachecker.checker;
 
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
+import dk.statsbiblioteket.util.xml.DOM;
+import dk.statsbiblioteket.util.xml.XPathSelector;
 import org.w3c.dom.Document;
 
 /**
@@ -11,10 +13,15 @@ import org.w3c.dom.Document;
  * This enables check to be broken down into small focused checks.  </p>
  */
 public abstract class XmlAttributeChecker {
+    protected static final XPathSelector XPATH = DOM.createXPathSelector(
+            "mix",
+            "http://www.loc.gov/mix/v20",
+            "avis",
+            "http://www.statsbiblioteket.dk/avisdigitalisering/microfilm/1/0/");
     private final ResultCollector resultCollector;
-    private final MetadataFailureType failureType;
+    private final FailureType failureType;
 
-    public XmlAttributeChecker(ResultCollector resultCollector, MetadataFailureType failureType ) {
+    public XmlAttributeChecker(ResultCollector resultCollector, FailureType failureType) {
         this.resultCollector = resultCollector;
         this.failureType = failureType;
     }
@@ -25,4 +32,12 @@ public abstract class XmlAttributeChecker {
     }
 
     public abstract void validate(AttributeParsingEvent event, Document doc);
+
+
+    /**
+     * Indicates whether the encountered event is relevant to check.
+     */
+    public boolean shouldCheckEvent(AttributeParsingEvent event){
+        return true;
+    }
 }
