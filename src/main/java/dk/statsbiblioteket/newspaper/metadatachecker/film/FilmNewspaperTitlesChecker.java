@@ -1,9 +1,13 @@
 package dk.statsbiblioteket.newspaper.metadatachecker.film;
 
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
+
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
-import dk.statsbiblioteket.newspaper.metadatachecker.checker.MetadataFailureType;
+import dk.statsbiblioteket.newspaper.metadatachecker.checker.FailureType;
 import dk.statsbiblioteket.newspaper.metadatachecker.checker.XmlAttributeChecker;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperEntity;
@@ -11,17 +15,6 @@ import dk.statsbiblioteket.util.xml.DOM;
 import dk.statsbiblioteket.util.xml.XPathSelector;
 import org.w3c.dom.Document;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.List;
-
-/**
- * Created with IntelliJ IDEA.
- * User: csr
- * Date: 11/19/13
- * Time: 2:11 PM
- * To change this template use File | Settings | File Templates.
- */
 public class FilmNewspaperTitlesChecker extends XmlAttributeChecker {
 
     private MfPakDAO mfPakDAO;
@@ -29,7 +22,7 @@ public class FilmNewspaperTitlesChecker extends XmlAttributeChecker {
     private XPathSelector filmXPathSelector;
     private ResultCollector resultCollector;
 
-    public FilmNewspaperTitlesChecker(ResultCollector resultCollector, MetadataFailureType failureType, MfPakDAO mfPakDAO, Batch batch) {
+    public FilmNewspaperTitlesChecker(ResultCollector resultCollector, FailureType failureType, MfPakDAO mfPakDAO, Batch batch) {
         super(resultCollector, failureType);
         this.batch = batch;
         this.mfPakDAO = mfPakDAO;

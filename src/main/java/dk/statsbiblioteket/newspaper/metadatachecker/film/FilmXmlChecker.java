@@ -1,5 +1,8 @@
 package dk.statsbiblioteket.newspaper.metadatachecker.film;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.newspaper.metadatachecker.checker.FailureType;
@@ -10,9 +13,6 @@ import dk.statsbiblioteket.util.xml.DOM;
 import dk.statsbiblioteket.util.xml.XPathSelector;
 import org.w3c.dom.Document;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class FilmXmlChecker extends XmlFileChecker {
 
     private MfPakDAO mfPakDAO;
@@ -22,7 +22,7 @@ public class FilmXmlChecker extends XmlFileChecker {
     private List<XmlAttributeChecker> checkers;
 
     public FilmXmlChecker(ResultCollector resultCollector, MfPakDAO mfPakDAO, Batch batch, Document batchXmlStructure) {
-        super(resultCollector, FailureType.Metadata);
+        super(resultCollector, FailureType.METADATA);
         this.batch = batch;
         this.mfPakDAO = mfPakDAO;
         XPathSelector xpathSelector = DOM.createXPathSelector("avis",
