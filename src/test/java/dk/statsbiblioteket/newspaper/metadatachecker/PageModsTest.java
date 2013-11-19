@@ -1,9 +1,17 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
+import dk.statsbiblioteket.medieplatform.autonomous.Batch;
+import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeBeginsParsingEvent;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeEndParsingEvent;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.filesystem.FileAttributeParsingEvent;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.InconsistentDatabaseException;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+import dk.statsbiblioteket.util.xml.DOM;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+import org.w3c.dom.Document;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,19 +20,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 
-import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeBeginsParsingEvent;
-import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeEndParsingEvent;
-import dk.statsbiblioteket.medieplatform.autonomous.iterator.filesystem.FileAttributeParsingEvent;
-import dk.statsbiblioteket.util.xml.DOM;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
-
-import dk.statsbiblioteket.medieplatform.autonomous.Batch;
-import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
-import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
-import dk.statsbiblioteket.newspaper.mfpakintegration.database.InconsistentDatabaseException;
-import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
-import org.w3c.dom.Document;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 /**
  * Tests for the validity of page-mods metadata are grouped in this class because they are logically connected, even
@@ -63,8 +62,8 @@ public class PageModsTest {
             }
         };
         handler.handleAttribute(modsEvent);
-        System.out.println(resultCollector.toReport());
-        assertTrue(resultCollector.isSuccess());
+
+        assertTrue(resultCollector.isSuccess(),resultCollector.toReport());
     }
 
 
@@ -88,13 +87,12 @@ public class PageModsTest {
         };
         handler.handleAttribute(modsEvent);
         String report = resultCollector.toReport();
-        assertTrue(report.contains("2C-1:"));
-        assertTrue(report.contains("2C-3:"));
-        assertTrue(report.contains("2C-4:"));
-        assertTrue(report.contains("2C-6:"));
-        assertTrue(report.contains("2C-9:"));
-        assertTrue(report.contains("2C-10:"));
-        System.out.println(report);
+        assertTrue(report.contains("2C-1:"),report);
+        assertTrue(report.contains("2C-3:"),report);
+        assertTrue(report.contains("2C-4:"),report);
+        assertTrue(report.contains("2C-6:"),report);
+        assertTrue(report.contains("2C-9:"),report);
+        assertTrue(report.contains("2C-10:"),report);
     }
 
     /**
@@ -123,7 +121,6 @@ public class PageModsTest {
         assertTrue(report.contains("2C-9:"), report);
         assertTrue(report.contains("2C-10:"), report);
 
-        System.out.println(report);
     }
 
 
@@ -186,10 +183,9 @@ public class PageModsTest {
         };
         handler.handleAttribute(modsEvent);
         String report = resultCollector.toReport();
-        assertTrue(report.contains("2C-4:"));
-        assertTrue(report.contains("2C-5:"));
-        assertTrue(report.contains("2C-11:"));
-        System.out.println(report);
+        assertTrue(report.contains("2C-4:"),report);
+        assertTrue(report.contains("2C-5:"),report);
+        assertTrue(report.contains("2C-11:"),report);
     }
 
     /**
