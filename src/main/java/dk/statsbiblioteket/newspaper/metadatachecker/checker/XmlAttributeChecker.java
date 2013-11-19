@@ -13,7 +13,7 @@ public abstract class XmlAttributeChecker {
         this.failureType = failureType;
     }
 
-    private void addFailure(AttributeParsingEvent event, String description) {
+    protected void addFailure(AttributeParsingEvent event, String description) {
         resultCollector.addFailure(
                 event.getName(), failureType.value(), getClass().getName(), description);
     }

@@ -9,17 +9,18 @@ import dk.statsbiblioteket.newspaper.metadatachecker.checker.XmlAttributeChecker
 import dk.statsbiblioteket.newspaper.metadatachecker.checker.XmlFileChecker;
 import dk.statsbiblioteket.util.xml.DOM;
 import dk.statsbiblioteket.util.xml.XPathSelector;
+import org.w3c.dom.Document;
 
 public class FilmXmlChecker extends XmlFileChecker {
     private List<XmlAttributeChecker> checkers;
 
-    public FilmXmlChecker(ResultCollector resultCollector) {
+    public FilmXmlChecker(ResultCollector resultCollector, Document batchXmlStructure) {
         super(resultCollector);
 
         XPathSelector xpathSelector = DOM.createXPathSelector("avis",
                 "http://www.statsbiblioteket.dk/avisdigitalisering/microfilm/1/0/");
         checkers = new ArrayList<>();
-        checkers.add(new FilmNumberOfPicturesChecker(resultCollector, xpathSelector));
+        checkers.add(new FilmNumberOfPicturesChecker(resultCollector, xpathSelector, batchXmlStructure));
     }
 
     @Override
