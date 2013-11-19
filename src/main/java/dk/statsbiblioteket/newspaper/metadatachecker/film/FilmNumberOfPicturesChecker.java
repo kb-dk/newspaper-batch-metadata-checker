@@ -9,7 +9,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 /**
- * Check whether the number of pictires for a film in the film xml (2E-5) is equal to the actial number of
+ * Check whether the number of pictures for a film in the film xml (2E-5) is equal to the actial number of
  * jp2 files in for a film in the batch structure.
  */
 public class FilmNumberOfPicturesChecker extends XmlAttributeChecker {
@@ -42,7 +42,6 @@ public class FilmNumberOfPicturesChecker extends XmlAttributeChecker {
 
     @Override
     public boolean shouldCheckEvent(AttributeParsingEvent event) {
-        return event.getName()
-                    .endsWith(".film.xml");
+        return event.getName().endsWith(".film.xml");
     }
 }

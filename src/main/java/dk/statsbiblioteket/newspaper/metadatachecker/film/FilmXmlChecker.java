@@ -22,6 +22,7 @@ public class FilmXmlChecker extends XmlFileChecker {
         checkers = new ArrayList<>();
         checkers.add(new FilmNumberOfPicturesChecker(resultCollector, xpathSelector, batchXmlStructure));
         checkers.add(new FilmDateVsEditionsChecker(resultCollector, xpathSelector, batchXmlStructure));
+        checkers.add(new FilmIDAgainstFilmNodenameChecker(resultCollector, xpathSelector));
     }
 
     @Override

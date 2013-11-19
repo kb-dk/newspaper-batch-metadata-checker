@@ -8,8 +8,6 @@
     <avis:captureResolutionOriginal measurement="pixels/inch">400</avis:captureResolutionOriginal>
     <avis:captureResolutionFilm measurement="pixels/inch">6000</avis:captureResolutionFilm>
     <avis:dateMicrofilmCreated>1970-06-05</avis:dateMicrofilmCreated>
-    <avis:looseLeavesFlag>true</avis:looseLeavesFlag>
-	<avis:boundVolumeFlag>false</avis:boundVolumeFlag>
     <avis:resolutionOfDuplicateNegative>6.3</avis:resolutionOfDuplicateNegative>
     <avis:resolutionCommentDuplicateNegative>No comments</avis:resolutionCommentDuplicateNegative>
     <avis:densityReadingDuplicateNegative>0.11</avis:densityReadingDuplicateNegative>
