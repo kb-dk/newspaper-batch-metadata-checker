@@ -118,11 +118,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
     private void validate2C10(AttributeParsingEvent event, Document modsDocument) {
         String display = "mods:mods/mods:relatedItem/mods:note[@type='noteAboutReproduction' and @displayLabel]";
         String name = getLastTokenInPath(event.getName());
-        name = name.replace(".mods.xml", "");
-        char lastChar = name.charAt(name.length() -1);
-        if (String.valueOf(lastChar).matches("[A-Z]")) {
-            name = name.substring(0, name.length() -1);
-        }
+        name = getBrikName(name);
         boolean brikExists = briksInThisEdition.contains(name);
         NodeList nodes = MODS_XPATH_SELECTOR.selectNodeList(modsDocument, display);
         boolean brikShouldExist =  nodes != null && nodes.getLength() > 0 ;
@@ -147,6 +143,25 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
             );
         }
 
+    }
+
+    /**
+     * Transform the name of this mods file to the expected name of the brik object.
+     * This means
+     * i) remove the .mods.xml ending
+     * ii) remove the multi-page suffix so
+     * adresseavisen1759-1795-06-15-02-0005B.mods.xml  ->  adresseavisen1759-1795-06-15-02-0005
+     * adresseavisen1759-1795-06-15-02-0004.mods.xml   ->  adresseavisen1759-1795-06-15-02-0004
+     * @param modsFileName the name of this mods file.
+     * @return the name of the matching brik (symbol) file.
+     */
+    private String getBrikName(String modsFileName) {
+        modsFileName = modsFileName.replace(".mods.xml", "");
+        char lastChar = modsFileName.charAt(modsFileName.length() -1);
+        if (String.valueOf(lastChar).matches("[A-Z]")) {
+            modsFileName = modsFileName.substring(0, modsFileName.length() -1);
+        }
+        return modsFileName;
     }
 
     /**
