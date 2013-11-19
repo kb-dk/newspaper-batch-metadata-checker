@@ -1,10 +1,5 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.util.List;
-
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
@@ -16,6 +11,11 @@ import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperEntity;
 import dk.statsbiblioteket.util.xml.DOM;
 import dk.statsbiblioteket.util.xml.XPathSelector;
 import org.w3c.dom.Document;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.List;
 
 /**
  * This class uses xpath to validate metadata requirements for edition xml (mods) files that do no fit into
@@ -127,11 +127,11 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
             return null;
         } else {
 
-            List<NewspaperEntity> titles = mfPakDAO.getBatchNewspaperEntities(batch.getBatchID());
+            List<NewspaperEntity> entities = mfPakDAO.getBatchNewspaperEntities(batch.getBatchID());
             NewspaperEntity selected = null;
-            for (NewspaperEntity title : titles) {
-                    if (matchDates(title.getNewspaperDateRange(),editionDate)){
-                    selected = title;
+            for (NewspaperEntity entity : entities) {
+                    if (matchDates(entity.getNewspaperDateRange(), editionDate)){
+                    selected = entity;
                     break;
                 }
             }
