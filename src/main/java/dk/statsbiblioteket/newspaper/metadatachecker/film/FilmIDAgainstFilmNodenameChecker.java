@@ -21,7 +21,7 @@ public class FilmIDAgainstFilmNodenameChecker extends XmlAttributeChecker {
 
     public void validate(AttributeParsingEvent event, Document doc) {
         String filmIdFromXml = xPathSelector.selectString(doc, "/avis:reelMetadata/avis:batchIdFilmId");
-        String filmIDFromEvent = event.getName().split("/")[1].replace(".film.xml", "");
+        String filmIDFromEvent = event.getName().split("/")[1];
         if (!filmIdFromXml.equals(filmIDFromEvent)) {
             addFailure(event, "2E-4: FildID in film.xml '" + filmIdFromXml +
                     "' doesn't correspond to the node name '" + filmIDFromEvent + "'.");

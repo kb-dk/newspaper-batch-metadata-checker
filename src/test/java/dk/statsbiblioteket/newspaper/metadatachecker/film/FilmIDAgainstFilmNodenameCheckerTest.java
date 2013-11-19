@@ -62,7 +62,7 @@ public class FilmIDAgainstFilmNodenameCheckerTest {
     }
 
     private AttributeParsingEvent createFilmEvent(final String filmID) {
-        return new AttributeParsingEvent("reelID/" + filmID + ".film.xml") {
+        return new AttributeParsingEvent("reelID/" + filmID + "/avisID-filmID.film.xml") {
             @Override
             public InputStream getData() throws IOException {
                 return null;
