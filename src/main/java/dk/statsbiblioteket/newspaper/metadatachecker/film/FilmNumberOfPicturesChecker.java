@@ -28,10 +28,10 @@ public class FilmNumberOfPicturesChecker extends XmlAttributeChecker {
                 "/avis:reelMetadata/avis:numberOfPictures"));
         String filmID = event.getName().split("/")[1].replace(".film.xml","");
         NodeList pageImages = xPathSelector.selectNodeList(batchXmlStructure,
-                "/node/node[@shortName='400022028241-1']/node/node/node[ends-with(@shortName,'.jp2')]");
+                "/node/node[@shortName='" + filmID + "']/node/node/node[ends-with(@shortName,'.jp2')]");
         if (pageImages.getLength() != numberOfPictures) {
             addFailure(event, "2E-5: Number of images in film xml for film '" + filmID+ "' doesn't correspond to the number" +
-                    "of actual page images.");
+                    " of actual page images.");
         }
     }
 }
