@@ -2,7 +2,7 @@ package dk.statsbiblioteket.newspaper.metadatachecker.film;
 
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
-import dk.statsbiblioteket.newspaper.metadatachecker.checker.MetadataFailureType;
+import dk.statsbiblioteket.newspaper.metadatachecker.checker.FailureType;
 import dk.statsbiblioteket.newspaper.metadatachecker.checker.XmlAttributeChecker;
 import dk.statsbiblioteket.util.xml.XPathSelector;
 import org.w3c.dom.Document;
@@ -15,16 +15,20 @@ public class FilmIDAgainstFilmNodenameChecker extends XmlAttributeChecker {
 
     public FilmIDAgainstFilmNodenameChecker(
             ResultCollector resultCollector, XPathSelector xPathSelector) {
-        super(resultCollector, MetadataFailureType.METADATA);
+        super(resultCollector, FailureType.METADATA);
         this.xPathSelector = xPathSelector;
     }
 
     public void validate(AttributeParsingEvent event, Document doc) {
         String filmIdFromXml = xPathSelector.selectString(doc, "/avis:reelMetadata/avis:batchIdFilmId");
-        String filmIDFromEvent = event.getName().split("/")[1].replace(".film.xml","");
-        if (filmIdFromXml != filmIDFromEvent) {
-            addFailure(event, "2E-4: FildID in film.xml '" + filmIDFromEvent +
+        String filmIDFromEvent = event.getName().split("/")[1].replace(".film.xml", "");
+        if (!filmIdFromXml.equals(filmIDFromEvent)) {
+            addFailure(event, "2E-4: FildID in film.xml '" + filmIdFromXml +
                     "' doesn't correspond to the node name '" + filmIDFromEvent + "'.");
         }
+    }
+    @Override
+    public boolean shouldCheckEvent(AttributeParsingEvent event) {
+        return event.getName().endsWith(".film.xml");
     }
 }

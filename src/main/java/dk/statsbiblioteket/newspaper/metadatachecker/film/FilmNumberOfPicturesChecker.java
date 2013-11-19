@@ -42,7 +42,6 @@ public class FilmNumberOfPicturesChecker extends XmlAttributeChecker {
 
     @Override
     public boolean shouldCheckEvent(AttributeParsingEvent event) {
-        return event.getName()
-                    .endsWith(".film.xml");
+        return event.getName().endsWith(".film.xml");
     }
 }
