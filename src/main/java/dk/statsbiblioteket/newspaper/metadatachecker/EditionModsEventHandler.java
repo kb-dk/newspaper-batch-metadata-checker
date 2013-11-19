@@ -9,7 +9,7 @@ import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.DefaultTreeEventHandler;
-import dk.statsbiblioteket.newspaper.metadatachecker.crosscheck.FuzzyDate;
+import dk.statsbiblioteket.newspaper.metadatachecker.film.FuzzyDate;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperDateRange;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperEntity;
@@ -96,10 +96,11 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
     private void check2D_9(AttributeParsingEvent event, XPathSelector xpath, Document doc) {
 
         final String xpathForEditionNumberXPath =
-                "mods:mods/mods:relatedItem[@type='host']/mods:part/mods:detail[@type='edition']/mods:number";
+                "/mods:mods/mods:relatedItem[@type='host']/mods:part/mods:detail[@type='edition']/mods:number";
 
         String xpathForEditionNumber = xpath.selectString(doc, xpathForEditionNumberXPath);
         String editionIDFromNode = event.getName().split("/")[2];
+        // Extracts the edition number from a editionID: yyyy-MM-dd-editionNumber.
         String nodeEditionNumber = editionIDFromNode.split("-")[3];
         try {
             if (Integer.parseInt(xpathForEditionNumber) != Integer.parseInt(nodeEditionNumber) ) {
@@ -107,7 +108,7 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
                         "correspond to node edition number: " + editionIDFromNode);
             }
         } catch (NumberFormatException nfe) {
-            addFailure(event, "2D_9: Unable to check (" + xpathForEditionNumber + ") in edition xml " +
+            addFailure(event, "2D_9: Unable to compare (" + xpathForEditionNumber + ") in edition xml " +
                     "to node edition number: " + editionIDFromNode + ", they can't be converted to numbers.");
         }
     }

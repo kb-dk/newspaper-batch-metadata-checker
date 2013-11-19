@@ -1,4 +1,4 @@
-package dk.statsbiblioteket.newspaper.metadatachecker.crosscheck;
+package dk.statsbiblioteket.newspaper.metadatachecker.film;
 
 import java.io.IOException;
 
@@ -55,7 +55,7 @@ public class FilmDateVsEditionsChecker extends DefaultTreeEventHandler {
             addFailure(editionID, "2E-2: Edition earlier than film start date " + filmStartdate + " in film " + filmID);  // Include filmid
         }
         if (filmEnd.compareTo(editionDate) < 0) {
-            addFailure(editionID, "2E-2: Edition later than film end date " + filmEnddate + " in film " + filmID);
+            addFailure(editionID, "2E-3: Edition later than film end date " + filmEnddate + " in film " + filmID);
         }
     }
 
