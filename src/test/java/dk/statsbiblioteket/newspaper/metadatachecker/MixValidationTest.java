@@ -50,7 +50,7 @@ public class MixValidationTest {
                 publishDate,
                 pictureNumber,
                 batch
-                , 9304, 11408,"7ed748249def3bcaadd825ae17dc817a");
+                , 9304, 11408, 400,"7ed748249def3bcaadd825ae17dc817a");
 
         SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
         handler.handleAttribute(event);
@@ -625,7 +625,7 @@ public class MixValidationTest {
                 avisID,
                 publishDate,
                 pictureNumber,
-                batch, 9304, 11408,"7ed748249def3bcaadd825ae17dc817a");
+                batch, 9304, 11408, 400, "7ed748249def3bcaadd825ae17dc817a");
 
 
         MfPakDAO mfpakDao = mock(MfPakDAO.class);
@@ -660,7 +660,7 @@ public class MixValidationTest {
                 avisID,
                 publishDate,
                 pictureNumber,
-                batch, 9304, 11408,"7ed748249def3bcaadd825ae17dc817a");
+                batch, 9304, 11408, 400, "7ed748249def3bcaadd825ae17dc817a");
 
         MfPakDAO mfpakDao = mock(MfPakDAO.class);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -697,7 +697,8 @@ public class MixValidationTest {
                 avisID,
                 publishDate,
                 pictureNumber,
-                batch, 9304, 11408,"7ed748249def3bcaadd825ae17dc817a");
+                batch, 9304, 11408, 400, "7ed748249def3bcaadd825ae17dc817a");
+        AttributeParsingEvent event2 = MixerMockup.getMixWorkshiftIso("000001", "0001", batch,"aac20a9ace772bc5a92b7d7b00048b91");
 
         MfPakDAO mfpakDao = mock(MfPakDAO.class);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");

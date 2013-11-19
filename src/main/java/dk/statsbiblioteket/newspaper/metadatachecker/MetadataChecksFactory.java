@@ -7,7 +7,7 @@ import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.EventHandlerFactory;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
-import dk.statsbiblioteket.newspaper.metadatachecker.crosscheck.FilmDateVsEditionsChecker;
+import dk.statsbiblioteket.newspaper.metadatachecker.film.FilmDateVsEditionsChecker;
 import dk.statsbiblioteket.newspaper.metadatachecker.jpylyzer.JpylyzingEventHandler;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 import org.w3c.dom.Document;

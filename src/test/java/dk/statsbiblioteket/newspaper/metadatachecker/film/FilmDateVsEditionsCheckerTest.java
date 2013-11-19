@@ -1,4 +1,4 @@
-package dk.statsbiblioteket.newspaper.metadatachecker.crosscheck;
+package dk.statsbiblioteket.newspaper.metadatachecker.film;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
