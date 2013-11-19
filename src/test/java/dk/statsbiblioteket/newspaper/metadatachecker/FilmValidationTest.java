@@ -41,8 +41,6 @@ public class FilmValidationTest {
                 "    <avis:captureResolutionOriginal measurement=\"pixels/inch\">400</avis:captureResolutionOriginal>\n" +
                 "    <avis:captureResolutionFilm measurement=\"pixels/inch\">6000</avis:captureResolutionFilm>\n" +
                 "    <avis:dateMicrofilmCreated>1970-06-05</avis:dateMicrofilmCreated>\n" +
-                "    <avis:looseLeavesFlag>true</avis:looseLeavesFlag>\n" +
-                "    <avis:boundVolumeFlag>false</avis:boundVolumeFlag>\n" +
                 "    <avis:resolutionOfDuplicateNegative>6.3</avis:resolutionOfDuplicateNegative>\n" +
                 "    <avis:resolutionCommentDuplicateNegative>No comments</avis:resolutionCommentDuplicateNegative>\n" +
                 "    <avis:densityReadingDuplicateNegative>0.11</avis:densityReadingDuplicateNegative>\n" +
@@ -76,8 +74,6 @@ public class FilmValidationTest {
                 "    <avis:captureResolutionOriginal measurement=\"pixels/inch\">400</avis:captureResolutionOriginal>\n" +
                 "    <avis:captureResolutionFilm measurement=\"pixels/inch\">6000</avis:captureResolutionFilm>\n" +
                 "    <avis:dateMicrofilmCreated>1970-06-05</avis:dateMicrofilmCreated>\n" +
-                "    <avis:looseLeavesFlag>true</avis:looseLeavesFlag>\n" +
-                "    <avis:boundVolumeFlag>false</avis:boundVolumeFlag>\n" +
                 "    <avis:resolutionOfDuplicateNegative>3.0</avis:resolutionOfDuplicateNegative>\n" +
                 "    <avis:resolutionCommentDuplicateNegative></avis:resolutionCommentDuplicateNegative>\n" +
                 "    <avis:densityReadingDuplicateNegative>0.11</avis:densityReadingDuplicateNegative>\n" +
@@ -111,8 +107,6 @@ public class FilmValidationTest {
                 "    <avis:captureResolutionOriginal measurement=\"pixels/alen\">400</avis:captureResolutionOriginal>\n" +
                 "    <avis:captureResolutionFilm measurement=\"pixels/inch\">6000</avis:captureResolutionFilm>\n" +
                 "    <avis:dateMicrofilmCreated>1970-06-05</avis:dateMicrofilmCreated>\n" +
-                "    <avis:looseLeavesFlag>true</avis:looseLeavesFlag>\n" +
-                "    <avis:boundVolumeFlag>false</avis:boundVolumeFlag>\n" +
                 "    <avis:resolutionOfDuplicateNegative>6.3</avis:resolutionOfDuplicateNegative>\n" +
                 "    <avis:resolutionCommentDuplicateNegative>No comments</avis:resolutionCommentDuplicateNegative>\n" +
                 "    <avis:densityReadingDuplicateNegative>0.11</avis:densityReadingDuplicateNegative>\n" +
@@ -146,8 +140,6 @@ public class FilmValidationTest {
                 "    <avis:captureResolutionOriginal measurement=\"pixels/inch\">400</avis:captureResolutionOriginal>\n" +
                 "    <avis:captureResolutionFilm measurement=\"pixels/alen\">6000</avis:captureResolutionFilm>\n" +
                 "    <avis:dateMicrofilmCreated>1970-06-05</avis:dateMicrofilmCreated>\n" +
-                "    <avis:looseLeavesFlag>true</avis:looseLeavesFlag>\n" +
-                "    <avis:boundVolumeFlag>false</avis:boundVolumeFlag>\n" +
                 "    <avis:resolutionOfDuplicateNegative>6.3</avis:resolutionOfDuplicateNegative>\n" +
                 "    <avis:resolutionCommentDuplicateNegative>No comments</avis:resolutionCommentDuplicateNegative>\n" +
                 "    <avis:densityReadingDuplicateNegative>0.11</avis:densityReadingDuplicateNegative>\n" +
@@ -181,8 +173,6 @@ public class FilmValidationTest {
                 "    <avis:captureResolutionOriginal measurement=\"pixels/inch\">400</avis:captureResolutionOriginal>\n" +
                 "    <avis:captureResolutionFilm measurement=\"pixels/inch\">1024</avis:captureResolutionFilm>\n" +
                 "    <avis:dateMicrofilmCreated>1970-06-05</avis:dateMicrofilmCreated>\n" +
-                "    <avis:looseLeavesFlag>true</avis:looseLeavesFlag>\n" +
-                "    <avis:boundVolumeFlag>false</avis:boundVolumeFlag>\n" +
                 "    <avis:resolutionOfDuplicateNegative>6.3</avis:resolutionOfDuplicateNegative>\n" +
                 "    <avis:resolutionCommentDuplicateNegative>No comments</avis:resolutionCommentDuplicateNegative>\n" +
                 "    <avis:densityReadingDuplicateNegative>0.11</avis:densityReadingDuplicateNegative>\n" +

@@ -48,8 +48,6 @@ public class FilmMocker {
                                  "<avis:captureResolutionOriginal measurement=\"pixels/inch\">"+resolution+"</avis:captureResolutionOriginal> \n" +
                                  "<avis:captureResolutionFilm measurement=\"pixels/inch\">6000</avis:captureResolutionFilm> \n" +
                                  "<avis:dateMicrofilmCreated>"+createdDate+"</avis:dateMicrofilmCreated> \n" +
-                                 "<avis:looseLeavesFlag>true</avis:looseLeavesFlag> \n" +
-                                 "<avis:boundVolumeFlag>false</avis:boundVolumeFlag> \n" +
                                  "<avis:resolutionOfDuplicateNegative>6.3</avis:resolutionOfDuplicateNegative> \n" +
                                  "<avis:resolutionCommentDuplicateNegative>No comments</avis:resolutionCommentDuplicateNegative> \n" +
                                  "<avis:densityReadingDuplicateNegative>0.11</avis:densityReadingDuplicateNegative> \n" +
