@@ -9,6 +9,10 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.Defau
 import dk.statsbiblioteket.util.xml.DOM;
 import org.w3c.dom.Document;
 
+/**
+ * Implements the generic functionality for checking the content of a xml file by delegating the actual
+ * detailed checks to a set of <code>XmlAttributeChecker</code>s.
+ */
 public abstract class XmlFileChecker extends DefaultTreeEventHandler {
     private List<XmlAttributeChecker> checkers;
     protected final ResultCollector resultCollector;
@@ -48,6 +52,13 @@ public abstract class XmlFileChecker extends DefaultTreeEventHandler {
                 event.getName(), MetadataFailureType.METADATA.value(), getClass().getName(), description);
     }
 
+    /**
+     * Must be implemented by subclasse providing the concrete list of <code>XmlAttributeChecker</code>s.
+     */
     protected abstract List<XmlAttributeChecker> getCheckers();
+
+    /**
+     * Indicates whether the encountered event is relevant to check.
+     */
     protected abstract boolean shouldCheckEvent(AttributeParsingEvent event);
 }

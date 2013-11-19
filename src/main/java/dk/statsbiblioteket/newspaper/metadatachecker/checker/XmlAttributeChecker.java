@@ -4,6 +4,12 @@ import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
 import org.w3c.dom.Document;
 
+/**
+ * Contains the general functionality for testing a event against a xml document (metadata xml file).
+ * The concrete subclasses will implement the actual business logic. <p>
+ *
+ * This enables check to be broken down into small focused checks.  </p>
+ */
 public abstract class XmlAttributeChecker {
     private final ResultCollector resultCollector;
     private final MetadataFailureType failureType;

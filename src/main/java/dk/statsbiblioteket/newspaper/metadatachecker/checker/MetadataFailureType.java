@@ -1,5 +1,8 @@
 package dk.statsbiblioteket.newspaper.metadatachecker.checker;
 
+/**
+ * Defines the types of failures which can be reported through the <code>ResultCollector</code>.
+ */
 public enum MetadataFailureType {
     METADATA("metadata");
 
