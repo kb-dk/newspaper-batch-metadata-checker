@@ -3,12 +3,12 @@ package dk.statsbiblioteket.newspaper.metadatachecker.checker;
 /**
  * Defines the types of failures which can be reported through the <code>ResultCollector</code>.
  */
-public enum MetadataFailureType {
+public enum FailureType {
     METADATA("metadata");
 
     private final String value;
 
-    MetadataFailureType(String v) {
+    FailureType(String v) {
         value = v;
     }
 
@@ -16,8 +16,8 @@ public enum MetadataFailureType {
         return value;
     }
 
-    public static MetadataFailureType fromValue(String v) {
-        for (MetadataFailureType c: MetadataFailureType.values()) {
+    public static FailureType fromValue(String v) {
+        for (FailureType c: FailureType.values()) {
             if (c.value.equals(v)) {
                 return c;
             }

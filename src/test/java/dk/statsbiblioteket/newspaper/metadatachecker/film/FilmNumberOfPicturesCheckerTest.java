@@ -5,7 +5,7 @@ import java.io.InputStream;
 
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
-import dk.statsbiblioteket.newspaper.metadatachecker.checker.MetadataFailureType;
+import dk.statsbiblioteket.newspaper.metadatachecker.checker.FailureType;
 import dk.statsbiblioteket.util.xml.DOM;
 import dk.statsbiblioteket.util.xml.XPathSelector;
 import org.testng.annotations.BeforeMethod;
@@ -95,7 +95,7 @@ public class FilmNumberOfPicturesCheckerTest {
         Document filmEventDoc = createFilmXmlDoc(2);
         AttributeParsingEvent event = createFilmEvent(filmID);
         checker.validate(event, filmEventDoc);
-        verify(resultCollector).addFailure(eq(event.getName()), eq(MetadataFailureType.METADATA.value()),
+        verify(resultCollector).addFailure(eq(event.getName()), eq(FailureType.METADATA.value()),
                 eq(FilmNumberOfPicturesChecker.class.getName()), anyString());
         verifyNoMoreInteractions(resultCollector);
     }

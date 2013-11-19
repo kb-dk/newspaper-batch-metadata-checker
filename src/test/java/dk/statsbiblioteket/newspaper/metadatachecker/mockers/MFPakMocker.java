@@ -1,4 +1,4 @@
-package dk.statsbiblioteket.newspaper.metadatachecker;
+package dk.statsbiblioteket.newspaper.metadatachecker.mockers;
 
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperDateRange;

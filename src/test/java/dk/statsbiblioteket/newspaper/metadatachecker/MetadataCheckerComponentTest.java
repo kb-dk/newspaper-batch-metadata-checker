@@ -1,6 +1,8 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
+import dk.statsbiblioteket.newspaper.metadatachecker.mockers.MFPakMocker;
+import dk.statsbiblioteket.newspaper.metadatachecker.mockers.MockupIteratorSuper;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -36,7 +38,7 @@ public class MetadataCheckerComponentTest {
                       .contains(
                               "Failure validating XML data from "
                               +
-                              "'B400022028240-RT1/400022028240-14/AdresseContoirsEfterretninger-400022028240-14.film.xml': Line 27 "
+                              "'B400022028240-RT1/400022028240-14/AdresseContoirsEfterretninger-400022028240-14.film.xml': Line 25 "
                               +
                               "Column 21: Content is not allowed in trailing section."));
         Assert.assertTrue(
