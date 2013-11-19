@@ -71,7 +71,7 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
             check2D_2(event, xpath, doc, entity);
             check2D_3(event, xpath, doc, entity);
             check2D_4(event, xpath, doc, entity);
-            check2D_9(event, xpath, doc, entity);
+            check2D_9(event, xpath, doc);
 
         } catch (SQLException e) {
             addFailure(event, "Problem with communication with MFPak");
@@ -90,14 +90,26 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
         return true;
     }
 
-    //TODO
-    private void check2D_9(AttributeParsingEvent event, XPathSelector xpath, Document doc,
-                           NewspaperEntity editionDate) {
-        /** 2D-9 Check Edition Order against event.getName() (file structure),
-         * and cross correlate with sibling editions that the numbers are sequential.
-         */
+    /**
+     * 2D-9 Check the edition number defined in the edition.xml with the edition node number.
+     */
+    private void check2D_9(AttributeParsingEvent event, XPathSelector xpath, Document doc) {
 
+        final String xpathForEditionNumberXPath =
+                "mods:mods/mods:relatedItem[@type='host']/mods:part/mods:detail[@type='edition']/mods:number";
 
+        String xpathForEditionNumber = xpath.selectString(doc, xpathForEditionNumberXPath);
+        String editionIDFromNode = event.getName().split("/")[2];
+        String nodeEditionNumber = editionIDFromNode.split("-")[3];
+        try {
+            if (Integer.parseInt(xpathForEditionNumber) != Integer.parseInt(nodeEditionNumber) ) {
+                addFailure(event, "2D_9: Edition number (" + xpathForEditionNumber + ") in edition xml doesn't " +
+                        "correspond to node edition number: " + editionIDFromNode);
+            }
+        } catch (NumberFormatException nfe) {
+            addFailure(event, "2D_9: Unable to check (" + xpathForEditionNumber + ") in edition xml " +
+                    "to node edition number: " + editionIDFromNode + ", they can't be converted to numbers.");
+        }
     }
 
     private NewspaperEntity getNewspaperEntity(AttributeParsingEvent event) throws SQLException {

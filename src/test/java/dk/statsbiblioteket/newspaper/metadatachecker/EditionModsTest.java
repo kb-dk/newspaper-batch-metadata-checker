@@ -1,5 +1,11 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.Date;
+
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
@@ -9,12 +15,6 @@ import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperDateRang
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperEntity;
 import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Date;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -87,7 +87,7 @@ public class EditionModsTest {
         AssertJUnit.assertTrue(report,report.contains("<description>2D-2: title Adresse Contoirs Efterretninger does not match title in MFPak 'Kiøbenhavns Kongelig alene priviligerede Adresse-Contoirs Efterretninger'</description>"));
         AssertJUnit.assertTrue(report,report.contains("<description>2D-3: Publication location 'Kobenhavn' does not match value 'København' from MFPak</description>"));
         AssertJUnit.assertTrue(report,report.contains("<description>2D-4: Date issued from file does not correspond to date in filename</description>"));
-
+        AssertJUnit.assertTrue(report,report.contains("<description>2D_9: Edition number (2) in edition xml doesn't correspond to node edition number: 1795-06-13-01</description>"));
 
         assertFalse(resultCollector.isSuccess(),resultCollector.toReport());
 
