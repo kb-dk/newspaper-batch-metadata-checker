@@ -1,20 +1,29 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.testng.Assert.assertTrue;
+import dk.statsbiblioteket.medieplatform.autonomous.Batch;
+import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeBeginsParsingEvent;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeEndParsingEvent;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.filesystem.FileAttributeParsingEvent;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.InconsistentDatabaseException;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+import dk.statsbiblioteket.util.xml.DOM;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+import org.w3c.dom.Document;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 
-import org.testng.annotations.Test;
-
-import dk.statsbiblioteket.medieplatform.autonomous.Batch;
-import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
-import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
-import dk.statsbiblioteket.newspaper.mfpakintegration.database.InconsistentDatabaseException;
-import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 /**
  * Tests for the validity of page-mods metadata are grouped in this class because they are logically connected, even
@@ -24,6 +33,15 @@ import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
  *
  */
 public class PageModsTest {
+
+    private Document goodBatchXmlStructure;
+
+    @BeforeTest
+    public void setUp() {
+        InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("assumed-valid-structure.xml");
+        goodBatchXmlStructure = DOM.streamToDOM(is);
+    }
+
 
     /**
      * Test that we can validate a valid page mods file.
@@ -44,8 +62,8 @@ public class PageModsTest {
             }
         };
         handler.handleAttribute(modsEvent);
-        System.out.println(resultCollector.toReport());
-        assertTrue(resultCollector.isSuccess());
+
+        assertTrue(resultCollector.isSuccess(),resultCollector.toReport());
     }
 
 
@@ -69,13 +87,12 @@ public class PageModsTest {
         };
         handler.handleAttribute(modsEvent);
         String report = resultCollector.toReport();
-        assertTrue(report.contains("2C-1:"));
-        assertTrue(report.contains("2C-3:"));
-        assertTrue(report.contains("2C-4:"));
-        assertTrue(report.contains("2C-6:"));
-        assertTrue(report.contains("2C-9:"));
-        assertTrue(report.contains("2C-10:"));
-        System.out.println(report);
+        assertTrue(report.contains("2C-1:"),report);
+        assertTrue(report.contains("2C-3:"),report);
+        assertTrue(report.contains("2C-4:"),report);
+        assertTrue(report.contains("2C-6:"),report);
+        assertTrue(report.contains("2C-9:"),report);
+        assertTrue(report.contains("2C-10:"),report);
     }
 
     /**
@@ -85,7 +102,7 @@ public class PageModsTest {
     public void testPageModsBad2Sch() {
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
         SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
-        AttributeParsingEvent modsEvent = new AttributeParsingEvent("AdresseContoirsEfterretninger-1795-06-15-01-0010B.mods.xml") {
+        AttributeParsingEvent modsEvent = new AttributeParsingEvent("AdresseContoirsEfterretninger-1795-06-15-01-0003B.mods.xml") {
             @Override
             public InputStream getData() throws IOException {
                 return Thread.currentThread().getContextClassLoader().getResourceAsStream("badData/bad2.mods.xml");
@@ -104,7 +121,6 @@ public class PageModsTest {
         assertTrue(report.contains("2C-9:"), report);
         assertTrue(report.contains("2C-10:"), report);
 
-        System.out.println(report);
     }
 
 
@@ -120,10 +136,11 @@ public class PageModsTest {
         batch.setBatchID("400022028241");
         batch.setRoundTripNumber(10);
         MfPakDAO dao = mock(MfPakDAO.class);
-        when(dao.getNewspaperID(batch.getBatchID())).thenReturn("adressecontoirsefterretninger");
-
-        ModsXPathEventHandler handler = new ModsXPathEventHandler(resultCollector, dao, batch);
-        AttributeParsingEvent modsEvent = new AttributeParsingEvent("AdresseContoirsEfterretninger-1795-06-15-01-0010B.mods.xml") {
+        when(dao.getNewspaperID(batch.getBatchID())).thenReturn("adresseavisen1759");
+        ModsXPathEventHandler handler = new ModsXPathEventHandler(resultCollector, dao, batch, goodBatchXmlStructure);
+        String editionNodeName = "B400022028240-RT1/400022028240-14/1795-06-15-01";
+        handler.handleNodeBegin(new NodeBeginsParsingEvent(editionNodeName));
+        AttributeParsingEvent modsEvent = new AttributeParsingEvent("AdresseContoirsEfterretninger-1795-06-15-01-0003B.mods.xml") {
             @Override
             public InputStream getData() throws IOException {
                 return Thread.currentThread().getContextClassLoader().getResourceAsStream("goodData/goodpagemods.mods.xml");
@@ -140,7 +157,7 @@ public class PageModsTest {
     }
 
     /**
-     * Test that we can test and invalid mods file.
+     * Test that we can test an invalid mods file.
      * @throws SQLException 
      * @throws InconsistentDatabaseException 
      */
@@ -152,8 +169,7 @@ public class PageModsTest {
         batch.setRoundTripNumber(10);
         MfPakDAO dao = mock(MfPakDAO.class);
         when(dao.getNewspaperID(batch.getBatchID())).thenReturn("adressecontoirsefterretninger123");
-
-        ModsXPathEventHandler handler = new ModsXPathEventHandler(resultCollector, dao, batch);
+        ModsXPathEventHandler handler = new ModsXPathEventHandler(resultCollector, dao, batch, goodBatchXmlStructure);
         AttributeParsingEvent modsEvent = new AttributeParsingEvent("AdresseContoirsEfterretninger-1795-06-15-01-0010B.mods.xml") {
             @Override
             public InputStream getData() throws IOException {
@@ -167,10 +183,90 @@ public class PageModsTest {
         };
         handler.handleAttribute(modsEvent);
         String report = resultCollector.toReport();
-        assertTrue(report.contains("2C-4:"));
-        assertTrue(report.contains("2C-5:"));
-        assertTrue(report.contains("2C-11:"));
-        System.out.println(report);
+        assertTrue(report.contains("2C-4:"),report);
+        assertTrue(report.contains("2C-5:"),report);
+        assertTrue(report.contains("2C-11:"),report);
     }
+
+    /**
+     * Test that we can validate an edition directory against a batch structure for consistency
+     * of expected brik files.
+     * @throws FileNotFoundException
+     * @throws SQLException
+     */
+    @Test
+    public void testBrikConsistencyGood() throws FileNotFoundException, SQLException {
+        String dataDirS = "goodData/editionDirWithValidBrik";
+        ResultCollector resultCollector = new ResultCollector("foo", "bar");
+        iterateDataDir(dataDirS, resultCollector);
+        assertTrue(resultCollector.isSuccess(), resultCollector.toReport());
+    }
+
+    /**
+      * Test with bad data where the brik file is not referred to in any mods file.
+      */
+     @Test
+     public void testWithBadBrikData1() throws SQLException, FileNotFoundException {
+         String dataDirS = "badData/editionDirsWithBadBrik/brikWithNoReferent";
+         ResultCollector resultCollector = new ResultCollector("foo", "bar");
+         iterateDataDir(dataDirS, resultCollector);
+         final String message = resultCollector.toReport();
+         assertFalse(resultCollector.isSuccess(), message);
+         assertTrue(message.contains("2C-10"), message);
+     }
+
+
+     /**
+      * Test with bad data where the brik file is referred to in one mods file but not the other for the same
+      * scan.
+      */
+     @Test
+     public void testWithBadBrikData2() throws SQLException, FileNotFoundException {
+         String dataDirS = "badData/editionDirsWithBadBrik/brikWithPartialReferent";
+         ResultCollector resultCollector = new ResultCollector("foo", "bar");
+         iterateDataDir(dataDirS, resultCollector);
+         final String message = resultCollector.toReport();
+         assertFalse(resultCollector.isSuccess(), message);
+         assertTrue(message.contains("2C-10"), message);
+     }
+
+
+     /**
+      * Test with bad data where the brik file is missing.
+      */
+     @Test
+     public void testWithBadBrikData3() throws SQLException, FileNotFoundException {
+         String dataDirS = "badData/editionDirsWithBadBrik/modsWithNoBrik";
+         ResultCollector resultCollector = new ResultCollector("foo", "bar");
+         iterateDataDir(dataDirS, resultCollector);
+         final String message = resultCollector.toReport();
+         assertFalse(resultCollector.isSuccess(), message);
+         assertTrue(message.contains("2C-10"), message);
+     }
+
+
+
+    private void iterateDataDir(String dataDirS, ResultCollector resultCollector) throws FileNotFoundException, SQLException {
+        Batch batch = new Batch();
+        batch.setBatchID("400022028241");
+        batch.setRoundTripNumber(1);
+        File dataDir = new File(Thread.currentThread().getContextClassLoader().getResource(dataDirS).getPath());
+        String editionNodeName = "B400022028241-RT1/400022028241-1/1795-06-15-02";
+        Document batchStructure = DOM.streamToDOM(new FileInputStream(new File(dataDir, "structure.xml")));
+        MfPakDAO dao = mock(MfPakDAO.class);
+        when(dao.getNewspaperID(batch.getBatchID())).thenReturn("adresseavisen1759");
+        ModsXPathEventHandler handler = new ModsXPathEventHandler(resultCollector, dao, batch, batchStructure);
+        File fileDir = new File(dataDir, "1795-06-15-02");
+        handler.handleNodeBegin(new NodeBeginsParsingEvent(editionNodeName));
+        for (File attributeFile: fileDir.listFiles()) {
+            final String name = editionNodeName + "/" + attributeFile.getName();
+            if (attributeFile.getName().contains("mods")) {
+                FileAttributeParsingEvent modsEvent = new FileAttributeParsingEvent(name, attributeFile);
+                handler.handleAttribute(modsEvent);
+            }
+        }
+        handler.handleNodeEnd(new NodeEndParsingEvent(editionNodeName));
+    }
+
 
 }
