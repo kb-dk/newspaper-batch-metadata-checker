@@ -20,8 +20,7 @@ public class MixFilmCrossCheckEventHandler extends DefaultTreeEventHandler {
 
 
     private final ResultCollector resultCollector;
-    private XPathSelector xpath;
-    private boolean isInFilm = false;
+    private final XPathSelector xpath;
     private String currentFilmNode = null;
     private Integer filmXmlSamplingFreq = null;
     
@@ -42,12 +41,9 @@ public class MixFilmCrossCheckEventHandler extends DefaultTreeEventHandler {
      */
     @Override
     public void handleNodeBegin(NodeBeginsParsingEvent event) {
-        if(event instanceof NodeBeginsParsingEvent) {
-            if(!isInFilm) {
-                if(isFilmNode(event)) {
-                    currentFilmNode = event.getName();
-                    isInFilm = true;
-                }
+        if(currentFilmNode == null) {
+            if(isFilmNode(event)) {
+                currentFilmNode = event.getName();
             }
         }
     }
@@ -59,12 +55,9 @@ public class MixFilmCrossCheckEventHandler extends DefaultTreeEventHandler {
      */
     @Override
     public void handleNodeEnd(NodeEndParsingEvent event) {
-        if(event instanceof NodeEndParsingEvent) {
-            if(isInFilm) {
-                if(currentFilmNode.equals(event.getName())) {
-                    currentFilmNode = "";
-                    isInFilm = false;
-                }
+       if(currentFilmNode != null) {
+            if(currentFilmNode.equals(event.getName())) {
+                currentFilmNode = null;
             }
         }
     }
@@ -79,7 +72,7 @@ public class MixFilmCrossCheckEventHandler extends DefaultTreeEventHandler {
      */
     @Override
     public void handleAttribute(AttributeParsingEvent event) {
-        if(isInFilm) {
+        if(currentFilmNode != null) {
             if(event.getName().endsWith(".film.xml")) {
                 setFilmSamplingFrequency(event);
             }
@@ -101,7 +94,7 @@ public class MixFilmCrossCheckEventHandler extends DefaultTreeEventHandler {
      * This is true if the path does not contain WORKSHIFT-ISO-TARGET
      * and have more that one path part (parts seperated by a '/')
      */
-    private boolean isFilmNode(NodeBeginsParsingEvent event) {
+    private static boolean isFilmNode(NodeBeginsParsingEvent event) {
         boolean isFilmNode = true;
         
         if(event.getName().contains("WORKSHIFT-ISO-TARGET")) {
@@ -116,7 +109,7 @@ public class MixFilmCrossCheckEventHandler extends DefaultTreeEventHandler {
         return isFilmNode;
     }
     
-    private Document asDom(InputStream data) {
+    private static Document asDom(InputStream data) {
         return DOM.streamToDOM(data, true);
     }
 

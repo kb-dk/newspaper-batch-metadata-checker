@@ -35,9 +35,9 @@ public class MixXPathEventHandler extends DefaultTreeEventHandler {
     /**
      * Constructor for this class.
      *
-     * @param resultCollector the result collector to collect errors in
-     * @param mfPakDAO        a DAO object from which one can read relevant external properties of a batch.
-     * @param batch           a batch object representing the batch being analysed.
+     * @param resultCollector   the result collector to collect errors in
+     * @param mfPakDAO          a DAO object from which one can read relevant external properties of a batch.
+     * @param batch             a batch object representing the batch being analysed.
      * @param batchXmlStructure
      */
     public MixXPathEventHandler(ResultCollector resultCollector, MfPakDAO mfPakDAO, Batch batch,
@@ -85,6 +85,8 @@ public class MixXPathEventHandler extends DefaultTreeEventHandler {
         }
     }
 
+
+
     /**
      * Validate the mix file
      *
@@ -110,24 +112,10 @@ public class MixXPathEventHandler extends DefaultTreeEventHandler {
         validateScannedDate(doc, XPATH, event);
         validateAgainstFilepath(doc, XPATH, event);
 
-        validateAgainstTree(doc,XPATH,event,batchXmlStructure);
-
-        validateAgainstJpylyzer(doc,XPATH,event);
-
-
-        /*
+        validateAgainstTree(doc, XPATH, event, batchXmlStructure);
 
 
 
-
-mix:mix/mix:BasicImageInformation/mix:BasicImageCharacteristics/mix:imageWidth
-J – skal sammenlignes med en karakterisering af filen
-
-mix:mix/mix:BasicImageInformation/mix:BasicImageCharacteristics/mix:imageHeigh
-J – skal sammenlignes med en karakterisering af filen
-
-
-         */
     }
 
     private void validateAgainstTree(Document doc, XPathSelector xpath, AttributeParsingEvent event,
@@ -142,33 +130,19 @@ J – skal sammenlignes med en karakterisering af filen
 
 
         String mixPath = event.getName();
-        String jp2Path = mixPath.replaceAll(".mix.xml$","").concat(".jp2/contents");
+        String jp2Path = mixPath.replaceAll(".mix.xml$", "")
+                                .concat(".jp2/contents");
         String treeMd5sum = XPATH.selectString(batchXmlStructure, "//attribute[@name='" + jp2Path + "']/@checksum");
 
-        if ( ! mixMd5sum.equalsIgnoreCase(treeMd5sum)){
-            resultCollector.addFailure(event.getName(),"metadata",getClass().getName(),"Checksum '"+mixMd5sum+"' does not agree with checksum '"+treeMd5sum+"'");
+        if (!mixMd5sum.equalsIgnoreCase(treeMd5sum)) {
+            resultCollector.addFailure(
+                    event.getName(),
+                    "metadata",
+                    getClass().getName(),
+                    "Checksum '" + mixMd5sum + "' does not agree with checksum '" + treeMd5sum + "'");
         }
     }
 
-    private void validateAgainstJpylyzer(Document doc, XPathSelector xpath, AttributeParsingEvent event) {
-        //To change body of created methods use File | Settings | File Templates.
-
-        /*
-        File size
-        integer
-        53153644
-        Size of the file in bytes
-        NR
-        M
-        mix:mix/mix:BasicDigitalObjectInformation/mix:fileSize
-        J – skal sammenlignes med det der ligger i filsystemet
-        – ikke relevant
-
-
-         */
-
-
-    }
 
     /** Checkst that  the scanned date is after the batch was sent from SB. */
     private void validateScannedDate(Document doc, XPathSelector xpath, AttributeParsingEvent event) throws
@@ -191,12 +165,7 @@ J – skal sammenlignes med en karakterisering af filen
         } catch (ParseException e) {
             addFailure(
                     event.getName(),
-                    "2K-1: Could not parse the scanned date '"
-                    + scannedDateInMix
-                    + "' found in the MIX file."
-                    + "Expected the form '"
-                    + mixDateFormat
-                    + "'.",
+                    "2K-1: Could not parse the scanned date '" + scannedDateInMix + "' found in the MIX file." + "Expected the form '" + mixDateFormat + "'.",
                     event.getName());
             return;
         }
@@ -209,12 +178,7 @@ J – skal sammenlignes med en karakterisering af filen
             if (scannedDate.before(shipmentDate)) {
                 addFailure(
                         event.getName(),
-                        "2K-1: The scanned '"
-                        + scannedDate
-                        + "' is before "
-                        + "the batch was shipped from SB '"
-                        + shipmentDate
-                        + "'.",
+                        "2K-1: The scanned '" + scannedDate + "' is before " + "the batch was shipped from SB '" + shipmentDate + "'.",
                         event.getName());
             }
         }
@@ -223,14 +187,14 @@ J – skal sammenlignes med en karakterisering af filen
 
     /** Validate that the objectIdentifier is of the form [Film-id]-[Billed-id] */
     private void validateAgainstFilepath(Document doc, XPathSelector xpath, AttributeParsingEvent event) {
-        final String xpath2K2 = "/mix:mix/mix:BasicDigitalObjectInformation/mix:ObjectIdentifier"
-                                + "[mix:objectIdentifierType='Image Unique ID']/mix:objectIdentifierValue";
+        final String xpath2K2
+                = "/mix:mix/mix:BasicDigitalObjectInformation/mix:ObjectIdentifier" + "[mix:objectIdentifierType='Image Unique ID']/mix:objectIdentifierValue";
 
-        final String xpath2K3 = "/mix:mix/mix:ImageCaptureMetadata/mix:SourceInformation/mix:SourceID"
-                                + "[mix:sourceIDType='Microfilm reel barcode #']/mix:sourceIDValue";
+        final String xpath2K3
+                = "/mix:mix/mix:ImageCaptureMetadata/mix:SourceInformation/mix:SourceID" + "[mix:sourceIDType='Microfilm reel barcode #']/mix:sourceIDValue";
 
-        final String xpath2K4 = "/mix:mix/mix:ImageCaptureMetadata/mix:SourceInformation/mix:SourceID"
-                                + "[mix:sourceIDType='Location on microfilm']/mix:sourceIDValue";
+        final String xpath2K4
+                = "/mix:mix/mix:ImageCaptureMetadata/mix:SourceInformation/mix:SourceID" + "[mix:sourceIDType='Location on microfilm']/mix:sourceIDValue";
 
         String objectIdentifier = xpath.selectString(doc, xpath2K2);
         String mixFilmID = xpath.selectString(doc, xpath2K3);
@@ -241,36 +205,21 @@ J – skal sammenlignes med en karakterisering af filen
         if (!objectIdentifier.equals(identifierFromPath)) {
             addFailure(
                     event.getName(),
-                    "2K-2: ObjectIdentifier does not match the location in the tree. "
-                    + "Expected '"
-                    + objectIdentifier
-                    + "' got '"
-                    + identifierFromPath
-                    + "'.",
+                    "2K-2: ObjectIdentifier does not match the location in the tree. " + "Expected '" + objectIdentifier + "' got '" + identifierFromPath + "'.",
                     event.getName());
         }
 
         if (!mixFilmID.equals(filmID)) {
             addFailure(
                     event.getName(),
-                    "2K-3: FilmID does not match the location in the tree. "
-                    + "Expected '"
-                    + mixFilmID
-                    + "' got '"
-                    + filmID
-                    + "'.",
+                    "2K-3: FilmID does not match the location in the tree. " + "Expected '" + mixFilmID + "' got '" + filmID + "'.",
                     event.getName());
         }
 
         if (!mixBilledeID.equals(billedID)) {
             addFailure(
                     event.getName(),
-                    "2K-4: Location on film does not match the location in the tree. "
-                    + "Expected '"
-                    + mixBilledeID
-                    + "' got '"
-                    + billedID
-                    + "'.",
+                    "2K-4: Location on film does not match the location in the tree. " + "Expected '" + mixBilledeID + "' got '" + billedID + "'.",
                     event.getName());
         }
 
@@ -282,7 +231,7 @@ J – skal sammenlignes med en karakterisering af filen
         String filename = name.substring(name.lastIndexOf("/") + 1, name.indexOf(".mix.xml"));
         if (filename.endsWith("brik") || filename.matches("^.*-ISO-[0-9]+$")) {
             String[] splits = filename.split("-");
-            return splits[splits.length-2]+"-"+splits[splits.length-1];
+            return splits[splits.length - 2] + "-" + splits[splits.length - 1];
         } else {
             return filename.substring(
                     filename.lastIndexOf("-") + 1);
