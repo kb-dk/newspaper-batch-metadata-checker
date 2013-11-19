@@ -21,6 +21,7 @@ public class FilmXmlChecker extends XmlFileChecker {
                 "http://www.statsbiblioteket.dk/avisdigitalisering/microfilm/1/0/");
         checkers = new ArrayList<>();
         checkers.add(new FilmNumberOfPicturesChecker(resultCollector, xpathSelector, batchXmlStructure));
+        checkers.add(new FilmDateVsEditionsChecker(resultCollector, xpathSelector, batchXmlStructure));
     }
 
     @Override
