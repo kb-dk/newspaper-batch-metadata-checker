@@ -10,10 +10,12 @@ import java.io.UnsupportedEncodingException;
 
 public class MixerMockup {
     static AttributeParsingEvent getMixPageAttributeParsingEvent(final String film, final String avisID,
-                                                                 final String publishDate, final String pictureNumber,
+                                                                 final String publishDate, 
+                                                                 final String pictureNumber,
                                                                  final Batch batch,
                                                                  final int width,
                                                                  final int height,
+                                                                 final int resolution,
                                                                  final String checksum) {
         return new AttributeParsingEvent(
                 batch.getFullID() + "/" +
@@ -24,7 +26,7 @@ public class MixerMockup {
             public InputStream getData() throws IOException {
                 return new ByteArrayInputStream(
                         getCustomPageMix(
-                                batch.getBatchID() + "-" + film, pictureNumber, "2013-11-12T11:48:06",width,height,400, checksum));
+                                batch.getBatchID() + "-" + film, pictureNumber, "2013-11-12T11:48:06",width,height,resolution, checksum));
             }
 
             @Override

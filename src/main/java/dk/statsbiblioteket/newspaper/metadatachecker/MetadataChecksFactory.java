@@ -7,7 +7,8 @@ import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.EventHandlerFactory;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
-import dk.statsbiblioteket.newspaper.metadatachecker.crosscheck.FilmDateVsEditionsChecker;
+import dk.statsbiblioteket.newspaper.metadatachecker.film.FilmDateVsEditionsChecker;
+import dk.statsbiblioteket.newspaper.metadatachecker.film.FilmXmlChecker;
 import dk.statsbiblioteket.newspaper.metadatachecker.jpylyzer.JpylyzingEventHandler;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 import org.w3c.dom.Document;
@@ -90,6 +91,7 @@ public class MetadataChecksFactory
         treeEventHandlers.add(new AltoMixCrossCheckEventHandler(resultCollector));
         treeEventHandlers.add(new EditionModsEventHandler(resultCollector,mfPakDAO,batch));
         treeEventHandlers.add(new FilmDateVsEditionsChecker(resultCollector, batchXmlStructure));
+        treeEventHandlers.add(new FilmXmlChecker(resultCollector, batchXmlStructure));
         treeEventHandlers.add(new MixXPathEventHandler(resultCollector,mfPakDAO,batch, batchXmlStructure));
         return treeEventHandlers;
     }

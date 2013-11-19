@@ -1,4 +1,4 @@
-package dk.statsbiblioteket.newspaper.metadatachecker.crosscheck;
+package dk.statsbiblioteket.newspaper.metadatachecker.film;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -149,5 +149,4 @@ public class FilmDateVsEditionsCheckerTest {
         Node filmNode = DOM.createXPathSelector().selectNodeList(doc, xPathStr).item(0);
         filmNode.appendChild(editionNode);
     }
-
 }

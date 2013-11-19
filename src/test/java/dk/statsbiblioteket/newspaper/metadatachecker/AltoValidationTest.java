@@ -1,20 +1,19 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
-import static org.mockito.Mockito.mock;
-import static org.testng.Assert.assertTrue;
-import static org.testng.AssertJUnit.assertFalse;
+import dk.statsbiblioteket.medieplatform.autonomous.Batch;
+import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
-
-import dk.statsbiblioteket.medieplatform.autonomous.Batch;
-import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
-import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
-import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+import static org.mockito.Mockito.mock;
+import static org.testng.Assert.assertTrue;
+import static org.testng.AssertJUnit.assertFalse;
 
 public class AltoValidationTest {
 
@@ -167,8 +166,7 @@ public class AltoValidationTest {
             }
         };
         handler.handleAttribute(event);
-        System.out.println(resultCollector.toReport());
-        assertTrue(resultCollector.isSuccess());
+        assertTrue(resultCollector.isSuccess(),resultCollector.toReport());
     }
 
     @Test
