@@ -16,16 +16,16 @@ import org.w3c.dom.Node;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
-public class FilmDateConsistentcyCheckerTest {
+public class FilmDateVsEditionsCheckerTest {
     private ResultCollector resultCollector;
     private Document batchXmlStructure;
-    FilmDateConsistentcyChecker checker;
+    FilmDateVsEditionsChecker checker;
 
     @BeforeMethod
     public void setup() {
         resultCollector = mock(ResultCollector.class);
         batchXmlStructure = createBatchXmlStructure();
-        checker = new FilmDateConsistentcyChecker(resultCollector, batchXmlStructure);
+        checker = new FilmDateVsEditionsChecker(resultCollector, batchXmlStructure);
     }
 
     @Test
@@ -79,7 +79,7 @@ public class FilmDateConsistentcyCheckerTest {
 
     @Test
     public void verifyEditionDateContainmentGoodcaseTest() {
-        FilmDateConsistentcyChecker checker = new FilmDateConsistentcyChecker(resultCollector, null);
+        FilmDateVsEditionsChecker checker = new FilmDateVsEditionsChecker(resultCollector, null);
         checker.verifyEditionDateContainment("2013-10-10", "2013-10-12", "2013-10-11-1", "filmID");
         verifyNoMoreInteractions(resultCollector);
         checker.verifyEditionDateContainment("2013-10-10", "2013-10-12", "2013-10-10-1", "filmID");
@@ -90,7 +90,7 @@ public class FilmDateConsistentcyCheckerTest {
 
     @Test
     public void verifyEditionDateContainmentFuzzyTest() {
-        FilmDateConsistentcyChecker checker = new FilmDateConsistentcyChecker(resultCollector, null);
+        FilmDateVsEditionsChecker checker = new FilmDateVsEditionsChecker(resultCollector, null);
         checker.verifyEditionDateContainment("2013-10-10", "2013-10-12", "2013-10-00-1", "filmID");
         verifyNoMoreInteractions(resultCollector);
         checker.verifyEditionDateContainment("2013-10-10", "2013-10-12", "2013-00-00-1", "filmID");
@@ -99,7 +99,7 @@ public class FilmDateConsistentcyCheckerTest {
 
     @Test
     public void verifyEditionDateContainmentBadcaseTest() {
-        FilmDateConsistentcyChecker checker = new FilmDateConsistentcyChecker(resultCollector, null);
+        FilmDateVsEditionsChecker checker = new FilmDateVsEditionsChecker(resultCollector, null);
         checker.verifyEditionDateContainment("2013-10-10", "2013-10-12", "2013-10-14-1", "filmID");
         verify(resultCollector).addFailure(anyString(), anyString(), anyString(), anyString());
         verifyNoMoreInteractions(resultCollector);

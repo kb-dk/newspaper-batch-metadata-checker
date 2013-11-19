@@ -1,5 +1,11 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.Date;
+
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
@@ -7,22 +13,15 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeE
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperDateRange;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperEntity;
-import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperTitle;
 import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Date;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
-import static org.testng.AssertJUnit.assertFalse;
 
 /**
  * Tests that the checks that the metadata for the edition follows the specification
@@ -54,11 +53,7 @@ public class EditionModsTest {
         handler.handleAttribute(editionEvent);
         editionModsEventHandler.handleAttribute(editionEvent);
 
-        if ( ! resultCollector.isSuccess()){
-            System.out
-                  .println(resultCollector.toReport());
-        }
-        assertTrue(resultCollector.isSuccess());
+        assertTrue(resultCollector.isSuccess(), resultCollector.toReport());
     }
 
     /** Test that we can validate a valid edition xml (mods) file. */
@@ -92,9 +87,9 @@ public class EditionModsTest {
         AssertJUnit.assertTrue(report,report.contains("<description>2D-2: title Adresse Contoirs Efterretninger does not match title in MFPak 'Kiøbenhavns Kongelig alene priviligerede Adresse-Contoirs Efterretninger'</description>"));
         AssertJUnit.assertTrue(report,report.contains("<description>2D-3: Publication location 'Kobenhavn' does not match value 'København' from MFPak</description>"));
         AssertJUnit.assertTrue(report,report.contains("<description>2D-4: Date issued from file does not correspond to date in filename</description>"));
+        AssertJUnit.assertTrue(report,report.contains("<description>2D_9: Edition number (2) in edition xml doesn't correspond to node edition number: 1795-06-13-01</description>"));
 
-
-        assertFalse(resultCollector.isSuccess());
+        assertFalse(resultCollector.isSuccess(),resultCollector.toReport());
 
     }
 
@@ -106,15 +101,17 @@ public class EditionModsTest {
 
         MfPakDAO mfPakDAO = mock(MfPakDAO.class);
         when(mfPakDAO.getNewspaperID(anyString())).thenReturn("adresseavisen1759");
-        NewspaperTitle title = new NewspaperTitle();
-        title.setTitle("Kiøbenhavns Kongelig alene priviligerede Adresse-Contoirs Efterretninger");
-        title.setDateRange(new NewspaperDateRange(new Date(Long.MIN_VALUE), new Date()));
-        when(mfPakDAO.getBatchNewspaperTitles(anyString())).thenReturn(Arrays.asList(title));
         NewspaperEntity entity = new NewspaperEntity();
-        entity.setPublicationLocation("København");
-        entity.setNewspaperID("adresseavisen1759");
         entity.setNewspaperTitle("Kiøbenhavns Kongelig alene priviligerede Adresse-Contoirs Efterretninger");
-        when(mfPakDAO.getNewspaperEntity(anyString(), any(Date.class))).thenReturn(entity);
+        entity.setNewspaperID("adresseavisen1759");
+        entity.setPublicationLocation("København");
+        entity.setNewspaperDateRange(new NewspaperDateRange(new Date(Long.MIN_VALUE), new Date()));
+        when(mfPakDAO.getBatchNewspaperEntities(anyString())).thenReturn(Arrays.asList(entity));
+        NewspaperEntity entity2 = new NewspaperEntity();
+        entity2.setPublicationLocation("København");
+        entity2.setNewspaperID("adresseavisen1759");
+        entity2.setNewspaperTitle("Kiøbenhavns Kongelig alene priviligerede Adresse-Contoirs Efterretninger");
+        when(mfPakDAO.getNewspaperEntity(anyString(), any(Date.class))).thenReturn(entity2);
         return mfPakDAO;
 
     }

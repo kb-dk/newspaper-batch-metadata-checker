@@ -21,8 +21,16 @@
             <s:assert test="matches(avis:captureResolutionOriginal, '^\s*[1-9][0-9]*\s*$')">Must be an integer number</s:assert>
             <s:report test="avis:captureResolutionOriginal &lt; 300">Original newspaper resolution must be 300 pixels per inch or higher</s:report>
 
-            <!--Original resolution unit-->
-            <!--<s:assert test=""></s:assert>-->
+            <!--2E-8: Original resolution unit-->
+            <s:assert test="matches(avis:captureResolutionOriginal/@measurement, '^\s*pixels/inch\s*$')">Original resolution unit should be 'pixels/inch'</s:assert>
+
+            <!--2E-9: Scanning resolution  Film-->
+            <s:let name="reductionRatioAsInteger" value="substring-before(avis:reductionRatio,'x')"/>
+            <s:let name="ratioResolutionProduct" value="number($reductionRatioAsInteger) * number(avis:captureResolutionOriginal)"/>
+            <s:assert test="avis:captureResolutionFilm = $ratioResolutionProduct">2E-9: captureResolutionFilm should equal reductionRatio * captureResolutionOriginal</s:assert>
+
+            <!--2E-10: Scanning resolution  Film  unit-->
+            <s:assert test="matches(avis:captureResolutionFilm/@measurement, '^\s*pixels/inch\s*$')">Scanning resolution Film unit should be 'pixels/inch'</s:assert>
 
         </s:rule>
 

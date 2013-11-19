@@ -29,6 +29,7 @@ public class MixXPathEventHandler extends DefaultTreeEventHandler {
     private ResultCollector resultCollector;
     private MfPakDAO mfPakDAO;
     private Batch batch;
+    private Document batchXmlStructure;
     private Date shipmentDate;
 
     /**
@@ -37,11 +38,14 @@ public class MixXPathEventHandler extends DefaultTreeEventHandler {
      * @param resultCollector the result collector to collect errors in
      * @param mfPakDAO        a DAO object from which one can read relevant external properties of a batch.
      * @param batch           a batch object representing the batch being analysed.
+     * @param batchXmlStructure
      */
-    public MixXPathEventHandler(ResultCollector resultCollector, MfPakDAO mfPakDAO, Batch batch) {
+    public MixXPathEventHandler(ResultCollector resultCollector, MfPakDAO mfPakDAO, Batch batch,
+                                Document batchXmlStructure) {
         this.resultCollector = resultCollector;
         this.mfPakDAO = mfPakDAO;
         this.batch = batch;
+        this.batchXmlStructure = batchXmlStructure;
 
         try {
             shipmentDate = mfPakDAO.getBatchShipmentDate(batch.getBatchID());
@@ -105,6 +109,64 @@ public class MixXPathEventHandler extends DefaultTreeEventHandler {
 
         validateScannedDate(doc, XPATH, event);
         validateAgainstFilepath(doc, XPATH, event);
+
+        validateAgainstTree(doc,XPATH,event,batchXmlStructure);
+
+        validateAgainstJpylyzer(doc,XPATH,event);
+
+
+        /*
+
+
+
+
+mix:mix/mix:BasicImageInformation/mix:BasicImageCharacteristics/mix:imageWidth
+J – skal sammenlignes med en karakterisering af filen
+
+mix:mix/mix:BasicImageInformation/mix:BasicImageCharacteristics/mix:imageHeigh
+J – skal sammenlignes med en karakterisering af filen
+
+
+         */
+    }
+
+    private void validateAgainstTree(Document doc, XPathSelector xpath, AttributeParsingEvent event,
+                                     Document batchXmlStructure) {
+        //        mix:mix/mix:BasicDigitalObjectInformation/mix:Fixity/mix:messageDigest
+        //       J – skal sammenlignes med filstrukturen
+
+
+        final String xpath2KX = "mix:mix/mix:BasicDigitalObjectInformation/mix:Fixity/mix:messageDigest";
+
+        String mixMd5sum = XPATH.selectString(doc, xpath2KX);
+
+
+        String mixPath = event.getName();
+        String jp2Path = mixPath.replaceAll(".mix.xml$","").concat(".jp2/contents");
+        String treeMd5sum = XPATH.selectString(batchXmlStructure, "//attribute[@name='" + jp2Path + "']/@checksum");
+
+        if ( ! mixMd5sum.equalsIgnoreCase(treeMd5sum)){
+            resultCollector.addFailure(event.getName(),"metadata",getClass().getName(),"Checksum '"+mixMd5sum+"' does not agree with checksum '"+treeMd5sum+"'");
+        }
+    }
+
+    private void validateAgainstJpylyzer(Document doc, XPathSelector xpath, AttributeParsingEvent event) {
+        //To change body of created methods use File | Settings | File Templates.
+
+        /*
+        File size
+        integer
+        53153644
+        Size of the file in bytes
+        NR
+        M
+        mix:mix/mix:BasicDigitalObjectInformation/mix:fileSize
+        J – skal sammenlignes med det der ligger i filsystemet
+        – ikke relevant
+
+
+         */
+
 
     }
 
