@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -13,17 +15,17 @@
 
 
     <repositories>
-           <repository>
-               <id>phloc.com</id>
-               <url>http://repo.phloc.com/maven2</url>
-               <releases>
-                   <enabled>true</enabled>
-               </releases>
-               <snapshots>
-                   <enabled>true</enabled>
-               </snapshots>
-           </repository>
-       </repositories>
+        <repository>
+            <id>phloc.com</id>
+            <url>http://repo.phloc.com/maven2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
 
     <dependencies>
@@ -33,6 +35,13 @@
             <artifactId>phloc-schematron</artifactId>
             <version>2.6.2</version>
         </dependency>
+
+        <dependency>
+            <groupId>dk.statsbiblioteket.newspaper</groupId>
+            <artifactId>batch-event-framework-common</artifactId>
+            <version>0.3-SNAPSHOT</version>
+        </dependency>
+
 
         <dependency>
             <groupId>dk.statsbiblioteket.newspaper</groupId>
@@ -150,8 +159,9 @@
 
     <scm>
         <connection>scm:git:https://github.com/statsbiblioteket/newspaper-batch-metadata-checker</connection>
-        <developerConnection>scm:git:git@github.com:statsbiblioteket/newspaper-batch-metadata-checker</developerConnection>
+        <developerConnection>scm:git:git@github.com:statsbiblioteket/newspaper-batch-metadata-checker
+        </developerConnection>
         <url>https://github.com/statsbiblioteket/newspaper-batch-event-framework</url>
-      <tag>HEAD</tag>
+        <tag>HEAD</tag>
     </scm>
 </project>
