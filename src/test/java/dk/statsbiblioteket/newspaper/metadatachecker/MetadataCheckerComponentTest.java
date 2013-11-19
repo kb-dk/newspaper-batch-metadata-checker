@@ -1,6 +1,8 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
+import dk.statsbiblioteket.newspaper.metadatachecker.mockers.MFPakMocker;
+import dk.statsbiblioteket.newspaper.metadatachecker.mockers.MockupIteratorSuper;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 import org.testng.Assert;
 import org.testng.annotations.Test;

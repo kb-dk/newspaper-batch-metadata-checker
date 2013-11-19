@@ -1,4 +1,4 @@
-package dk.statsbiblioteket.newspaper.metadatachecker;
+package dk.statsbiblioteket.newspaper.metadatachecker.mockers;
 
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
@@ -10,6 +10,8 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.TreeIterator
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.InjectingTreeEventHandler;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.filesystem.transforming.TransformingIteratorForFileSystems;
+import dk.statsbiblioteket.newspaper.metadatachecker.MetadataCheckerComponent;
+import dk.statsbiblioteket.newspaper.metadatachecker.MetadataChecksFactory;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 import dk.statsbiblioteket.util.Bytes;
 import dk.statsbiblioteket.util.Streams;
