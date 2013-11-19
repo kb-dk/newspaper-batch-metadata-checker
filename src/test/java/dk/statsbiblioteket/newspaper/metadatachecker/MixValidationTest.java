@@ -698,7 +698,6 @@ public class MixValidationTest {
                 publishDate,
                 pictureNumber,
                 batch, 9304, 11408,"7ed748249def3bcaadd825ae17dc817a");
-        AttributeParsingEvent event2 = MixerMockup.getMixWorkshiftIso("000001", "0001", batch,"aac20a9ace772bc5a92b7d7b00048b91");
 
         MfPakDAO mfpakDao = mock(MfPakDAO.class);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -713,6 +712,32 @@ public class MixValidationTest {
 
 
         handler.handleAttribute(event);
+        String report = resultCollector.toReport();
+        assertTrue(resultCollector.isSuccess(), report);
+    }
+
+
+    @Test
+    public void testXpathValidationObjectIdentifierWorkshift() throws ParseException, SQLException {
+        setUp();
+        final String batchId = "400022028241";
+        final Batch batch = new Batch();
+        batch.setBatchID(batchId);
+        batch.setRoundTripNumber(1);
+        AttributeParsingEvent event2 = MixerMockup.getMixWorkshiftIso("000001", "0001", batch,"aac20a9ace772bc5a92b7d7b00048b91");
+
+        MfPakDAO mfpakDao = mock(MfPakDAO.class);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date shipmentDate = formatter.parse("2010-01-02");
+        when(mfpakDao.getBatchShipmentDate("400022028241")).thenReturn(shipmentDate);
+        Document batchXmlStructure = DOM.streamToDOM(
+                Thread.currentThread()
+                      .getContextClassLoader()
+                      .getResourceAsStream("assumed-valid-structure.xml"));
+
+        MixXPathEventHandler handler = new MixXPathEventHandler(resultCollector, mfpakDao, batch, batchXmlStructure);
+
+
         handler.handleAttribute(event2);
         String report = resultCollector.toReport();
         assertTrue(resultCollector.isSuccess(), report);
