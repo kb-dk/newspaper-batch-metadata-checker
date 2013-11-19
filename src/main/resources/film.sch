@@ -10,19 +10,19 @@
     <s:pattern>
         <s:rule context="/avis:reelMetadata[avis:resolutionOfDuplicateNegative &lt; 4.5]/avis:resolutionCommentDuplicateNegative">
             <!--2E-14 + 2E-15: Negative resolution / comments concerning negative resolution-->
-            <s:assert test="not(matches(text(), '^\s*$'))">When negative resolution is below 4.5, resolutionCommentDuplicateNegative must contain an explanation.</s:assert>
+            <s:assert test="not(matches(text(), '^\s*$'))">2E-14 / 2E-15: When negative resolution is below 4.5, resolutionCommentDuplicateNegative must contain an explanation.</s:assert>
         </s:rule>
 
         <s:rule context="/avis:reelMetadata">
             <!--2E-6: Reduction ratio-->
-            <s:assert test="matches(avis:reductionRatio, '^\s*([1-9]|1[0-9])x\s*$')">Should be a integer number (19 or lower) followed by an x (no leading zeroes)</s:assert>
+            <s:assert test="matches(avis:reductionRatio, '^\s*([1-9]|1[0-9])x\s*$')">2E-6: Should be a integer number (19 or lower) followed by an x (no leading zeroes)</s:assert>
 
             <!--2E-7: Original newspaper resolution-->
-            <s:assert test="matches(avis:captureResolutionOriginal, '^\s*[1-9][0-9]*\s*$')">Must be an integer number</s:assert>
-            <s:report test="avis:captureResolutionOriginal &lt; 300">Original newspaper resolution must be 300 pixels per inch or higher</s:report>
+            <s:assert test="matches(avis:captureResolutionOriginal, '^\s*[1-9][0-9]*\s*$')">2E-7: Original newspaper resolution must be an integer number</s:assert>
+            <s:report test="avis:captureResolutionOriginal &lt; 300">2E-7: Original newspaper resolution must be 300 pixels per inch or higher</s:report>
 
             <!--2E-8: Original resolution unit-->
-            <s:assert test="matches(avis:captureResolutionOriginal/@measurement, '^\s*pixels/inch\s*$')">Original resolution unit should be 'pixels/inch'</s:assert>
+            <s:assert test="matches(avis:captureResolutionOriginal/@measurement, '^\s*pixels/inch\s*$')">2E-8: Original resolution unit should be 'pixels/inch'</s:assert>
 
             <!--2E-9: Scanning resolution  Film-->
             <s:let name="reductionRatioAsInteger" value="substring-before(avis:reductionRatio,'x')"/>
@@ -30,7 +30,17 @@
             <s:assert test="avis:captureResolutionFilm = $ratioResolutionProduct">2E-9: captureResolutionFilm should equal reductionRatio * captureResolutionOriginal</s:assert>
 
             <!--2E-10: Scanning resolution  Film  unit-->
-            <s:assert test="matches(avis:captureResolutionFilm/@measurement, '^\s*pixels/inch\s*$')">Scanning resolution Film unit should be 'pixels/inch'</s:assert>
+            <s:assert test="matches(avis:captureResolutionFilm/@measurement, '^\s*pixels/inch\s*$')">2E-10: Scanning resolution Film unit should be 'pixels/inch'</s:assert>
+
+            <!--2E-2 + 2E-3: Start date and End date, proper format-->
+            <s:let name="dateFormat" value="'^[12][0-9]{3}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$'"/>
+            <s:assert test="matches(avis:startDate, $dateFormat)">2E-2: Start date should be of ISO 8601 format YYYY-MM-DD</s:assert>
+            <s:assert test="matches(avis:endDate, $dateFormat)">2E-3: Start date should be of ISO 8601 format YYYY-MM-DD</s:assert>
+
+            <!--2E-2 + 2E-3: Start date and End date, proper order-->
+            <s:let name="startDateAsNum" value="translate(avis:startDate,'-','')"/>
+            <s:let name="endDateAsNum" value="translate(avis:endDate,'-','')"/>
+            <s:assert test="$startDateAsNum &lt; $endDateAsNum">2E-2 / 2E-3: Start date must be before end date</s:assert>
 
         </s:rule>
 
