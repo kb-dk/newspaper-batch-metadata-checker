@@ -1,4 +1,4 @@
-package dk.statsbiblioteket.newspaper.metadatachecker;
+package dk.statsbiblioteket.newspaper.metadatachecker.mockers;
 
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;

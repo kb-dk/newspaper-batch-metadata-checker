@@ -1,4 +1,4 @@
-package dk.statsbiblioteket.newspaper.metadatachecker;
+package dk.statsbiblioteket.newspaper.metadatachecker.mockers;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,6 +10,8 @@ import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
+import dk.statsbiblioteket.newspaper.metadatachecker.EditionModsEventHandler;
+import dk.statsbiblioteket.newspaper.metadatachecker.SchematronValidatorEventHandler;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperDateRange;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperEntity;

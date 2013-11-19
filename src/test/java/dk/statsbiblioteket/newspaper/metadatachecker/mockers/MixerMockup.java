@@ -1,4 +1,4 @@
-package dk.statsbiblioteket.newspaper.metadatachecker;
+package dk.statsbiblioteket.newspaper.metadatachecker.mockers;
 
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
@@ -16,7 +16,8 @@ public class MixerMockup {
                                                                  final int width,
                                                                  final int height,
                                                                  final int resolution,
-                                                                 final String checksum) {
+                                                                 final String checksum,
+                                                                 final int size) {
         return new AttributeParsingEvent(
                 batch.getFullID() + "/" +
                 batch.getBatchID() + "-" + film + "/" +
@@ -26,7 +27,7 @@ public class MixerMockup {
             public InputStream getData() throws IOException {
                 return new ByteArrayInputStream(
                         getCustomPageMix(
-                                batch.getBatchID() + "-" + film, pictureNumber, "2013-11-12T11:48:06",width,height,resolution, checksum));
+                                batch.getBatchID() + "-" + film, pictureNumber, "2013-11-12T11:48:06",width,height,resolution, checksum,size));
             }
 
             @Override
@@ -38,7 +39,8 @@ public class MixerMockup {
 
     public static AttributeParsingEvent getMixWorkshiftIso(final String workshift, final String pictureNumber,
                                                     final Batch batch,
-                                                    final String checksum) {
+                                                    final String checksum,
+                                                    final int size) {
         return new AttributeParsingEvent(
                 batch.getFullID() + "/" +
                 "WORKSHIFT-ISO-TARGET/" +
@@ -46,7 +48,7 @@ public class MixerMockup {
             @Override
             public InputStream getData() throws IOException {
                 return new ByteArrayInputStream(
-                        getCustomPageMix(workshift, pictureNumber, "2013-11-12T11:48:06", 9304, 11408,400,checksum ));
+                        getCustomPageMix(workshift, pictureNumber, "2013-11-12T11:48:06", 9304, 11408,400,checksum,size));
             }
 
             @Override
@@ -56,14 +58,14 @@ public class MixerMockup {
         };
     }
 
-    private static byte[] getCustomPageMix(String filmId, String billedID, String scannedDate, int width, int height, int resolution, String checksum) {
+    private static byte[] getCustomPageMix(String filmId, String billedID, String scannedDate, int width, int height, int resolution, String checksum, int size) {
         String mix = "<mix:mix xmlns:mix=\"http://www.loc.gov/mix/v20\">\n" +
                      "    <mix:BasicDigitalObjectInformation>\n" +
                      "        <mix:ObjectIdentifier>\n" +
                      "            <mix:objectIdentifierType>Image Unique ID</mix:objectIdentifierType>\n" +
                      "            <mix:objectIdentifierValue>" + filmId + "-" + billedID + "</mix:objectIdentifierValue>\n" +
                      "        </mix:ObjectIdentifier>\n" +
-                     "        <mix:fileSize>3662332</mix:fileSize>\n" +
+                     "        <mix:fileSize>"+size+"</mix:fileSize>\n" +
                      "        <mix:Fixity>\n" +
                      "            <mix:messageDigestAlgorithm>MD5</mix:messageDigestAlgorithm>\n" +
                      "            <mix:messageDigest>"+checksum+"</mix:messageDigest>\n" +
