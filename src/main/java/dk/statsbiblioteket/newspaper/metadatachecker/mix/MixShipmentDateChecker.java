@@ -10,6 +10,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * This checker verifies that the dateTimeCreated in the mix file is after the batch was actually shipped from SB
+ */
 public class MixShipmentDateChecker extends XmlAttributeChecker{
     private Date shipmentDate;
 

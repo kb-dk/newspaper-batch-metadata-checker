@@ -62,7 +62,7 @@ public class FilmDateVsEditionsChecker extends XmlAttributeChecker {
         if (filmStart.compareTo(editionDate) > 0) {
             addFailure(
                     event,
-                    "2E-2: Edition earlier than film start date " + filmStartdate + " in film " + filmID);  // Include filmid
+                    "2E-2: Edition earlier than film start date " + filmStartdate + " in film " + filmID);
         }
         if (filmEnd.compareTo(editionDate) < 0) {
             addFailure(event, "2E-3: Edition later than film end date " + filmEnddate + " in film " + filmID);

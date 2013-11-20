@@ -1,9 +1,5 @@
 package dk.statsbiblioteket.newspaper.metadatachecker.film;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.List;
-
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
@@ -14,6 +10,10 @@ import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperEntity;
 import dk.statsbiblioteket.util.xml.DOM;
 import dk.statsbiblioteket.util.xml.XPathSelector;
 import org.w3c.dom.Document;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 
 public class FilmNewspaperTitlesChecker extends XmlAttributeChecker {
 
@@ -38,7 +38,7 @@ public class FilmNewspaperTitlesChecker extends XmlAttributeChecker {
             try {
                 filmMetaData = DOM.streamToDOM(event.getData());
                 if (filmMetaData == null) {
-                    addFailure(event.getName(), "Could not parse xml");
+                    addFailure(event, "Could not parse xml");
                     return;
                 }
             } catch (IOException e) {
@@ -61,9 +61,11 @@ public class FilmNewspaperTitlesChecker extends XmlAttributeChecker {
 
     }
 
-    private void addFailure(String eventName, String description) {
-            resultCollector.addFailure(
-                    eventName, "metadata", getClass().getSimpleName(), description);
+    @Override
+    public boolean shouldCheckEvent(AttributeParsingEvent event) {
+        if (event.getName().endsWith(".film.xml")) {
+            return true;
         }
-
+        return false;
+    }
 }

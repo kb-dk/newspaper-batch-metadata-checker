@@ -83,12 +83,10 @@ public class MockupIteratorSuper extends MetadataCheckerComponent {
 
                             @Override
                             public void handleNodeBegin(NodeBeginsParsingEvent event) {
-                                //To change body of implemented methods use File | Settings | File Templates.
                             }
 
                             @Override
                             public void handleNodeEnd(NodeEndParsingEvent event) {
-                                //To change body of implemented methods use File | Settings | File Templates.
                             }
 
                             @Override
@@ -146,7 +144,6 @@ public class MockupIteratorSuper extends MetadataCheckerComponent {
 
                             @Override
                             public void handleFinish() {
-                                //To change body of implemented methods use File | Settings | File Templates.
                             }
                         });
                 return defaultHandlers;

@@ -48,7 +48,5 @@ public abstract class XmlAttributeChecker {
     /**
      * Indicates whether the encountered event is relevant to check.
      */
-    public boolean shouldCheckEvent(AttributeParsingEvent event){
-        return true;
-    }
+    public abstract boolean shouldCheckEvent(AttributeParsingEvent event);
 }
