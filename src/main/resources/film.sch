@@ -13,13 +13,17 @@
             <s:let name="dateFormat" value="'^[12][0-9]{3}(-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])?)?$'"/>
 
             <!--2E-2 + 2E-3: Start date and End date, proper format-->
-            <s:assert test="matches(avis:startDate, $dateFormat)">2E-2: Start date should be of ISO 8601 format YYYY-MM-DD</s:assert>
-            <s:assert test="matches(avis:endDate, $dateFormat)">2E-3: Start date should be of ISO 8601 format YYYY-MM-DD</s:assert>
+            <s:assert test="matches(avis:startDate, $dateFormat)">2E-2: Start date should be of ISO 8601 format YYYY-MM-DD, YYYY-MM, or YYYY</s:assert>
+            <s:assert test="matches(avis:endDate, $dateFormat)">2E-3: Start date should be of ISO 8601 format YYYY-MM-DD, YYYY-MM, or YYYY</s:assert>
 
             <!--2E-2 + 2E-3: Start date and End date, proper order-->
-            <s:let name="startDateAsNum" value="translate(avis:startDate,'-','')"/>
-            <s:let name="endDateAsNum" value="translate(avis:endDate,'-','')"/>
-            <s:assert test="$startDateAsNum &lt; $endDateAsNum">2E-2 / 2E-3: Start date must be before end date</s:assert>
+            <s:let name="startDateNoDashes" value="translate(avis:startDate,'-','')"/>
+            <s:let name="endDateNoDashes" value="translate(avis:endDate,'-','')"/>
+            <s:let name="startDateAppended" value="concat($startDateNoDashes,'0000')"/>
+            <s:let name="endDateAppended" value="concat($endDateNoDashes,'9999')"/>
+            <s:let name="startDateForComparison" value="substring($startDateAppended,1,8)"/>
+            <s:let name="endDateForComparison" value="substring($endDateAppended,1,8)"/>
+            <s:assert test="$startDateForComparison &lt;= $endDateForComparison">2E-2 / 2E-3: Start date must be before end date</s:assert>
 
             <!--2E-6: Reduction ratio-->
             <s:assert test="matches(avis:reductionRatio, '^\s*([1-9]|1[0-9])x\s*$')">2E-6: Should be a integer (19 or lower) followed by an x (no leading zeroes)</s:assert>
@@ -40,9 +44,9 @@
             <s:assert test="matches(avis:captureResolutionFilm/@measurement, '^\s*pixels/inch\s*$')">2E-10: Scanning resolution Film unit should be 'pixels/inch'</s:assert>
 
             <!--2E-11: Date microfilm created-->
-         <!--   <s:assert test="matches(avis:dateMicrofilmCreated,$dateFormat)">2E-11: Date microfilm created must be of format YYYY-MM-DD</s:assert>
-            <s:let name="dateMicrofilmCreatedAsNum" value="translate(avis:dateMicrofilmCreated,'-','')"/> -->
-
+   <!--         <s:assert test="matches(avis:dateMicrofilmCreated,$dateFormat)">2E-11: Date microfilm created must be of format YYYY-MM-DD, YYYY-MM, YYYY</s:assert>
+            <s:let name="dateMicrofilmCreatedForComparison" value="translate(avis:dateMicrofilmCreated,'-','')"/>
+       -->
 
         </s:rule>
 
