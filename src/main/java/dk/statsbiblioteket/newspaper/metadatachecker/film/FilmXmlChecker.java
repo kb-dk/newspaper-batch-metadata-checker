@@ -13,6 +13,10 @@ import dk.statsbiblioteket.util.xml.DOM;
 import dk.statsbiblioteket.util.xml.XPathSelector;
 import org.w3c.dom.Document;
 
+/**
+ * Handles the checking of film.xml files. The concrete checks are delegated to the individual film attribute
+ * checker.
+ */
 public class FilmXmlChecker extends XmlFileChecker {
 
     private MfPakDAO mfPakDAO;

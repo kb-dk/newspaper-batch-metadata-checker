@@ -1,13 +1,13 @@
 package dk.statsbiblioteket.newspaper.metadatachecker.checker;
 
+import java.io.IOException;
+import java.util.List;
+
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.DefaultTreeEventHandler;
 import dk.statsbiblioteket.util.xml.DOM;
 import org.w3c.dom.Document;
-
-import java.io.IOException;
-import java.util.List;
 
 /**
  * Implements the generic functionality for checking the content of a xml file by delegating the actual
@@ -62,7 +62,7 @@ public abstract class XmlFileChecker extends DefaultTreeEventHandler {
                 event.getName(), failureType.value(), getClass().getName(), description);
     }
 
-    /** Must be implemented by subclasse providing the concrete list of <code>XmlAttributeChecker</code>s. */
+    /** Must be implemented by subclass providing the concrete list of <code>XmlAttributeChecker</code>s. */
     protected abstract List<XmlAttributeChecker> createCheckers();
 
     public synchronized List<XmlAttributeChecker> getCheckers() {

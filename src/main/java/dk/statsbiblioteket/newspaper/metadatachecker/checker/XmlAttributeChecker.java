@@ -21,6 +21,10 @@ public abstract class XmlAttributeChecker {
     private final ResultCollector resultCollector;
     private final FailureType failureType;
 
+    /**
+     * @param resultCollector The result collector to used for logging failures.
+     * @param failureType The specific type of failure to register.
+     */
     public XmlAttributeChecker(ResultCollector resultCollector, FailureType failureType) {
         this.resultCollector = resultCollector;
         this.failureType = failureType;
@@ -31,6 +35,13 @@ public abstract class XmlAttributeChecker {
                 event.getName(), failureType.value(), getClass().getName(), description);
     }
 
+    /**
+     * Makes the relevant checks for the concrete checker based on the supplied event and doc.
+     * @param event The event to base the check on.
+     * @param doc The xml document representing the metadata for the event (if any). The document has been generate
+     *            based on the event data, but is pregenerated and injected to avoid every
+     *            <code>XmlAttributeChecker</code> having to do this.
+     */
     public abstract void validate(AttributeParsingEvent event, Document doc);
 
 
