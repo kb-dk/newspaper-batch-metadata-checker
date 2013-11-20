@@ -6,6 +6,9 @@ import dk.statsbiblioteket.newspaper.metadatachecker.checker.FailureType;
 import dk.statsbiblioteket.newspaper.metadatachecker.checker.XmlAttributeChecker;
 import org.w3c.dom.Document;
 
+/**
+ * This class validates the mix information vs. the jpylyzer information
+ */
 public class MixJpylyzerEventHandler extends XmlAttributeChecker {
 
     private boolean foundMix = false;

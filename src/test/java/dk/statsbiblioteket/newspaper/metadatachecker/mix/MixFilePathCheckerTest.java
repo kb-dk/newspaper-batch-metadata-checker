@@ -25,7 +25,6 @@ public class MixFilePathCheckerTest {
            resultCollector = new ResultCollector("test", "test");
        }
 
-
     @Test
       public void testXpathValidationObjectIdentifierWorkshift() throws ParseException, SQLException, IOException {
           setUp();
@@ -73,6 +72,32 @@ public class MixFilePathCheckerTest {
            String report = resultCollector.toReport();
            assertTrue(resultCollector.isSuccess(), report);
        }
+
+    @Test
+       public void testXpathValidationObjectIdentifierBad() throws ParseException, SQLException, IOException {
+           setUp();
+           final String batchId = "400022028241";
+           final String film = "1";
+           final String avisID = "adresseavisen1759";
+           final String publishDate = "1795-06-13";
+           final String pictureNumber = "0006";
+           final Batch batch = new Batch();
+           batch.setBatchID(batchId);
+           batch.setRoundTripNumber(1);
+           AttributeParsingEvent event = MixerMockup.getMixPageAttributeParsingEvent(
+                   film, avisID, publishDate, pictureNumber, batch, 9304, 11408, 400, "7ed748249def3bcaadd825ae17dc817a",15);
+
+           Document doc = DOM.streamToDOM(event.getData());
+
+           XmlAttributeChecker handler = new MixFilePathChecker(resultCollector);
+
+           handler.validate(event,doc);
+
+
+           String report = resultCollector.toReport();
+           assertTrue(resultCollector.isSuccess(), report);
+       }
+
 
 
 }

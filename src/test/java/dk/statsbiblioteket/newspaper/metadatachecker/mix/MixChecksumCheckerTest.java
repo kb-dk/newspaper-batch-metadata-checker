@@ -64,7 +64,7 @@ public class MixChecksumCheckerTest {
           batch.setBatchID(batchId);
           batch.setRoundTripNumber(1);
           AttributeParsingEvent event = MixerMockup.getMixPageAttributeParsingEvent(
-                  film, avisID, publishDate, pictureNumber, batch, 9304, 11408, 400, "7ed748249def3bcaadd825ae17dc917a",15);
+                  film, avisID, publishDate, pictureNumber, batch, 9304, 11408, 400, "wrongSum",15);
 
           Document doc = DOM.streamToDOM(event.getData());
 
