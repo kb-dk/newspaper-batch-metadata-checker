@@ -42,6 +42,10 @@
             <s:let name="endDateAsNum" value="translate(avis:endDate,'-','')"/>
             <s:assert test="$startDateAsNum &lt; $endDateAsNum">2E-2 / 2E-3: Start date must be before end date</s:assert>
 
+            <!--2E-11: Date microfilm created-->
+            <s:assert test="matches(avis:dateMicrofilmCreated,$dateFormat)">2E-11: Date microfilm created must be of format YYYY-MM-DD</s:assert>
+
+
         </s:rule>
 
     </s:pattern>

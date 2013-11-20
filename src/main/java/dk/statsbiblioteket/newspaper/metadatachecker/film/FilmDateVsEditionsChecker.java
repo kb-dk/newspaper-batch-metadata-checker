@@ -8,6 +8,10 @@ import dk.statsbiblioteket.util.xml.XPathSelector;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
+/**
+ * Checks that the editions contained in a film for a batch structure are inside of the start/end dates specified in the
+ * foilm.xml.
+ */
 public class FilmDateVsEditionsChecker extends XmlAttributeChecker {
     private final XPathSelector xPathSelector;
     private final Document batchXmlStructure;
@@ -41,6 +45,15 @@ public class FilmDateVsEditionsChecker extends XmlAttributeChecker {
         }
     }
 
+    /**
+     * Contain the logic for checking whether a given edition is inside of the film start/end dates. Also
+     * handles the registration of check failures.
+     * @param filmStartdate The start date to check against.
+     * @param filmEnddate The end date to check against.
+     * @param editionID The edition date which should be after (or same) the start date and before the end date.
+     * @param filmID For failure information.
+     * @param event For failure information.
+     */
     protected void verifyEditionDateContainment(String filmStartdate, String filmEnddate, String editionID,
                                                 String filmID, AttributeParsingEvent event) {
         FuzzyDate filmStart = new FuzzyDate(filmStartdate);
