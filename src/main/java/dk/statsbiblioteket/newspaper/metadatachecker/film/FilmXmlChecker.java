@@ -19,22 +19,18 @@ import org.w3c.dom.Document;
  */
 public class FilmXmlChecker extends XmlFileChecker {
 
-    private MfPakDAO mfPakDAO;
-    private Batch batch;
-
 
     private List<XmlAttributeChecker> checkers;
 
     public FilmXmlChecker(ResultCollector resultCollector, MfPakDAO mfPakDAO, Batch batch, Document batchXmlStructure) {
         super(resultCollector, FailureType.METADATA);
-        this.batch = batch;
-        this.mfPakDAO = mfPakDAO;
         XPathSelector xpathSelector = DOM.createXPathSelector("avis",
                 "http://www.statsbiblioteket.dk/avisdigitalisering/microfilm/1/0/");
         checkers = new ArrayList<>();
         checkers.add(new FilmNumberOfPicturesChecker(resultCollector, xpathSelector, batchXmlStructure));
         checkers.add(new FilmDateVsEditionsChecker(resultCollector, xpathSelector, batchXmlStructure));
         checkers.add(new FilmIDAgainstFilmNodenameChecker(resultCollector, xpathSelector));
+        checkers.add(new FilmNewspaperTitlesChecker(resultCollector, FailureType.METADATA, mfPakDAO, batch));
     }
 
     @Override
