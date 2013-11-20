@@ -1,6 +1,7 @@
 package dk.statsbiblioteket.newspaper.metadatachecker.film;
 
 import org.junit.Test;
+import org.testng.Assert;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -232,6 +233,26 @@ public class FuzzyDateTest {
         assertTrue(fuzzyMonthReferenceDate.compareTo(getDate("2013-01-01")) == 0);
 
 
+    }
+
+    @Test
+    public void testGetMinDate() {
+        FuzzyDate date = new FuzzyDate("1831-00-00");
+        Assert.assertTrue(date.getMinDate().equals(new Date(-69, 0, 1)));
+        date = new FuzzyDate("1831-02-00");
+        Assert.assertEquals(date.getMinDate().toString(), new Date(-69, 1, 1).toString());
+    }
+
+    @Test
+    public void testGetMaxDate() {
+        FuzzyDate date = new FuzzyDate("1831-00-00");
+        Assert.assertTrue(date.getMaxDate().equals(new Date(-69, 11, 31)));
+        date = new FuzzyDate("1831-02-00");
+        Assert.assertTrue(date.getMaxDate().equals(new Date(-69, 1, 28)));
+        date = new FuzzyDate("1984-02-00");
+        Assert.assertTrue(date.getMaxDate().equals(new Date(84, 1, 29)));
+        date = new FuzzyDate("1955-12-00");
+        assertEquals(date.getMaxDate().toString(), new Date(55,11,31).toString());
     }
 
     private Date getDate(String values) {
