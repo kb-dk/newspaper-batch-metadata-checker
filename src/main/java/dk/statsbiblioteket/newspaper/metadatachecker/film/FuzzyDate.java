@@ -119,6 +119,66 @@ public final class FuzzyDate implements Comparable<FuzzyDate> {
         }
     }
 
+    /**
+     * Return the earliest date this fuzzy date can represent.
+     * @return
+     */
+    public Date getMinDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            if (getPrecision() > 9 ){
+                 return sdf.parse(dateString);
+            } else if (getPrecision() > 5 ){
+                return sdf.parse(dateString.replace("-00", "-01"));
+            } else {
+                return sdf.parse(dateString.replace("-00-00", "-01-01"));
+            }
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Unparseable date", e);
+        }
+    }
+
+    /**
+     * Return the latest date this fuzzy date can represent. For non-precise dates, the algorithm is
+     * to find a nextDate which is the date immediately after this fuzzy date and then roll it back 24 hours.
+     * @return
+     */
+    public Date getMaxDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Long oneDayMs = 24*3600*1000L;
+        try {
+            if (getPrecision() > 9 ){
+                return sdf.parse(dateString);
+            } else if (getPrecision() > 5 ){
+                if (getMonth() == 12) {
+                    return sdf.parse(dateString.replace("-00","-31")); //Special case in december
+                } else {
+                    Date nextDate = new Date(getYear() - 1900 , getMonth(), 1); //1st date of next month, same year. "getMonth" because of 0-month
+                    Date actualDate = new Date(nextDate.getTime() - oneDayMs );
+                    return actualDate;
+                }
+            } else {
+                Date nextDate = new Date(getYear()+1-1900, 0, 1);  //1st January next year
+                Date actualDate = new Date(nextDate.getTime() - oneDayMs );
+                return actualDate;
+            }
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Unparseable date", e);
+        }
+    }
+
+    private int getYear() {
+        return Integer.parseInt(dateString.substring(0,4));
+    }
+
+    private int getMonth() {
+        return Integer.parseInt(dateString.substring(5,7));
+    }
+
+    private int getDate() {
+        return Integer.parseInt(dateString.substring(9));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
