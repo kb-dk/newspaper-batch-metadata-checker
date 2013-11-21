@@ -62,7 +62,7 @@ public class MetadataCheckerComponentIT {
                 new MfPakDAO(mfPakConfiguration),
                 batch,
                 batchXmlManifest);
-        batchStructureChecker.runEvents(eventHandlerFactory.createEventHandlers());
+        batchStructureChecker.runEvents(eventHandlerFactory.createEventHandlers(), resultCollector);
         System.out.println(resultCollector.toReport());
         assertTrue(resultCollector.isSuccess());
         //Assert.fail();
