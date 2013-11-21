@@ -53,9 +53,9 @@
             <s:assert test="$endDate0000ForComparison &lt;= $dateMicrofilmCreatedForComparison">2E-11: End date must be before date microfilm created</s:assert>
         </s:rule>
 
-        <s:rule context="/avis:reelMetadata[avis:resolutionOfNegative &lt; 4.5]/avis:resolutionCommentNegative">
+        <s:rule context="/avis:reelMetadata[avis:resolutionOfDuplicateNegative &lt; 4.5]/avis:resolutionCommentDuplicateNegative">
             <!--2E-14 + 2E-15: Negative resolution / comments concerning negative resolution-->
-            <s:assert test="not(matches(text(), '^\s*$'))">2E-14 / 2E-15: When negative resolution is below 4.5, resolutionCommentNegative must contain an explanation.</s:assert>
+            <s:assert test="not(matches(text(), '^\s*$'))">2E-14 / 2E-15: When negative resolution is below 4.5, resolutionCommentDuplicateNegative must contain an explanation.</s:assert>
         </s:rule>
     </s:pattern>
 </s:schema>

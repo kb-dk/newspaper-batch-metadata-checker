@@ -48,20 +48,20 @@ public class FilmMocker {
                                  "<avis:captureResolutionOriginal measurement=\"pixels/inch\">"+resolution+"</avis:captureResolutionOriginal> \n" +
                                  "<avis:captureResolutionFilm measurement=\"pixels/inch\">6000</avis:captureResolutionFilm> \n" +
                                  "<avis:dateMicrofilmCreated>"+createdDate+"</avis:dateMicrofilmCreated> \n" +
-                                 "<avis:resolutionOfNegative>6.3</avis:resolutionOfNegative> \n" +
-                                 "<avis:resolutionCommentNegative>No comments</avis:resolutionCommentNegative> \n" +
-                                 "<avis:densityReadingNegative>0.11</avis:densityReadingNegative> \n" +
-                                 "<avis:densityReadingNegative>0.12</avis:densityReadingNegative> \n" +
-                                 "<avis:densityReadingNegative>0.12</avis:densityReadingNegative> \n" +
-                                 "<avis:densityReadingNegative>0.12</avis:densityReadingNegative> \n" +
-                                 "<avis:densityReadingNegative>0.12</avis:densityReadingNegative> \n" +
-                                 "<avis:densityReadingNegative>0.13</avis:densityReadingNegative> \n" +
-                                 "<avis:densityReadingNegative>0.12</avis:densityReadingNegative> \n" +
-                                 "<avis:densityReadingNegative>0.12</avis:densityReadingNegative> \n" +
-                                 "<avis:densityReadingNegative>0.12</avis:densityReadingNegative> \n" +
-                                 "<avis:densityReadingNegative>0.12</avis:densityReadingNegative> \n" +
-                                 "<avis:averageDensityNegative>0.12</avis:averageDensityNegative> \n" +
-                                 "<avis:dminNegative>0.12</avis:dminNegative> \n" +
+                                 "<avis:resolutionOfDuplicateNegative>6.3</avis:resolutionOfDuplicateNegative> \n" +
+                                 "<avis:resolutionCommentDuplicateNegative>No comments</avis:resolutionCommentDuplicateNegative> \n" +
+                                 "<avis:densityReadingDuplicateNegative>0.11</avis:densityReadingDuplicateNegative> \n" +
+                                 "<avis:densityReadingDuplicateNegative>0.12</avis:densityReadingDuplicateNegative> \n" +
+                                 "<avis:densityReadingDuplicateNegative>0.12</avis:densityReadingDuplicateNegative> \n" +
+                                 "<avis:densityReadingDuplicateNegative>0.12</avis:densityReadingDuplicateNegative> \n" +
+                                 "<avis:densityReadingDuplicateNegative>0.12</avis:densityReadingDuplicateNegative> \n" +
+                                 "<avis:densityReadingDuplicateNegative>0.13</avis:densityReadingDuplicateNegative> \n" +
+                                 "<avis:densityReadingDuplicateNegative>0.12</avis:densityReadingDuplicateNegative> \n" +
+                                 "<avis:densityReadingDuplicateNegative>0.12</avis:densityReadingDuplicateNegative> \n" +
+                                 "<avis:densityReadingDuplicateNegative>0.12</avis:densityReadingDuplicateNegative> \n" +
+                                 "<avis:densityReadingDuplicateNegative>0.12</avis:densityReadingDuplicateNegative> \n" +
+                                 "<avis:averageDensityDuplicateNegative>0.12</avis:averageDensityDuplicateNegative> \n" +
+                                 "<avis:dminDuplicateNegative>0.12</avis:dminDuplicateNegative> \n" +
                              "</avis:reelMetadata>";
             
             return filmXml.getBytes("UTF-8");

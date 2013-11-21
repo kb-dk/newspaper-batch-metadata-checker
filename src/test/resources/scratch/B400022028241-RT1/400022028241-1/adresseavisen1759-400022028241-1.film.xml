@@ -8,19 +8,19 @@
     <avis:captureResolutionOriginal measurement="pixels/inch">400</avis:captureResolutionOriginal>
     <avis:captureResolutionFilm measurement="pixels/inch">6000</avis:captureResolutionFilm>
     <avis:dateMicrofilmCreated>1970-06-05</avis:dateMicrofilmCreated>
-    <avis:resolutionOfNegative>6.3</avis:resolutionOfNegative>
-    <avis:resolutionCommentNegative>No comments</avis:resolutionCommentNegative>
-    <avis:densityReadingNegative>0.11</avis:densityReadingNegative>
-    <avis:densityReadingNegative>0.12</avis:densityReadingNegative>
-    <avis:densityReadingNegative>0.12</avis:densityReadingNegative>
-    <avis:densityReadingNegative>0.12</avis:densityReadingNegative>
-    <avis:densityReadingNegative>0.12</avis:densityReadingNegative>
-    <avis:densityReadingNegative>0.13</avis:densityReadingNegative>
-    <avis:densityReadingNegative>0.12</avis:densityReadingNegative>
-    <avis:densityReadingNegative>0.12</avis:densityReadingNegative>
-    <avis:densityReadingNegative>0.12</avis:densityReadingNegative>
-    <avis:densityReadingNegative>0.12</avis:densityReadingNegative>
-    <avis:averageDensityNegative>0.12</avis:averageDensityNegative>
-    <avis:dminNegative>0.12</avis:dminNegative>
+    <avis:resolutionOfDuplicateNegative>6.3</avis:resolutionOfDuplicateNegative>
+    <avis:resolutionCommentDuplicateNegative>No comments</avis:resolutionCommentDuplicateNegative>
+    <avis:densityReadingDuplicateNegative>0.11</avis:densityReadingDuplicateNegative>
+    <avis:densityReadingDuplicateNegative>0.12</avis:densityReadingDuplicateNegative>
+    <avis:densityReadingDuplicateNegative>0.12</avis:densityReadingDuplicateNegative>
+    <avis:densityReadingDuplicateNegative>0.12</avis:densityReadingDuplicateNegative>
+    <avis:densityReadingDuplicateNegative>0.12</avis:densityReadingDuplicateNegative>
+    <avis:densityReadingDuplicateNegative>0.13</avis:densityReadingDuplicateNegative>
+    <avis:densityReadingDuplicateNegative>0.12</avis:densityReadingDuplicateNegative>
+    <avis:densityReadingDuplicateNegative>0.12</avis:densityReadingDuplicateNegative>
+    <avis:densityReadingDuplicateNegative>0.12</avis:densityReadingDuplicateNegative>
+    <avis:densityReadingDuplicateNegative>0.12</avis:densityReadingDuplicateNegative>
+    <avis:averageDensityDuplicateNegative>0.12</avis:averageDensityDuplicateNegative>
+    <avis:dminDuplicateNegative>0.12</avis:dminDuplicateNegative>
 </avis:reelMetadata>
 

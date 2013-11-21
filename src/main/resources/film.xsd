@@ -38,11 +38,11 @@
                 <!---Use this particular ISO 8601 style: YYYY-MM-DD -->
                 <xsd:element name="dateMicrofilmCreated" type="xsd:string" minOccurs="1" maxOccurs="1"/>
                 <!--Resolution of the duplicate negative used for digitization. -->
-                <xsd:element name="resolutionOfNegative" type="xsd:float" minOccurs="1" maxOccurs="1"/>
-                <xsd:element name="resolutionCommentNegative" type="xsd:string" minOccurs="1" maxOccurs="1"/>
-                <xsd:element name="densityReadingNegative" type="xsd:float" minOccurs="0" maxOccurs="10"/>
-                <xsd:element name="averageDensityNegative" type="xsd:float" minOccurs="1" maxOccurs="1"/>
-                <xsd:element name="dminNegative" type="xsd:float" minOccurs="1" maxOccurs="1"/>
+                <xsd:element name="resolutionOfDuplicateNegative" type="xsd:float" minOccurs="1" maxOccurs="1"/>
+                <xsd:element name="resolutionCommentDuplicateNegative" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                <xsd:element name="densityReadingDuplicateNegative" type="xsd:float" minOccurs="0" maxOccurs="10"/>
+                <xsd:element name="averageDensityDuplicateNegative" type="xsd:float" minOccurs="1" maxOccurs="1"/>
+                <xsd:element name="dminDuplicateNegative" type="xsd:float" minOccurs="1" maxOccurs="1"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
