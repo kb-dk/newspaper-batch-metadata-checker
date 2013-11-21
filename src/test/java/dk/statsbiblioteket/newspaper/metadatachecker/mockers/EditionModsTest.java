@@ -91,7 +91,7 @@ public class EditionModsTest {
         AssertJUnit.assertTrue(report,report.contains("<description>2D-2: title Adresse Contoirs Efterretninger does not match title in MFPak 'Kiøbenhavns Kongelig alene priviligerede Adresse-Contoirs Efterretninger'</description>"));
         AssertJUnit.assertTrue(report,report.contains("<description>2D-3: Publication location 'Kobenhavn' does not match value 'København' from MFPak</description>"));
         AssertJUnit.assertTrue(report,report.contains("<description>2D-4: Date issued from file does not correspond to date in filename</description>"));
-        AssertJUnit.assertTrue(report,report.contains("<description>2D_9: Edition number (2) in edition xml doesn't correspond to node edition number: 1795-06-13-01</description>"));
+        AssertJUnit.assertTrue(report,report.contains("<description>2D-9: Edition number (2) in edition xml doesn't correspond to node edition number: 1795-06-13-01</description>"));
 
         assertFalse(resultCollector.isSuccess(),resultCollector.toReport());
 

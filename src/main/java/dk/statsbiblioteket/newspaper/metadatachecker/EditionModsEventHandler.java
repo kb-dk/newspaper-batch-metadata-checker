@@ -109,11 +109,11 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
         String nodeEditionNumber = editionIDFromNode.split("-")[3];
         try {
             if (Integer.parseInt(xpathForEditionNumber) != Integer.parseInt(nodeEditionNumber) ) {
-                addFailure(event, "2D_9: Edition number (" + xpathForEditionNumber + ") in edition xml doesn't " +
+                addFailure(event, "2D-9: Edition number (" + xpathForEditionNumber + ") in edition xml doesn't " +
                         "correspond to node edition number: " + editionIDFromNode);
             }
         } catch (NumberFormatException nfe) {
-            addFailure(event, "2D_9: Unable to compare (" + xpathForEditionNumber + ") in edition xml " +
+            addFailure(event, "2D-9: Unable to compare (" + xpathForEditionNumber + ") in edition xml " +
                     "to node edition number: " + editionIDFromNode + ", they can't be converted to numbers.");
         }
     }
