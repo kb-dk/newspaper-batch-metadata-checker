@@ -44,10 +44,13 @@
             <s:assert test="matches(avis:captureResolutionFilm/@measurement, '^\s*pixels/inch\s*$')">2E-10: Scanning resolution Film unit should be 'pixels/inch'</s:assert>
 
             <!--2E-11: Date microfilm created-->
-   <!--         <s:assert test="matches(avis:dateMicrofilmCreated,$dateFormat)">2E-11: Date microfilm created must be of format YYYY-MM-DD, YYYY-MM, YYYY</s:assert>
-            <s:let name="dateMicrofilmCreatedForComparison" value="translate(avis:dateMicrofilmCreated,'-','')"/>
-       -->
-
+            <s:assert test="matches(avis:dateMicrofilmCreated,$dateFormat)">2E-11: Date microfilm created must be of format YYYY-MM-DD, YYYY-MM, YYYY</s:assert>
+            <s:let name="dateMicrofilmCreatedNoDashes" value="translate(avis:dateMicrofilmCreated,'-','')"/>
+            <s:let name="endDate0000Appended" value="concat($endDateNoDashes,'0000')"/>
+            <s:let name="dateMicrofilmCreatedAppended" value="concat($dateMicrofilmCreatedNoDashes,'9999')"/>
+            <s:let name="endDate0000ForComparison" value="substring($endDate0000Appended,1,8)"/>
+            <s:let name="dateMicrofilmCreatedForComparison" value="substring($dateMicrofilmCreatedAppended,1,8)"/>
+            <s:assert test="$endDate0000ForComparison &lt;= $dateMicrofilmCreatedForComparison">2E-11: End date must be before date microfilm created</s:assert>
         </s:rule>
 
         <s:rule context="/avis:reelMetadata[avis:resolutionOfDuplicateNegative &lt; 4.5]/avis:resolutionCommentDuplicateNegative">
