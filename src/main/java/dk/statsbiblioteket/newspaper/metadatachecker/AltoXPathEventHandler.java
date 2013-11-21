@@ -44,9 +44,9 @@ public class AltoXPathEventHandler extends DefaultTreeEventHandler {
             } catch (Exception e) {    //Fault Barrier
                 resultCollector.addFailure(
                         event.getName(),
-                        "metadata",
-                        getClass().getName(),
-                        "Error processing ALTO metadata.",
+                        "exception",
+                        getClass().getSimpleName(),
+                        "Error processing ALTO metadata: " + e.toString(),
                         getStackTrace(e)
                 );
             }
@@ -59,13 +59,8 @@ public class AltoXPathEventHandler extends DefaultTreeEventHandler {
         try {
             doc = DOM.streamToDOM(event.getData());
             if (doc == null) {
-                resultCollector.addFailure(
-                        event.getName(),
-                        "metadata",
-                        getClass().getName(),
-                        "Could not parse xml from " + event.getName(),
-                        event.getName()
-                );
+                resultCollector
+                        .addFailure(event.getName(), "exception", getClass().getSimpleName(), "Could not parse xml");
                 return;
             }
         } catch (IOException e) {
@@ -76,11 +71,9 @@ public class AltoXPathEventHandler extends DefaultTreeEventHandler {
         String expectedName = event.getName().replaceAll("/", "\\\\");
         expectedName = expectedName.replace(".alto.xml", ".jp2");
         if (pathInAlto == null || !expectedName.equals(pathInAlto)) {
-            resultCollector.addFailure(event.getName(),
-                    "metadata",
-                    getClass().getName(),
-                    "2J-3: file path in ALTO file '" + pathInAlto + "' does not match actual file path '" + expectedName + "'.",
-                    xpath2J3);
+            resultCollector.addFailure(event.getName(), "metadata", getClass().getSimpleName(),
+                                       "2J-3: file path in ALTO file '" + pathInAlto
+                                               + "' does not match actual file path '" + expectedName + "'.", xpath2J3);
         }
     }
 

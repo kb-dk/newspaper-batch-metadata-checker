@@ -77,9 +77,9 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
             } catch (Exception e) {    //Fault Barrier
                 resultCollector.addFailure(
                         event.getName(),
-                        "metadata",
-                        getClass().getName(),
-                        "Error processing page-MODS metadata.",
+                        "exception",
+                        getClass().getSimpleName(),
+                        "Error processing page-MODS metadata: " + e.toString(),
                         getStackTrace(e)
                 );
             }
@@ -93,11 +93,9 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
             if (modsDocument == null) {
                 resultCollector.addFailure(
                         event.getName(),
-                        "metadata",
-                        getClass().getName(),
-                        "Could not parse xml from " + event.getName(),
-                        event.getName()
-                );
+                        "exception",
+                        getClass().getSimpleName(),
+                        "Could not parse xml");
                 return;
             }
         } catch (IOException e) {
@@ -125,8 +123,8 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
         if (brikExists && !brikShouldExist) {
             resultCollector.addFailure(
                     event.getName(),
-                    "symbolconsistency",
-                    getClass().getName(),
+                    "metadata",
+                    getClass().getSimpleName(),
                     "2C-10:Found symbol " + name + " but there is no displayName attribute in the" +
                             " corresponding page " + event.getName(),
                     display
@@ -135,8 +133,8 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
         if (!brikExists && brikShouldExist) {
             resultCollector.addFailure(
                     event.getName(),
-                    "symbolconsistency",
-                    getClass().getName(),
+                    "metadata",
+                    getClass().getSimpleName(),
                     "2C-10: Did not find symbol " + name + " although it is implied by existence of " +
                             "displayname in corresponding page " + event.getName(),
                     display
@@ -180,7 +178,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
                 resultCollector.addFailure(
                         event.getName(),
                         "metadata",
-                        getClass().getName(),
+                        getClass().getSimpleName(),
                         "2C-11: avisId mismatch. Document gives " + modsAvisId + " but mfpak gives " + avisId,
                         xpath2C11
                 );
@@ -188,7 +186,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
         } catch (SQLException e) {
             resultCollector.addFailure(event.getName(),
                                     "metadata",
-                                    getClass().getName(),
+                                    getClass().getSimpleName(),
                                     "2C-11: Couldn't read avisId from mfpak.",
                                     getStackTrace(e)
                                     );
@@ -208,7 +206,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
         if (sequenceNumber == null || !(event.getName().matches(namePattern))) {
             resultCollector.addFailure(event.getName(),
                                     "metadata",
-                                    getClass().getName(),
+                                    getClass().getSimpleName(),
                                     "2C-5: " + sequenceNumber + " not found in file name. Should match " + namePattern + ".",
                                     xpath2C5
                                     );
@@ -228,7 +226,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
         if (reelNumber == null || !reelNumber.matches(reelNumberPatternString)) {
               resultCollector.addFailure(event.getName(),
                                     "metadata",
-                                    getClass().getName(),
+                                    getClass().getSimpleName(),
                                     "2C-4: reel number " + reelNumber + " does not match expected pattern '" + reelNumberPatternString+"'",
                                     xpath2C4
                                     );

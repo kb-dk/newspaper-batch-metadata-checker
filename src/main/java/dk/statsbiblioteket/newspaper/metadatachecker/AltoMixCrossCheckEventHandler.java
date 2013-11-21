@@ -72,7 +72,7 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
             resultCollector.addFailure(
                     sizes.getFolder(),
                     "metadata",
-                    getClass().getName(),
+                    getClass().getSimpleName(),
                     "2J-7: The file '" + sizes.getFolder() + ".mix.xml' and file '" + sizes.getFolder() + ".alto.xml' should agree on height");
 
         }
@@ -81,7 +81,7 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
             resultCollector.addFailure(
                     sizes.getFolder(),
                     "metadata",
-                    getClass().getName(),
+                    getClass().getSimpleName(),
                     "2J-7: The file '" + sizes.getFolder() + ".mix.xml' and file '" + sizes.getFolder() + ".alto.xml' should agree on width");
         }
     }
@@ -105,14 +105,15 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
 
         } catch (IOException e) {
             resultCollector.addFailure(
-                    event.getName(), "metadata", getClass().getName(), "Error processing metadata.", getStackTrace(e));
+                    event.getName(), "exception", getClass().getSimpleName(), "Error processing metadata: " + e.toString(),
+                    getStackTrace(e));
 
         } catch (NumberFormatException e) {
             resultCollector.addFailure(
                     event.getName(),
                     "metadata",
-                    getClass().getName(),
-                    "Failed to parse integer '" + e.getMessage(),
+                    getClass().getSimpleName(),
+                    "2J-7 / 2K-9 - 2K-10: Failed to parse integer: " + e.toString(),
                     Strings.getStackTrace(e));
         }
 
@@ -129,7 +130,7 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
                 data, "/mix:mix/mix:BasicImageInformation/mix:BasicImageCharacteristics/mix:imageWidth");
         if (width == null) {
             resultCollector.addFailure(
-                    name, "metadata", getClass().getName(), "Failed to read page width from mix file");
+                    name, "metadata", getClass().getSimpleName(), "2K-9: Failed to read page width from mix file");
         } else {
             size.setWidth(width * 1200 / xResolution);
         }
@@ -141,7 +142,7 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
                 data, "/mix:mix/mix:BasicImageInformation/mix:BasicImageCharacteristics/mix:imageHeight");
         if (height == null) {
             resultCollector.addFailure(
-                    name, "metadata", getClass().getName(), "Failed to read page height from mix file");
+                    name, "metadata", getClass().getSimpleName(), "2K-10: Failed to read page height from mix file");
         } else {
 
             size.setHeight(height * 1200 / yResolution);
@@ -154,7 +155,7 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
         Integer height = xpath.selectInteger(data, "/a:alto/a:Layout/a:Page/@HEIGHT");
         if (height == null) {
             resultCollector.addFailure(
-                    reference, "metadata", getClass().getName(), "Failed to read page height from alto");
+                    reference, "metadata", getClass().getSimpleName(), "2J-7: Failed to read page height from alto");
 
         } else {
             size.setHeight(height);
@@ -162,7 +163,7 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
         Integer width = xpath.selectInteger(data, "/a:alto/a:Layout/a:Page/@WIDTH");
         if (width == null) {
             resultCollector.addFailure(
-                    reference, "metadata", getClass().getName(), "Failed to read page width from alto");
+                    reference, "metadata", getClass().getSimpleName(), "2J-7: Failed to read page width from alto");
         } else {
 
             size.setWidth(width);

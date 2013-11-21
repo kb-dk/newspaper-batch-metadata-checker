@@ -128,9 +128,9 @@ public class JpylyzingEventHandler extends InjectingTreeEventHandler {
             }
         } catch (IOException e) {
             resultCollector.addFailure(event.getName(),
-                                       "jp2file",
-                                       getComponentName(),
-                                       e.getMessage(),
+                                       "exception",
+                                       getClass().getSimpleName(),
+                                       "Unexpected error: " + e.getMessage(),
                                        Strings.getStackTrace(e));
         }
     }

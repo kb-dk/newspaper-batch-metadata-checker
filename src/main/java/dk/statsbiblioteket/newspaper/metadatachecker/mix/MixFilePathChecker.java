@@ -32,19 +32,19 @@ public class MixFilePathChecker extends XmlAttributeChecker {
         if (!objectIdentifier.equals(identifierFromPath)) {
             addFailure(
                     event,
-                    "2K-2: ObjectIdentifier does not match the location in the tree. " + "Expected '" + objectIdentifier + "' got '" + identifierFromPath + "'.");
+                    "2K-1: ObjectIdentifier does not match the location in the tree. " + "Expected '" + objectIdentifier + "' got '" + identifierFromPath + "'.");
         }
 
         if (!mixFilmID.equals(filmID)) {
             addFailure(
                     event,
-                    "2K-3: FilmID does not match the location in the tree. " + "Expected '" + mixFilmID + "' got '" + filmID + "'.");
+                    "2K-13: FilmID does not match the location in the tree. " + "Expected '" + mixFilmID + "' got '" + filmID + "'.");
         }
 
         if (!mixBilledeID.equals(billedID)) {
             addFailure(
                     event,
-                    "2K-4: Location on film does not match the location in the tree. " + "Expected '" + mixBilledeID + "' got '" + billedID + "'.");
+                    "2K-14: Location on film does not match the location in the tree. " + "Expected '" + mixBilledeID + "' got '" + billedID + "'.");
         }
     }
 

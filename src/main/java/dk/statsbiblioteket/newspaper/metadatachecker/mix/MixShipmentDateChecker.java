@@ -29,7 +29,7 @@ public class MixShipmentDateChecker extends XmlAttributeChecker{
         String scannedDateInMix = XPATH.selectString(doc, xpath2K1);
         if (scannedDateInMix == null) {
             addFailure(
-                    event, "2K-1: Could not find scanned date in MIX file with XPath: '" + xpath2K1 + "'");
+                    event, "2K-15: Could not find scanned date in MIX file with XPath: '" + xpath2K1 + "'");
         }
 
         Date scannedDate;
@@ -39,19 +39,19 @@ public class MixShipmentDateChecker extends XmlAttributeChecker{
         } catch (ParseException e) {
             addFailure(
                     event,
-                    "2K-1: Could not parse the scanned date '" + scannedDateInMix + "' found in the MIX file." + "Expected the form '" + mixDateFormat + "'.");
+                    "2K-15: Could not parse the scanned date '" + scannedDateInMix + "' found in the MIX file." + "Expected the form '" + mixDateFormat + "'.");
             return;
         }
 
         if (shipmentDate == null) {
-            addFailure(event, "2K-1: Shipment date for this batch not found in MFPak");
+            addFailure(event, "2K-15: Shipment date for this batch not found in MFPak");
 
         } else {
 
             if (scannedDate.before(shipmentDate)) {
                 addFailure(
                         event,
-                        "2K-1: The scanned '" + scannedDate + "' is before " + "the batch was shipped from SB '" + shipmentDate + "'.");
+                        "2K-15: The scanned '" + scannedDate + "' is before " + "the batch was shipped from SB '" + shipmentDate + "'.");
             }
         }
 

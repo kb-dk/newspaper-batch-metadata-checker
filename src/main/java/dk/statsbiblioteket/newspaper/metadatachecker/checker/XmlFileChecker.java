@@ -6,6 +6,7 @@ import java.util.List;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.DefaultTreeEventHandler;
+import dk.statsbiblioteket.util.Strings;
 import dk.statsbiblioteket.util.xml.DOM;
 import org.w3c.dom.Document;
 
@@ -15,13 +16,11 @@ import org.w3c.dom.Document;
  */
 public abstract class XmlFileChecker extends DefaultTreeEventHandler {
     protected final ResultCollector resultCollector;
-    private FailureType failureType;
     private List<XmlAttributeChecker> checkers;
 
 
-    public XmlFileChecker(ResultCollector resultCollector, FailureType failureType) {
+    public XmlFileChecker(ResultCollector resultCollector) {
         this.resultCollector = resultCollector;
-        this.failureType = failureType;
     }
 
     @Override
@@ -43,11 +42,16 @@ public abstract class XmlFileChecker extends DefaultTreeEventHandler {
         try {
             doc = DOM.streamToDOM(event.getData(), true);
             if (doc == null) {
-                addFailure(event, "Could not parse xml from " + event.getName());
+                resultCollector.addFailure(
+                        event.getName(), "exception", getClass().getSimpleName(),
+                        "Could not parse xml");
                 return;
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            resultCollector.addFailure(
+                    event.getName(), "exception", getClass().getSimpleName(),
+                    "Unexpected error: " + e.toString(), Strings.getStackTrace(e));
+            return;
         }
 
         for (XmlAttributeChecker checker : getCheckers()) {
@@ -55,11 +59,6 @@ public abstract class XmlFileChecker extends DefaultTreeEventHandler {
                 checker.validate(event, doc);
             }
         }
-    }
-
-    private void addFailure(AttributeParsingEvent event, String description) {
-        resultCollector.addFailure(
-                event.getName(), failureType.value(), getClass().getSimpleName(), description);
     }
 
     /** Must be implemented by subclass providing the concrete list of <code>XmlAttributeChecker</code>s. */

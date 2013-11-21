@@ -8,6 +8,7 @@ import dk.statsbiblioteket.newspaper.metadatachecker.film.FuzzyDate;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperDateRange;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperEntity;
+import dk.statsbiblioteket.util.Strings;
 import dk.statsbiblioteket.util.xml.DOM;
 import dk.statsbiblioteket.util.xml.XPathSelector;
 import org.w3c.dom.Document;
@@ -54,7 +55,9 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
         try {
             doc = DOM.streamToDOM(event.getData(), true);
             if (doc == null) {
-                addFailure(event, "Could not parse xml from " + event.getName());
+                resultCollector.addFailure(
+                        event.getName(), "exception", getClass().getSimpleName(),
+                        "Could not parse xml");
                 return;
             }
         } catch (IOException e) {
@@ -64,7 +67,7 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
 
             NewspaperEntity entity = getNewspaperEntity(event);
             if (entity == null){
-                addFailure(event,"Failed to resolve a newspaper entity in MFPak");
+                addFailure(event,"2D: Failed to resolve a newspaper entity in MFPak");
                 return;
             }
             check2D_1(event, xpath, doc, entity);
@@ -74,7 +77,9 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
             check2D_9(event, xpath, doc);
 
         } catch (SQLException e) {
-            addFailure(event, "Problem with communication with MFPak");
+            resultCollector.addFailure(event.getName(), "exception", getClass().getSimpleName(),
+                                       "Problem with communication with MFPak: " + e.toString(),
+                                       Strings.getStackTrace(e));
         }
 
 
@@ -160,7 +165,7 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
 
     private void addFailure(AttributeParsingEvent event, String description) {
         resultCollector.addFailure(
-                event.getName(), "metadata", getClass().getName(), description);
+                event.getName(), "metadata", getClass().getSimpleName(), description);
     }
 
     /**

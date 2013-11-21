@@ -23,7 +23,7 @@ public class FilmXmlChecker extends XmlFileChecker {
     private List<XmlAttributeChecker> checkers;
 
     public FilmXmlChecker(ResultCollector resultCollector, MfPakDAO mfPakDAO, Batch batch, Document batchXmlStructure) {
-        super(resultCollector, FailureType.METADATA);
+        super(resultCollector);
         XPathSelector xpathSelector = DOM.createXPathSelector("avis",
                 "http://www.statsbiblioteket.dk/avisdigitalisering/microfilm/1/0/");
         checkers = new ArrayList<>();

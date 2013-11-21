@@ -2,10 +2,11 @@ package dk.statsbiblioteket.newspaper.metadatachecker.mix;
 
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
-import dk.statsbiblioteket.newspaper.metadatachecker.checker.FailureType;
 import dk.statsbiblioteket.newspaper.metadatachecker.checker.XmlAttributeChecker;
 import dk.statsbiblioteket.newspaper.metadatachecker.checker.XmlFileChecker;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+import dk.statsbiblioteket.util.Strings;
+
 import org.w3c.dom.Document;
 
 import java.sql.SQLException;
@@ -20,7 +21,7 @@ public class MixXmlFileChecker extends XmlFileChecker {
 
     public MixXmlFileChecker(ResultCollector resultCollector, MfPakDAO mfPakDAO, Batch batch,
                              Document batchXmlStructure) {
-        super(resultCollector, FailureType.METADATA);
+        super(resultCollector);
         this.batchXmlStructure = batchXmlStructure;
 
 
@@ -29,10 +30,10 @@ public class MixXmlFileChecker extends XmlFileChecker {
         } catch (SQLException e) {
             resultCollector.addFailure(
                     batch.getFullID(),
-                    "metadata",
-                    getClass().getName(),
-                    "Could not connect to MFPak",
-                    batch.getFullID());
+                    "exception",
+                    getClass().getSimpleName(),
+                    "Could not connect to MFPak: " + e.toString(),
+                    Strings.getStackTrace(e));
             throw new RuntimeException(e);
         }
     }

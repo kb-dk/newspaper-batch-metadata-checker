@@ -124,7 +124,8 @@ public class MixFilmCrossCheckEventHandler extends DefaultTreeEventHandler {
             filmXmlSamplingFreq = xpath.selectInteger(doc, filmFrequencyXPath);
             
         } catch (IOException e) {
-            addFailure(event.getName(), "Error processing FILM metadata.", getStackTrace(e));
+            resultCollector.addFailure(event.getName(), "exception", getClass().getSimpleName(),
+                                       "Error processing FILM metadata: " + e.toString(), getStackTrace(e));
         }
     }
 
@@ -156,12 +157,13 @@ public class MixFilmCrossCheckEventHandler extends DefaultTreeEventHandler {
             }
             
         } catch (IOException e) {
-            addFailure(event.getName(), "Error processing MIX metadata.", getStackTrace(e));
+            resultCollector.addFailure(event.getName(), "exception", getClass().getSimpleName(),
+                                       "Error processing MIX metadata: " + e.toString(), getStackTrace(e));
         }
     }
 
     private void addFailure(String reference, String description, String details) {
-        resultCollector.addFailure(reference, "metadata", getClass().getName(), description, details);
+        resultCollector.addFailure(reference, "metadata", getClass().getSimpleName(), description, details);
     }
     
 }

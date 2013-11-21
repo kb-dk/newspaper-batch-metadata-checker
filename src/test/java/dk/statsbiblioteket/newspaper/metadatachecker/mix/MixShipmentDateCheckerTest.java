@@ -89,7 +89,7 @@ public class MixShipmentDateCheckerTest {
 
         String report = resultCollector.toReport();
         assertFalse(resultCollector.isSuccess(), report);
-        assertTrue(report.contains("2K-1:"));
+        assertTrue(report.contains("2K-15:"));
     }
 
 

@@ -93,7 +93,7 @@ public class FilmDateRangeAgainstMfpakChecker extends XmlAttributeChecker {
                  resultCollector.addFailure(
                       batch.getFullID(),
                          FailureType.METADATA.name(),
-                         getClass().getName(),
+                         getClass().getSimpleName(),
                          "2E-2, 2E-3: No film.xml file was found for the film with date range " +
                                  "(" + range.getFromDate() + "," + range.getToDate() + ")."
                  );

@@ -36,7 +36,7 @@ public class MixJpylyzerEventHandler extends XmlAttributeChecker {
         if (!jpylyzerFileSize.equals(mixFileSize)) {
             addFailure(
                     event,
-                    "The file size from jpylyzer does not match what is reported in the mix file"
+                    "2K-2: The file size from jpylyzer does not match what is reported in the mix file"
                     );
         }
 
@@ -45,7 +45,7 @@ public class MixJpylyzerEventHandler extends XmlAttributeChecker {
         if (!jpylyzerHeight.equals(mixHeight)) {
             addFailure(
                     event,
-                    "The picture height from jpylyzer does not match what is reported in the mix file"
+                    "2K-10: The picture height from jpylyzer does not match what is reported in the mix file"
                     );
         }
 
@@ -54,7 +54,7 @@ public class MixJpylyzerEventHandler extends XmlAttributeChecker {
         if (!jpylyzerWidth.equals(mixWidth)) {
             addFailure(
                     event,
-                    "The picture width from jpylyzer does not match what is reported in the mix file"
+                    "2K-9: The picture width from jpylyzer does not match what is reported in the mix file"
                     );
         }
         foundMix = false;
@@ -64,7 +64,8 @@ public class MixJpylyzerEventHandler extends XmlAttributeChecker {
 
     protected void handleMix(AttributeParsingEvent event, Document doc) {
         if (foundMix) {
-            addFailure(event, "We found this two mix files without a jpylyzer file");
+            // TODO: Say what?
+            addFailure(event, "2K: We found this two mix files without a jpylyzer file");
         }
 
         final String mixFileSizeXpath = "/mix:mix/mix:BasicDigitalObjectInformation/mix:fileSize";

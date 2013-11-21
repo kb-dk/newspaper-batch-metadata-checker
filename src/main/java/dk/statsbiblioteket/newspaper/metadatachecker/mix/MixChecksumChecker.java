@@ -31,7 +31,7 @@ public class MixChecksumChecker extends XmlAttributeChecker {
 
         if (!mixMd5sum.equalsIgnoreCase(treeMd5sum)) {
             addFailure(
-                    event, "Checksum '" + mixMd5sum + "' does not agree with checksum '" + treeMd5sum + "'");
+                    event, "2K-7: Checksum '" + mixMd5sum + "' does not agree with checksum '" + treeMd5sum + "'");
         }
     }
     @Override
