@@ -71,4 +71,11 @@ public abstract class XmlFileChecker extends DefaultTreeEventHandler {
         }
         return checkers;
     }
+
+    @Override
+    public void handleFinish() {
+        for (XmlAttributeChecker checker: getCheckers()) {
+            checker.finish();
+        }
+    }
 }

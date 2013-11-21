@@ -3,6 +3,8 @@ package dk.statsbiblioteket.newspaper.metadatachecker.mockers;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -33,7 +35,7 @@ import static org.testng.Assert.assertTrue;
 public class EditionModsTest {
     /** Test that we can validate a valid edition xml (mods) file. */
     @Test
-    public void testEditionModsGood() throws SQLException {
+    public void testEditionModsGood() throws SQLException, ParseException {
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
         SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
         TreeEventHandler editionModsEventHandler = new EditionModsEventHandler(resultCollector, getMFPak(), getBatch());
@@ -60,7 +62,7 @@ public class EditionModsTest {
 
     /** Test that we can validate a valid edition xml (mods) file. */
     @Test
-    public void testEditionModsBad() throws SQLException {
+    public void testEditionModsBad() throws SQLException, ParseException {
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
         Batch batch = getBatch();
         TreeEventHandler schematronValidatorEventHandler = new SchematronValidatorEventHandler(resultCollector,null);
@@ -99,7 +101,7 @@ public class EditionModsTest {
         return new Batch("400022028241");
     }
 
-    private MfPakDAO getMFPak() throws SQLException {
+    private MfPakDAO getMFPak() throws SQLException, ParseException {
 
         MfPakDAO mfPakDAO = mock(MfPakDAO.class);
         when(mfPakDAO.getNewspaperID(anyString())).thenReturn("adresseavisen1759");
@@ -107,7 +109,7 @@ public class EditionModsTest {
         entity.setNewspaperTitle("Kiøbenhavns Kongelig alene priviligerede Adresse-Contoirs Efterretninger");
         entity.setNewspaperID("adresseavisen1759");
         entity.setPublicationLocation("København");
-        entity.setNewspaperDateRange(new NewspaperDateRange(new Date(Long.MIN_VALUE), new Date()));
+        entity.setNewspaperDateRange(new NewspaperDateRange(new SimpleDateFormat("yyyy").parse("1600"), new Date()));
         when(mfPakDAO.getBatchNewspaperEntities(anyString())).thenReturn(Arrays.asList(entity));
         NewspaperEntity entity2 = new NewspaperEntity();
         entity2.setPublicationLocation("København");

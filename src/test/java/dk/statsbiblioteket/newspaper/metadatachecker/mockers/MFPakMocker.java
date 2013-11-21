@@ -6,6 +6,8 @@ import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperEntity;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperTitle;
 
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -16,7 +18,7 @@ import static org.mockito.Mockito.when;
 
 public class MFPakMocker {
 
-    public static MfPakDAO getMFPak() throws SQLException {
+    public static MfPakDAO getMFPak() throws SQLException, ParseException {
 
         MfPakDAO mfPakDAO = mock(MfPakDAO.class);
         when(mfPakDAO.getNewspaperID(anyString())).thenReturn("adresseavisen1759");
@@ -24,7 +26,7 @@ public class MFPakMocker {
         entity.setNewspaperTitle("Kiøbenhavns Kongelig alene priviligerede Adresse-Contoirs Efterretninger");
         entity.setNewspaperID("adresseavisen1759");
         entity.setPublicationLocation("København");
-        entity.setNewspaperDateRange(new NewspaperDateRange(new Date(Long.MIN_VALUE), new Date()));
+        entity.setNewspaperDateRange(new NewspaperDateRange(new SimpleDateFormat("yyyy").parse("1600"), new Date()));
         when(mfPakDAO.getBatchNewspaperEntities(anyString())).thenReturn(Arrays.asList(entity));
         NewspaperEntity entity2 = new NewspaperEntity();
         entity2.setPublicationLocation("København");

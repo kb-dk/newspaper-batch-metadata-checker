@@ -49,12 +49,15 @@ public final class FuzzyDate implements Comparable<FuzzyDate> {
     public int compareTo(Date date)  {
         DateFormat dateFormat = getDateFormat();
         Date thisAsDate = null;
+        Date thatDate;
         try {
             thisAsDate = dateFormat.parse(asString());
+
+            thatDate = dateFormat.parse(dateFormat.format(date));
         } catch (ParseException e) {
             throw new IllegalArgumentException("The datestring '"+dateString+"' is invalid",e);
         }
-        return thisAsDate.compareTo(date);
+        return thisAsDate.compareTo(thatDate);
     }
 
     /**

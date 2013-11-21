@@ -49,4 +49,9 @@ public abstract class XmlAttributeChecker {
      * Indicates whether the encountered event is relevant to check.
      */
     public abstract boolean shouldCheckEvent(AttributeParsingEvent event);
+
+    /**
+     * Override in subclasses if necessary.
+     */
+    protected void finish() {}
 }

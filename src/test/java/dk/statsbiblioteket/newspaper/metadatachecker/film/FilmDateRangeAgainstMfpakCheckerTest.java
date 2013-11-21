@@ -1,0 +1,164 @@
+package dk.statsbiblioteket.newspaper.metadatachecker.film;
+
+import com.sun.jersey.core.util.StringIgnoreCaseKeyComparator;
+import dk.statsbiblioteket.medieplatform.autonomous.Batch;
+import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
+import dk.statsbiblioteket.newspaper.metadatachecker.checker.FailureType;
+import dk.statsbiblioteket.newspaper.metadatachecker.checker.XmlAttributeChecker;
+import dk.statsbiblioteket.newspaper.metadatachecker.mockers.FilmMocker;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperDateRange;
+import dk.statsbiblioteket.util.xml.DOM;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+import org.w3c.dom.Document;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.when;
+import static org.testng.Assert.*;
+
+/**
+ *
+ */
+public class FilmDateRangeAgainstMfpakCheckerTest {
+
+    Batch batch;
+
+       @BeforeTest
+       public void setUp() throws SQLException, ParseException {
+           batch = new Batch();
+           batch.setBatchID("400022028241");
+                   batch.setRoundTripNumber(1);
+
+       }
+
+
+    /**
+     * Tests that a single film event validates if it has the precise dates.
+     * @throws IOException
+     * @throws SQLException
+     * @throws ParseException
+     */
+    @Test
+    public void testGoodPreciseData() throws IOException, SQLException, ParseException {
+        MfPakDAO dao  = mock(MfPakDAO.class);
+        when(dao.getBatchDateRanges(batch.getBatchID())).thenReturn(getRanges());
+        ResultCollector resultCollector = new ResultCollector("foo", "bar");
+        FilmDateRangeAgainstMfpakChecker checker = new FilmDateRangeAgainstMfpakChecker(resultCollector, FailureType.METADATA, dao, batch);
+        checkEvent(checker, "1851-03-16", "1852-03-15");
+        assertTrue(resultCollector.isSuccess(), resultCollector.toReport());
+    }
+
+    /**
+     * Tests film dates for a complete batch with precise data - ie that all expected films are found.
+     * @throws IOException
+     * @throws SQLException
+     * @throws ParseException
+     */
+    @Test
+    public void testGoodPreciseDataComplete() throws IOException, SQLException, ParseException {
+        MfPakDAO dao  = mock(MfPakDAO.class);
+        when(dao.getBatchDateRanges(batch.getBatchID())).thenReturn(getRanges());
+        ResultCollector resultCollector = new ResultCollector("foo", "bar");
+        FilmDateRangeAgainstMfpakChecker checker = new FilmDateRangeAgainstMfpakChecker(resultCollector, FailureType.METADATA, dao, batch);
+        checkEvent(checker, "1850-03-16", "1851-03-15");
+        checkEvent(checker, "1851-03-16", "1852-03-15");
+        checkEvent(checker, "1852-03-16", "1853-03-15");
+        checkEvent(checker, "1853-03-16", "1854-03-15");
+        checker.finish();
+        assertTrue(resultCollector.isSuccess(), resultCollector.toReport());
+    }
+
+    /**
+     * Checks that we can validate that all films in a batch are present when some of the dates are fuzzy.
+     * @throws IOException
+     * @throws SQLException
+     * @throws ParseException
+     */
+    @Test
+    public void testGoodFuzzyDataComplete() throws IOException, SQLException, ParseException {
+        MfPakDAO dao  = mock(MfPakDAO.class);
+        when(dao.getBatchDateRanges(batch.getBatchID())).thenReturn(getRanges());
+        ResultCollector resultCollector = new ResultCollector("foo", "bar");
+        FilmDateRangeAgainstMfpakChecker checker = new FilmDateRangeAgainstMfpakChecker(resultCollector, FailureType.METADATA, dao, batch);
+        checkEvent(checker, "1850-03-16", "1851-03-15");
+        checkEvent(checker, "1851-03-00", "1852-03-15");
+        checkEvent(checker, "1852-03-16", "1853-00-00");
+        checkEvent(checker, "1853-03-16", "1854-03-15");
+        checker.finish();
+        assertTrue(resultCollector.isSuccess(), resultCollector.toReport());
+    }
+
+    /**
+     * Checks that we can identify a missing film in a batch when some of the film dates are fuzzy.
+     * @throws IOException
+     * @throws SQLException
+     * @throws ParseException
+     */
+    @Test
+    public void testBadFuzzyDataIncomplete() throws IOException, SQLException, ParseException {
+        MfPakDAO dao  = mock(MfPakDAO.class);
+        when(dao.getBatchDateRanges(batch.getBatchID())).thenReturn(getRanges());
+        ResultCollector resultCollector = new ResultCollector("foo", "bar");
+        FilmDateRangeAgainstMfpakChecker checker = new FilmDateRangeAgainstMfpakChecker(resultCollector, FailureType.METADATA, dao, batch);
+        checkEvent(checker, "1851-03-00", "1852-03-15");
+        checkEvent(checker, "1852-03-16", "1853-00-00");
+        checkEvent(checker, "1853-03-16", "1854-03-15");
+        checker.finish();
+        assertFalse(resultCollector.isSuccess(), resultCollector.toReport());
+        assertTrue(resultCollector.toReport().contains("2E-2"), resultCollector.toReport());
+    }
+
+
+
+    @Test
+    public void testBadPreciseDataIncomplete() throws IOException, SQLException, ParseException {
+        MfPakDAO dao  = mock(MfPakDAO.class);
+        when(dao.getBatchDateRanges(batch.getBatchID())).thenReturn(getRanges());
+        ResultCollector resultCollector = new ResultCollector("foo", "bar");
+        FilmDateRangeAgainstMfpakChecker checker = new FilmDateRangeAgainstMfpakChecker(resultCollector, FailureType.METADATA, dao, batch);
+        checkEvent(checker, "1852-03-16", "1853-03-15");
+        checker.finish();
+        assertFalse(resultCollector.isSuccess(), resultCollector.toReport());
+        assertTrue(resultCollector.toReport().contains("2E-2"), resultCollector.toReport());
+    }
+
+
+    private void checkEvent(XmlAttributeChecker checker, String start, String end) throws IOException {
+            AttributeParsingEvent event = FilmMocker.getFilmXmlAttributeParsingEvent(
+                            "14",
+                            "Titleavis",
+                            "title",
+                            "1999-01-01",
+                            start,
+                    end,
+                    batch,
+                    300
+            );
+          checker.validate(event, DOM.streamToDOM(event.getData()));
+      }
+
+
+    private List<NewspaperDateRange> getRanges() throws ParseException {
+        List<NewspaperDateRange> ranges = new ArrayList<>();
+        ranges.add(getNewspaperDateRange("1850-03-16", "1851-03-15"));
+        ranges.add(getNewspaperDateRange("1851-03-16", "1852-03-15"));
+        ranges.add(getNewspaperDateRange("1852-03-16", "1853-03-15"));
+        ranges.add(getNewspaperDateRange("1853-03-16", "1854-03-15"));
+        return ranges;
+    }
+
+    private NewspaperDateRange getNewspaperDateRange(String start, String end) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return new NewspaperDateRange(sdf.parse(start), sdf.parse(end) );
+    }
+}
