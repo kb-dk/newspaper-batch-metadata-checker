@@ -7,10 +7,12 @@ import java.util.Date;
 
 /**
  * Implements functionality for working with ISO format dates without full precision. This means the dates can be
- * instantiate with the follow formats: <ol>
+ * instantiated with the follow formats: <ol>
  *     <li>Full precision: yyyy-MM-dd.</li>
  *     <li>Month precision: yyyy-MM-00.</li>
- *     <li>Year precision: yyyy-00-00.</li>
+ *     <li>Year precision: yyyy-00-00</li>
+ *      <li>Month precision: yyyy-MM</li>
+ *     <li>Year precision: yyyy.</li>
  * </ol>
  */
 public final class FuzzyDate implements Comparable<FuzzyDate> {

@@ -210,9 +210,6 @@ public class FuzzyDateTest {
         assertTrue(strictReferenceDate.compareTo(getDate("2012-00-00")) > 0);
         assertTrue(strictReferenceDate.compareTo(getDate("2013-09-12")) == 0);
 
-
-
-
         FuzzyDate fuzzyDayReferenceDate = new FuzzyDate("2013-09");
         assertTrue(fuzzyDayReferenceDate.compareTo(getDate("2013-10-10")) < 0);
         assertTrue(fuzzyDayReferenceDate.compareTo(getDate("2013-10-01")) < 0);
@@ -224,20 +221,19 @@ public class FuzzyDateTest {
         assertTrue(fuzzyDayReferenceDate.compareTo(getDate("2012-00-00")) > 0);
         assertTrue(fuzzyDayReferenceDate.compareTo(getDate("2013-09-01")) == 0);
 
-
         FuzzyDate fuzzyMonthReferenceDate = new FuzzyDate("2013-00-00");
         assertTrue(fuzzyMonthReferenceDate.compareTo(getDate("2014-10-01")) < 0);
         assertTrue(fuzzyMonthReferenceDate.compareTo(getDate("2014-01-01")) < 0);
         assertTrue(fuzzyMonthReferenceDate.compareTo(getDate("2012-09-00")) > 0);
         assertTrue(fuzzyMonthReferenceDate.compareTo(getDate("2012-00-00")) > 0);
         assertTrue(fuzzyMonthReferenceDate.compareTo(getDate("2013-01-01")) == 0);
-
-
     }
 
     @Test
     public void testGetMinDate() {
         FuzzyDate date = new FuzzyDate("1831-00-00");
+        // java Date constructor uses y-1900 so 1831 -> -69
+        // also January is month 0
         Assert.assertTrue(date.getMinDate().equals(new Date(-69, 0, 1)));
         date = new FuzzyDate("1831-02-00");
         Assert.assertEquals(date.getMinDate().toString(), new Date(-69, 1, 1).toString());
