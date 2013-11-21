@@ -31,6 +31,7 @@ public class FilmXmlChecker extends XmlFileChecker {
         checkers.add(new FilmDateVsEditionsChecker(resultCollector, xpathSelector, batchXmlStructure));
         checkers.add(new FilmIDAgainstFilmNodenameChecker(resultCollector, xpathSelector));
         checkers.add(new FilmNewspaperTitlesChecker(resultCollector, FailureType.METADATA, mfPakDAO, batch));
+        checkers.add(new FilmDateRangeAgainstMfpakChecker(resultCollector, mfPakDAO, batch));
     }
 
     @Override

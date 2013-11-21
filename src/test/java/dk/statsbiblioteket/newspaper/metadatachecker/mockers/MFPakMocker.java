@@ -8,8 +8,10 @@ import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperTitle;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -34,6 +36,11 @@ public class MFPakMocker {
         entity2.setNewspaperTitle("Kiøbenhavns Kongelig alene priviligerede Adresse-Contoirs Efterretninger");
         when(mfPakDAO.getNewspaperEntity(anyString(), any(Date.class))).thenReturn(entity2);
         when(mfPakDAO.getBatchShipmentDate(anyString())).thenReturn(new Date(0));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        NewspaperDateRange filmDateRange = new NewspaperDateRange(sdf.parse("1795-06-13"), sdf.parse("1795-06-15"));
+        List<NewspaperDateRange> ranges = new ArrayList<>();
+        ranges.add(filmDateRange);
+        when(mfPakDAO.getBatchDateRanges(anyString())).thenReturn(ranges);
         return mfPakDAO;
 
     }
