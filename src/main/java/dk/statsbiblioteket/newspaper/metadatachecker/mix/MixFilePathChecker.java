@@ -63,7 +63,7 @@ public class MixFilePathChecker extends XmlAttributeChecker {
 
     private String getInfixFromEvent(AttributeParsingEvent event) {
         if (event.getName()
-                 .contains("FILM-ISO-target")) {
+                 .contains("/FILM-ISO-target/")) {
             return "-ISO-";
         } else {
             return "-";
@@ -73,7 +73,7 @@ public class MixFilePathChecker extends XmlAttributeChecker {
     private String getFilmIDFromEvent(AttributeParsingEvent event) {
         String filmID;
         if (event.getName()
-                 .contains("WORKSHIFT-ISO-TARGET")) {
+                 .contains("/WORKSHIFT-ISO-TARGET/")) {
               /* WORKSHIFT-ISO-TARGET is special in the sense that it does not belong to a film.
                  The 'filmID' here is based on the running number that is in the filename just
                  before the 'billedID' */
