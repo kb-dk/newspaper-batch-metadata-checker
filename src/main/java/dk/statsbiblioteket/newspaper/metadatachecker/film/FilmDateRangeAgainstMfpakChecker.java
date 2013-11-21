@@ -33,12 +33,11 @@ public class FilmDateRangeAgainstMfpakChecker extends XmlAttributeChecker {
     /**
      * Constructor for this class.
      * @param resultCollector
-     * @param failureType
      * @param mfPakDAO
      * @param batch
      */
-    public FilmDateRangeAgainstMfpakChecker(ResultCollector resultCollector, FailureType failureType, MfPakDAO mfPakDAO, Batch batch) {
-        super(resultCollector, failureType);
+    public FilmDateRangeAgainstMfpakChecker(ResultCollector resultCollector, MfPakDAO mfPakDAO, Batch batch) {
+        super(resultCollector, FailureType.METADATA);
         this.batch = batch;
         this.resultCollector = resultCollector;
         this.filmXPathSelector = DOM.createXPathSelector("avis",

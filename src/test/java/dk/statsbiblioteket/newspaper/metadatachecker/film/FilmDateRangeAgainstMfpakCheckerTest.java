@@ -1,10 +1,8 @@
 package dk.statsbiblioteket.newspaper.metadatachecker.film;
 
-import com.sun.jersey.core.util.StringIgnoreCaseKeyComparator;
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
-import dk.statsbiblioteket.newspaper.metadatachecker.checker.FailureType;
 import dk.statsbiblioteket.newspaper.metadatachecker.checker.XmlAttributeChecker;
 import dk.statsbiblioteket.newspaper.metadatachecker.mockers.FilmMocker;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
@@ -12,7 +10,6 @@ import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperDateRang
 import dk.statsbiblioteket.util.xml.DOM;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
-import org.w3c.dom.Document;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -22,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.*;
 
@@ -71,7 +67,7 @@ public class FilmDateRangeAgainstMfpakCheckerTest {
         MfPakDAO dao  = mock(MfPakDAO.class);
         when(dao.getBatchDateRanges(batch.getBatchID())).thenReturn(getRanges());
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
-        FilmDateRangeAgainstMfpakChecker checker = new FilmDateRangeAgainstMfpakChecker(resultCollector, FailureType.METADATA, dao, batch);
+        FilmDateRangeAgainstMfpakChecker checker = new FilmDateRangeAgainstMfpakChecker(resultCollector, dao, batch);
         checkEvent(checker, "1851-03-16", "1852-03-15");
         assertTrue(resultCollector.isSuccess(), resultCollector.toReport());
     }
@@ -87,7 +83,7 @@ public class FilmDateRangeAgainstMfpakCheckerTest {
         MfPakDAO dao  = mock(MfPakDAO.class);
         when(dao.getBatchDateRanges(batch.getBatchID())).thenReturn(getRanges());
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
-        FilmDateRangeAgainstMfpakChecker checker = new FilmDateRangeAgainstMfpakChecker(resultCollector, FailureType.METADATA, dao, batch);
+        FilmDateRangeAgainstMfpakChecker checker = new FilmDateRangeAgainstMfpakChecker(resultCollector, dao, batch);
         checkEvent(checker, "1850-03-16", "1851-03-15");
         checkEvent(checker, "1851-03-16", "1852-03-15");
         checkEvent(checker, "1852-03-16", "1853-03-15");
@@ -107,7 +103,7 @@ public class FilmDateRangeAgainstMfpakCheckerTest {
         MfPakDAO dao  = mock(MfPakDAO.class);
         when(dao.getBatchDateRanges(batch.getBatchID())).thenReturn(getRanges());
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
-        FilmDateRangeAgainstMfpakChecker checker = new FilmDateRangeAgainstMfpakChecker(resultCollector, FailureType.METADATA, dao, batch);
+        FilmDateRangeAgainstMfpakChecker checker = new FilmDateRangeAgainstMfpakChecker(resultCollector, dao, batch);
         checkEvent(checker, "1850-03-16", "1851-03-15");
         checkEvent(checker, "1851-03-00", "1852-03-15");
         checkEvent(checker, "1852-03-16", "1853");
@@ -127,7 +123,7 @@ public class FilmDateRangeAgainstMfpakCheckerTest {
         MfPakDAO dao  = mock(MfPakDAO.class);
         when(dao.getBatchDateRanges(batch.getBatchID())).thenReturn(getRanges());
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
-        FilmDateRangeAgainstMfpakChecker checker = new FilmDateRangeAgainstMfpakChecker(resultCollector, FailureType.METADATA, dao, batch);
+        FilmDateRangeAgainstMfpakChecker checker = new FilmDateRangeAgainstMfpakChecker(resultCollector, dao, batch);
         checkEvent(checker, "1851-03-00", "1852-03-15");
         checkEvent(checker, "1852-03-16", "1853-00");
         checkEvent(checker, "1853-03-16", "1854-03-15");
@@ -148,7 +144,7 @@ public class FilmDateRangeAgainstMfpakCheckerTest {
         MfPakDAO dao  = mock(MfPakDAO.class);
         when(dao.getBatchDateRanges(batch.getBatchID())).thenReturn(getRanges());
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
-        FilmDateRangeAgainstMfpakChecker checker = new FilmDateRangeAgainstMfpakChecker(resultCollector, FailureType.METADATA, dao, batch);
+        FilmDateRangeAgainstMfpakChecker checker = new FilmDateRangeAgainstMfpakChecker(resultCollector, dao, batch);
         checkEvent(checker, "1852-03-16", "1853-03-15");
         checker.finish();
         assertFalse(resultCollector.isSuccess(), resultCollector.toReport());
@@ -166,7 +162,7 @@ public class FilmDateRangeAgainstMfpakCheckerTest {
         MfPakDAO dao  = mock(MfPakDAO.class);
         when(dao.getBatchDateRanges(batch.getBatchID())).thenReturn(getRanges());
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
-        FilmDateRangeAgainstMfpakChecker checker = new FilmDateRangeAgainstMfpakChecker(resultCollector, FailureType.METADATA, dao, batch);
+        FilmDateRangeAgainstMfpakChecker checker = new FilmDateRangeAgainstMfpakChecker(resultCollector, dao, batch);
         checkEvent(checker, "1852-03-16", "1853-06-00");
         assertFalse(resultCollector.isSuccess(), resultCollector.toReport());
         assertTrue(resultCollector.toReport().contains("2E-2"), resultCollector.toReport());
