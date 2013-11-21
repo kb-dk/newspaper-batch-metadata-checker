@@ -98,13 +98,14 @@ public class FilmNewspaperTitlesChecker extends XmlAttributeChecker {
         for (NewspaperEntity newspaperEntity: possibleNewspaperEntities) {
             Date fromDate = newspaperEntity.getNewspaperDateRange().getFromDate();
             Date toDate = newspaperEntity.getNewspaperDateRange().getToDate();
-            if (
-                    (startLimit.before(fromDate) && endLimit.after(fromDate))
-                            ||
-                            (startLimit.before(toDate) && endLimit.after(toDate))
-                            ||
-                            (startLimit.after(fromDate) && endLimit.before(toDate))
-                    ) {
+                if (
+                        (startLimit.compareTo(fromDate) <= 0 && endLimit.compareTo(fromDate) >= 0)
+                                ||
+                                (startLimit.compareTo(toDate) <=0 && endLimit.compareTo(toDate) >= 0)
+                                ||
+                                (startLimit.compareTo(fromDate) >= 0 && endLimit.compareTo(toDate) <= 0)
+                        )
+            {
                 includedTitles.add(newspaperEntity.getNewspaperTitle().trim());
             }
         }

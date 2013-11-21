@@ -13,6 +13,7 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.w3c.dom.Document;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -70,6 +71,34 @@ public class FilmNewspaperTitlesCheckerTest {
                 "1999-01-01",
                 "1920-04-01",
                 "1935-01-01",
+                batch,
+                300
+        );
+        Document filmDocument = DOM.streamToDOM(event.getData());
+        ResultCollector resultCollector = new ResultCollector("foo", "bar");
+        FilmNewspaperTitlesChecker checker = new FilmNewspaperTitlesChecker(resultCollector, FailureType.METADATA, dao, batch);
+        checker.validate(event, filmDocument);
+        assertTrue(resultCollector.isSuccess(), resultCollector.toReport());
+    }
+
+    /**
+     * Basic test that we can find the right titles if we have the exact dates of the film. This
+     * tests the corner case when the film exactly matches start/end dates for the titles.
+     * @throws Exception
+     */
+    @Test
+    public void testGoodDataPreciseCornerCase() throws IOException {
+        AttributeParsingEvent event = FilmMocker.getFilmXmlAttributeParsingEvent(
+                "14",
+                "Titleavis",
+                "title2</avis:titles>" +
+                        "<avis:titles>title3</avis:titles>" +
+                        "<avis:titles>title4</avis:titles>" +
+                        "<avis:titles>title5</avis:titles>" +
+                        "<avis:titles>title6",
+                "1999-01-01",
+                "1920-04-15",
+                "1930-04-16",
                 batch,
                 300
         );
@@ -248,8 +277,8 @@ public class FilmNewspaperTitlesCheckerTest {
         entities.add(getNewspaperEntity("1920-03-16", "1920-04-15", 2));
         entities.add(getNewspaperEntity("1920-04-16", "1920-05-15", 3));
         entities.add(getNewspaperEntity("1920-05-16", "1930-03-15", 4));
-        entities.add(getNewspaperEntity("1930-03-16", "1930-03-15", 5));
-        entities.add(getNewspaperEntity("1930-03-16", "3050-06-01", 6));
+        entities.add(getNewspaperEntity("1930-03-16", "1930-04-15", 5));
+        entities.add(getNewspaperEntity("1930-04-16", "3050-06-01", 6));
         return entities;
     }
 
