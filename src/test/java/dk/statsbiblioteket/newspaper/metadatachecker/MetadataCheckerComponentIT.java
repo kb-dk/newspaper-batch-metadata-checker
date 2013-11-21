@@ -1,12 +1,5 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.util.Properties;
-
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.TreeIterator;
@@ -16,10 +9,15 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.filesystem.transfor
 import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.ConfigurationProperties;
 import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.MfPakConfiguration;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
-import dk.statsbiblioteket.util.Streams;
 import dk.statsbiblioteket.util.xml.DOM;
 import org.testng.annotations.Test;
 import org.w3c.dom.Document;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.util.Properties;
 
 import static org.testng.Assert.assertTrue;
 
@@ -74,8 +72,19 @@ public class MetadataCheckerComponentIT {
         return Thread.currentThread().getContextClassLoader().getResourceAsStream("assumed-valid-structure.xml");
     }
 
-    private String getJpylyzerPath() {
-        return "src/main/extras/jpylyzer-1.10.1/jpylyzer.py";
+    private String getJpylyzerPath() throws URISyntaxException {
+        File placeHolderURL = new File(
+                Thread.currentThread()
+                      .getContextClassLoader()
+                      .getResource("METADATA_PLACEHOLDER")
+                      .toURI());
+
+        String path = placeHolderURL.getParentFile()
+                                 .getParentFile().getParentFile()
+                                 .getAbsolutePath() + "/src/main/extras/jpylyzer-1.10.1/jpylyzer.py";
+        /*System.out
+              .println(path);*/
+        return path;
     }
 
     /**
