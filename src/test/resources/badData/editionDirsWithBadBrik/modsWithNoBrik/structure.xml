@@ -4,16 +4,16 @@
                    shortName="adresseavisen1759-400022028241-1.film.xml"
                    checksum="a54c6bc260bc6f089648ae67216c23a2"/>
         <node name="B400022028241-RT1/400022028241-1/FILM-ISO-target" shortName="FILM-ISO-target">
-            <node name="B400022028241-RT1/400022028241-1/FILM-ISO-target/adresseavisen1759-400022028241-1-ISO-1"
-                  shortName="adresseavisen1759-400022028241-1-ISO-1">
-                <attribute name="B400022028241-RT1/400022028241-1/FILM-ISO-target/adresseavisen1759-400022028241-1-ISO-1.mix.xml"
-                           shortName="adresseavisen1759-400022028241-1-ISO-1.mix.xml"
+            <node name="B400022028241-RT1/400022028241-1/FILM-ISO-target/adresseavisen1759-400022028241-1-ISO-0001"
+                  shortName="adresseavisen1759-400022028241-1-ISO-0001">
+                <attribute name="B400022028241-RT1/400022028241-1/FILM-ISO-target/adresseavisen1759-400022028241-1-ISO-0001.mix.xml"
+                           shortName="adresseavisen1759-400022028241-1-ISO-0001.mix.xml"
                            checksum="5eee92c0edeadaadcd38b86361f744ec"/>
-                <node name="B400022028241-RT1/400022028241-1/FILM-ISO-target/adresseavisen1759-400022028241-1-ISO-1.jp2"
-                      shortName="adresseavisen1759-400022028241-1-ISO-1.jp2">
-                    <attribute name="B400022028241-RT1/400022028241-1/FILM-ISO-target/adresseavisen1759-400022028241-1-ISO-1.jp2/contents"
+                <node name="B400022028241-RT1/400022028241-1/FILM-ISO-target/adresseavisen1759-400022028241-1-ISO-0001.jp2"
+                      shortName="adresseavisen1759-400022028241-1-ISO-0001.jp2">
+                    <attribute name="B400022028241-RT1/400022028241-1/FILM-ISO-target/adresseavisen1759-400022028241-1-ISO-0001.jp2/contents"
                                shortName="contents"
-                               checksum="b9de003a75ff2408b4ae99de49f66f9e"/>
+                               checksum="d41d8cd98f00b204e9800998ecf8427e"/>
                 </node>
             </node>
         </node>
