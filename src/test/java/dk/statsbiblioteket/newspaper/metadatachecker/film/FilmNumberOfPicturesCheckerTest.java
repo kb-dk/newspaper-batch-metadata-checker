@@ -96,7 +96,7 @@ public class FilmNumberOfPicturesCheckerTest {
         AttributeParsingEvent event = createFilmEvent(filmID);
         checker.validate(event, filmEventDoc);
         verify(resultCollector).addFailure(eq(event.getName()), eq(FailureType.METADATA.value()),
-                eq(FilmNumberOfPicturesChecker.class.getName()), anyString());
+                eq(FilmNumberOfPicturesChecker.class.getSimpleName()), anyString());
         verifyNoMoreInteractions(resultCollector);
     }
 

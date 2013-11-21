@@ -32,7 +32,7 @@ public abstract class XmlAttributeChecker {
 
     protected void addFailure(AttributeParsingEvent event, String description) {
         resultCollector.addFailure(
-                event.getName(), failureType.value(), getClass().getName(), description);
+                event.getName(), failureType.value(), getClass().getSimpleName(), description);
     }
 
     /**

@@ -59,7 +59,7 @@ public abstract class XmlFileChecker extends DefaultTreeEventHandler {
 
     private void addFailure(AttributeParsingEvent event, String description) {
         resultCollector.addFailure(
-                event.getName(), failureType.value(), getClass().getName(), description);
+                event.getName(), failureType.value(), getClass().getSimpleName(), description);
     }
 
     /** Must be implemented by subclass providing the concrete list of <code>XmlAttributeChecker</code>s. */

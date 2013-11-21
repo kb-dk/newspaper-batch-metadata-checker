@@ -154,7 +154,7 @@ public class FilmDateVsEditionsCheckerTest {
 
     private void verifyFailure(String eventName) {
         verify(resultCollector).addFailure(eq(eventName), eq(FailureType.METADATA.value()),
-                eq(FilmDateVsEditionsChecker.class.getName()), anyString());
+                eq(FilmDateVsEditionsChecker.class.getSimpleName()), anyString());
     }
 
     /**

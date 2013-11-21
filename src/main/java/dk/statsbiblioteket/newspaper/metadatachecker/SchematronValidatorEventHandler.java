@@ -94,33 +94,33 @@ public class SchematronValidatorEventHandler extends DefaultTreeEventHandler {
 
     private void schematronValidate(AttributeParsingEvent event,
                                     String schematronFile) {
-        Document doc = null;
+        Document doc;
         try {
             doc = DOM.streamToDOM(event.getData());
             if (doc == null) {
                 resultCollector.addFailure(event.getName(),
-                                           getType(event.getName()),
-                                           getClass().getName(),
-                                           "Exception parsing xml metadata from " + event.getName(),
+                                           "exception",
+                                           getClass().getSimpleName(),
+                                           "Exception parsing xml metadata",
                                            event.getName());
                 return;
             }
         } catch (IOException e) {
             resultCollector.addFailure(event.getName(),
-                                       getType(event.getName()),
-                                       getClass().getName(),
+                                       "exception",
+                                       getClass().getSimpleName(),
                                        "Exception reading metadata. Error was " + e.toString(),
                                        Strings.getStackTrace(e));
             return;
         }
-        SchematronOutputType result = null;
+        SchematronOutputType result;
         try {
             final SchematronResourcePure schematron = getSchematron(schematronFile);
             result = schematron.applySchematronValidation(doc);
         } catch (SchematronException e) {
             resultCollector.addFailure(event.getName(),
-                                       "schematron",
-                                       getClass().getName(),
+                                       "exception",
+                                       getClass().getSimpleName(),
                                        "Schematron Exception. Error was " + e.toString(),
                                        Strings.getStackTrace(e));
             return;
@@ -130,7 +130,7 @@ public class SchematronValidatorEventHandler extends DefaultTreeEventHandler {
                 FailedAssert failedAssert = (FailedAssert) o;
                 resultCollector.addFailure(event.getName(),
                                            getType(event.getName()),
-                                           getClass().getName(),
+                                           getClass().getSimpleName(),
                                            failedAssert.getText(),
                                            "Location: '" + failedAssert.getLocation() + "'",
                                            "Test: '" + failedAssert.getTest() + "'");
@@ -161,6 +161,4 @@ public class SchematronValidatorEventHandler extends DefaultTreeEventHandler {
         }
         return null;
     }
-
-
 }

@@ -10,6 +10,7 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributePar
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeBeginsParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeEndParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
+import dk.statsbiblioteket.util.Strings;
 
 import javax.xml.XMLConstants;
 import javax.xml.transform.stream.StreamSource;
@@ -30,6 +31,7 @@ public class SchemaValidatorEventHandler implements TreeEventHandler {
     /** A map from file postfix to a known schema for that file. */
     private static final Map<String, String> POSTFIX_TO_XSD;
     private static final Map<String, String> POSTFIX_TO_TYPE;
+    private static final Map<String, String> POSTFIX_TO_MESSAGE_PREFIX;
 
     static {
         Map<String, String> postfixToXsd = new HashMap<>();
@@ -49,6 +51,15 @@ public class SchemaValidatorEventHandler implements TreeEventHandler {
         postfixToType.put(".film.xml", "metadata");
         postfixToType.put(".jpylyzer.xml", "jp2file");
         POSTFIX_TO_TYPE = Collections.unmodifiableMap(postfixToType);
+
+        Map<String, String> postfixToMessagePrefix = new HashMap<>();
+        postfixToMessagePrefix.put(".alto.xml", "2J: ");
+        postfixToMessagePrefix.put(".mix.xml", "2K: ");
+        postfixToMessagePrefix.put(".mods.xml", "2C: ");
+        postfixToMessagePrefix.put(".edition.xml", "2D: ");
+        postfixToMessagePrefix.put(".film.xml", "2E: ");
+        postfixToMessagePrefix.put(".jpylyzer.xml", "2B: ");
+        POSTFIX_TO_MESSAGE_PREFIX = Collections.unmodifiableMap(postfixToMessagePrefix);
     }
 
     /** Logger */
@@ -110,9 +121,10 @@ public class SchemaValidatorEventHandler implements TreeEventHandler {
         } catch (SAXParseException e) {
             resultCollector.addFailure(event.getName(),
                                        getType(event.getName()),
-                                       "Metadata_checker_component",
-                                       "Failure validating XML data from '" + event.getName() + "': Line " +
-                                       e.getLineNumber() + " Column " + e.getColumnNumber() + ": " + e.getMessage());
+                                       getClass().getSimpleName(),
+                                       getMessagePrefix(event.getName()) + "Failure validating XML data: Line " +
+                                               e.getLineNumber() + " Column " + e.getColumnNumber() + ": " + e
+                                               .getMessage());
             log.debug("Error validating '{}' with schema '{}': Line {} Column {}: {}",
                       event.getName(),
                       schemaFile,
@@ -122,23 +134,26 @@ public class SchemaValidatorEventHandler implements TreeEventHandler {
                       e);
         } catch (SAXException e) {
             resultCollector.addFailure(event.getName(),
-                                       getType(event.getName()),
-                                       "Metadata_checker_component",
-                                       "Failure validating XML data from '" + event.getName() + "': " + e.getMessage());
+                                       "exception",
+                                       getClass().getSimpleName(),
+                                       getMessagePrefix(
+                                               event.getName()) + "Failure validating XML data: " + e.toString(),
+                                       Strings.getStackTrace(e));
             log.debug("Error validating '{}' with schema '{}': {}", event.getName(), schemaFile, e.getMessage(), e);
         } catch (IOException e) {
             resultCollector.addFailure(event.getName(),
-                                       getType(event.getName()),
-                                       "Metadata_checker_component",
-                                       "Failure reading data from '" + event.getName() + "': " + e.toString());
+                                       "exception",
+                                       getClass().getSimpleName(),
+                                       getMessagePrefix(event.getName()) + "Failure reading data: " + e.toString(),
+                                       Strings.getStackTrace(e));
             log.debug("IO error reading '{}' while validating with schema '{}'", event.getName(), schemaFile, e);
         } catch (Exception e) {
             StringWriter sw = new StringWriter();
             e.printStackTrace(new PrintWriter(sw));
             resultCollector.addFailure(event.getName(),
-                                       getType(event.getName()),
-                                       "Metadata_checker_component",
-                                       "Unexpected failure processing data from '" + event.getName() + "': " +
+                                       "exception",
+                                       getClass().getSimpleName(),
+                                       getMessagePrefix(event.getName()) + "Unexpected failure processing data from '" + event.getName() + "': " +
                                        e.toString(),
                                        sw.toString());
             log.error("Unexpected error while validating '{}' with schema '{}'", event.getName(), schemaFile, e);
@@ -152,6 +167,15 @@ public class SchemaValidatorEventHandler implements TreeEventHandler {
             }
         }
         return null;
+    }
+
+    private String getMessagePrefix(String name) {
+        for (Map.Entry<String, String> stringStringEntry : POSTFIX_TO_MESSAGE_PREFIX.entrySet()) {
+            if (name.endsWith(stringStringEntry.getKey())) {
+                return stringStringEntry.getValue();
+            }
+        }
+        return "";
     }
 
     /**

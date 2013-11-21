@@ -57,7 +57,7 @@ public class FilmIDAgainstFilmNodenameCheckerTest {
         AttributeParsingEvent event = createFilmEvent(filmID + "-1");
         checker.validate(event, filmEventDoc);
         verify(resultCollector).addFailure(eq(event.getName()), eq(FailureType.METADATA.value()),
-                eq(FilmIDAgainstFilmNodenameChecker.class.getName()), anyString());
+                eq(FilmIDAgainstFilmNodenameChecker.class.getSimpleName()), anyString());
         verifyNoMoreInteractions(resultCollector);
     }
 

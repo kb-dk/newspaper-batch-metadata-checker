@@ -33,56 +33,21 @@ public class MetadataCheckerComponentTest {
 
         // Assert errors
         Assert.assertFalse(result.isSuccess(), result.toReport() + "\n");
-        Assert.assertTrue(
-                result.failures
-                      .contains(
-                              "Failure validating XML data from "
-                              +
-                              "'B400022028240-RT1/400022028240-14/AdresseContoirsEfterretninger-400022028240-14.film.xml': Line 25 "
-                              +
-                              "Column 21: Content is not allowed in trailing section."));
-        Assert.assertTrue(
-                result.failures
-                      .contains(
-                              "Failure validating XML data from "
-                              +
-                              "'B400022028240-RT1/400022028240-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01.edition"
-                              +
-                              ".xml': Line 1 Column 53: cvc-elt.1: Cannot find the declaration "
-                              +
-                              "of element 'mods:mods'."));
-        Assert.assertTrue(
-                result.failures
-                      .contains(
-                              "Failure validating XML data from "
-                              +
-                              "'B400022028240-RT1/400022028240-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006"
-                              +
-                              ".alto.xml': Line 2 Column 180: cvc-elt.1: Cannot find the "
-                              +
-                              "declaration of element 'altox'."));
-        Assert.assertTrue(
-                result.failures
-                      .contains(
-                              "Failure validating XML data from "
-                              +
-                              "'B400022028240-RT1/400022028240-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006"
-                              +
-                              ".mods.xml': Line 9 Column 16: The end-tag for element type "
-                              +
-                              "\"mods:part\" must end with a '>' "
-                              +
-                              "delimiter."));
-        Assert.assertTrue(
-                result.failures
-                      .contains(
-                              "Failure validating XML data from "
-                              +
-                              "'B400022028240-RT1/400022028240-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006"
-                              +
-                              ".mix.xml': Line 63 Column 52: cvc-datatype-valid.1.2.1: 'hest' is"
-                              +
-                              " not a valid value for 'integer'."));
+        Assert.assertTrue(result.failures.contains(
+                "2E: Failure validating XML data: Line 25 Column 21: Content is not allowed in trailing section."),
+                          result.toReport());
+        Assert.assertTrue(result.failures.contains(
+                "2D: Failure validating XML data: Line 1 Column 53: cvc-elt.1: Cannot find the declaration of element 'mods:mods'."),
+                          result.toReport());
+        Assert.assertTrue(result.failures.contains(
+                "2J: Failure validating XML data: Line 2 Column 180: cvc-elt.1: Cannot find the declaration of element 'altox'."),
+                          result.toReport());
+        Assert.assertTrue(result.failures.contains(
+                "2C: Failure validating XML data: Line 9 Column 16: The end-tag for element type \"mods:part\" must end with a '>' delimiter."),
+                          result.toReport());
+        Assert.assertTrue(result.failures.contains(
+                "2K: Failure validating XML data: Line 63 Column 52: cvc-datatype-valid.1.2.1: 'hest' is not a valid value for 'integer'."),
+                          result.toReport());
     }
 
     @Test
