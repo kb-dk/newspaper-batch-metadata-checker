@@ -52,7 +52,6 @@ public final class FuzzyDate implements Comparable<FuzzyDate> {
         Date thatDate;
         try {
             thisAsDate = dateFormat.parse(asString());
-
             thatDate = dateFormat.parse(dateFormat.format(date));
         } catch (ParseException e) {
             throw new IllegalArgumentException("The datestring '"+dateString+"' is invalid",e);
@@ -132,9 +131,11 @@ public final class FuzzyDate implements Comparable<FuzzyDate> {
             if (getPrecision() > 9 ){
                  return sdf.parse(dateString);
             } else if (getPrecision() > 5 ){
-                return sdf.parse(dateString.replace("-00", "-01"));
+                //return sdf.parse(dateString.replace("-00", "-01"));
+                return sdf.parse(dateString.substring(0,7) + "-01");
             } else {
-                return sdf.parse(dateString.replace("-00-00", "-01-01"));
+                //return sdf.parse(dateString.replace("-00-00", "-01-01"));
+                return sdf.parse(dateString.substring(0,4) + "-01-01");
             }
         } catch (ParseException e) {
             throw new IllegalArgumentException("Unparseable date", e);
@@ -154,7 +155,7 @@ public final class FuzzyDate implements Comparable<FuzzyDate> {
                 return sdf.parse(dateString);
             } else if (getPrecision() > 5 ){
                 if (getMonth() == 12) {
-                    return sdf.parse(dateString.replace("-00","-31")); //Special case in december
+                    return sdf.parse(dateString.substring(0,4) + "-12-31"); //Special case in december
                 } else {
                     Date nextDate = new Date(getYear() - 1900 , getMonth(), 1); //1st date of next month, same year. "getMonth" because of 0-month
                     Date actualDate = new Date(nextDate.getTime() - oneDayMs );
@@ -175,11 +176,19 @@ public final class FuzzyDate implements Comparable<FuzzyDate> {
     }
 
     private int getMonth() {
-        return Integer.parseInt(dateString.substring(5,7));
+        if (myPrecision > 5) {
+            return Integer.parseInt(dateString.substring(5,7));
+        } else {
+            return 0;
+        }
     }
 
     private int getDate() {
+        if (myPrecision > 9) {
         return Integer.parseInt(dateString.substring(9));
+        } else {
+            return 0;
+        }
     }
 
     @Override

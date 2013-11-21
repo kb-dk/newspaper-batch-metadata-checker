@@ -110,7 +110,7 @@ public class FilmDateRangeAgainstMfpakCheckerTest {
         FilmDateRangeAgainstMfpakChecker checker = new FilmDateRangeAgainstMfpakChecker(resultCollector, FailureType.METADATA, dao, batch);
         checkEvent(checker, "1850-03-16", "1851-03-15");
         checkEvent(checker, "1851-03-00", "1852-03-15");
-        checkEvent(checker, "1852-03-16", "1853-00-00");
+        checkEvent(checker, "1852-03-16", "1853");
         checkEvent(checker, "1853-03-16", "1854-03-15");
         checker.finish();
         assertTrue(resultCollector.isSuccess(), resultCollector.toReport());
@@ -129,7 +129,7 @@ public class FilmDateRangeAgainstMfpakCheckerTest {
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
         FilmDateRangeAgainstMfpakChecker checker = new FilmDateRangeAgainstMfpakChecker(resultCollector, FailureType.METADATA, dao, batch);
         checkEvent(checker, "1851-03-00", "1852-03-15");
-        checkEvent(checker, "1852-03-16", "1853-00-00");
+        checkEvent(checker, "1852-03-16", "1853-00");
         checkEvent(checker, "1853-03-16", "1854-03-15");
         checker.finish();
         assertFalse(resultCollector.isSuccess(), resultCollector.toReport());

@@ -221,8 +221,8 @@ public class FilmNewspaperTitlesCheckerTest {
                         "<avis:titles>title5</avis:titles>" +
                         "<avis:titles>title6",
                 "1999-01-01",
-                "1920-04-00",
-                "1930-00-00",
+                "1920-04",
+                "1930",
                 batch,
                 300
         );
