@@ -27,20 +27,38 @@ import static org.mockito.Mockito.when;
 import static org.testng.Assert.*;
 
 /**
- *
+ * Unit tests for FilmDateRangeAgainstMfpakChecker
  */
 public class FilmDateRangeAgainstMfpakCheckerTest {
 
     Batch batch;
 
-       @BeforeTest
-       public void setUp() throws SQLException, ParseException {
-           batch = new Batch();
-           batch.setBatchID("400022028241");
-                   batch.setRoundTripNumber(1);
+    @BeforeTest
+    public void setUp() throws SQLException, ParseException {
+        batch = new Batch();
+        batch.setBatchID("400022028241");
+        batch.setRoundTripNumber(1);
 
-       }
+    }
 
+    /**
+     * Define a batch with four consecutive films.
+     * @return
+     * @throws ParseException
+     */
+    private List<NewspaperDateRange> getRanges() throws ParseException {
+        List<NewspaperDateRange> ranges = new ArrayList<>();
+        ranges.add(getNewspaperDateRange("1850-03-16", "1851-03-15"));
+        ranges.add(getNewspaperDateRange("1851-03-16", "1852-03-15"));
+        ranges.add(getNewspaperDateRange("1852-03-16", "1853-03-15"));
+        ranges.add(getNewspaperDateRange("1853-03-16", "1854-03-15"));
+        return ranges;
+    }
+
+    private NewspaperDateRange getNewspaperDateRange(String start, String end) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return new NewspaperDateRange(sdf.parse(start), sdf.parse(end) );
+    }
 
     /**
      * Tests that a single film event validates if it has the precise dates.
@@ -119,7 +137,12 @@ public class FilmDateRangeAgainstMfpakCheckerTest {
     }
 
 
-
+     /**
+     * Checks that we can identify a missing film in a batch with non-fuzzy data.
+     * @throws IOException
+     * @throws SQLException
+     * @throws ParseException
+     */
     @Test
     public void testBadPreciseDataIncomplete() throws IOException, SQLException, ParseException {
         MfPakDAO dao  = mock(MfPakDAO.class);
@@ -132,7 +155,30 @@ public class FilmDateRangeAgainstMfpakCheckerTest {
         assertTrue(resultCollector.toReport().contains("2E-2"), resultCollector.toReport());
     }
 
+    /**
+     * Checks that we can recognise an unexpected film in a batch via fuzzy data.
+     * @throws IOException
+     * @throws SQLException
+     * @throws ParseException
+     */
+    @Test
+    public void testBadDataUnknownFilm() throws IOException, SQLException, ParseException {
+        MfPakDAO dao  = mock(MfPakDAO.class);
+        when(dao.getBatchDateRanges(batch.getBatchID())).thenReturn(getRanges());
+        ResultCollector resultCollector = new ResultCollector("foo", "bar");
+        FilmDateRangeAgainstMfpakChecker checker = new FilmDateRangeAgainstMfpakChecker(resultCollector, FailureType.METADATA, dao, batch);
+        checkEvent(checker, "1852-03-16", "1853-06-00");
+        assertFalse(resultCollector.isSuccess(), resultCollector.toReport());
+        assertTrue(resultCollector.toReport().contains("2E-2"), resultCollector.toReport());
+    }
 
+    /**
+     * Utility method to create and check a film.xml instance with specified start/end dates.
+     * @param checker
+     * @param start
+     * @param end
+     * @throws IOException
+     */
     private void checkEvent(XmlAttributeChecker checker, String start, String end) throws IOException {
             AttributeParsingEvent event = FilmMocker.getFilmXmlAttributeParsingEvent(
                             "14",
@@ -148,17 +194,4 @@ public class FilmDateRangeAgainstMfpakCheckerTest {
       }
 
 
-    private List<NewspaperDateRange> getRanges() throws ParseException {
-        List<NewspaperDateRange> ranges = new ArrayList<>();
-        ranges.add(getNewspaperDateRange("1850-03-16", "1851-03-15"));
-        ranges.add(getNewspaperDateRange("1851-03-16", "1852-03-15"));
-        ranges.add(getNewspaperDateRange("1852-03-16", "1853-03-15"));
-        ranges.add(getNewspaperDateRange("1853-03-16", "1854-03-15"));
-        return ranges;
-    }
-
-    private NewspaperDateRange getNewspaperDateRange(String start, String end) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        return new NewspaperDateRange(sdf.parse(start), sdf.parse(end) );
-    }
 }

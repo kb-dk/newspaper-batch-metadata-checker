@@ -16,16 +16,27 @@ import java.util.Date;
 import java.util.List;
 
 /**
- *
+ * This class checks the date range for a film in the film.xml metadata against the list of known
+ * date ranges for films in the current batch (from mfpak).
  */
 public class FilmDateRangeAgainstMfpakChecker extends XmlAttributeChecker {
 
+    /**
+     * The sorted list of known date ranges. From mfpak.
+     */
     private List<NewspaperDateRange> dateRanges;
 
     private Batch batch;
     private ResultCollector resultCollector;
     private XPathSelector filmXPathSelector;
 
+    /**
+     * Constructor for this class.
+     * @param resultCollector
+     * @param failureType
+     * @param mfPakDAO
+     * @param batch
+     */
     public FilmDateRangeAgainstMfpakChecker(ResultCollector resultCollector, FailureType failureType, MfPakDAO mfPakDAO, Batch batch) {
         super(resultCollector, failureType);
         this.batch = batch;
@@ -39,7 +50,12 @@ public class FilmDateRangeAgainstMfpakChecker extends XmlAttributeChecker {
         }
     }
 
-
+    /**
+     * The algorithm is that each time we find a matching film/date-range we remove it from the dateRanges
+     * list. At the end of the batch the list should be empty.
+     * @param event The event to base the check on.
+     * @param filmMetaData  the xml representation of the film metadata.
+     */
     @Override
     public void validate(AttributeParsingEvent event, Document filmMetaData) {
         String filmStartdate = filmXPathSelector.selectString(filmMetaData, "/avis:reelMetadata/avis:startDate");
