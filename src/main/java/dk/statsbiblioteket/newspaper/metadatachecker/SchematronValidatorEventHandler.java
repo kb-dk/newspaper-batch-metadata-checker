@@ -128,10 +128,14 @@ public class SchematronValidatorEventHandler extends DefaultTreeEventHandler {
         for (Object o : result.getActivePatternAndFiredRuleAndFailedAssert()) {
             if (o instanceof FailedAssert) {
                 FailedAssert failedAssert = (FailedAssert) o;
+                String message = failedAssert.getText();
+                if (message == null) {
+                    message = "";
+                }
+                message = message.trim().replaceAll("\\s+", " ");
                 resultCollector.addFailure(event.getName(),
                                            getType(event.getName()),
-                                           getClass().getSimpleName(),
-                                           failedAssert.getText(),
+                                           getClass().getSimpleName(), message,
                                            "Location: '" + failedAssert.getLocation() + "'",
                                            "Test: '" + failedAssert.getTest() + "'");
             }
