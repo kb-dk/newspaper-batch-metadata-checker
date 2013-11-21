@@ -26,8 +26,9 @@ public class MixFilePathChecker extends XmlAttributeChecker {
         String mixFilmID = XPATH.selectString(doc, xpath2K3);
         String mixBilledeID = XPATH.selectString(doc, xpath2K4);
         String filmID = getFilmIDFromEvent(event);
+        String infix = getInfixFromEvent(event);
         String billedID = getBilledIDFromEvent(event);
-        String identifierFromPath = filmID + "-" + billedID;
+        String identifierFromPath = filmID + infix + billedID;
         if (!objectIdentifier.equals(identifierFromPath)) {
             addFailure(
                     event,
@@ -50,7 +51,7 @@ public class MixFilePathChecker extends XmlAttributeChecker {
     private String getBilledIDFromEvent(AttributeParsingEvent event) {
         String name = event.getName();
         String filename = name.substring(name.lastIndexOf("/") + 1, name.indexOf(".mix.xml"));
-        if (filename.endsWith("brik") || filename.matches("^.*-ISO-[0-9]+$")) {
+        if (filename.endsWith("brik")) {
             String[] splits = filename.split("-");
             return splits[splits.length - 2] + "-" + splits[splits.length - 1];
         } else {
@@ -60,10 +61,19 @@ public class MixFilePathChecker extends XmlAttributeChecker {
 
     }
 
+    private String getInfixFromEvent(AttributeParsingEvent event) {
+        if (event.getName()
+                 .contains("/FILM-ISO-target/")) {
+            return "-ISO-";
+        } else {
+            return "-";
+        }
+    }
+
     private String getFilmIDFromEvent(AttributeParsingEvent event) {
         String filmID;
         if (event.getName()
-                 .contains("WORKSHIFT-ISO-TARGET")) {
+                 .contains("/WORKSHIFT-ISO-TARGET/")) {
               /* WORKSHIFT-ISO-TARGET is special in the sense that it does not belong to a film.
                  The 'filmID' here is based on the running number that is in the filename just
                  before the 'billedID' */
