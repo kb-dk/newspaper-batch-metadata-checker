@@ -57,9 +57,10 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
      */
     @Override
     public void handleNodeBegin(NodeBeginsParsingEvent event) {
-        briksInThisEdition = new ArrayList<String>();
+
         String shortName = getLastTokenInPath(event.getName());
         if (shortName.matches(EDITION_REGEX)) {
+            briksInThisEdition = new ArrayList<String>();
             String xpathForBriks = "//node[@name='" + event.getName() + "']/node[ends-with(@shortName, 'brik')]/@shortName";
             NodeList nodeList = BATCH_XPATH_SELECTOR.selectNodeList(batchXmlStructure, xpathForBriks);
             for (int nodeNumber = 0; nodeNumber < nodeList.getLength(); nodeNumber++ ) {
