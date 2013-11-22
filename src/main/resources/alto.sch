@@ -13,24 +13,24 @@
     <!--Measurement unit-->
     <!--OCRProcessing-->
     <s:rule context="alto:alto/alto:Description">
-      <s:assert test="alto:MeasurementUnit = 'inch1200'">Measurement should match value inch1200</s:assert>
-      <s:assert test="boolean(alto:OCRProcessing)">OCRProcessing element should exist</s:assert>
+      <s:assert test="alto:MeasurementUnit = 'inch1200'">2J-2: Measurement should match value inch1200</s:assert>
+      <s:assert test="boolean(alto:OCRProcessing)">2J-4: OCRProcessing element should exist</s:assert>
     </s:rule>
     
 	<!--processingStepSettings -->
 	<!--softwareName -->
 	<!--softwareVersion -->
     <s:rule context="alto:alto/alto:Description/alto:OCRProcessing">
-      <s:assert test="alto:ocrProcessingStep/alto:processingStepSettings/string-length() > 0">Software configuration should exist and have a value</s:assert>
-      <s:assert test="alto:ocrProcessingStep/alto:processingSoftware/alto:softwareName/string-length() > 0">Software name should exist and have a value</s:assert>
-      <s:assert test="alto:ocrProcessingStep/alto:processingSoftware/alto:softwareVersion/string-length() > 0">Software version should exist and have a value</s:assert>
+      <s:assert test="alto:ocrProcessingStep/alto:processingStepSettings/string-length() > 0">2J-4: Software configuration should exist and have a value</s:assert>
+      <s:assert test="alto:ocrProcessingStep/alto:processingSoftware/alto:softwareName/string-length() > 0">2J-4: Software name should exist and have a value</s:assert>
+      <s:assert test="alto:ocrProcessingStep/alto:processingSoftware/alto:softwareVersion/string-length() > 0">2J-4: Software version should exist and have a value</s:assert>
     </s:rule>
     
     <!--Page height attribute-->
     <!--Page width attribute-->
     <s:rule context="alto:alto/alto:Layout/alto:Page">
-      <s:assert test="@HEIGHT/string-length() > 0">Page should have HEIGHT attribute <s:value-of select="@HEIGHT"/></s:assert>
-      <s:assert test="@WIDTH/string-length() > 0">Page should have WIDTH attribute <s:value-of select="@WIDTH"/></s:assert>
+      <s:assert test="@HEIGHT/string-length() > 0">2J-7: Page should have HEIGHT attribute <s:value-of select="@HEIGHT"/></s:assert>
+      <s:assert test="@WIDTH/string-length() > 0">2J-7: Page should have WIDTH attribute <s:value-of select="@WIDTH"/></s:assert>
     </s:rule>
     
     <!--String element must have HEIGHT attribute, assuming content syntax is verified by schema check-->
@@ -39,11 +39,11 @@
     <!--String element must have VPOS attribute, assuming content syntax is verified by schema check-->
     <!--String element must have CONTENT attribute-->
     <s:rule context="alto:alto/alto:Layout/alto:Page/alto:PrintSpace/alto:TextBlock/alto:TextLine/alto:String">
-      <s:assert test="@HEIGHT/string-length() > 0">String should have HEIGHT attribute <s:value-of select="@HEIGHT"/></s:assert>
-      <s:assert test="@WIDTH/string-length() > 0">String should have WIDTH attribute <s:value-of select="@WIDTH"/></s:assert>
-      <s:assert test="@HPOS/string-length() > 0">String should have HPOS attribute <s:value-of select="@HPOS"/></s:assert>
-      <s:assert test="@VPOS/string-length() > 0">String should have VPOS attribute <s:value-of select="@VPOS"/></s:assert>
-      <s:assert test="matches(@CONTENT, '^\s*\S+\s*$')">String should have CONTENT attribute <s:value-of select="@CONTENT"/></s:assert>
+      <s:assert test="@HEIGHT/string-length() > 0">2J-14: String should have HEIGHT attribute <s:value-of select="@HEIGHT"/></s:assert>
+      <s:assert test="@WIDTH/string-length() > 0">2J-14: String should have WIDTH attribute <s:value-of select="@WIDTH"/></s:assert>
+      <s:assert test="@HPOS/string-length() > 0">2J-14: String should have HPOS attribute <s:value-of select="@HPOS"/></s:assert>
+      <s:assert test="@VPOS/string-length() > 0">2J-14: String should have VPOS attribute <s:value-of select="@VPOS"/></s:assert>
+      <s:assert test="matches(@CONTENT, '^\s*\S+\s*$')">2J-15: String should have CONTENT attribute <s:value-of select="@CONTENT"/></s:assert>
     </s:rule>
     
 <!--     /alto:altox/alto:Layout/alto:Page/alto:PrintSpace/alto:TextBlock[@language] -->
