@@ -76,7 +76,7 @@ public class MixerMockup {
                      "        </mix:SourceInformation>\n" +
                      "        <mix:GeneralCaptureInformation>\n" +
                      "            <mix:dateTimeCreated>" + scannedDate + "</mix:dateTimeCreated>\n" +
-                     "            <mix:imageProducer>Ninestars</mix:imageProducer>\n" +
+                     "            <mix:imageProducer>State and University Library; Ninestars Information Technologies LTD; operator-name-here</mix:imageProducer>\n" +
                      "        </mix:GeneralCaptureInformation>\n" +
                      "    </mix:ImageCaptureMetadata>\n" +
                      "    <mix:ImageAssessmentMetadata>\n" +
