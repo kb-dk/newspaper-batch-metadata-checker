@@ -125,7 +125,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
                     event.getName(),
                     "metadata",
                     getClass().getSimpleName(),
-                    "2C-10:Found symbol " + name + " but there is no displayName attribute in the" +
+                    "2C-10: Found symbol " + name + " but there is no displayName attribute in the" +
                             " corresponding page " + event.getName(),
                     display
             );
