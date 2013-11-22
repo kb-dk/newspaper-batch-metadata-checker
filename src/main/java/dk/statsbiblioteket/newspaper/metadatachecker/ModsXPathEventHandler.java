@@ -227,7 +227,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
               resultCollector.addFailure(event.getName(),
                                     "metadata",
                                     getClass().getSimpleName(),
-                                    "2C-4: reel number " + reelNumber + " does not match expected pattern '" + reelNumberPatternString+"'",
+                                    "2C-4: reel number " + reelNumber + " does not match expected pattern '" + reelNumberPatternString + "'",
                                     xpath2C4
                                     );
         }
