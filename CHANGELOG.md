@@ -5,6 +5,7 @@
  * Values from xml metadata blobs and file structure are cross correlated and checked to be consistent
  * Values from xml metadata blobs are checked agains MFPAK database
  * Jpylyzer output from analysis of JP2 files are checked to conform to specification
+ * All checks refer to the specification in the message
 
 0.2
 Standalone page-mods, alto and mix xml file checks. This excludes checks against other files and the MFPak db.
