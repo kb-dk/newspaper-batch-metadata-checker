@@ -10,7 +10,7 @@ import org.w3c.dom.NodeList;
 
 /**
  * Checks that the editions contained in a film for a batch structure are inside of the start/end dates specified in the
- * foilm.xml.
+ * film.xml.
  */
 public class FilmDateVsEditionsChecker extends XmlAttributeChecker {
     private final XPathSelector xPathSelector;
