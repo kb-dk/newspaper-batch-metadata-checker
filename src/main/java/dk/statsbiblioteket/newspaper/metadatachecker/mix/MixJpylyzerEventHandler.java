@@ -10,11 +10,10 @@ import org.w3c.dom.Document;
  * This class validates the mix information vs. the jpylyzer information
  */
 public class MixJpylyzerEventHandler extends XmlAttributeChecker {
-
-    private boolean foundMix = false;
     private Integer mixFileSize = null;
     private Integer mixWidth = null;
     private Integer mixHeight = null;
+    private AttributeParsingEvent foundMix = null;
 
 
     /**
@@ -57,17 +56,17 @@ public class MixJpylyzerEventHandler extends XmlAttributeChecker {
                     "2K-9: The picture width from jpylyzer does not match what is reported in the mix file"
                     );
         }
-        foundMix = false;
+        foundMix = null;
 
 
     }
 
     protected void handleMix(AttributeParsingEvent event, Document doc) {
-        if (foundMix) {
-            // TODO: Say what?
-            // TODO Please output which for which mix file the corresponding jpylyzer file was not found
-            addFailure(event, "2K: We found this two mix files without a jpylyzer file");
+        if (foundMix != null) {
+            addFailure(foundMix, "2K: No corresponding jpylyzer analysis found");
         }
+
+        foundMix = event;
 
         final String mixFileSizeXpath = "/mix:mix/mix:BasicDigitalObjectInformation/mix:fileSize";
         this.mixFileSize = XPATH.selectInteger(doc, mixFileSizeXpath);
@@ -78,9 +77,6 @@ public class MixJpylyzerEventHandler extends XmlAttributeChecker {
 
         String mixHeightXpath = "/mix:mix/mix:BasicImageInformation/mix:BasicImageCharacteristics/mix:imageHeight";
         this.mixHeight = XPATH.selectInteger(doc, mixHeightXpath);
-
-        foundMix = true;
-
     }
 
     @Override
