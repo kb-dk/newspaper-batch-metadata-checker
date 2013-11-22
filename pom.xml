@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>newspaper-batch-metadata-checker</artifactId>
-    <version>0.4-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
 
 
     <repositories>
@@ -46,7 +46,7 @@
         <dependency>
             <groupId>dk.statsbiblioteket.newspaper</groupId>
             <artifactId>autonomous-component</artifactId>
-            <version>0.3-SNAPSHOT</version>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -69,7 +69,7 @@
         <dependency>
             <groupId>dk.statsbiblioteket.newspaper</groupId>
             <artifactId>newspaper-mfpak-integration</artifactId>
-            <version>0.3-SNAPSHOT</version>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
