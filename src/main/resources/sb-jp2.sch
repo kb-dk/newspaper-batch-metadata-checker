@@ -41,7 +41,7 @@
             <s:assert test="codingBypass = 'yes'">2B-12: Coding bypass should be enabled.</s:assert>
             <s:assert test="sop = 'yes'">2B-14: Should have start of packet (SOP) marker segments.</s:assert>
             <s:assert test="eph = 'yes'">2B-15: Should have end of packet header (EPH) marker segments.</s:assert>
-            <s:assert test="segmentationSymbols = 'yes'">2B-16: Should have  segmentation symbols.</s:assert>
+            <s:assert test="segmentationSymbols = 'yes'">2B-16: Should have segmentation symbols.</s:assert>
             <s:assert test="order = 'RPCL'">2B-7: Should have progression order RPCL</s:assert>
         </s:rule>
 
