@@ -65,6 +65,7 @@ public class MixJpylyzerEventHandler extends XmlAttributeChecker {
     protected void handleMix(AttributeParsingEvent event, Document doc) {
         if (foundMix) {
             // TODO: Say what?
+            // TODO Please output which for which mix file the corresponding jpylyzer file was not found
             addFailure(event, "2K: We found this two mix files without a jpylyzer file");
         }
 
