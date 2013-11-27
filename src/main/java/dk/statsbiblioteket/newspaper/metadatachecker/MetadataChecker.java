@@ -1,17 +1,16 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
+import java.io.IOException;
+import java.util.Properties;
+
+import dk.statsbiblioteket.medieplatform.autonomous.AutonomousComponentUtils;
+import dk.statsbiblioteket.medieplatform.autonomous.CallResult;
+import dk.statsbiblioteket.medieplatform.autonomous.RunnableComponent;
 import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.ConfigurationProperties;
 import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.MfPakConfiguration;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import dk.statsbiblioteket.medieplatform.autonomous.RunnableComponent;
-import dk.statsbiblioteket.medieplatform.autonomous.AutonomousComponentUtils;
-
-import java.io.IOException;
-import java.util.Map;
-import java.util.Properties;
 
 /** This component checks metadata for validity. */
 public class MetadataChecker {
@@ -28,10 +27,10 @@ public class MetadataChecker {
      * @see AutonomousComponentUtils#parseArgs(String[])
      */
     public static void main(String... args) throws Exception {
-        doMain(args);
+        System.exit(doMain(args));
     }
 
-    private static void doMain(String[] args) throws IOException {
+    private static int doMain(String[] args) throws IOException {
         log.info("Starting with args {}", new Object[]{args});
 
         //Parse the args to a properties construct
@@ -45,8 +44,10 @@ public class MetadataChecker {
         //make a new runnable component from the properties
         RunnableComponent component = new MetadataCheckerComponent(properties, new MfPakDAO(mfPakConfiguration));
 
-        Map<String, Boolean> result = AutonomousComponentUtils.startAutonomousComponent(properties, component);
+        CallResult result = AutonomousComponentUtils.startAutonomousComponent(properties, component);
+        System.out.print(result);
 
-        AutonomousComponentUtils.printResults(result);
+        if (result.getError() != null) return 2;
+        else return result.containsFailures();
     }
 }
