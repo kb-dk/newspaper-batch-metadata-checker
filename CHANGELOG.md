@@ -1,3 +1,6 @@
+1.1
+Various fixes, and getting ready for stage
+
 1.0
  * Checks are done on ALTO, page-MODS, edition-MODS, MIX, FILM and JP2 jpylyzer analysis as defined below
  * All xml metadata blobs are checked for XML schema validity
