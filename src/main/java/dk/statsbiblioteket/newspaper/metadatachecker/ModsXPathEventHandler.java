@@ -111,47 +111,48 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
     }
 
     /**
-     * Checks that if option B7 is not chosen then the section title is missing.
+     * Checks that section titles are absent if option B7 is not chosen.
      * @param event the event corresponding to the mods file being checked.
      * @param modsDocument the xml representation of the file.
      */
     private void valdiate2C1(AttributeParsingEvent event, Document modsDocument) {
+        NewspaperBatchOptions batchOptions = null;
         try {
-            final NewspaperBatchOptions batchOptions = mfPakDAO.getBatchOptions(batch.getBatchID());
-            if (batchOptions == null) {
-                resultCollector.addFailure(event.getName(),
-                        "metadata",
-                        getClass().getSimpleName(),
-                        "2C-1: Couldn't read batch options from mfpak. Got null value.",
-                        batch.getBatchID()
-                );
-            }
-            if (!batchOptions.isOptionB7()) {
-                String sectionLabelXpath = "mods:mods/mods:part/mods:detail[@type='sectionLabel']";
-                NodeList nodes = MODS_XPATH_SELECTOR.selectNodeList(modsDocument, sectionLabelXpath);
-                if (nodes == null || nodes.getLength() == 0) {
-                    return;
-                } else {
-                    resultCollector.addFailure(
-                                        event.getName(),
-                                        "metadata",
-                                        getClass().getSimpleName(),
-                                        "2C-1: Found section entitled " + nodes.item(0).getTextContent() + " for the page "
-                                                + event.getName() + " although Option B7 (Section Titles) was not chosen for the batch " + batch.getBatchID(),
-                                        sectionLabelXpath );
-                }
-            } else {
-                //We cannot expect that there is always a section title,
-                //so there is nothing to verify here.
-                return;
-            }
+            batchOptions = mfPakDAO.getBatchOptions(batch.getBatchID());
         } catch (SQLException e) {
             resultCollector.addFailure(event.getName(),
-                                                "metadata",
-                                                getClass().getSimpleName(),
-                                                "2C-1: Couldn't read batch options from mfpak.",
-                                                getStackTrace(e)
-                                                );
+                    "metadata",
+                    getClass().getSimpleName(),
+                    "2C-1: Couldn't read batch options from mfpak.",
+                    getStackTrace(e)
+            );
+        }
+        if (batchOptions == null) {
+            resultCollector.addFailure(event.getName(),
+                    "metadata",
+                    getClass().getSimpleName(),
+                    "2C-1: Couldn't read batch options from mfpak. Got null value.",
+                    batch.getBatchID()
+            );
+            return;
+        } else if (!batchOptions.isOptionB7()) {
+            String sectionLabelXpath = "mods:mods/mods:part/mods:detail[@type='sectionLabel']";
+            NodeList nodes = MODS_XPATH_SELECTOR.selectNodeList(modsDocument, sectionLabelXpath);
+            if (nodes == null || nodes.getLength() == 0) {
+                return;
+            } else {
+                resultCollector.addFailure(
+                        event.getName(),
+                        "metadata",
+                        getClass().getSimpleName(),
+                        "2C-1: Found section entitled " + nodes.item(0).getTextContent() + " for the page "
+                                + event.getName() + " although Option B7 (Section Titles) was not chosen for the batch " + batch.getBatchID(),
+                        sectionLabelXpath );
+            }
+        } else {
+            //We cannot expect that there is always a section title,
+            //so there is nothing to verify here.
+            return;
         }
     }
 
