@@ -2,6 +2,7 @@ package dk.statsbiblioteket.newspaper.metadatachecker;
 
 import dk.statsbiblioteket.medieplatform.autonomous.AbstractRunnableComponent;
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
+import dk.statsbiblioteket.medieplatform.autonomous.ConfigConstants;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.EventRunner;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
@@ -80,12 +81,12 @@ public class MetadataCheckerComponent
     protected MetadataChecksFactory getMetadataChecksFactory(Batch batch, ResultCollector resultCollector,
                                                            Document batchXmlStructure) {
         boolean atNinestars =
-                Boolean.parseBoolean(getProperties().getProperty("atNinestars", Boolean.FALSE.toString()));
+                Boolean.parseBoolean(getProperties().getProperty(ConfigConstants.AT_NINESTARS, Boolean.FALSE.toString()));
         MetadataChecksFactory metadataChecksFactory;
         if (atNinestars) {
-            String jpylyzerPath = getProperties().getProperty("jpylyzerPath");
-            String batchFolder = getProperties().getProperty("scratch");
-            String controlPoliciesPath = getProperties().getProperty("controlPolicies");
+            String jpylyzerPath = getProperties().getProperty(ConfigConstants.JPYLYZER_PATH);
+            String batchFolder = getProperties().getProperty(ConfigConstants.ITERATOR_FILESYSTEM_BATCHES_FOLDER);
+            String controlPoliciesPath = getProperties().getProperty(ConfigConstants.SCAPE_CONTROL_POLICIES_PATH);
             metadataChecksFactory = new MetadataChecksFactory(resultCollector,
                                                               atNinestars,
                                                               batchFolder,
