@@ -8,6 +8,7 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeEndParsi
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.filesystem.FileAttributeParsingEvent;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.InconsistentDatabaseException;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperBatchOptions;
 import dk.statsbiblioteket.util.xml.DOM;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -20,6 +21,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertFalse;
@@ -92,7 +96,7 @@ public class PageModsTest {
         assertTrue(report.contains("2C-4:"),report);
         assertTrue(report.contains("2C-6:"),report);
         assertTrue(report.contains("2C-9:"),report);
-        assertTrue(report.contains("2C-10:"),report);
+        assertTrue(report.contains("2C-10:"), report);
     }
 
     /**
@@ -123,6 +127,21 @@ public class PageModsTest {
 
     }
 
+    /**
+     * Returns a mock MfPakDAO instance.
+     * @param batch the batch against which to mock.
+     * @param optionB7 whether or not Option B7 (Section Titles) has been specified for this batch.
+     * @return a mock dao.
+     * @throws SQLException
+     */
+    private MfPakDAO getMockMfPakDAO(Batch batch, boolean optionB7) throws SQLException {
+        MfPakDAO dao = mock(MfPakDAO.class);
+        NewspaperBatchOptions options = mock(NewspaperBatchOptions.class);
+        when(options.isOptionB7()).thenReturn(optionB7);
+        when(dao.getNewspaperID(batch.getBatchID())).thenReturn("adresseavisen1759");
+        when(dao.getBatchOptions(anyString())).thenReturn(options);
+        return dao;
+    }
 
     /**
      * Test that we can validate a valid page mods file.
@@ -135,8 +154,7 @@ public class PageModsTest {
         Batch batch = new Batch();
         batch.setBatchID("400022028241");
         batch.setRoundTripNumber(10);
-        MfPakDAO dao = mock(MfPakDAO.class);
-        when(dao.getNewspaperID(batch.getBatchID())).thenReturn("adresseavisen1759");
+        MfPakDAO dao = getMockMfPakDAO(batch, true);
         ModsXPathEventHandler handler = new ModsXPathEventHandler(resultCollector, dao, batch, goodBatchXmlStructure);
         String editionNodeName = "B400022028240-RT1/400022028240-14/1795-06-15-01";
         handler.handleNodeBegin(new NodeBeginsParsingEvent(editionNodeName));
@@ -157,6 +175,38 @@ public class PageModsTest {
     }
 
     /**
+       * Test that a mods file with section title is identified as invalid when Option B7 has not been chosen.
+       * @throws SQLException
+       * @throws InconsistentDatabaseException
+       */
+      @Test
+      public void testPageModsGoodXpathBadOptionB7() throws InconsistentDatabaseException, SQLException {
+          ResultCollector resultCollector = new ResultCollector("foo", "bar");
+          Batch batch = new Batch();
+          batch.setBatchID("400022028241");
+          batch.setRoundTripNumber(10);
+          MfPakDAO dao = getMockMfPakDAO(batch, false);
+          ModsXPathEventHandler handler = new ModsXPathEventHandler(resultCollector, dao, batch, goodBatchXmlStructure);
+          String editionNodeName = "B400022028240-RT1/400022028240-14/1795-06-15-01";
+          handler.handleNodeBegin(new NodeBeginsParsingEvent(editionNodeName));
+          AttributeParsingEvent modsEvent = new AttributeParsingEvent("AdresseContoirsEfterretninger-1795-06-15-01-0003B.mods.xml") {
+              @Override
+              public InputStream getData() throws IOException {
+                  return Thread.currentThread().getContextClassLoader().getResourceAsStream("goodData/goodpagemods.mods.xml");
+              }
+
+              @Override
+              public String getChecksum() throws IOException {
+                  return null;
+              }
+          };
+          handler.handleAttribute(modsEvent);
+          String report = resultCollector.toReport();
+          assertFalse(resultCollector.isSuccess(), report);
+          assertTrue(report.contains("2C-1:"), report);
+      }
+
+    /**
      * Test that we can test an invalid mods file.
      * @throws SQLException 
      * @throws InconsistentDatabaseException 
@@ -167,8 +217,7 @@ public class PageModsTest {
         Batch batch = new Batch();
         batch.setBatchID("400022028241");
         batch.setRoundTripNumber(10);
-        MfPakDAO dao = mock(MfPakDAO.class);
-        when(dao.getNewspaperID(batch.getBatchID())).thenReturn("adressecontoirsefterretninger123");
+        MfPakDAO dao = getMockMfPakDAO(batch, true);
         ModsXPathEventHandler handler = new ModsXPathEventHandler(resultCollector, dao, batch, goodBatchXmlStructure);
         AttributeParsingEvent modsEvent = new AttributeParsingEvent("AdresseContoirsEfterretninger-1795-06-15-01-0010B.mods.xml") {
             @Override
@@ -185,7 +234,7 @@ public class PageModsTest {
         String report = resultCollector.toReport();
         assertTrue(report.contains("2C-4:"),report);
         assertTrue(report.contains("2C-5:"),report);
-        assertTrue(report.contains("2C-11:"),report);
+        assertTrue(report.contains("2C-11:"), report);
     }
 
     /**
@@ -253,8 +302,7 @@ public class PageModsTest {
         File dataDir = new File(Thread.currentThread().getContextClassLoader().getResource(dataDirS).getPath());
         String editionNodeName = "B400022028241-RT1/400022028241-1/1795-06-15-02";
         Document batchStructure = DOM.streamToDOM(new FileInputStream(new File(dataDir, "structure.xml")));
-        MfPakDAO dao = mock(MfPakDAO.class);
-        when(dao.getNewspaperID(batch.getBatchID())).thenReturn("adresseavisen1759");
+        MfPakDAO dao = getMockMfPakDAO(batch, true);
         ModsXPathEventHandler handler = new ModsXPathEventHandler(resultCollector, dao, batch, batchStructure);
         File fileDir = new File(dataDir, "1795-06-15-02");
         handler.handleNodeBegin(new NodeBeginsParsingEvent(editionNodeName));

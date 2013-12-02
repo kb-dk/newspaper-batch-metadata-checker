@@ -1,6 +1,7 @@
 package dk.statsbiblioteket.newspaper.metadatachecker.mockers;
 
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperBatchOptions;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperDateRange;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperEntity;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperTitle;
@@ -41,6 +42,9 @@ public class MFPakMocker {
         List<NewspaperDateRange> ranges = new ArrayList<>();
         ranges.add(filmDateRange);
         when(mfPakDAO.getBatchDateRanges(anyString())).thenReturn(ranges);
+        NewspaperBatchOptions options = mock(NewspaperBatchOptions.class);
+        when(options.isOptionB7()).thenReturn(true);
+        when(mfPakDAO.getBatchOptions(anyString())).thenReturn(options);
         return mfPakDAO;
 
     }

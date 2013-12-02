@@ -6,6 +6,7 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributePar
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeBeginsParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.DefaultTreeEventHandler;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperBatchOptions;
 import dk.statsbiblioteket.util.xml.DOM;
 import dk.statsbiblioteket.util.xml.XPathSelector;
 import org.w3c.dom.Document;
@@ -102,10 +103,56 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        valdiate2C1(event, modsDocument);
         validate2C4(event, modsDocument);
         validate2C5(event, modsDocument);
         validate2C11(event, modsDocument);
         validate2C10(event, modsDocument);
+    }
+
+    /**
+     * Checks that if option B7 is not chosen then the section title is missing.
+     * @param event the event corresponding to the mods file being checked.
+     * @param modsDocument the xml representation of the file.
+     */
+    private void valdiate2C1(AttributeParsingEvent event, Document modsDocument) {
+        try {
+            final NewspaperBatchOptions batchOptions = mfPakDAO.getBatchOptions(batch.getBatchID());
+            if (batchOptions == null) {
+                resultCollector.addFailure(event.getName(),
+                        "metadata",
+                        getClass().getSimpleName(),
+                        "2C-1: Couldn't read batch options from mfpak. Got null value.",
+                        batch.getBatchID()
+                );
+            }
+            if (!batchOptions.isOptionB7()) {
+                String sectionLabelXpath = "mods:mods/mods:part/mods:detail[@type='sectionLabel']";
+                NodeList nodes = MODS_XPATH_SELECTOR.selectNodeList(modsDocument, sectionLabelXpath);
+                if (nodes == null || nodes.getLength() == 0) {
+                    return;
+                } else {
+                    resultCollector.addFailure(
+                                        event.getName(),
+                                        "metadata",
+                                        getClass().getSimpleName(),
+                                        "2C-1: Found section entitled " + nodes.item(0).getTextContent() + " for the page "
+                                                + event.getName() + " although Option B7 (Section Titles) was not chosen for the batch " + batch.getBatchID(),
+                                        sectionLabelXpath );
+                }
+            } else {
+                //We cannot expect that there is always a section title,
+                //so there is nothing to verify here.
+                return;
+            }
+        } catch (SQLException e) {
+            resultCollector.addFailure(event.getName(),
+                                                "metadata",
+                                                getClass().getSimpleName(),
+                                                "2C-1: Couldn't read batch options from mfpak.",
+                                                getStackTrace(e)
+                                                );
+        }
     }
 
     /**
