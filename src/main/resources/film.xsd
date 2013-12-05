@@ -21,10 +21,12 @@
             <xsd:sequence>
                 <!--Newspaper titles on this reel-->
                 <xsd:element name="titles" type="xsd:string" minOccurs="1" maxOccurs="unbounded"/>
-                <!--Start date of the issues on this reel. Use this particular ISO 8601 style: YYYY-MM-DD -->
-                <xsd:element name="startDate" type="xsd:date" minOccurs="1" maxOccurs="1"/>
-                <!--End date of the issues on this reel. Use this particular ISO 8601 style: YYYY-MM-DD -->
-                <xsd:element name="endDate" type="xsd:date" minOccurs="1" maxOccurs="1"/>
+                <!--Start date of the issues on this reel. Use this particular ISO 8601 style: YYYY-MM-DD,
+                or if the date is only partial YYYY or YYYY-MM -->
+                <xsd:element name="startDate" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                <!--End date of the issues on this reel. Use this particular ISO 8601 style: YYYY-MM-DD,
+                or if the date is only partial YYYY or YYYY-MM -->
+                <xsd:element name="endDate" type="xsd:string" minOccurs="1" maxOccurs="1"/>
                 <!-- The barcode from the batch this reel is a part of id of the film-->
                 <xsd:element name="batchIdFilmId" type="xsd:string" minOccurs="1" maxOccurs="1"/>
                 <xsd:element name="numberOfPictures" type="xsd:int" minOccurs="1" maxOccurs="1"/>
