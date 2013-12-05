@@ -64,6 +64,8 @@ public class MixFilePathCheckerTest {
         handler.validate(event, doc);
 
         String report = resultCollector.toReport();
+        assertTrue(report.contains("2K-14:"),report);
+        assertTrue(report.contains("2K-1:"),report);
         assertFalse(resultCollector.isSuccess(), report);
     }
 
@@ -134,6 +136,9 @@ public class MixFilePathCheckerTest {
 
 
         String report = resultCollector.toReport();
+        assertTrue(report.contains("2K-14:"),report);
+        assertTrue(report.contains("2K-1:"),report);
+
         assertFalse(resultCollector.isSuccess(), report);
     }
 
