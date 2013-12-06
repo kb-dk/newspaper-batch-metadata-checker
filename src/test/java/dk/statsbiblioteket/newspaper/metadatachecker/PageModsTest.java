@@ -91,7 +91,6 @@ public class PageModsTest {
         };
         handler.handleAttribute(modsEvent);
         String report = resultCollector.toReport();
-        assertTrue(report.contains("2C-1:"),report);
         assertTrue(report.contains("2C-3:"),report);
         assertTrue(report.contains("2C-4:"),report);
         assertTrue(report.contains("2C-6:"),report);

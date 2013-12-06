@@ -111,7 +111,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
     }
 
     /**
-     * Checks that section titles are absent if option B7 is not chosen.
+     * Checks that section titles are absent if option B7 is not chosen, and vice versa.
      * @param event the event corresponding to the mods file being checked.
      * @param modsDocument the xml representation of the file.
      */
@@ -150,9 +150,19 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
                         sectionLabelXpath );
             }
         } else {
-            //We cannot expect that there is always a section title,
-            //so there is nothing to verify here.
-            return;
+            String sectionLabelXpath = "mods:mods/mods:part/mods:detail[@type='sectionLabel']";
+            NodeList nodes = MODS_XPATH_SELECTOR.selectNodeList(modsDocument, sectionLabelXpath);
+            if (nodes == null || nodes.getLength() == 0) {
+                resultCollector.addFailure(
+                        event.getName(),
+                        "metadata",
+                        getClass().getSimpleName(),
+                        "2C-1: Dit not find section entitled " + nodes.item(0).getTextContent() + " for the page "
+                                + event.getName() + " although Option B7 (Section Titles) was chosen for the batch " + batch.getBatchID(),
+                        sectionLabelXpath );
+            } else {
+                return;
+            }
         }
     }
 
