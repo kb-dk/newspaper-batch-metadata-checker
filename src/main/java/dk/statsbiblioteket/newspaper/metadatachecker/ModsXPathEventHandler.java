@@ -103,7 +103,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        valdiate2C1(event, modsDocument);
+        validate2C1(event, modsDocument);
         validate2C4(event, modsDocument);
         validate2C5(event, modsDocument);
         validate2C11(event, modsDocument);
@@ -115,7 +115,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
      * @param event the event corresponding to the mods file being checked.
      * @param modsDocument the xml representation of the file.
      */
-    private void valdiate2C1(AttributeParsingEvent event, Document modsDocument) {
+    private void validate2C1(AttributeParsingEvent event, Document modsDocument) {
         NewspaperBatchOptions batchOptions = null;
         try {
             batchOptions = mfPakDAO.getBatchOptions(batch.getBatchID());
