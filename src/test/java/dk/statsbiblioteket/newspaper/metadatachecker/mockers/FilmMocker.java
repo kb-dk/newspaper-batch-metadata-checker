@@ -42,7 +42,7 @@ public class FilmMocker {
                                  "<avis:titles>"+title+"</avis:titles> \n" + 
                                  "<avis:startDate>"+startDate+"</avis:startDate> \n" +
                                  "<avis:endDate>"+endDate+"</avis:endDate> \n" +
-                                 "<avis:batchIdFilmId>" + batch.getBatchID() + "-" + film + "</avis:batchIdFilmId> \n" + 
+                                 "<avis:FilmId>" + batch.getBatchID() + "-" + film + "</avis:FilmId> \n" + 
                                  "<avis:numberOfPictures>14</avis:numberOfPictures> \n" + 
                                  "<avis:reductionRatio>15x</avis:reductionRatio> \n" +
                                  "<avis:captureResolutionOriginal measurement=\"pixels/inch\">"+resolution+"</avis:captureResolutionOriginal> \n" +
