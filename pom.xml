@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>newspaper-batch-metadata-checker</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.1</version>
 
 
     <repositories>
@@ -37,7 +37,7 @@
         <dependency>
             <groupId>dk.statsbiblioteket.newspaper</groupId>
             <artifactId>autonomous-component</artifactId>
-            <version>1.2-SNAPSHOT</version>
+            <version>1.2</version>
         </dependency>
 
         <dependency>
@@ -60,7 +60,7 @@
         <dependency>
             <groupId>dk.statsbiblioteket.newspaper</groupId>
             <artifactId>newspaper-mfpak-integration</artifactId>
-            <version>1.2-SNAPSHOT</version>
+            <version>1.2</version>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
@@ -153,6 +153,6 @@
         <developerConnection>scm:git:git@github.com:statsbiblioteket/newspaper-batch-metadata-checker
         </developerConnection>
         <url>https://github.com/statsbiblioteket/newspaper-batch-event-framework</url>
-        <tag>HEAD</tag>
+        <tag>newspaper-batch-metadata-checker-1.1</tag>
     </scm>
 </project>
