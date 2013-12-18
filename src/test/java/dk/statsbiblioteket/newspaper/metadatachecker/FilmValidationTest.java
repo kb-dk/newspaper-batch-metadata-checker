@@ -29,7 +29,7 @@ public class FilmValidationTest {
                 "    <avis:titles>Adresse Contoirs Efterretninger</avis:titles>\n" +
                 "    <avis:startDate>1795-06-13</avis:startDate>\n" +
                 "    <avis:endDate>1795-06-15</avis:endDate>\n" +
-                "    <avis:batchIdFilmId>400022028241-1</avis:batchIdFilmId>\n" +
+                "    <avis:FilmId>400022028241-1</avis:FilmId>\n" +
                 "    <avis:numberOfPictures>14</avis:numberOfPictures>\n" +
                 "    <avis:reductionRatio>15x</avis:reductionRatio>\n" +
                 "    <avis:captureResolutionOriginal measurement=\"pixels/inch\">400</avis:captureResolutionOriginal>\n" +
@@ -62,7 +62,7 @@ public class FilmValidationTest {
                 "    <avis:titles>Adresse Contoirs Efterretninger</avis:titles>\n" +
                 "    <avis:startDate>1795-06-13</avis:startDate>\n" +
                 "    <avis:endDate>1795-06-15</avis:endDate>\n" +
-                "    <avis:batchIdFilmId>400022028241-1</avis:batchIdFilmId>\n" +
+                "    <avis:FilmId>400022028241-1</avis:FilmId>\n" +
                 "    <avis:numberOfPictures>14</avis:numberOfPictures>\n" +
                 "    <avis:reductionRatio>15x</avis:reductionRatio>\n" +
                 "    <avis:captureResolutionOriginal measurement=\"pixels/inch\">400</avis:captureResolutionOriginal>\n" +
@@ -95,7 +95,7 @@ public class FilmValidationTest {
                 "    <avis:titles>Adresse Contoirs Efterretninger</avis:titles>\n" +
                 "    <avis:startDate>1795-06-13</avis:startDate>\n" +
                 "    <avis:endDate>1795-06-15</avis:endDate>\n" +
-                "    <avis:batchIdFilmId>400022028241-1</avis:batchIdFilmId>\n" +
+                "    <avis:FilmId>400022028241-1</avis:FilmId>\n" +
                 "    <avis:numberOfPictures>14</avis:numberOfPictures>\n" +
                 "    <avis:reductionRatio>15x</avis:reductionRatio>\n" +
                 "    <avis:captureResolutionOriginal measurement=\"pixels/alen\">400</avis:captureResolutionOriginal>\n" +
@@ -128,7 +128,7 @@ public class FilmValidationTest {
                 "    <avis:titles>Adresse Contoirs Efterretninger</avis:titles>\n" +
                 "    <avis:startDate>1795-06-13</avis:startDate>\n" +
                 "    <avis:endDate>1795-06-15</avis:endDate>\n" +
-                "    <avis:batchIdFilmId>400022028241-1</avis:batchIdFilmId>\n" +
+                "    <avis:FilmId>400022028241-1</avis:FilmId>\n" +
                 "    <avis:numberOfPictures>14</avis:numberOfPictures>\n" +
                 "    <avis:reductionRatio>15x</avis:reductionRatio>\n" +
                 "    <avis:captureResolutionOriginal measurement=\"pixels/inch\">400</avis:captureResolutionOriginal>\n" +
@@ -161,7 +161,7 @@ public class FilmValidationTest {
                 "    <avis:titles>Adresse Contoirs Efterretninger</avis:titles>\n" +
                 "    <avis:startDate>1795-06-13</avis:startDate>\n" +
                 "    <avis:endDate>1795-06-15</avis:endDate>\n" +
-                "    <avis:batchIdFilmId>400022028241-1</avis:batchIdFilmId>\n" +
+                "    <avis:FilmId>400022028241-1</avis:FilmId>\n" +
                 "    <avis:numberOfPictures>14</avis:numberOfPictures>\n" +
                 "    <avis:reductionRatio>15x</avis:reductionRatio>\n" +
                 "    <avis:captureResolutionOriginal measurement=\"pixels/inch\">400</avis:captureResolutionOriginal>\n" +
@@ -194,7 +194,7 @@ public class FilmValidationTest {
                 "    <avis:titles>Adresse Contoirs Efterretninger</avis:titles>\n" +
                 "    <avis:startDate>1795-06-13</avis:startDate>\n" +
                 "    <avis:endDate>1790-06-15</avis:endDate>\n" +
-                "    <avis:batchIdFilmId>400022028241-1</avis:batchIdFilmId>\n" +
+                "    <avis:FilmId>400022028241-1</avis:FilmId>\n" +
                 "    <avis:numberOfPictures>14</avis:numberOfPictures>\n" +
                 "    <avis:reductionRatio>15x</avis:reductionRatio>\n" +
                 "    <avis:captureResolutionOriginal measurement=\"pixels/inch\">400</avis:captureResolutionOriginal>\n" +
@@ -227,7 +227,7 @@ public class FilmValidationTest {
                 "    <avis:titles>Adresse Contoirs Efterretninger</avis:titles>\n" +
                 "    <avis:startDate>1795/06/13</avis:startDate>\n" +
                 "    <avis:endDate>1795-06-15</avis:endDate>\n" +
-                "    <avis:batchIdFilmId>400022028241-1</avis:batchIdFilmId>\n" +
+                "    <avis:FilmId>400022028241-1</avis:FilmId>\n" +
                 "    <avis:numberOfPictures>14</avis:numberOfPictures>\n" +
                 "    <avis:reductionRatio>15x</avis:reductionRatio>\n" +
                 "    <avis:captureResolutionOriginal measurement=\"pixels/inch\">400</avis:captureResolutionOriginal>\n" +
@@ -260,7 +260,7 @@ public class FilmValidationTest {
                 "    <avis:titles>Adresse Contoirs Efterretninger</avis:titles>\n" +
                 "    <avis:startDate>1795-06-13</avis:startDate>\n" +
                 "    <avis:endDate>1795-06-15</avis:endDate>\n" +
-                "    <avis:batchIdFilmId>400022028241-1</avis:batchIdFilmId>\n" +
+                "    <avis:FilmId>400022028241-1</avis:FilmId>\n" +
                 "    <avis:numberOfPictures>14</avis:numberOfPictures>\n" +
                 "    <avis:reductionRatio>15x</avis:reductionRatio>\n" +
                 "    <avis:captureResolutionOriginal measurement=\"pixels/inch\">400</avis:captureResolutionOriginal>\n" +
@@ -293,7 +293,7 @@ public class FilmValidationTest {
                 "    <avis:titles>Adresse Contoirs Efterretninger</avis:titles>\n" +
                 "    <avis:startDate>1795-06-13</avis:startDate>\n" +
                 "    <avis:endDate>1795-06-15</avis:endDate>\n" +
-                "    <avis:batchIdFilmId>400022028241-1</avis:batchIdFilmId>\n" +
+                "    <avis:FilmId>400022028241-1</avis:FilmId>\n" +
                 "    <avis:numberOfPictures>14</avis:numberOfPictures>\n" +
                 "    <avis:reductionRatio>15x</avis:reductionRatio>\n" +
                 "    <avis:captureResolutionOriginal measurement=\"pixels/inch\">400</avis:captureResolutionOriginal>\n" +

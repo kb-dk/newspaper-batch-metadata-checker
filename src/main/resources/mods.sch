@@ -7,14 +7,7 @@
 
     <s:title>Schematron checks for mods files for document pages.</s:title>
 
-    <!--2C-1-->
-    <s:pattern id="sectionlabel">
-        <s:rule context="mods:mods/mods:part/mods:detail[@type='sectionLabel']">
-            <s:assert test="mods:number/string-length() > 0">2C-1: If present, Section Label should not be empty.
-            </s:assert>
-        </s:rule>
-    </s:pattern>
-
+    <!--2C-1 Nothing to check, since section labels are not controlled, and may be empty. -->
 
     <!--2C-2 Option Omitted
     <s:pattern id="pagesequence">

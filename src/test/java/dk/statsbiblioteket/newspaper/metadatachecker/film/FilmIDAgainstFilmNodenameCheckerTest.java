@@ -77,7 +77,7 @@ public class FilmIDAgainstFilmNodenameCheckerTest {
     private Document createFilmXmlDoc(final String filmID) {
         final String filmXmlStructure =
                 "<avis:reelMetadata xmlns:avis=\"http://www.statsbiblioteket.dk/avisdigitalisering/microfilm/1/0/\">\n" +
-                        "    <avis:batchIdFilmId>" + filmID + "</avis:batchIdFilmId>\n" +
+                        "    <avis:FilmId>" + filmID + "</avis:FilmId>\n" +
                         "</avis:reelMetadata>";
         return DOM.stringToDOM(filmXmlStructure);
     }

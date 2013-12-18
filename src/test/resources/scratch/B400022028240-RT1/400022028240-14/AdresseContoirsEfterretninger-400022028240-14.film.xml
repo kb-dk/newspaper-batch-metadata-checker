@@ -2,7 +2,7 @@
     <avis:titles>Adresse Contoirs Efterretninger</avis:titles>
     <avis:startDate>1795-06-13</avis:startDate>
     <avis:endDate>1795-06-15</avis:endDate>
-    <avis:batchIdFilmId>400022028240-14</avis:batchIdFilmId>
+    <avis:FilmId>400022028240-14</avis:FilmId>
     <avis:numberOfPictures>14</avis:numberOfPictures>
     <avis:reductionRatio>15x</avis:reductionRatio>
     <avis:captureResolutionOriginal measurement="pixels/inch">400</avis:captureResolutionOriginal>
