@@ -40,13 +40,13 @@ public class EditionModsTest {
         SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
         TreeEventHandler editionModsEventHandler = new EditionModsEventHandler(resultCollector, getMFPak(), getBatch());
         AttributeParsingEvent editionEvent = new AttributeParsingEvent(
-                "B400022028241-RT1/400022028241-14/1795-06-13-01/adresseavisen1759-1795-06-13-01.edition.xml") {
+                "B400022028241-RT1/400022028241-14/1795-06-01/adresseavisen1759-1795-06-01.edition.xml") {
             @Override
             public InputStream getData() throws IOException {
                 return Thread.currentThread()
                              .getContextClassLoader()
                              .getResourceAsStream(
-                                     "goodData/adresseavisen1759-1795-06-13-01.edition.xml");
+                                     "goodData/adresseavisen1759-1795-06-01.edition.xml");
             }
 
             @Override
@@ -68,13 +68,13 @@ public class EditionModsTest {
         TreeEventHandler schematronValidatorEventHandler = new SchematronValidatorEventHandler(resultCollector,null);
         TreeEventHandler editionModsEventHandler = new EditionModsEventHandler(resultCollector, getMFPak(), batch);
         AttributeParsingEvent editionEvent = new AttributeParsingEvent(
-                "B400022028241-RT1/400022028241-14/1795-06-13-01/adresseavisen1759-1795-06-13-01.edition.xml") {
+                "B400022028241-RT1/400022028241-14/1795-06-01/adresseavisen1759-1795-06-01.edition.xml") {
             @Override
             public InputStream getData() throws IOException {
                 return Thread.currentThread()
                              .getContextClassLoader()
                              .getResourceAsStream(
-                                     "badData/adresseavisen1759-1795-06-13-01.edition.xml");
+                                     "badData/adresseavisen1759-1795-06-01.edition.xml");
             }
 
             @Override
@@ -91,7 +91,7 @@ public class EditionModsTest {
         AssertJUnit.assertTrue(report,report.contains("<description>2D-2: title Adresse Contoirs Efterretninger does not match title in MFPak 'Kiøbenhavns Kongelig alene priviligerede Adresse-Contoirs Efterretninger'</description>"));
         AssertJUnit.assertTrue(report,report.contains("<description>2D-3: Publication location 'Kobenhavn' does not match value 'København' from MFPak</description>"));
         AssertJUnit.assertTrue(report,report.contains("<description>2D-4: Date issued from file does not correspond to date in filename</description>"));
-        AssertJUnit.assertTrue(report,report.contains("<description>2D-9: Edition number (2) in edition xml doesn't correspond to node edition number: 1795-06-13-01</description>"));
+        AssertJUnit.assertTrue(report,report.contains("<description>2D-9: Edition number (2) in edition xml doesn't correspond to node edition number: 1795-06-01</description>"));
 
         assertFalse(resultCollector.isSuccess(),resultCollector.toReport());
 

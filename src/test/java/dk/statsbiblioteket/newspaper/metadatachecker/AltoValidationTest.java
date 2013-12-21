@@ -85,7 +85,7 @@ public class AltoValidationTest {
     public void shouldSucceed2J16() {
         setUp();
         SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
-        AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006.alto.xml") {
+        AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-01/AdresseContoirsEfterretninger-1795-06-01-0006.alto.xml") {
             @Override
             public InputStream getData() throws IOException {
                 return Thread.currentThread().getContextClassLoader().getResourceAsStream("goodData/good.alto.xml");
@@ -107,7 +107,7 @@ public class AltoValidationTest {
     public void shouldFail2J16() {
         setUp();
         SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
-        AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006.alto.xml") {
+        AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-01/AdresseContoirsEfterretninger-1795-06-01-0006.alto.xml") {
             @Override
             public InputStream getData() throws IOException {
                 return Thread.currentThread().getContextClassLoader().getResourceAsStream("badData/bad1.alto.xml");
@@ -131,7 +131,7 @@ public class AltoValidationTest {
      public void shouldFail2J16DoubleNested() {
          setUp();
          SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
-         AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006.alto.xml") {
+         AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-01/AdresseContoirsEfterretninger-1795-06-01-0006.alto.xml") {
              @Override
              public InputStream getData() throws IOException {
                  return Thread.currentThread().getContextClassLoader().getResourceAsStream("badData/bad2.alto.xml");
@@ -153,11 +153,11 @@ public class AltoValidationTest {
     public void shouldSucceed() {
         setUp();
         SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
-        AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006.alto.xml") {
+        AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-01/AdresseContoirsEfterretninger-1795-06-01-0006.alto.xml") {
             @Override
             public InputStream getData() throws IOException {
                 return Thread.currentThread().getContextClassLoader().getResourceAsStream(
-                        "scratch/B400022028240-RT1/400022028240-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01-0006.alto.xml");
+                        "scratch/B400022028240-RT1/400022028240-14/1795-06-01/AdresseContoirsEfterretninger-1795-06-01-0006.alto.xml");
             }
 
             @Override

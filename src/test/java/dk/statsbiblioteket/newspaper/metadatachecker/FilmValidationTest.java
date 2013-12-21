@@ -27,7 +27,7 @@ public class FilmValidationTest {
         final String input = "" +
                 "<avis:reelMetadata xmlns:avis=\"http://www.statsbiblioteket.dk/avisdigitalisering/microfilm/1/0/\">\n" +
                 "    <avis:titles>Adresse Contoirs Efterretninger</avis:titles>\n" +
-                "    <avis:startDate>1795-06-13</avis:startDate>\n" +
+                "    <avis:startDate>1795-06</avis:startDate>\n" +
                 "    <avis:endDate>1795-06-15</avis:endDate>\n" +
                 "    <avis:FilmId>400022028241-1</avis:FilmId>\n" +
                 "    <avis:numberOfPictures>14</avis:numberOfPictures>\n" +
@@ -60,7 +60,7 @@ public class FilmValidationTest {
         final String input = "" +
                 "<avis:reelMetadata xmlns:avis=\"http://www.statsbiblioteket.dk/avisdigitalisering/microfilm/1/0/\">\n" +
                 "    <avis:titles>Adresse Contoirs Efterretninger</avis:titles>\n" +
-                "    <avis:startDate>1795-06-13</avis:startDate>\n" +
+                "    <avis:startDate>1795-06</avis:startDate>\n" +
                 "    <avis:endDate>1795-06-15</avis:endDate>\n" +
                 "    <avis:FilmId>400022028241-1</avis:FilmId>\n" +
                 "    <avis:numberOfPictures>14</avis:numberOfPictures>\n" +
@@ -93,7 +93,7 @@ public class FilmValidationTest {
         final String input = "" +
                 "<avis:reelMetadata xmlns:avis=\"http://www.statsbiblioteket.dk/avisdigitalisering/microfilm/1/0/\">\n" +
                 "    <avis:titles>Adresse Contoirs Efterretninger</avis:titles>\n" +
-                "    <avis:startDate>1795-06-13</avis:startDate>\n" +
+                "    <avis:startDate>1795-06</avis:startDate>\n" +
                 "    <avis:endDate>1795-06-15</avis:endDate>\n" +
                 "    <avis:FilmId>400022028241-1</avis:FilmId>\n" +
                 "    <avis:numberOfPictures>14</avis:numberOfPictures>\n" +
@@ -126,7 +126,7 @@ public class FilmValidationTest {
         final String input = "" +
                 "<avis:reelMetadata xmlns:avis=\"http://www.statsbiblioteket.dk/avisdigitalisering/microfilm/1/0/\">\n" +
                 "    <avis:titles>Adresse Contoirs Efterretninger</avis:titles>\n" +
-                "    <avis:startDate>1795-06-13</avis:startDate>\n" +
+                "    <avis:startDate>1795-06</avis:startDate>\n" +
                 "    <avis:endDate>1795-06-15</avis:endDate>\n" +
                 "    <avis:FilmId>400022028241-1</avis:FilmId>\n" +
                 "    <avis:numberOfPictures>14</avis:numberOfPictures>\n" +
@@ -159,7 +159,7 @@ public class FilmValidationTest {
         final String input = "" +
                 "<avis:reelMetadata xmlns:avis=\"http://www.statsbiblioteket.dk/avisdigitalisering/microfilm/1/0/\">\n" +
                 "    <avis:titles>Adresse Contoirs Efterretninger</avis:titles>\n" +
-                "    <avis:startDate>1795-06-13</avis:startDate>\n" +
+                "    <avis:startDate>1795-06</avis:startDate>\n" +
                 "    <avis:endDate>1795-06-15</avis:endDate>\n" +
                 "    <avis:FilmId>400022028241-1</avis:FilmId>\n" +
                 "    <avis:numberOfPictures>14</avis:numberOfPictures>\n" +
@@ -192,7 +192,7 @@ public class FilmValidationTest {
         final String input = "" +
                 "<avis:reelMetadata xmlns:avis=\"http://www.statsbiblioteket.dk/avisdigitalisering/microfilm/1/0/\">\n" +
                 "    <avis:titles>Adresse Contoirs Efterretninger</avis:titles>\n" +
-                "    <avis:startDate>1795-06-13</avis:startDate>\n" +
+                "    <avis:startDate>1795-06</avis:startDate>\n" +
                 "    <avis:endDate>1790-06-15</avis:endDate>\n" +
                 "    <avis:FilmId>400022028241-1</avis:FilmId>\n" +
                 "    <avis:numberOfPictures>14</avis:numberOfPictures>\n" +
@@ -258,7 +258,7 @@ public class FilmValidationTest {
         final String input = "" +
                 "<avis:reelMetadata xmlns:avis=\"http://www.statsbiblioteket.dk/avisdigitalisering/microfilm/1/0/\">\n" +
                 "    <avis:titles>Adresse Contoirs Efterretninger</avis:titles>\n" +
-                "    <avis:startDate>1795-06-13</avis:startDate>\n" +
+                "    <avis:startDate>1795-06</avis:startDate>\n" +
                 "    <avis:endDate>1795-06-15</avis:endDate>\n" +
                 "    <avis:FilmId>400022028241-1</avis:FilmId>\n" +
                 "    <avis:numberOfPictures>14</avis:numberOfPictures>\n" +
@@ -291,7 +291,7 @@ public class FilmValidationTest {
         final String input = "" +
                 "<avis:reelMetadata xmlns:avis=\"http://www.statsbiblioteket.dk/avisdigitalisering/microfilm/1/0/\">\n" +
                 "    <avis:titles>Adresse Contoirs Efterretninger</avis:titles>\n" +
-                "    <avis:startDate>1795-06-13</avis:startDate>\n" +
+                "    <avis:startDate>1795-06</avis:startDate>\n" +
                 "    <avis:endDate>1795-06-15</avis:endDate>\n" +
                 "    <avis:FilmId>400022028241-1</avis:FilmId>\n" +
                 "    <avis:numberOfPictures>14</avis:numberOfPictures>\n" +

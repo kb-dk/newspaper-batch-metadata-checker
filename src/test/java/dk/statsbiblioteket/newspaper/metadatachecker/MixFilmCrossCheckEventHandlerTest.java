@@ -21,7 +21,7 @@ public class MixFilmCrossCheckEventHandlerTest {
         final String batchId = "400022028241";
         final String film = "1";
         final String avisID = "adresseavisen1759";
-        final String publishDate = "1795-06-13";
+        final String publishDate = "1795-06";
         final String pictureNumber = "0006";
         final Batch batch = new Batch();
         batch.setBatchID(batchId);
@@ -49,7 +49,7 @@ public class MixFilmCrossCheckEventHandlerTest {
         final String batchId = "400022028241";
         final String film = "1";
         final String avisID = "adresseavisen1759";
-        final String publishDate = "1795-06-13";
+        final String publishDate = "1795-06";
         final String pictureNumber = "0006";
         final Batch batch = new Batch();
         batch.setBatchID(batchId);
@@ -80,7 +80,7 @@ public class MixFilmCrossCheckEventHandlerTest {
         final String batchId = "400022028241";
         final String film = "1";
         final String avisID = "adresseavisen1759";
-        final String publishDate = "1795-06-13";
+        final String publishDate = "1795-06";
         final String pictureNumber = "0006";
         final Batch batch = new Batch();
         batch.setBatchID(batchId);

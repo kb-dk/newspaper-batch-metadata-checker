@@ -106,7 +106,7 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
         String xpathForEditionNumber = xpath.selectString(doc, xpathForEditionNumberXPath);
         String editionIDFromNode = event.getName().split("/")[2];
         // Extracts the edition number from a editionID: yyyy-MM-dd-editionNumber.
-        String nodeEditionNumber = editionIDFromNode.split("-")[3];
+        String nodeEditionNumber = editionIDFromNode.substring(editionIDFromNode.lastIndexOf("-") + 1);
         try {
             if (Integer.parseInt(xpathForEditionNumber) != Integer.parseInt(nodeEditionNumber) ) {
                 addFailure(event, "2D-9: Edition number (" + xpathForEditionNumber + ") in edition xml doesn't " +
@@ -258,7 +258,7 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
      */
     private FuzzyDate getDateFromName(String name) throws ParseException {
 
-        //B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01.edition.xml
+        //B400022028241-RT1/400022028241-14/1795-06-01/AdresseContoirsEfterretninger-1795-06-01.edition.xml
         String[] splits = name.split("/");
         String file = splits[2];
         String date = file.replaceAll("-[0-9]{2}$", "");
@@ -273,7 +273,7 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
      * @return the avisID
      */
     private String getAvisIDfromName(String name) {
-        //B400022028241-RT1/400022028241-14/1795-06-13-01/AdresseContoirsEfterretninger-1795-06-13-01.edition.xml
+        //B400022028241-RT1/400022028241-14/1795-06-01/AdresseContoirsEfterretninger-1795-06-01.edition.xml
         String[] splits = name.split("/");
         String file = splits[splits.length - 1];
         String[] parts = file.split("-");

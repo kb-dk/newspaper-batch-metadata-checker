@@ -38,7 +38,7 @@ public class MFPakMocker {
         when(mfPakDAO.getNewspaperEntity(anyString(), any(Date.class))).thenReturn(entity2);
         when(mfPakDAO.getBatchShipmentDate(anyString())).thenReturn(new Date(0));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        NewspaperDateRange filmDateRange = new NewspaperDateRange(sdf.parse("1795-06-13"), sdf.parse("1795-06-15"));
+        NewspaperDateRange filmDateRange = new NewspaperDateRange(sdf.parse("1795-06-01"), sdf.parse("1795-06-15"));
         List<NewspaperDateRange> ranges = new ArrayList<>();
         ranges.add(filmDateRange);
         when(mfPakDAO.getBatchDateRanges(anyString())).thenReturn(ranges);

@@ -41,9 +41,9 @@ public class JpylyzerMocker {
                               "        <toolVersion>1.10.1</toolVersion>\n" +
                               "    </toolInfo>\n" +
                               "    <fileInfo>\n" +
-                              "        <fileName>adresseavisen1759-1795-06-13-01-0006.jp2</fileName>\n" +
+                              "        <fileName>adresseavisen1759-1795-06-01-0006.jp2</fileName>\n" +
                               "        <filePath>\n" +
-                              "            /home/abr/newspaper-test-data/small-test-batch/B400022028241-RT1/400022028241-1/1795-06-13-01/adresseavisen1759-1795-06-13-01-0006.jp2\n" +
+                              "            /home/abr/newspaper-test-data/small-test-batch/B400022028241-RT1/400022028241-1/1795-06-01/adresseavisen1759-1795-06-01-0006.jp2\n" +
                               "        </filePath>\n" +
                               "        <fileSizeInBytes>" + size + "</fileSizeInBytes>\n" +
                               "        <fileLastModified>Thu Nov 14 14:36:57 2013</fileLastModified>\n" +

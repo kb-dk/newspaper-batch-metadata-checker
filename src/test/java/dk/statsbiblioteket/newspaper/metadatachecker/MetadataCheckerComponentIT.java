@@ -63,8 +63,7 @@ public class MetadataCheckerComponentIT {
                 batch,
                 batchXmlManifest);
         batchStructureChecker.runEvents(eventHandlerFactory.createEventHandlers(), resultCollector);
-        System.out.println(resultCollector.toReport());
-        assertTrue(resultCollector.isSuccess());
+        assertTrue(resultCollector.isSuccess(), resultCollector.toReport());
         //Assert.fail();
     }
 
