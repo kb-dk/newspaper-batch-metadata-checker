@@ -1,3 +1,8 @@
+1.2
+* Update to batch-event-framework 1.4
+* Fix NullPointerException in ModsXPathEventHandler when missing section title element
+* Add support for fuzzy dates
+
 1.1
 * Read logback configuration from classpath
 * Check for Option B7 (reading of newspaper section titles)
