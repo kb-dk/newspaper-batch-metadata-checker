@@ -10,7 +10,7 @@
     <s:pattern>
         <s:rule context="/avis:reelMetadata">
             <!--Fuzzy date format, i.e. YYYY-MM-DD, YYYY-MM, or YYYY-->
-            <s:let name="dateFormat" value="'^[12][0-9]{3}((-(0[1-9]|1[0-2]))?-(0[1-9]|[12][0-9]|3[01]))?$'"/>
+            <s:let name="dateFormat" value="'^[12][0-9]{3}(-(0[1-9]|1[0-2])(-(0[1-9]|[12][0-9]|3[01]))?)?$'"/>
 
             <!--2E-2 + 2E-3: Start date and End date, proper format-->
             <s:assert test="matches(avis:startDate, $dateFormat)">2E-2: Start date should be of ISO 8601 format YYYY-MM-DD, YYYY-MM, or YYYY</s:assert>
