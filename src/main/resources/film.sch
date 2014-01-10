@@ -44,7 +44,7 @@
             <s:assert test="matches(avis:captureResolutionFilm/@measurement, '^\s*pixels/inch\s*$')">2E-10: Scanning resolution Film unit should be 'pixels/inch'</s:assert>
 
             <!--2E-11: Date microfilm created-->
-            <s:assert test="matches(avis:dateMicrofilmCreated,$dateFormat)">2E-11: Date microfilm created must be of format YYYY-MM-DD, YYYY-MM, YYYY</s:assert>
+            <s:assert test="avis:dateMicrofilmCreated='' or matches(avis:dateMicrofilmCreated,$dateFormat)">2E-11: Date microfilm created must be of format YYYY-MM-DD, YYYY-MM, YYYY</s:assert>
             <s:let name="dateMicrofilmCreatedNoDashes" value="translate(avis:dateMicrofilmCreated,'-','')"/>
             <s:let name="endDate0000Appended" value="concat($endDateNoDashes,'0000')"/>
             <s:let name="dateMicrofilmCreatedAppended" value="concat($dateMicrofilmCreatedNoDashes,'9999')"/>

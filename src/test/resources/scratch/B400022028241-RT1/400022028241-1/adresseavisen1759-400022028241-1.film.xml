@@ -7,7 +7,7 @@
     <avis:reductionRatio>15x</avis:reductionRatio>
     <avis:captureResolutionOriginal measurement="pixels/inch">400</avis:captureResolutionOriginal>
     <avis:captureResolutionFilm measurement="pixels/inch">6000</avis:captureResolutionFilm>
-    <avis:dateMicrofilmCreated>1970-06-05</avis:dateMicrofilmCreated>
+    <avis:dateMicrofilmCreated></avis:dateMicrofilmCreated>
     <avis:resolutionOfNegative>6.3</avis:resolutionOfNegative>
     <avis:resolutionCommentNegative>No comments</avis:resolutionCommentNegative>
     <avis:densityReadingNegative>0.11</avis:densityReadingNegative>
