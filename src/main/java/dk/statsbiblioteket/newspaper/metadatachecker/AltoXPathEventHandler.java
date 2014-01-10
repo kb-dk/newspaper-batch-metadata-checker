@@ -68,7 +68,7 @@ public class AltoXPathEventHandler extends DefaultTreeEventHandler {
         }
         final String xpath2J3 = "alto:alto/alto:Description/alto:sourceImageInformation/alto:fileName";
         String pathInAlto = xpath.selectString(doc, xpath2J3);
-        String expectedName = event.getName().replaceAll("/", "\\\\");
+        String expectedName = event.getName().substring(event.getName().indexOf('/') + 1).replaceAll("/", "\\\\");
         expectedName = expectedName.replace(".alto.xml", ".jp2");
         if (pathInAlto == null || !expectedName.equals(pathInAlto)) {
             resultCollector.addFailure(event.getName(), "metadata", getClass().getSimpleName(),
