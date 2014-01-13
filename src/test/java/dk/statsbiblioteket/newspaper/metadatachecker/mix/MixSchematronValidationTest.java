@@ -38,11 +38,12 @@ public class MixSchematronValidationTest {
         batch.setBatchID(batchId);
         batch.setRoundTripNumber(1);
         AttributeParsingEvent event = MixerMockup.getMixPageAttributeParsingEvent(
-                film, avisID, publishDate, pictureNumber, batch, 9304, 11408, 400, "7ed748249def3bcaadd825ae17dc817a",15);
+                film, avisID, publishDate, pictureNumber, batch, 9304, 11408, 400, "7ed748249def3bcaadd825ae17dc817a",15,
+                "microfilm");
 
         SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
         handler.handleAttribute(event);
-        assertTrue(resultCollector.isSuccess(),resultCollector.toReport());
+        assertTrue(resultCollector.isSuccess(), resultCollector.toReport());
     }
 
     @Test
@@ -242,38 +243,6 @@ public class MixSchematronValidationTest {
                              "      </mix:PhotometricInterpretation>" +
                              "    </mix:BasicImageCharacteristics>" +
                              "  </mix:BasicImageInformation>" +
-                             "</mix:mix>";
-
-        setUp();
-        handleTestEvent(input, resultCollector);
-        assertFalse(resultCollector.isSuccess());
-    }
-
-    @Test
-    public void shouldFailDueToMissingSourceType() {
-        final String input = "" +
-                             "<mix:mix xmlns:mix='http://www.loc.gov/mix/v20'>" +
-                             "  <mix:ImageCaptureMetadata>" +
-                             "    <mix:SourceInformation>" +
-                             "      <mix:sourceType></mix:sourceType>" +
-                             "    </mix:SourceInformation>" +
-                             "  </mix:ImageCaptureMetadata>" +
-                             "</mix:mix>";
-
-        setUp();
-        handleTestEvent(input, resultCollector);
-        assertFalse(resultCollector.isSuccess());
-    }
-
-    @Test
-    public void shouldFailDueToWrongSourceType() {
-        final String input = "" +
-                             "<mix:mix xmlns:mix='http://www.loc.gov/mix/v20'>" +
-                             "  <mix:ImageCaptureMetadata>" +
-                             "    <mix:SourceInformation>" +
-                             "      <mix:sourceType>Wrong source type</mix:sourceType>" +
-                             "    </mix:SourceInformation>" +
-                             "  </mix:ImageCaptureMetadata>" +
                              "</mix:mix>";
 
         setUp();

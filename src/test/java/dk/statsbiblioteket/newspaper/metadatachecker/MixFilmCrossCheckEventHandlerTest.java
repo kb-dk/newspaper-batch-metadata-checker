@@ -27,7 +27,7 @@ public class MixFilmCrossCheckEventHandlerTest {
         batch.setBatchID(batchId);
         batch.setRoundTripNumber(1);
         AttributeParsingEvent mixEvent = MixerMockup.getMixPageAttributeParsingEvent(
-                film, avisID, publishDate, pictureNumber, batch, 2286, 2864, 400, "",15);
+                film, avisID, publishDate, pictureNumber, batch, 2286, 2864, 400, "",15, "microfilm");
         AttributeParsingEvent filmEvent = FilmMocker.getFilmXmlAttributeParsingEvent(
                 film, avisID, "Adresse Contoirs Efterretninger", "1980-11-01", "1978-10-10", "1978-12-30", batch, 400);
         
@@ -55,7 +55,7 @@ public class MixFilmCrossCheckEventHandlerTest {
         batch.setBatchID(batchId);
         batch.setRoundTripNumber(1);
         AttributeParsingEvent mixBadResEvent = MixerMockup.getMixPageAttributeParsingEvent(
-                film, avisID, publishDate, pictureNumber, batch, 2286, 2864, 300, "",15);
+                film, avisID, publishDate, pictureNumber, batch, 2286, 2864, 300, "",15, "microfilm");
         AttributeParsingEvent filmEvent = FilmMocker.getFilmXmlAttributeParsingEvent(film, avisID, "Adresse Contoirs Efterretninger", 
                 "1980-11-01", "1978-10-10", "1978-12-30", batch, 400);
         
@@ -86,7 +86,7 @@ public class MixFilmCrossCheckEventHandlerTest {
         batch.setBatchID(batchId);
         batch.setRoundTripNumber(1);
         AttributeParsingEvent mixBadResEvent = MixerMockup.getMixPageAttributeParsingEvent(
-                film, avisID, publishDate, pictureNumber, batch, 2286, 2864, 300, "",15);
+                film, avisID, publishDate, pictureNumber, batch, 2286, 2864, 300, "",15, "microfilm");
         AttributeParsingEvent filmEvent = FilmMocker.getFilmXmlAttributeParsingEvent(film, avisID, "Adresse Contoirs Efterretninger", 
                 "1980-11-01", "1978-10-10", "1978-12-30", batch, 400);
         

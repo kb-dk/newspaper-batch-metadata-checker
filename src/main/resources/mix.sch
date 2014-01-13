@@ -34,11 +34,6 @@
       <s:assert test="mix:PhotometricInterpretation/mix:colorSpace = 'greyscale'">2K-10: ColorSpace should match greyscale</s:assert>
     </s:rule>
 
-    <!--Image source-->
-    <s:rule context="mix:mix/mix:ImageCaptureMetadata/mix:SourceInformation">
-      <s:assert test="mix:sourceType = 'microfilm'">2K-12: Image source should match microfilm</s:assert>
-    </s:rule>
-    
     <!--Scanner-organisation-->
     <s:rule context="mix:mix/mix:ImageCaptureMetadata/mix:GeneralCaptureInformation">
       <s:assert test="matches(mix:imageProducer,'^State and University Library; Ninestars Information Technologies LTD; .+')">2K-16: ImageProducer should match "State and University Library; Ninestars Information Technologies LTD; [operator]"</s:assert>

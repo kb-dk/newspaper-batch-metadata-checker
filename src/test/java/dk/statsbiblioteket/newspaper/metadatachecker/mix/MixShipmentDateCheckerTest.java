@@ -43,7 +43,8 @@ public class MixShipmentDateCheckerTest {
         batch.setBatchID(batchId);
         batch.setRoundTripNumber(1);
         AttributeParsingEvent event = MixerMockup.getMixPageAttributeParsingEvent(
-                film, avisID, publishDate, pictureNumber, batch, 9304, 11408, 400, "7ed748249def3bcaadd825ae17dc817a",15);
+                film, avisID, publishDate, pictureNumber, batch, 9304, 11408, 400, "7ed748249def3bcaadd825ae17dc817a",15,
+                "microfilm");
 
 
         MfPakDAO mfpakDao = mock(MfPakDAO.class);
@@ -73,7 +74,8 @@ public class MixShipmentDateCheckerTest {
         batch.setBatchID(batchId);
         batch.setRoundTripNumber(1);
         AttributeParsingEvent event = MixerMockup.getMixPageAttributeParsingEvent(
-                film, avisID, publishDate, pictureNumber, batch, 9304, 11408, 400, "7ed748249def3bcaadd825ae17dc817a",15);
+                film, avisID, publishDate, pictureNumber, batch, 9304, 11408, 400, "7ed748249def3bcaadd825ae17dc817a",15,
+                "microfilm");
 
         MfPakDAO mfpakDao = mock(MfPakDAO.class);
         // The in the mix file is 2010-11-11

@@ -14,7 +14,8 @@ public class MixerMockup {
                                                                                final String pictureNumber,
                                                                                final Batch batch, final int width,
                                                                                final int height, final int resolution,
-                                                                               final String checksum, final int size) {
+                                                                               final String checksum, final int size,
+                                                                               String sourceType) {
         return new MixPageAttributeParsingEvent(
                 batch.getFullID() + "/" +
                 batch.getBatchID() + "-" + film + "/" +
@@ -27,19 +28,92 @@ public class MixerMockup {
                 height,
                 resolution,
                 checksum,
-                size);
+                size,
+                sourceType);
     }
 
     public static MixWorkshiftIsoAttributeParsingEvent getMixWorkshiftIso(final String workshift, final String pictureNumber,
-                                                           final Batch batch, final String checksum, final int size) {
+                                                                          final Batch batch, final String checksum, final int size,
+                                                                          String sourceType) {
         return new MixWorkshiftIsoAttributeParsingEvent(
                 batch.getFullID() + "/" +
                 "WORKSHIFT-ISO-TARGET/" +
-                "Target-" + workshift + "-" + pictureNumber + ".mix.xml", workshift, pictureNumber, checksum, size);
+                "Target-" + workshift + "-" + pictureNumber + ".mix.xml", workshift, pictureNumber, checksum, size,
+                sourceType);
     }
 
+    private static byte[] getWorkshiftPageMix(String billedID, String scannedDate, int width, int height,
+                                              int resolution, String checksum, int size, String sourceType) {
+        String mix = "<mix:mix xmlns:mix=\"http://www.loc.gov/mix/v20\">\n" +
+                     "    <mix:BasicDigitalObjectInformation>\n" +
+                     "        <mix:ObjectIdentifier>\n" +
+                     "            <mix:objectIdentifierType>ISO Film Target Image ID</mix:objectIdentifierType>\n" +
+                     "            <mix:objectIdentifierValue>iso-film-target-0001-" + billedID + "</mix:objectIdentifierValue>\n" +
+                     "        </mix:ObjectIdentifier>\n" +
+                     "        <mix:fileSize>" + size + "</mix:fileSize>\n" +
+                     "        <mix:Fixity>\n" +
+                     "            <mix:messageDigestAlgorithm>MD5</mix:messageDigestAlgorithm>\n" +
+                     "            <mix:messageDigest>" + checksum + "</mix:messageDigest>\n" +
+                     "            <mix:messageDigestOriginator>Ninestars</mix:messageDigestOriginator>\n" +
+                     "        </mix:Fixity>\n" +
+                     "    </mix:BasicDigitalObjectInformation>\n" +
+                     "    <mix:BasicImageInformation>\n" +
+                     "        <mix:BasicImageCharacteristics>\n" +
+                     "            <mix:imageWidth>" + width + "</mix:imageWidth>\n" +
+                     "            <mix:imageHeight>" + height + "</mix:imageHeight>\n" +
+                     "            <mix:PhotometricInterpretation>\n" +
+                     "                <mix:colorSpace>greyscale</mix:colorSpace>\n" +
+                     "            </mix:PhotometricInterpretation>\n" +
+                     "        </mix:BasicImageCharacteristics>\n" +
+                     "    </mix:BasicImageInformation>\n" +
+                     "    <mix:ImageCaptureMetadata>\n" +
+                     "        <mix:SourceInformation>\n" +
+                     "            <mix:sourceType>" + sourceType + "</mix:sourceType>\n" +
+                     "            <mix:SourceID>\n" +
+                     "                <mix:sourceIDType>ISO Film Target ID</mix:sourceIDType>\n" +
+                     "                <mix:sourceIDValue>iso-film-target-0001</mix:sourceIDValue>\n" +
+                     "            </mix:SourceID>\n" +
+                     "            <mix:SourceID>\n" +
+                     "                <mix:sourceIDType>Location on microfilm</mix:sourceIDType>\n" +
+                     "                <mix:sourceIDValue>" + billedID + "</mix:sourceIDValue>\n" +
+                     "            </mix:SourceID>\n" +
+                     "        </mix:SourceInformation>\n" +
+                     "        <mix:GeneralCaptureInformation>\n" +
+                     "            <mix:dateTimeCreated>" + scannedDate + "</mix:dateTimeCreated>\n" +
+                     "            <mix:imageProducer>State and University Library; Ninestars Information Technologies LTD; operator-name-here</mix:imageProducer>\n" +
+                     "        </mix:GeneralCaptureInformation>\n" +
+                     "    </mix:ImageCaptureMetadata>\n" +
+                     "    <mix:ImageAssessmentMetadata>\n" +
+                     "        <mix:SpatialMetrics>\n" +
+                     "            <mix:samplingFrequencyUnit>in.</mix:samplingFrequencyUnit>\n" +
+                     "            <mix:xSamplingFrequency>\n" +
+                     "                <mix:numerator>" + resolution + "</mix:numerator>\n" +
+                     "                <mix:denominator>1</mix:denominator>\n" +
+                     "            </mix:xSamplingFrequency>\n" +
+                     "            <mix:ySamplingFrequency>\n" +
+                     "                <mix:numerator>" + resolution + "</mix:numerator>\n" +
+                     "                <mix:denominator>1</mix:denominator>\n" +
+                     "            </mix:ySamplingFrequency>\n" +
+                     "        </mix:SpatialMetrics>\n" +
+                     "        <mix:ImageColorEncoding>\n" +
+                     "            <mix:BitsPerSample>\n" +
+                     "                <mix:bitsPerSampleValue>8</mix:bitsPerSampleValue>\n" +
+                     "                <mix:bitsPerSampleUnit>integer</mix:bitsPerSampleUnit>\n" +
+                     "            </mix:BitsPerSample>\n" +
+                     "            <mix:samplesPerPixel>1</mix:samplesPerPixel>\n" +
+                     "        </mix:ImageColorEncoding>\n" +
+                     "    </mix:ImageAssessmentMetadata>\n" +
+                     "</mix:mix>\n";
+        try {
+            return mix.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new Error("UTF-8 not known");
+        }
+    }
+
+
     private static byte[] getCustomPageMix(String filmId, String billedID, String scannedDate, int width, int height,
-                                           int resolution, String checksum, int size) {
+                                           int resolution, String checksum, int size, String sourceType) {
         String mix = "<mix:mix xmlns:mix=\"http://www.loc.gov/mix/v20\">\n" +
                      "    <mix:BasicDigitalObjectInformation>\n" +
                      "        <mix:ObjectIdentifier>\n" +
@@ -64,7 +138,7 @@ public class MixerMockup {
                      "    </mix:BasicImageInformation>\n" +
                      "    <mix:ImageCaptureMetadata>\n" +
                      "        <mix:SourceInformation>\n" +
-                     "            <mix:sourceType>microfilm</mix:sourceType>\n" +
+                     "            <mix:sourceType>" + sourceType + "</mix:sourceType>\n" +
                      "            <mix:SourceID>\n" +
                      "                <mix:sourceIDType>Microfilm reel barcode #</mix:sourceIDType>\n" +
                      "                <mix:sourceIDValue>" + filmId + "</mix:sourceIDValue>\n" +
@@ -109,25 +183,27 @@ public class MixerMockup {
 
     public static class MixWorkshiftIsoAttributeParsingEvent extends AttributeParsingEvent {
 
+        private final String sourceType;
         private String workshift;
         private String pictureNumber;
         private String checksum;
         private int size;
 
         public MixWorkshiftIsoAttributeParsingEvent(String name, String workshift, String pictureNumber,
-                                                    String checksum, int size) {
+                                                    String checksum, int size, String sourceType) {
             super(name);
             this.workshift = workshift;
             this.pictureNumber = pictureNumber;
             this.checksum = checksum;
             this.size = size;
+            this.sourceType = sourceType;
         }
 
         @Override
         public InputStream getData() throws IOException {
             return new ByteArrayInputStream(
-                    getCustomPageMix(
-                            workshift, pictureNumber, "2013-11-12T11:48:06", 9304, 11408, 400, checksum, size));
+                    getWorkshiftPageMix(pictureNumber, "2013-11-12T11:48:06", 9304, 11408, 400, checksum, size,
+                                        sourceType));
         }
 
         @Override
@@ -166,6 +242,7 @@ public class MixerMockup {
 
     public static class MixPageAttributeParsingEvent extends AttributeParsingEvent {
 
+        private final String sourceType;
         private Batch batch;
         private String film;
         private String pictureNumber;
@@ -176,7 +253,7 @@ public class MixerMockup {
         private int size;
 
         public MixPageAttributeParsingEvent(String name, Batch batch, String film, String pictureNumber, int width,
-                                            int height, int resolution, String checksum, int size) {
+                                            int height, int resolution, String checksum, int size, String sourceType) {
             super(name);
             this.batch = batch;
             this.film = film;
@@ -186,6 +263,7 @@ public class MixerMockup {
             this.resolution = resolution;
             this.checksum = checksum;
             this.size = size;
+            this.sourceType = sourceType;
         }
 
         @Override
@@ -199,7 +277,8 @@ public class MixerMockup {
                             height,
                             resolution,
                             checksum,
-                            size));
+                            size,
+                            sourceType));
         }
 
         public String getFilm() {

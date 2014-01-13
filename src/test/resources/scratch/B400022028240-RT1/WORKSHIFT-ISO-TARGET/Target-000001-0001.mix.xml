@@ -1,8 +1,8 @@
 <mix:mix xmlns:mix="http://www.loc.gov/mix/v20">
     <mix:BasicDigitalObjectInformation>
         <mix:ObjectIdentifier>
-            <mix:objectIdentifierType>Image Unique ID</mix:objectIdentifierType>
-            <mix:objectIdentifierValue>000001-0001</mix:objectIdentifierValue>
+            <mix:objectIdentifierType>ISO Film Target Image ID</mix:objectIdentifierType>
+            <mix:objectIdentifierValue>iso-film-target-0001-0001</mix:objectIdentifierValue>
         </mix:ObjectIdentifier>
         <mix:fileSize>7190470</mix:fileSize>
         <mix:FormatDesignation>
@@ -29,18 +29,18 @@
     </mix:BasicImageInformation>
     <mix:ImageCaptureMetadata>
         <mix:SourceInformation>
-            <mix:sourceType>microfilm</mix:sourceType>
+            <mix:sourceType>iso-film-target</mix:sourceType>
             <mix:SourceID>
-                <mix:sourceIDType>Microfilm reel barcode #</mix:sourceIDType>
-                <mix:sourceIDValue>123456789-12</mix:sourceIDValue>
+                <mix:sourceIDType>ISO Film Target ID</mix:sourceIDType>
+                <mix:sourceIDValue>iso-film-target-0001</mix:sourceIDValue>
             </mix:SourceID>
             <mix:SourceID>
                 <mix:sourceIDType>Location on microfilm</mix:sourceIDType>
-                <mix:sourceIDValue>0000</mix:sourceIDValue>
+                <mix:sourceIDValue>0001</mix:sourceIDValue>
             </mix:SourceID>
         </mix:SourceInformation>
         <mix:GeneralCaptureInformation>
-            <mix:dateTimeCreated>2010-03-02T11:48:06</mix:dateTimeCreated>
+            <mix:dateTimeCreated>2013-11-12T11:48:06</mix:dateTimeCreated>
             <mix:imageProducer>State and University Library; Ninestars Information Technologies LTD; operator-name-here</mix:imageProducer>
         </mix:GeneralCaptureInformation>
         <mix:ScannerCapture>

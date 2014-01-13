@@ -51,7 +51,7 @@ public class MixJpylyzerEventHandlerTest {
                 height,
                 400,
                 "7ed748249def3bcaadd825ae17dc817a",
-                size);
+                size, "microfilm");
         Document doc1 = DOM.streamToDOM(event.getData());
 
         AttributeParsingEvent event2 = JpylyzerMocker.getJpylyzerXmlAttributeParsingEvent(
@@ -91,7 +91,7 @@ public class MixJpylyzerEventHandlerTest {
                 height,
                 400,
                 "7ed748249def3bcaadd825ae17dc817a",
-                size);
+                size, "microfilm");
         Document doc1 = DOM.streamToDOM(event.getData());
 
         AttributeParsingEvent event2 = JpylyzerMocker.getJpylyzerXmlAttributeParsingEvent(
@@ -136,7 +136,7 @@ public class MixJpylyzerEventHandlerTest {
                 height,
                 400,
                 "7ed748249def3bcaadd825ae17dc817a",
-                size);
+                size, "microfilm");
         Document doc1 = DOM.streamToDOM(event.getData());
 
         AttributeParsingEvent event2 = JpylyzerMocker.getJpylyzerXmlAttributeParsingEvent(
@@ -180,7 +180,7 @@ public class MixJpylyzerEventHandlerTest {
                 height,
                 400,
                 "7ed748249def3bcaadd825ae17dc817a",
-                size);
+                size, "microfilm");
         Document doc1 = DOM.streamToDOM(event.getData());
 
         AttributeParsingEvent event2 = JpylyzerMocker.getJpylyzerXmlAttributeParsingEvent(
