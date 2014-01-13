@@ -43,7 +43,7 @@
       <s:assert test="@WIDTH/string-length() > 0">2J-14: String should have WIDTH attribute <s:value-of select="@WIDTH"/></s:assert>
       <s:assert test="@HPOS/string-length() > 0">2J-14: String should have HPOS attribute <s:value-of select="@HPOS"/></s:assert>
       <s:assert test="@VPOS/string-length() > 0">2J-14: String should have VPOS attribute <s:value-of select="@VPOS"/></s:assert>
-      <s:assert test="matches(@CONTENT, '^\s*\S+\s*$')">2J-15: String should have CONTENT attribute <s:value-of select="@CONTENT"/></s:assert>
+      <s:assert test="matches(@CONTENT, '^\s*\S+\s*$')">2J-15: String should have CONTENT attribute containing a word, but was '<s:value-of select="@CONTENT"/>'</s:assert>
     </s:rule>
     
 <!--     /alto:altox/alto:Layout/alto:Page/alto:PrintSpace/alto:TextBlock[@language] -->
