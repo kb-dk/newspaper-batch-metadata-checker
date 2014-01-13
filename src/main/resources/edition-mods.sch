@@ -53,12 +53,14 @@
     mods:mods/mods:relatedItem[@type="host"]/mods:part/mods:detail@type="edition"]/mods:caption
     check only expected characters. -->
 
-    <s:pattern id="editionLabel">
+    <!-- Not all special characters should be escaped, like '.'. In the discussion it was unclear which characters
+    should be escaped, so we decided to revert the requirement altogether. Thus this test has been disabled -->
+    <!--<s:pattern id="editionLabel">
         <s:rule context="/mods:mods/mods:relatedItem[@type='host']/mods:part/mods:detail[@type='edition']/mods:caption">
             <s:assert test="matches(text(), '^[a-zA-Z0-9 æøåÆØÅ]+$')">
                 2D-10: Edition Label '<s:value-of select="text()"/>' contains unexpected characters.</s:assert>
         </s:rule>
-    </s:pattern>
+    </s:pattern>-->
 
 </s:schema>
 
