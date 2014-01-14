@@ -157,7 +157,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
                         event.getName(),
                         "metadata",
                         getClass().getSimpleName(),
-                        "2C-1: Dit not find section for the page " + event.getName() 
+                        "2C-1: Did not find section for the page " + event.getName()
                         + " although Option B7 (Section Titles) was chosen for the batch " + batch.getBatchID(),
                         sectionLabelXpath );
             } else {
