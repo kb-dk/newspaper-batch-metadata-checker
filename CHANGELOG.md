@@ -1,3 +1,10 @@
+1.3
+* Update MIX checks to be different on WORKSHIFT-ISO-TARGET matching 9*
+* Disable check for special characters, it is not well defined
+* No roundtrip in ALTO fileName
+* Allow empty date in dateMicrofilmCreated
+* Fix of fuzzy date pattern
+
 1.2
 * Update to batch-event-framework 1.4
 * Fix NullPointerException in ModsXPathEventHandler when missing section title element
