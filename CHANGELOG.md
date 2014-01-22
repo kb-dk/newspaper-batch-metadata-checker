@@ -1,5 +1,6 @@
 1.3.1
 * Update to newspaper-batch-event-framekwork 1.4.2, to make the component quiet on stderr
+* Remove System.out.println() from non-test code
 
 1.3
 * Update MIX checks to be different on WORKSHIFT-ISO-TARGET matching 9*
