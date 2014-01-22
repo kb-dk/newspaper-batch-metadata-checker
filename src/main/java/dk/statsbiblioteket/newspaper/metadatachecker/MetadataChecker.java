@@ -45,7 +45,7 @@ public class MetadataChecker {
         RunnableComponent component = new MetadataCheckerComponent(properties, new MfPakDAO(mfPakConfiguration));
 
         CallResult result = AutonomousComponentUtils.startAutonomousComponent(properties, component);
-        System.out.println(result);
+        log.info(result.toString());
         return result.containsFailures();
     }
 }
