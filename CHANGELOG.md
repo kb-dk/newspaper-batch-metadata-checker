@@ -1,3 +1,7 @@
+1.3.2
+* Updated framework dependency to 1.4.4 to enable maxResults
+* Config parameter autonomous.component.maxResults is now respected
+
 1.3.1
 * Update to newspaper-batch-event-framekwork 1.4.2, to make the component quiet on stderr
 * Remove System.out.println() from non-test code

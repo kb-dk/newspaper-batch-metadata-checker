@@ -11,6 +11,8 @@ import java.util.Properties;
 
 import static org.mockito.Mockito.mock;
 
+import java.util.Properties;
+
 /** Test Metadata checker */
 public class MetadataCheckerComponentTest {
 
