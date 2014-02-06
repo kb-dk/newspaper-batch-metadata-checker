@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>newspaper-batch-metadata-checker</artifactId>
-    <version>1.3.2</version>
+    <version>1.3.3-SNAPSHOT</version>
 
 
     <repositories>
@@ -160,6 +160,6 @@
         <developerConnection>scm:git:git@github.com:statsbiblioteket/newspaper-batch-metadata-checker
         </developerConnection>
         <url>https://github.com/statsbiblioteket/newspaper-batch-event-framework</url>
-        <tag>newspaper-batch-metadata-checker-1.3.2</tag>
+        <tag>HEAD</tag>
     </scm>
 </project>
