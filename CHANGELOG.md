@@ -1,5 +1,5 @@
 1.3.2
-* Updated framework dependency to 1.4.4 to enable maxResults
+* Updated framework dependency to 1.4.5 to enable maxResults
 * Config parameter autonomous.component.maxResults is now respected
 
 1.3.1
