@@ -1,3 +1,6 @@
+1.3.3
+* Updated to newspaper-parent 1.1.
+
 1.3.2
 * Updated framework dependency to 1.4.5 to enable maxResults
 * Config parameter autonomous.component.maxResults is now respected
