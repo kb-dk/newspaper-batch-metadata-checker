@@ -1,5 +1,15 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
+import static dk.statsbiblioteket.util.Strings.getStackTrace;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
@@ -9,16 +19,6 @@ import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperBatchOptions;
 import dk.statsbiblioteket.util.xml.DOM;
 import dk.statsbiblioteket.util.xml.XPathSelector;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import static dk.statsbiblioteket.util.Strings.getStackTrace;
 
 /**
  * This class uses xpath to validate metadata requirements for mods files that do no otherwise fit into the schematron
@@ -35,6 +35,8 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
     private Document batchXmlStructure;
     private static final XPathSelector BATCH_XPATH_SELECTOR = DOM.createXPathSelector();
     private static final XPathSelector MODS_XPATH_SELECTOR = DOM.createXPathSelector("mods", "http://www.loc.gov/mods/v3");
+    private NewspaperBatchOptions batchOptions;
+    private String avisId;
 
     /**
      * Constructor for this class.
@@ -49,6 +51,13 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
         this.batch = batch;
         this.batchXmlStructure = batchXmlStructure;
         briksInThisEdition = new ArrayList<>();
+        try {
+            batchOptions = mfPakDAO.getBatchOptions(batch.getBatchID());
+            avisId = mfPakDAO.getNewspaperID(batch.getBatchID());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to obtain required information from database. "
+                    + "Check connection, and try again", e);
+        }
     }
 
     /**
@@ -116,17 +125,6 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
      * @param modsDocument the xml representation of the file.
      */
     private void validate2C1(AttributeParsingEvent event, Document modsDocument) {
-        NewspaperBatchOptions batchOptions = null;
-        try {
-            batchOptions = mfPakDAO.getBatchOptions(batch.getBatchID());
-        } catch (SQLException e) {
-            resultCollector.addFailure(event.getName(),
-                    "metadata",
-                    getClass().getSimpleName(),
-                    "2C-1: Couldn't read batch options from mfpak.",
-                    getStackTrace(e)
-            );
-        }
         if (batchOptions == null) {
             resultCollector.addFailure(event.getName(),
                     "metadata",
@@ -229,26 +227,15 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
     private void validate2C11(AttributeParsingEvent event, Document modsDocument) {
         //2C-11
         final String xpath2C11 = "mods:mods/mods:relatedItem/mods:titleInfo[@type='uniform' and @authority='Statens Avissamling']/mods:title";
-        String avisId = null;
-        try {
-            avisId = mfPakDAO.getNewspaperID(batch.getBatchID());
-            String modsAvisId = MODS_XPATH_SELECTOR.selectString(modsDocument, xpath2C11);
-            if (modsAvisId == null || avisId == null || !modsAvisId.equals(avisId)) {
-                resultCollector.addFailure(
-                        event.getName(),
-                        "metadata",
-                        getClass().getSimpleName(),
-                        "2C-11: avisId mismatch. Document gives " + modsAvisId + " but mfpak gives " + avisId,
-                        xpath2C11
-                );
-            }
-        } catch (SQLException e) {
-            resultCollector.addFailure(event.getName(),
-                                    "metadata",
-                                    getClass().getSimpleName(),
-                                    "2C-11: Couldn't read avisId from mfpak.",
-                                    getStackTrace(e)
-                                    );
+        String modsAvisId = MODS_XPATH_SELECTOR.selectString(modsDocument, xpath2C11);
+        if (modsAvisId == null || avisId == null || !modsAvisId.equals(avisId)) {
+            resultCollector.addFailure(
+                    event.getName(),
+                    "metadata",
+                    getClass().getSimpleName(),
+                    "2C-11: avisId mismatch. Document gives " + modsAvisId + " but mfpak gives " + avisId,
+                    xpath2C11
+            );
         }
     }
 

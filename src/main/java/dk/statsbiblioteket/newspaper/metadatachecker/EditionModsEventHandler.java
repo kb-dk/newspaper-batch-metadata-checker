@@ -27,6 +27,7 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
     private ResultCollector resultCollector;
     private MfPakDAO mfPakDAO;
     private Batch batch;
+    private List<NewspaperEntity> entities;
 
     /**
      * Constructor for this class.
@@ -39,6 +40,12 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
         this.resultCollector = resultCollector;
         this.mfPakDAO = mfPakDAO;
         this.batch = batch;
+        try {
+            entities = mfPakDAO.getBatchNewspaperEntities(batch.getBatchID());
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to obtain required information from database. "
+                    + "Check database connection, and try again", e);
+        }
     }
 
     @Override
@@ -132,7 +139,7 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
             return null;
         } else {
 
-            List<NewspaperEntity> entities = mfPakDAO.getBatchNewspaperEntities(batch.getBatchID());
+            //List<NewspaperEntity> entities = mfPakDAO.getBatchNewspaperEntities(batch.getBatchID());
             NewspaperEntity selected = null;
             for (NewspaperEntity entity : entities) {
                     if (matchDates(entity.getNewspaperDateRange(), editionDate)){
