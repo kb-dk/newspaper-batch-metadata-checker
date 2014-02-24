@@ -1,22 +1,21 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
-import dk.statsbiblioteket.medieplatform.autonomous.Batch;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.text.ParseException;
+
+import org.w3c.dom.Document;
+
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.DefaultTreeEventHandler;
+import dk.statsbiblioteket.medieplatform.batchcontext.BatchContext;
 import dk.statsbiblioteket.newspaper.metadatachecker.film.FuzzyDate;
-import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperDateRange;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperEntity;
 import dk.statsbiblioteket.util.Strings;
 import dk.statsbiblioteket.util.xml.DOM;
 import dk.statsbiblioteket.util.xml.XPathSelector;
-import org.w3c.dom.Document;
-
-import java.io.IOException;
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.util.List;
 
 /**
  * This class uses xpath to validate metadata requirements for edition xml (mods) files that do no fit into
@@ -25,9 +24,7 @@ import java.util.List;
 public class EditionModsEventHandler extends DefaultTreeEventHandler {
     private static final String YYYY_MM_DD = "yyyy-MM-dd";
     private ResultCollector resultCollector;
-    private MfPakDAO mfPakDAO;
-    private Batch batch;
-    private List<NewspaperEntity> entities;
+    private BatchContext context;
 
     /**
      * Constructor for this class.
@@ -36,16 +33,9 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
      * @param mfPakDAO        a DAO object from which one can read relevant external properties of a batch.
      * @param batch           a batch object representing the batch being analysed.
      */
-    public EditionModsEventHandler(ResultCollector resultCollector, MfPakDAO mfPakDAO, Batch batch) {
+    public EditionModsEventHandler(ResultCollector resultCollector, BatchContext context) {
         this.resultCollector = resultCollector;
-        this.mfPakDAO = mfPakDAO;
-        this.batch = batch;
-        try {
-            entities = mfPakDAO.getBatchNewspaperEntities(batch.getBatchID());
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to obtain required information from database. "
-                    + "Check database connection, and try again", e);
-        }
+        this.context = context;
     }
 
     @Override
@@ -141,7 +131,7 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
 
             //List<NewspaperEntity> entities = mfPakDAO.getBatchNewspaperEntities(batch.getBatchID());
             NewspaperEntity selected = null;
-            for (NewspaperEntity entity : entities) {
+            for (NewspaperEntity entity : context.getEntities()) {
                     if (matchDates(entity.getNewspaperDateRange(), editionDate)){
                     selected = entity;
                     break;

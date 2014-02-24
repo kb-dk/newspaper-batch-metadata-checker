@@ -1,19 +1,16 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
-import dk.statsbiblioteket.medieplatform.autonomous.Batch;
+import static dk.statsbiblioteket.util.Strings.getStackTrace;
+
+import java.io.IOException;
+
+import org.w3c.dom.Document;
+
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.DefaultTreeEventHandler;
-import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 import dk.statsbiblioteket.util.xml.DOM;
 import dk.statsbiblioteket.util.xml.XPathSelector;
-import org.w3c.dom.Document;
-
-import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static dk.statsbiblioteket.util.Strings.getStackTrace;
 
 /**
  *
@@ -21,8 +18,6 @@ import static dk.statsbiblioteket.util.Strings.getStackTrace;
 public class AltoXPathEventHandler extends DefaultTreeEventHandler {
 
     private ResultCollector resultCollector;
-    private MfPakDAO mfPakDAO;
-    private Batch batch;
 
     /**
      * Constructor for this class.
@@ -30,10 +25,8 @@ public class AltoXPathEventHandler extends DefaultTreeEventHandler {
      * @param mfPakDAO a DAO object from which one can read relevant external properties of a batch.
      * @param batch a batch object representing the batch being analysed.
      */
-    public AltoXPathEventHandler(ResultCollector resultCollector, MfPakDAO mfPakDAO, Batch batch) {
+    public AltoXPathEventHandler(ResultCollector resultCollector) {
         this.resultCollector = resultCollector;
-        this.mfPakDAO = mfPakDAO;
-        this.batch = batch;
     }
 
     @Override

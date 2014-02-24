@@ -1,24 +1,22 @@
 package dk.statsbiblioteket.newspaper.metadatachecker.film;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import dk.statsbiblioteket.medieplatform.autonomous.Batch;
-import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
-import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
-import dk.statsbiblioteket.newspaper.metadatachecker.checker.FailureType;
-import dk.statsbiblioteket.newspaper.metadatachecker.checker.XmlAttributeChecker;
-import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
-import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperEntity;
-import dk.statsbiblioteket.util.xml.DOM;
-import dk.statsbiblioteket.util.xml.XPathSelector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
+
+import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
+import dk.statsbiblioteket.medieplatform.batchcontext.BatchContext;
+import dk.statsbiblioteket.newspaper.metadatachecker.checker.FailureType;
+import dk.statsbiblioteket.newspaper.metadatachecker.checker.XmlAttributeChecker;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperEntity;
+import dk.statsbiblioteket.util.xml.DOM;
+import dk.statsbiblioteket.util.xml.XPathSelector;
 
 /**
  * This class checks the requirement of Appendix 2E-1, that the names of the newspaper titles found on a film are
@@ -27,16 +25,13 @@ import org.w3c.dom.NodeList;
 public class FilmNewspaperTitlesChecker extends XmlAttributeChecker {
 
     private static Logger log = LoggerFactory.getLogger(FilmNewspaperTitlesChecker.class);
-
-
-    private MfPakDAO mfPakDAO;
-    private Batch batch;
+    
     private XPathSelector filmXPathSelector;
+    private BatchContext context;
 
-    public FilmNewspaperTitlesChecker(ResultCollector resultCollector, FailureType failureType, MfPakDAO mfPakDAO, Batch batch) {
+    public FilmNewspaperTitlesChecker(ResultCollector resultCollector, FailureType failureType, BatchContext context) {
         super(resultCollector, failureType);
-        this.batch = batch;
-        this.mfPakDAO = mfPakDAO;
+        this.context = context;
         this.filmXPathSelector = DOM.createXPathSelector("avis",
                 "http://www.statsbiblioteket.dk/avisdigitalisering/microfilm/1/0/");
     }
@@ -56,11 +51,7 @@ public class FilmNewspaperTitlesChecker extends XmlAttributeChecker {
         FuzzyDate filmEnd = new FuzzyDate(filmEnddate);
         List<String> titlesOnFilm = getTitlesOnFilm(filmMetaData);
         List<NewspaperEntity> possibleNewspaperEntities;
-        try {
-            possibleNewspaperEntities = mfPakDAO.getBatchNewspaperEntities(batch.getBatchID());
-        } catch (SQLException e) {
-            throw new RuntimeException("SQL exception: ", e);
-        }
+        possibleNewspaperEntities = context.getEntities();
         List<String> requiredTitles = findIncludedTitles(possibleNewspaperEntities, filmStart.getMaxDate(), filmEnd.getMinDate());
         List<String> allowedTitles  = findIncludedTitles(possibleNewspaperEntities, filmStart.getMinDate(), filmEnd.getMaxDate());
         for (String requiredTitle: requiredTitles) {

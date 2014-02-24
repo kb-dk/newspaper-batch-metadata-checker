@@ -34,7 +34,7 @@ public class AltoValidationTest {
         batch.setBatchID("400022028241");
         batch.setRoundTripNumber(10);
         MfPakDAO dao = mock(MfPakDAO.class);
-        AltoXPathEventHandler handler = new AltoXPathEventHandler(resultCollector, dao, batch);
+        AltoXPathEventHandler handler = new AltoXPathEventHandler(resultCollector);
         AttributeParsingEvent altoEvent = new AttributeParsingEvent("B400022028241-RT2/400022028241-14/1795-06-15-01/AdresseContoirsEfterretninger-1795-06-15-01-0012B.alto.xml") {
             @Override
             public InputStream getData() throws IOException {
@@ -61,7 +61,7 @@ public class AltoValidationTest {
         batch.setBatchID("400022028241");
         batch.setRoundTripNumber(10);
         MfPakDAO dao = mock(MfPakDAO.class);
-        AltoXPathEventHandler handler = new AltoXPathEventHandler(resultCollector, dao, batch);
+        AltoXPathEventHandler handler = new AltoXPathEventHandler(resultCollector);
         AttributeParsingEvent altoEvent = new AttributeParsingEvent("B400022028241-RT2/400022028241-14/1795-06-15-01/AdresseContoirsEfterretninger-1795-06-15-01-0012B.alto.xml") {
             @Override
             public InputStream getData() throws IOException {

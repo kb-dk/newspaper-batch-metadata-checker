@@ -1,5 +1,6 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,10 +8,13 @@ import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.EventHandlerFactory;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
+import dk.statsbiblioteket.medieplatform.batchcontext.BatchContext;
+import dk.statsbiblioteket.medieplatform.batchcontext.BatchContextUtils;
 import dk.statsbiblioteket.newspaper.metadatachecker.film.FilmXmlChecker;
 import dk.statsbiblioteket.newspaper.metadatachecker.jpylyzer.JpylyzingEventHandler;
 import dk.statsbiblioteket.newspaper.metadatachecker.mix.MixXmlFileChecker;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+
 import org.w3c.dom.Document;
 
 /** A factory for checks to do on metadata. */
@@ -22,9 +26,7 @@ public class MetadataChecksFactory
     private String batchFolder;
     private String jpylyzerPath;
     private String controlPoliciesPath;
-    //private MfPakConfiguration mfPakConfiguration;
-    private MfPakDAO mfPakDAO;
-    private Batch batch;
+    private BatchContext batchContext;
     private Document batchXmlStructure;
 
     /**
@@ -39,9 +41,13 @@ public class MetadataChecksFactory
                                  Batch batch,
                                  Document batchXmlStructure) {
         this.resultCollector = resultCollector;
-        this.mfPakDAO = mfPakDAO;
-        this.batch = batch;
         this.batchXmlStructure = batchXmlStructure;
+        try {
+            this.batchContext = BatchContextUtils.buildBatchContext(mfPakDAO, batch);
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to obtain required information from database. "
+                    + "Check database connection, and try again", e);
+        }
     }
 
     /**
@@ -86,12 +92,12 @@ public class MetadataChecksFactory
         }
         treeEventHandlers.add(new SchemaValidatorEventHandler(resultCollector));
         treeEventHandlers.add(new SchematronValidatorEventHandler(resultCollector, controlPoliciesPath));
-        treeEventHandlers.add(new ModsXPathEventHandler(resultCollector, mfPakDAO, batch, batchXmlStructure));
-        treeEventHandlers.add(new AltoXPathEventHandler(resultCollector, mfPakDAO, batch));
+        treeEventHandlers.add(new ModsXPathEventHandler(resultCollector, batchContext, batchXmlStructure));
+        treeEventHandlers.add(new AltoXPathEventHandler(resultCollector));
         treeEventHandlers.add(new AltoMixCrossCheckEventHandler(resultCollector));
-        treeEventHandlers.add(new EditionModsEventHandler(resultCollector,mfPakDAO,batch));
-        treeEventHandlers.add(new FilmXmlChecker(resultCollector, mfPakDAO, batch, batchXmlStructure));
-        treeEventHandlers.add(new MixXmlFileChecker(resultCollector,mfPakDAO,batch, batchXmlStructure));
+        treeEventHandlers.add(new EditionModsEventHandler(resultCollector, batchContext));
+        treeEventHandlers.add(new FilmXmlChecker(resultCollector, batchContext, batchXmlStructure));
+        treeEventHandlers.add(new MixXmlFileChecker(resultCollector, batchContext, batchXmlStructure));
         return treeEventHandlers;
     }
 }

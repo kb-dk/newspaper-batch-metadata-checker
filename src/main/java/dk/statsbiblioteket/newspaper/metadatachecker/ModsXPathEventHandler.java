@@ -15,6 +15,8 @@ import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeBeginsParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.DefaultTreeEventHandler;
+import dk.statsbiblioteket.medieplatform.batchcontext.BatchContext;
+import dk.statsbiblioteket.medieplatform.batchcontext.BatchContextUtils;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperBatchOptions;
 import dk.statsbiblioteket.util.xml.DOM;
@@ -29,14 +31,11 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
 
     public static final String EDITION_REGEX = "^[0-9]{4}.*-[0-9]{2}$";
     private ResultCollector resultCollector;
-    private MfPakDAO mfPakDAO;
-    private Batch batch;
     private List<String> briksInThisEdition;
     private Document batchXmlStructure;
     private static final XPathSelector BATCH_XPATH_SELECTOR = DOM.createXPathSelector();
     private static final XPathSelector MODS_XPATH_SELECTOR = DOM.createXPathSelector("mods", "http://www.loc.gov/mods/v3");
-    private NewspaperBatchOptions batchOptions;
-    private String avisId;
+    private BatchContext context;
 
     /**
      * Constructor for this class.
@@ -45,19 +44,11 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
      * @param batch a batch object representing the batch being analysed.
      * @param batchXmlStructure the complete structure of this batch as XML.
      */
-    public ModsXPathEventHandler(ResultCollector resultCollector, MfPakDAO mfPakDAO, Batch batch, Document batchXmlStructure) {
+    public ModsXPathEventHandler(ResultCollector resultCollector, BatchContext context, Document batchXmlStructure) {
         this.resultCollector = resultCollector;
-        this.mfPakDAO = mfPakDAO;
-        this.batch = batch;
         this.batchXmlStructure = batchXmlStructure;
         briksInThisEdition = new ArrayList<>();
-        try {
-            batchOptions = mfPakDAO.getBatchOptions(batch.getBatchID());
-            avisId = mfPakDAO.getNewspaperID(batch.getBatchID());
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to obtain required information from database. "
-                    + "Check connection, and try again", e);
-        }
+        this.context = context;
     }
 
     /**
@@ -125,15 +116,15 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
      * @param modsDocument the xml representation of the file.
      */
     private void validate2C1(AttributeParsingEvent event, Document modsDocument) {
-        if (batchOptions == null) {
+        if (context.getBatchOptions() == null) {
             resultCollector.addFailure(event.getName(),
                     "metadata",
                     getClass().getSimpleName(),
                     "2C-1: Couldn't read batch options from mfpak. Got null value.",
-                    batch.getBatchID()
+                    context.getBatch().getBatchID()
             );
             return;
-        } else if (!batchOptions.isOptionB7()) {
+        } else if (!context.getBatchOptions().isOptionB7()) {
             String sectionLabelXpath = "mods:mods/mods:part/mods:detail[@type='sectionLabel']";
             NodeList nodes = MODS_XPATH_SELECTOR.selectNodeList(modsDocument, sectionLabelXpath);
             if (nodes == null || nodes.getLength() == 0) {
@@ -144,7 +135,8 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
                         "metadata",
                         getClass().getSimpleName(),
                         "2C-1: Found section entitled " + nodes.item(0).getTextContent() + " for the page "
-                                + event.getName() + " although Option B7 (Section Titles) was not chosen for the batch " + batch.getBatchID(),
+                                + event.getName() + " although Option B7 (Section Titles) was not chosen for the batch "
+                                + context.getBatch().getBatchID(),
                         sectionLabelXpath );
             }
         } else {
@@ -156,7 +148,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
                         "metadata",
                         getClass().getSimpleName(),
                         "2C-1: Did not find section for the page " + event.getName()
-                        + " although Option B7 (Section Titles) was chosen for the batch " + batch.getBatchID(),
+                        + " although Option B7 (Section Titles) was chosen for the batch " + context.getBatch().getBatchID(),
                         sectionLabelXpath );
             } else {
                 return;
@@ -228,12 +220,12 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
         //2C-11
         final String xpath2C11 = "mods:mods/mods:relatedItem/mods:titleInfo[@type='uniform' and @authority='Statens Avissamling']/mods:title";
         String modsAvisId = MODS_XPATH_SELECTOR.selectString(modsDocument, xpath2C11);
-        if (modsAvisId == null || avisId == null || !modsAvisId.equals(avisId)) {
+        if (modsAvisId == null || context.getAvisId() == null || !modsAvisId.equals(context.getAvisId())) {
             resultCollector.addFailure(
                     event.getName(),
                     "metadata",
                     getClass().getSimpleName(),
-                    "2C-11: avisId mismatch. Document gives " + modsAvisId + " but mfpak gives " + avisId,
+                    "2C-11: avisId mismatch. Document gives " + modsAvisId + " but mfpak gives " + context.getAvisId(),
                     xpath2C11
             );
         }
@@ -268,7 +260,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
         //2C-4
         final String xpath2C4 = "mods:mods/mods:relatedItem[@type='original']/mods:identifier[@type='reel number']";
         String reelNumber = MODS_XPATH_SELECTOR.selectString(modsDocument, xpath2C4);
-        String reelNumberPatternString = "^" + batch.getBatchID() + "-" + "[0-9]+$";
+        String reelNumberPatternString = "^" + context.getBatch().getBatchID() + "-" + "[0-9]+$";
         if (reelNumber == null || !reelNumber.matches(reelNumberPatternString)) {
               resultCollector.addFailure(event.getName(),
                                     "metadata",

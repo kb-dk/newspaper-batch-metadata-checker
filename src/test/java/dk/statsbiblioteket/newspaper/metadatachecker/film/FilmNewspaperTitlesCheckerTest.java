@@ -3,12 +3,15 @@ package dk.statsbiblioteket.newspaper.metadatachecker.film;
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
+import dk.statsbiblioteket.medieplatform.batchcontext.BatchContext;
+import dk.statsbiblioteket.medieplatform.batchcontext.BatchContextUtils;
 import dk.statsbiblioteket.newspaper.metadatachecker.checker.FailureType;
 import dk.statsbiblioteket.newspaper.metadatachecker.mockers.FilmMocker;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperDateRange;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperEntity;
 import dk.statsbiblioteket.util.xml.DOM;
+
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.w3c.dom.Document;
@@ -76,7 +79,8 @@ public class FilmNewspaperTitlesCheckerTest {
         );
         Document filmDocument = DOM.streamToDOM(event.getData());
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
-        FilmNewspaperTitlesChecker checker = new FilmNewspaperTitlesChecker(resultCollector, FailureType.METADATA, dao, batch);
+        BatchContext context = BatchContextUtils.buildBatchContext(dao, batch);
+        FilmNewspaperTitlesChecker checker = new FilmNewspaperTitlesChecker(resultCollector, FailureType.METADATA, context);
         checker.validate(event, filmDocument);
         assertTrue(resultCollector.isSuccess(), resultCollector.toReport());
     }
@@ -87,7 +91,7 @@ public class FilmNewspaperTitlesCheckerTest {
      * @throws Exception
      */
     @Test
-    public void testGoodDataPreciseCornerCase() throws IOException {
+    public void testGoodDataPreciseCornerCase() throws Exception {
         AttributeParsingEvent event = FilmMocker.getFilmXmlAttributeParsingEvent(
                 "14",
                 "Titleavis",
@@ -104,7 +108,8 @@ public class FilmNewspaperTitlesCheckerTest {
         );
         Document filmDocument = DOM.streamToDOM(event.getData());
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
-        FilmNewspaperTitlesChecker checker = new FilmNewspaperTitlesChecker(resultCollector, FailureType.METADATA, dao, batch);
+        BatchContext context = BatchContextUtils.buildBatchContext(dao, batch);
+        FilmNewspaperTitlesChecker checker = new FilmNewspaperTitlesChecker(resultCollector, FailureType.METADATA, context);
         checker.validate(event, filmDocument);
         assertTrue(resultCollector.isSuccess(), resultCollector.toReport());
     }
@@ -135,7 +140,8 @@ public class FilmNewspaperTitlesCheckerTest {
         );
         Document filmDocument = DOM.streamToDOM(event.getData());
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
-        FilmNewspaperTitlesChecker checker = new FilmNewspaperTitlesChecker(resultCollector, FailureType.METADATA, dao, batch);
+        BatchContext context = BatchContextUtils.buildBatchContext(dao, batch);
+        FilmNewspaperTitlesChecker checker = new FilmNewspaperTitlesChecker(resultCollector, FailureType.METADATA, context);
         checker.validate(event, filmDocument);
         assertTrue(resultCollector.isSuccess(), resultCollector.toReport());
     }
@@ -164,7 +170,8 @@ public class FilmNewspaperTitlesCheckerTest {
         );
         Document filmDocument = DOM.streamToDOM(event.getData());
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
-        FilmNewspaperTitlesChecker checker = new FilmNewspaperTitlesChecker(resultCollector, FailureType.METADATA, dao, batch);
+        BatchContext context = BatchContextUtils.buildBatchContext(dao, batch);
+        FilmNewspaperTitlesChecker checker = new FilmNewspaperTitlesChecker(resultCollector, FailureType.METADATA, context);
         checker.validate(event, filmDocument);
         final String report = resultCollector.toReport();
         assertFalse(resultCollector.isSuccess(), report);
@@ -194,7 +201,8 @@ public class FilmNewspaperTitlesCheckerTest {
         );
         Document filmDocument = DOM.streamToDOM(event.getData());
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
-        FilmNewspaperTitlesChecker checker = new FilmNewspaperTitlesChecker(resultCollector, FailureType.METADATA, dao, batch);
+        BatchContext context = BatchContextUtils.buildBatchContext(dao, batch);
+        FilmNewspaperTitlesChecker checker = new FilmNewspaperTitlesChecker(resultCollector, FailureType.METADATA, context);
         checker.validate(event, filmDocument);
         final String report = resultCollector.toReport();
         assertFalse(resultCollector.isSuccess(), report);
@@ -228,7 +236,8 @@ public class FilmNewspaperTitlesCheckerTest {
         );
         Document filmDocument = DOM.streamToDOM(event.getData());
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
-        FilmNewspaperTitlesChecker checker = new FilmNewspaperTitlesChecker(resultCollector, FailureType.METADATA, dao, batch);
+        BatchContext context = BatchContextUtils.buildBatchContext(dao, batch);
+        FilmNewspaperTitlesChecker checker = new FilmNewspaperTitlesChecker(resultCollector, FailureType.METADATA, context);
         checker.validate(event, filmDocument);
         final String report = resultCollector.toReport();
         assertFalse(resultCollector.isSuccess(), report);
@@ -262,7 +271,8 @@ public class FilmNewspaperTitlesCheckerTest {
         );
         Document filmDocument = DOM.streamToDOM(event.getData());
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
-        FilmNewspaperTitlesChecker checker = new FilmNewspaperTitlesChecker(resultCollector, FailureType.METADATA, dao, batch);
+        BatchContext context = BatchContextUtils.buildBatchContext(dao, batch);
+        FilmNewspaperTitlesChecker checker = new FilmNewspaperTitlesChecker(resultCollector, FailureType.METADATA, context);
         checker.validate(event, filmDocument);
         final String report = resultCollector.toReport();
         assertFalse(resultCollector.isSuccess(), report);
