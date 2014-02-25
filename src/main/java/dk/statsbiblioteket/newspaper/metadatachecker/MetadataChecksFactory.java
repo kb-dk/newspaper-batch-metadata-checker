@@ -8,8 +8,8 @@ import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.EventHandlerFactory;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
-import dk.statsbiblioteket.medieplatform.batchcontext.BatchContext;
-import dk.statsbiblioteket.medieplatform.batchcontext.BatchContextUtils;
+import dk.statsbiblioteket.newspaper.mfpakintegration.batchcontext.BatchContext;
+import dk.statsbiblioteket.newspaper.mfpakintegration.batchcontext.BatchContextUtils;
 import dk.statsbiblioteket.newspaper.metadatachecker.film.FilmXmlChecker;
 import dk.statsbiblioteket.newspaper.metadatachecker.jpylyzer.JpylyzingEventHandler;
 import dk.statsbiblioteket.newspaper.metadatachecker.mix.MixXmlFileChecker;
@@ -48,6 +48,8 @@ public class MetadataChecksFactory
             throw new RuntimeException("Failed to obtain required information from database. "
                     + "Check database connection, and try again", e);
         }
+        
+        //FIXME Introduce checks on batch context
     }
 
     /**

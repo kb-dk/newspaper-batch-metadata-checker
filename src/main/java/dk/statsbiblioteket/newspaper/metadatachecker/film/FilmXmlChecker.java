@@ -3,17 +3,15 @@ package dk.statsbiblioteket.newspaper.metadatachecker.film;
 import java.util.ArrayList;
 import java.util.List;
 
-import dk.statsbiblioteket.medieplatform.autonomous.Batch;
+import org.w3c.dom.Document;
+
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
-import dk.statsbiblioteket.medieplatform.batchcontext.BatchContext;
 import dk.statsbiblioteket.newspaper.metadatachecker.checker.FailureType;
 import dk.statsbiblioteket.newspaper.metadatachecker.checker.XmlAttributeChecker;
 import dk.statsbiblioteket.newspaper.metadatachecker.checker.XmlFileChecker;
-import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+import dk.statsbiblioteket.newspaper.mfpakintegration.batchcontext.BatchContext;
 import dk.statsbiblioteket.util.xml.DOM;
 import dk.statsbiblioteket.util.xml.XPathSelector;
-
-import org.w3c.dom.Document;
 
 /**
  * Handles the checking of film.xml files. The concrete checks are delegated to the individual film attribute

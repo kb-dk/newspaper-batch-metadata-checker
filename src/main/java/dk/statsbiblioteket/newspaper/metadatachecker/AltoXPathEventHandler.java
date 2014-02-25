@@ -1,6 +1,6 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
-import static dk.statsbiblioteket.util.Strings.getStackTrace;
+import dk.statsbiblioteket.util.Strings;
 
 import java.io.IOException;
 
@@ -22,8 +22,6 @@ public class AltoXPathEventHandler extends DefaultTreeEventHandler {
     /**
      * Constructor for this class.
      * @param resultCollector the result collector to collect errors in
-     * @param mfPakDAO a DAO object from which one can read relevant external properties of a batch.
-     * @param batch a batch object representing the batch being analysed.
      */
     public AltoXPathEventHandler(ResultCollector resultCollector) {
         this.resultCollector = resultCollector;
@@ -40,7 +38,7 @@ public class AltoXPathEventHandler extends DefaultTreeEventHandler {
                         "exception",
                         getClass().getSimpleName(),
                         "Error processing ALTO metadata: " + e.toString(),
-                        getStackTrace(e)
+                        Strings.getStackTrace(e)
                 );
             }
         }

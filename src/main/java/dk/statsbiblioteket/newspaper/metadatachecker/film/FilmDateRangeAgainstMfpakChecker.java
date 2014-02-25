@@ -1,22 +1,18 @@
 package dk.statsbiblioteket.newspaper.metadatachecker.film;
 
-import dk.statsbiblioteket.medieplatform.autonomous.Batch;
-import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
-import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
-import dk.statsbiblioteket.medieplatform.batchcontext.BatchContext;
-import dk.statsbiblioteket.newspaper.metadatachecker.checker.FailureType;
-import dk.statsbiblioteket.newspaper.metadatachecker.checker.XmlAttributeChecker;
-import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
-import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperDateRange;
-import dk.statsbiblioteket.util.xml.DOM;
-import dk.statsbiblioteket.util.xml.XPathSelector;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.w3c.dom.Document;
 
-import java.sql.SQLException;
-import java.util.Date;
-import java.util.List;
-import java.util.ArrayList;
+import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
+import dk.statsbiblioteket.newspaper.metadatachecker.checker.FailureType;
+import dk.statsbiblioteket.newspaper.metadatachecker.checker.XmlAttributeChecker;
+import dk.statsbiblioteket.newspaper.mfpakintegration.batchcontext.BatchContext;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperDateRange;
+import dk.statsbiblioteket.util.xml.DOM;
+import dk.statsbiblioteket.util.xml.XPathSelector;
 
 /**
  * This class checks the date range for a film in the film.xml metadata against the list of known
