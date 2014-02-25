@@ -35,20 +35,19 @@ public class MixerMockup {
     public static MixWorkshiftIsoAttributeParsingEvent getMixWorkshiftIso(final String workshift, final String pictureNumber,
                                                                           final Batch batch, final String checksum, final int size,
                                                                           String sourceType) {
-        return new MixWorkshiftIsoAttributeParsingEvent(
-                batch.getFullID() + "/" +
+        return new MixWorkshiftIsoAttributeParsingEvent(batch.getBatchID(), batch.getFullID() + "/" +
                 "WORKSHIFT-ISO-TARGET/" +
                 "Target-" + workshift + "-" + pictureNumber + ".mix.xml", workshift, pictureNumber, checksum, size,
                 sourceType);
     }
 
-    private static byte[] getWorkshiftPageMix(String billedID, String scannedDate, int width, int height,
+    private static byte[] getWorkshiftPageMix(Object batchID, String billedID, String scannedDate, int width, int height,
                                               int resolution, String checksum, int size, String sourceType) {
         String mix = "<mix:mix xmlns:mix=\"http://www.loc.gov/mix/v20\">\n" +
                      "    <mix:BasicDigitalObjectInformation>\n" +
                      "        <mix:ObjectIdentifier>\n" +
                      "            <mix:objectIdentifierType>ISO Film Target Image ID</mix:objectIdentifierType>\n" +
-                     "            <mix:objectIdentifierValue>iso-film-target-0001-" + billedID + "</mix:objectIdentifierValue>\n" +
+                     "            <mix:objectIdentifierValue>" + batchID +  "-00-" + billedID + "</mix:objectIdentifierValue>\n" +
                      "        </mix:ObjectIdentifier>\n" +
                      "        <mix:fileSize>" + size + "</mix:fileSize>\n" +
                      "        <mix:Fixity>\n" +
@@ -188,10 +187,12 @@ public class MixerMockup {
         private String pictureNumber;
         private String checksum;
         private int size;
+        private Object batchID;
 
-        public MixWorkshiftIsoAttributeParsingEvent(String name, String workshift, String pictureNumber,
+        public MixWorkshiftIsoAttributeParsingEvent(Object batchID, String name, String workshift, String pictureNumber,
                                                     String checksum, int size, String sourceType) {
             super(name);
+            this.batchID = batchID;
             this.workshift = workshift;
             this.pictureNumber = pictureNumber;
             this.checksum = checksum;
@@ -202,7 +203,7 @@ public class MixerMockup {
         @Override
         public InputStream getData() throws IOException {
             return new ByteArrayInputStream(
-                    getWorkshiftPageMix(pictureNumber, "2013-11-12T11:48:06", 9304, 11408, 400, checksum, size,
+                    getWorkshiftPageMix(batchID, pictureNumber, "2013-11-12T11:48:06", 9304, 11408, 400, checksum, size,
                                         sourceType));
         }
 
