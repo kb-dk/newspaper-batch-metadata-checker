@@ -17,6 +17,7 @@ import dk.statsbiblioteket.newspaper.mfpakintegration.batchcontext.BatchContextU
 import dk.statsbiblioteket.newspaper.metadatachecker.EditionModsEventHandler;
 import dk.statsbiblioteket.newspaper.metadatachecker.SchematronValidatorEventHandler;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperBatchOptions;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperDateRange;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperEntity;
 
@@ -25,6 +26,7 @@ import org.testng.annotations.Test;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertFalse;
@@ -121,6 +123,12 @@ public class EditionModsTest {
         entity2.setNewspaperID("adresseavisen1759");
         entity2.setNewspaperTitle("Kiøbenhavns Kongelig alene priviligerede Adresse-Contoirs Efterretninger");
         when(mfPakDAO.getNewspaperEntity(anyString(), any(Date.class))).thenReturn(entity2);
+        NewspaperBatchOptions options = new NewspaperBatchOptions();
+        options.setOptionB1(false);
+        options.setOptionB2(false);
+        options.setOptionB9(false);
+        when(mfPakDAO.getBatchOptions(anyString())).thenReturn(options);
+        when(mfPakDAO.getBatchShipmentDate(anyString())).thenReturn(new Date(0));
         return mfPakDAO;
 
     }

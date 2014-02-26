@@ -4,12 +4,17 @@ import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.newspaper.metadatachecker.mockers.MFPakMocker;
 import dk.statsbiblioteket.newspaper.metadatachecker.mockers.MockupIteratorSuper;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperBatchOptions;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.Date;
 import java.util.Properties;
 
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.Properties;
 
@@ -26,11 +31,22 @@ public class MetadataCheckerComponentTest {
         MfPakDAO mfPakDAO = mock(MfPakDAO.class);
         MetadataCheckerComponent metadataCheckerComponent = new MockupIteratorSuper(
                 System.getProperties(), mfPakDAO);
+        
+        Batch batch = new Batch("400022028240");
+        batch.setRoundTripNumber(1);
+        
+        NewspaperBatchOptions options = new NewspaperBatchOptions();
+        options.setOptionB1(false);
+        options.setOptionB2(false);
+        options.setOptionB9(false);
+
+        when(mfPakDAO.getBatchOptions(eq(batch.getBatchID()))).thenReturn(options);
+        when(mfPakDAO.getNewspaperID(eq(batch.getBatchID()))).thenReturn("foobar");
+        when(mfPakDAO.getBatchShipmentDate(eq(batch.getBatchID()))).thenReturn(new Date(0));
 
         TestResultCollector result = new TestResultCollector(
                 metadataCheckerComponent.getComponentName(), metadataCheckerComponent.getComponentVersion());
-        Batch batch = new Batch("400022028240");
-        batch.setRoundTripNumber(1);
+
         metadataCheckerComponent.doWorkOnBatch(batch, result);
 
         // Assert errors

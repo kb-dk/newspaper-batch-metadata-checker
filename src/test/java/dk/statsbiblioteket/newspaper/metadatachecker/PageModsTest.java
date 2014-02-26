@@ -23,6 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
+import java.util.Date;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -141,6 +142,7 @@ public class PageModsTest {
         when(options.isOptionB7()).thenReturn(optionB7);
         when(dao.getNewspaperID(batch.getBatchID())).thenReturn("adresseavisen1759");
         when(dao.getBatchOptions(anyString())).thenReturn(options);
+        when(dao.getBatchShipmentDate(batch.getBatchID())).thenReturn(new Date(0));
         return dao;
     }
 
