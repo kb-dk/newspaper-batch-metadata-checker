@@ -8,6 +8,7 @@ import dk.statsbiblioteket.newspaper.mfpakintegration.batchcontext.BatchContextU
 import dk.statsbiblioteket.newspaper.metadatachecker.checker.FailureType;
 import dk.statsbiblioteket.newspaper.metadatachecker.mockers.FilmMocker;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperBatchOptions;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperDateRange;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperEntity;
 import dk.statsbiblioteket.util.xml.DOM;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertFalse;
@@ -55,6 +57,15 @@ public class FilmNewspaperTitlesCheckerTest {
                 batch.setRoundTripNumber(1);
         dao = mock(MfPakDAO.class);
         when(dao.getBatchNewspaperEntities(batch.getBatchID())).thenReturn(getEntities());
+        when(dao.getBatchDateRanges(batch.getBatchID())).thenReturn(new ArrayList<NewspaperDateRange>());
+        NewspaperBatchOptions options = new NewspaperBatchOptions();
+        options.setOptionB1(false);
+        options.setOptionB2(false);
+        options.setOptionB9(false);
+        when(dao.getBatchOptions(eq(batch.getBatchID()))).thenReturn(options);
+        when(dao.getNewspaperID(eq(batch.getBatchID()))).thenReturn("foobar");
+        when(dao.getBatchShipmentDate(eq(batch.getBatchID()))).thenReturn(new Date(0));
+        
     }
 
     /**

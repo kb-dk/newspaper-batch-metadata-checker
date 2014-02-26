@@ -8,6 +8,7 @@ import dk.statsbiblioteket.newspaper.mfpakintegration.batchcontext.BatchContextU
 import dk.statsbiblioteket.newspaper.metadatachecker.checker.XmlAttributeChecker;
 import dk.statsbiblioteket.newspaper.metadatachecker.mockers.FilmMocker;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperBatchOptions;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperDateRange;
 import dk.statsbiblioteket.util.xml.DOM;
 
@@ -19,8 +20,10 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.*;
@@ -67,8 +70,7 @@ public class FilmDateRangeAgainstMfpakCheckerTest {
      */
     @Test
     public void testGoodPreciseData() throws IOException, SQLException, ParseException {
-        MfPakDAO dao  = mock(MfPakDAO.class);
-        when(dao.getBatchDateRanges(batch.getBatchID())).thenReturn(getRanges());
+        MfPakDAO dao = getMockDao(batch);
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
         BatchContext context = BatchContextUtils.buildBatchContext(dao, batch);
         FilmDateRangeAgainstMfpakChecker checker = new FilmDateRangeAgainstMfpakChecker(resultCollector, context);
@@ -84,8 +86,7 @@ public class FilmDateRangeAgainstMfpakCheckerTest {
      */
     @Test
     public void testGoodPreciseDataComplete() throws IOException, SQLException, ParseException {
-        MfPakDAO dao  = mock(MfPakDAO.class);
-        when(dao.getBatchDateRanges(batch.getBatchID())).thenReturn(getRanges());
+        MfPakDAO dao = getMockDao(batch);
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
         BatchContext context = BatchContextUtils.buildBatchContext(dao, batch);
         FilmDateRangeAgainstMfpakChecker checker = new FilmDateRangeAgainstMfpakChecker(resultCollector, context);
@@ -105,8 +106,7 @@ public class FilmDateRangeAgainstMfpakCheckerTest {
      */
     @Test
     public void testGoodFuzzyDataComplete() throws IOException, SQLException, ParseException {
-        MfPakDAO dao  = mock(MfPakDAO.class);
-        when(dao.getBatchDateRanges(batch.getBatchID())).thenReturn(getRanges());
+        MfPakDAO dao = getMockDao(batch);
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
         BatchContext context = BatchContextUtils.buildBatchContext(dao, batch);
         FilmDateRangeAgainstMfpakChecker checker = new FilmDateRangeAgainstMfpakChecker(resultCollector, context);
@@ -126,8 +126,7 @@ public class FilmDateRangeAgainstMfpakCheckerTest {
      */
     @Test
     public void testBadFuzzyDataIncomplete() throws IOException, SQLException, ParseException {
-        MfPakDAO dao  = mock(MfPakDAO.class);
-        when(dao.getBatchDateRanges(batch.getBatchID())).thenReturn(getRanges());
+        MfPakDAO dao = getMockDao(batch);
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
         BatchContext context = BatchContextUtils.buildBatchContext(dao, batch);
         FilmDateRangeAgainstMfpakChecker checker = new FilmDateRangeAgainstMfpakChecker(resultCollector, context);
@@ -148,8 +147,7 @@ public class FilmDateRangeAgainstMfpakCheckerTest {
      */
     @Test
     public void testBadPreciseDataIncomplete() throws IOException, SQLException, ParseException {
-        MfPakDAO dao  = mock(MfPakDAO.class);
-        when(dao.getBatchDateRanges(batch.getBatchID())).thenReturn(getRanges());
+        MfPakDAO dao = getMockDao(batch);
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
         BatchContext context = BatchContextUtils.buildBatchContext(dao, batch);
         FilmDateRangeAgainstMfpakChecker checker = new FilmDateRangeAgainstMfpakChecker(resultCollector, context);
@@ -167,8 +165,7 @@ public class FilmDateRangeAgainstMfpakCheckerTest {
      */
     @Test
     public void testBadDataUnknownFilm() throws IOException, SQLException, ParseException {
-        MfPakDAO dao  = mock(MfPakDAO.class);
-        when(dao.getBatchDateRanges(batch.getBatchID())).thenReturn(getRanges());
+        MfPakDAO dao = getMockDao(batch);
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
         BatchContext context = BatchContextUtils.buildBatchContext(dao, batch);
         FilmDateRangeAgainstMfpakChecker checker = new FilmDateRangeAgainstMfpakChecker(resultCollector, context);
@@ -177,6 +174,20 @@ public class FilmDateRangeAgainstMfpakCheckerTest {
         assertTrue(resultCollector.toReport().contains("2E-2"), resultCollector.toReport());
     }
 
+    private MfPakDAO getMockDao(Batch batch) throws SQLException, ParseException {
+        MfPakDAO dao  = mock(MfPakDAO.class);
+        when(dao.getBatchDateRanges(batch.getBatchID())).thenReturn(getRanges());
+        NewspaperBatchOptions options = new NewspaperBatchOptions();
+        options.setOptionB1(false);
+        options.setOptionB2(false);
+        options.setOptionB9(false);
+        when(dao.getBatchOptions(eq(batch.getBatchID()))).thenReturn(options);
+        when(dao.getNewspaperID(eq(batch.getBatchID()))).thenReturn("foobar");
+        when(dao.getBatchShipmentDate(eq(batch.getBatchID()))).thenReturn(new Date(0));
+        
+        return dao;
+    }
+    
     /**
      * Utility method to create and check a film.xml instance with specified start/end dates.
      * @param checker
