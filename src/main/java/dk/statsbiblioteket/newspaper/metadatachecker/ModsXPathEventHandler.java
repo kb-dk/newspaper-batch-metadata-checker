@@ -194,7 +194,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
     }
 
     /**
-     * Validate that all briks were mentioned in a metadatafile.
+     * Validate that all briks were mentioned in at least one metadatafile.
      * @param event An edition end node event.
      */
     private void validate2C10AllBriksInEdition(NodeEndParsingEvent event) {
@@ -228,7 +228,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
     }
 
     /**
-     * Validate consistency of newspaper title against teh database.
+     * Validate consistency of newspaper title against the database.
      * @param event
      * @param modsDocument
      */
