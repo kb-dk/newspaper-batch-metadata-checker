@@ -4,7 +4,9 @@ import static dk.statsbiblioteket.util.Strings.getStackTrace;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -13,6 +15,7 @@ import org.w3c.dom.NodeList;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeBeginsParsingEvent;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeEndParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.DefaultTreeEventHandler;
 import dk.statsbiblioteket.newspaper.mfpakintegration.batchcontext.BatchContext;
 import dk.statsbiblioteket.util.xml.DOM;
@@ -28,6 +31,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
     public static final String EDITION_REGEX = "^[0-9]{4}.*-[0-9]{2}$";
     private ResultCollector resultCollector;
     private List<String> briksInThisEdition;
+    private Set<String> displayLabelsInThisEdition;
     private Document batchXmlStructure;
     private static final XPathSelector BATCH_XPATH_SELECTOR = DOM.createXPathSelector();
     private static final XPathSelector MODS_XPATH_SELECTOR = DOM.createXPathSelector("mods", "http://www.loc.gov/mods/v3");
@@ -36,9 +40,8 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
     /**
      * Constructor for this class.
      * @param resultCollector the result collector to collect errors in
-     * @param mfPakDAO a DAO object from which one can read relevant external properties of a batch.
-     * @param batch a batch object representing the batch being analysed.
      * @param batchXmlStructure the complete structure of this batch as XML.
+     * @param context the batch context
      */
     public ModsXPathEventHandler(ResultCollector resultCollector, BatchContext context, Document batchXmlStructure) {
         this.resultCollector = resultCollector;
@@ -58,6 +61,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
         String shortName = getLastTokenInPath(event.getName());
         if (shortName.matches(EDITION_REGEX)) {
             briksInThisEdition = new ArrayList<String>();
+            displayLabelsInThisEdition = new HashSet<>();
             String xpathForBriks = "//node[@name='" + event.getName() + "']/node[ends-with(@shortName, 'brik')]/@shortName";
             NodeList nodeList = BATCH_XPATH_SELECTOR.selectNodeList(batchXmlStructure, xpathForBriks);
             for (int nodeNumber = 0; nodeNumber < nodeList.getLength(); nodeNumber++ ) {
@@ -81,6 +85,14 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
                         getStackTrace(e)
                 );
             }
+        }
+    }
+
+    @Override
+    public void handleNodeEnd(NodeEndParsingEvent event) {
+        String shortName = getLastTokenInPath(event.getName());
+        if (shortName.matches(EDITION_REGEX)) {
+            validate2C10AllBriksInEdition(event);
         }
     }
 
@@ -154,7 +166,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
 
     /**
      * Valid against the requirement that the displayLabel attribute implies the existence of a corresponding briks
-     * file and it's absence implies absence of brik file.
+     * file. Also display labels are remembered, so it can be checked that all briks were described.
      * @param event
      * @param modsDocument
      */
@@ -164,18 +176,11 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
         name = getBrikName(name);
         boolean brikExists = briksInThisEdition.contains(name);
         NodeList nodes = MODS_XPATH_SELECTOR.selectNodeList(modsDocument, display);
-        boolean brikShouldExist =  nodes != null && nodes.getLength() > 0 ;
-        if (brikExists && !brikShouldExist) {
-            resultCollector.addFailure(
-                    event.getName(),
-                    "metadata",
-                    getClass().getSimpleName(),
-                    "2C-10: Found symbol " + name + " but there is no displayName attribute in the" +
-                            " corresponding page " + event.getName(),
-                    display
-            );
+        boolean hasDisplayLabel =  nodes != null && nodes.getLength() > 0 ;
+        if (hasDisplayLabel) {
+            displayLabelsInThisEdition.add(name);
         }
-        if (!brikExists && brikShouldExist) {
+        if (!brikExists && hasDisplayLabel) {
             resultCollector.addFailure(
                     event.getName(),
                     "metadata",
@@ -186,6 +191,21 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
             );
         }
 
+    }
+
+    /**
+     * Validate that all briks were mentioned in a metadatafile.
+     * @param event An edition end node event.
+     */
+    private void validate2C10AllBriksInEdition(NodeEndParsingEvent event) {
+        Set<String> undescribedBriks = new HashSet<>(briksInThisEdition); undescribedBriks.removeAll(displayLabelsInThisEdition);
+        for (String undescribedBrik : undescribedBriks) {
+            resultCollector.addFailure(event.getName(),
+                                       "metadata",
+                                       getClass().getSimpleName(),
+                                       "2C-10: The brik-file '" + undescribedBrik
+                                               + "' was not mentioned by any MODS metadata displayLabel attribute.");
+        }
     }
 
     /**

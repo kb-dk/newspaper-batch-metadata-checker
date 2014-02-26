@@ -25,7 +25,6 @@ import java.io.InputStream;
 import java.sql.SQLException;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -257,6 +256,20 @@ public class PageModsTest {
     }
 
     /**
+     * Test with good data where the brik file is referred to in one mods file but not the other for the same
+     * scan.
+     */
+    @Test
+    public void testWithPartialBrikData() throws SQLException, FileNotFoundException {
+        String dataDirS = "goodData/editionDirsWithBadBrik/brikWithPartialReferent";
+        ResultCollector resultCollector = new ResultCollector("foo", "bar");
+        iterateDataDir(dataDirS, resultCollector);
+        final String message = resultCollector.toReport();
+        assertTrue(resultCollector.isSuccess(), message);
+    }
+
+
+    /**
       * Test with bad data where the brik file is not referred to in any mods file.
       */
      @Test
@@ -271,25 +284,10 @@ public class PageModsTest {
 
 
      /**
-      * Test with bad data where the brik file is referred to in one mods file but not the other for the same
-      * scan.
-      */
-     @Test
-     public void testWithBadBrikData2() throws SQLException, FileNotFoundException {
-         String dataDirS = "badData/editionDirsWithBadBrik/brikWithPartialReferent";
-         ResultCollector resultCollector = new ResultCollector("foo", "bar");
-         iterateDataDir(dataDirS, resultCollector);
-         final String message = resultCollector.toReport();
-         assertFalse(resultCollector.isSuccess(), message);
-         assertTrue(message.contains("2C-10"), message);
-     }
-
-
-     /**
       * Test with bad data where the brik file is missing.
       */
      @Test
-     public void testWithBadBrikData3() throws SQLException, FileNotFoundException {
+     public void testWithBadBrikData2() throws SQLException, FileNotFoundException {
          String dataDirS = "badData/editionDirsWithBadBrik/modsWithNoBrik";
          ResultCollector resultCollector = new ResultCollector("foo", "bar");
          iterateDataDir(dataDirS, resultCollector);
