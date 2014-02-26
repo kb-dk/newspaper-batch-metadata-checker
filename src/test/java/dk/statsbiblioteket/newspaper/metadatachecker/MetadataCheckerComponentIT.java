@@ -28,7 +28,7 @@ public class MetadataCheckerComponentIT {
     private final static String TEST_BATCH_ID = "400022028241";
 
     /** Tests that the BatchStructureChecker can parse a production like batch. */
-    @Test(groups = "integrationTest")
+    @Test(groups = "testDataTest")
     public void testMetadataCheck() throws Exception {
         String pathToProperties = System.getProperty("integration.test.newspaper.properties");
         Properties properties = new Properties();
