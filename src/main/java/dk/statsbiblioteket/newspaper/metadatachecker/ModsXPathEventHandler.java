@@ -254,6 +254,10 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
      */
     private void validate2C5(AttributeParsingEvent event, Document modsDocument) {
         //2C-5
+        if (event.getName().matches(".*-X[0-9]{4}\\.mods\\.xml$")) {
+            //Missing pages do not have a sequence number
+            return;
+        }
         final String xpath2C5 = "mods:mods/mods:relatedItem[@type='original']/mods:identifier[@type='reel sequence number']";
         String sequenceNumber = MODS_XPATH_SELECTOR.selectString(modsDocument, xpath2C5);
         String namePattern = ".*-[0]*" + sequenceNumber + ".mods.xml";
