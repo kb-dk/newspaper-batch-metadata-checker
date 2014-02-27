@@ -1,5 +1,9 @@
-1.3.3
-* Updated to newspaper-parent 1.1.
+1.4
+* Updated to newspaper-parent 1.1, supporting new testing strategy
+* Only read database information once on startup
+* Update identifier scheme in agreement with Ninestars
+* Only require brik-files to be mentioned by at least one MODS file per image, not all of them
+* Support missing page mods files change request
 
 1.3.2
 * Updated framework dependency to 1.4.5 to enable maxResults
