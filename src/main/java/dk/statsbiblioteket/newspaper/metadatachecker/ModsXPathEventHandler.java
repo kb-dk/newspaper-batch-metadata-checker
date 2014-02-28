@@ -28,7 +28,7 @@ import dk.statsbiblioteket.util.xml.XPathSelector;
  */
 public class ModsXPathEventHandler extends DefaultTreeEventHandler {
 
-    public static final String EDITION_REGEX = "^[0-9]{4}.*-[0-9]{2}$";
+    public static final String EDITION_REGEX = "^[0-9]{4}((-[0-9]{2})?)*-[0-9]{2}$";
     private ResultCollector resultCollector;
     private List<String> briksInThisEdition;
     private Set<String> displayLabelsInThisEdition;
@@ -198,7 +198,8 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
      * @param event An edition end node event.
      */
     private void validate2C10AllBriksInEdition(NodeEndParsingEvent event) {
-        Set<String> undescribedBriks = new HashSet<>(briksInThisEdition); undescribedBriks.removeAll(displayLabelsInThisEdition);
+        Set<String> undescribedBriks = new HashSet<>(briksInThisEdition);
+        undescribedBriks.removeAll(displayLabelsInThisEdition);
         for (String undescribedBrik : undescribedBriks) {
             resultCollector.addFailure(event.getName(),
                                        "metadata",
