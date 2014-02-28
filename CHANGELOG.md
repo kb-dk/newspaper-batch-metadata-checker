@@ -1,3 +1,6 @@
+1.5
+* Fix bug: Missing brik file metadata was reported on film folders, not just edition folders
+
 1.4
 * Updated to newspaper-parent 1.1, supporting new testing strategy
 * Only read database information once on startup
