@@ -150,15 +150,9 @@
         <node name="B400022028241-RT1/400022028241-1/UNMATCHED" shortName="UNMATCHED">
             <node name="B400022028241-RT1/400022028241-1/UNMATCHED/adresseavisen1759-400022028241-1-0001"
                   shortName="adresseavisen1759-400022028241-1-0001">
-                <attribute name="B400022028241-RT1/400022028241-1/UNMATCHED/adresseavisen1759-400022028241-1-0001.mods.xml"
-                           shortName="adresseavisen1759-400022028241-1-0001.mods.xml"
-                           checksum="158744403032f32eea5f2e83e94432be"/>
                 <attribute name="B400022028241-RT1/400022028241-1/UNMATCHED/adresseavisen1759-400022028241-1-0001.mix.xml"
                            shortName="adresseavisen1759-400022028241-1-0001.mix.xml"
                            checksum="5c42d16b0af85c956d5db5ed799eb892"/>
-                <attribute name="B400022028241-RT1/400022028241-1/UNMATCHED/adresseavisen1759-400022028241-1-0001.alto.xml"
-                           shortName="adresseavisen1759-400022028241-1-0001.alto.xml"
-                           checksum="a2954c19aa74e7e5c472ea28fecf8977"/>
                 <node name="B400022028241-RT1/400022028241-1/UNMATCHED/adresseavisen1759-400022028241-1-0001.jp2"
                       shortName="adresseavisen1759-400022028241-1-0001.jp2">
                     <attribute name="B400022028241-RT1/400022028241-1/UNMATCHED/adresseavisen1759-400022028241-1-0001.jp2/contents"
