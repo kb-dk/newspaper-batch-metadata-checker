@@ -283,6 +283,13 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
         return nameSplit[nameSplit.length -1];
     }
 
+    /**
+     * Collect page numbers for a given section, to validate sequence afterwards.
+     * Will record a failure if a duplicate page number is collected.
+     *
+     * @param event The parsing event where page numbers are collected.
+     * @param modsDocument Document containing parsed MODS.
+     */
     private void collect2C2(AttributeParsingEvent event, Document modsDocument) {
         String sectionLabelXpath = "mods:mods/mods:part/mods:detail[@type='sectionLabel']";
         String sectionLabel = MODS_XPATH_SELECTOR.selectString(modsDocument, sectionLabelXpath);
@@ -302,6 +309,13 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
         pageNumbers.add(pageSequenceNumber);
     }
 
+    /**
+     * Check that page numbers for all collected sections are sequential and start from 1.
+     * Will record a failure if page sequence numbers for a section do not start with one.
+     * Will record a failure if page sequence numbers for are not sequential.
+     *
+     * @param event The parsing event for the end of an edition.
+     */
     private void validate2C2(NodeEndParsingEvent event) {
         for (Map.Entry<String, SortedSet<Integer>> entry : sectionPageNumbers.entrySet()) {
             Integer current = entry.getValue().first();
