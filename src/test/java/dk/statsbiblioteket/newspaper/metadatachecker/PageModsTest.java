@@ -336,7 +336,7 @@ public class PageModsTest {
      }
 
     /**
-      * Test with bad data where a page sequence number does not start from 1
+      * Test with duplicate sequence numbers
       */
      @Test
      public void testWithDuplicatePageNumber() throws SQLException, FileNotFoundException {
@@ -349,7 +349,7 @@ public class PageModsTest {
      }
 
     /**
-      * Test with bad data where a page sequence number does not start from 1
+      * Test with missing sequence numbers
       */
      @Test
      public void testWithMissingPageNumber() throws SQLException, FileNotFoundException {
@@ -362,7 +362,7 @@ public class PageModsTest {
      }
 
     /**
-      * Test with bad data where a page sequence number does not start from 1
+      * Test with two different sections
       */
      @Test
      public void testWithPageNumberInMultipleSections() throws SQLException, FileNotFoundException {
