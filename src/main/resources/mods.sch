@@ -9,7 +9,6 @@
 
     <!--2C-1 Nothing to check, since section labels are not controlled, and may be empty. -->
 
-    <!--2C-2 Option Omitted
     <s:pattern id="pagesequence">
         <s:rule context="mods:mods">
             <s:assert test="mods:part/mods:extent[@unit='pages']/mods:start">2C-2: Page Sequence Number is required.</s:assert>
@@ -19,7 +18,6 @@
             <s:assert test="matches(., '^[0-9]+$')">2C-2: Page Sequence Number is not a number: <s:value-of select="."/></s:assert>
         </s:rule>
     </s:pattern>
-    -->
 
     <!--2C-3-->
     <s:pattern id="pagenumber">

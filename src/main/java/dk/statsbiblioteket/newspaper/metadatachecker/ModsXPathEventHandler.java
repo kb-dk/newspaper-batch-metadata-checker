@@ -4,9 +4,13 @@ import static dk.statsbiblioteket.util.Strings.getStackTrace;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -32,6 +36,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
     private ResultCollector resultCollector;
     private List<String> briksInThisEdition;
     private Set<String> displayLabelsInThisEdition;
+    private Map<String, SortedSet<Integer>> sectionPageNumbers;
     private Document batchXmlStructure;
     private static final XPathSelector BATCH_XPATH_SELECTOR = DOM.createXPathSelector();
     private static final XPathSelector MODS_XPATH_SELECTOR = DOM.createXPathSelector("mods", "http://www.loc.gov/mods/v3");
@@ -62,6 +67,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
         if (shortName.matches(EDITION_REGEX)) {
             briksInThisEdition = new ArrayList<String>();
             displayLabelsInThisEdition = new HashSet<>();
+            sectionPageNumbers = new HashMap<>();
             String xpathForBriks = "//node[@name='" + event.getName() + "']/node[ends-with(@shortName, 'brik')]/@shortName";
             NodeList nodeList = BATCH_XPATH_SELECTOR.selectNodeList(batchXmlStructure, xpathForBriks);
             for (int nodeNumber = 0; nodeNumber < nodeList.getLength(); nodeNumber++ ) {
@@ -93,6 +99,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
         String shortName = getLastTokenInPath(event.getName());
         if (shortName.matches(EDITION_REGEX)) {
             validate2C10AllBriksInEdition(event);
+            validate2C2(event);
         }
     }
 
@@ -116,6 +123,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
         validate2C5(event, modsDocument);
         validate2C11(event, modsDocument);
         validate2C10(event, modsDocument);
+        collect2C2(event, modsDocument);
     }
 
     /**
@@ -294,14 +302,60 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
 
 
     /**
-         * We use a constant "/" as file separator in DOMS, not the system-dependent file-separator, so this
-         * method finds the last token in a path assuming that "/" is the file separator.
-         * @param name
-         * @return
-         */
-        private static String getLastTokenInPath(String name) {
-            String [] nameSplit = name.split("/");
-            return nameSplit[nameSplit.length -1];
-        }
+     * We use a constant "/" as file separator in DOMS, not the system-dependent file-separator, so this
+     * method finds the last token in a path assuming that "/" is the file separator.
+     * @param name
+     * @return
+     */
+    private static String getLastTokenInPath(String name) {
+        String [] nameSplit = name.split("/");
+        return nameSplit[nameSplit.length -1];
+    }
 
+    private void collect2C2(AttributeParsingEvent event, Document modsDocument) {
+        String sectionLabelXpath = "mods:mods/mods:part/mods:detail[@type='sectionLabel']";
+        String sectionLabel = MODS_XPATH_SELECTOR.selectString(modsDocument, sectionLabelXpath);
+        String pageSequenceNumberXpath = "mods:mods/mods:part/mods:extent[@unit=\"pages\"]/mods:start";
+        Integer pageSequenceNumber = MODS_XPATH_SELECTOR.selectInteger(modsDocument, pageSequenceNumberXpath);
+        SortedSet<Integer> pageNumbers = sectionPageNumbers.get(sectionLabel);
+        if (pageNumbers == null) {
+            pageNumbers = new TreeSet<>();
+            sectionPageNumbers.put(sectionLabel, pageNumbers);
+        }
+        if (pageNumbers.contains(pageSequenceNumber)) {
+            resultCollector.addFailure(event.getName(),
+                                  "metadata",
+                                  getClass().getSimpleName(),
+                                  "2C-2: Duplicate Page sequence number '" + pageSequenceNumber + "' for section '"
+                                          + sectionLabel);
+
+        }
+        pageNumbers.add(pageSequenceNumber);
+    }
+
+    private void validate2C2(NodeEndParsingEvent event) {
+        for (Map.Entry<String, SortedSet<Integer>> entry : sectionPageNumbers.entrySet()) {
+            Integer current = entry.getValue().first();
+            if (!current.equals(1)) {
+                resultCollector.addFailure(event.getName(),
+                                      "metadata",
+                                      getClass().getSimpleName(),
+                                      "2C-2: Page sequence numbers for section '" + entry.getKey()
+                                              + "' do not start from 1");
+
+            }
+            for (Integer pageNumber : entry.getValue()) {
+                if (!pageNumber.equals(current)) {
+                    resultCollector.addFailure(event.getName(),
+                                          "metadata",
+                                          getClass().getSimpleName(),
+                                          "2C-2: Page sequence number '" + current + "' for section '" + entry.getKey()
+                                                  + "' is missing. Found '" + pageNumber + "' instead");
+                    current = pageNumber;
+
+                }
+                current++;
+            }
+        }
+    }
 }

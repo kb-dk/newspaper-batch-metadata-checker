@@ -4,7 +4,7 @@
             <mods:number>Sektion 1</mods:number>
         </mods:detail>
         <mods:extent unit="pages">
-            <mods:start>16</mods:start>
+            <mods:start>1</mods:start>
         </mods:extent>
         <mods:detail type="pageNumber">
             <mods:number>2</mods:number>

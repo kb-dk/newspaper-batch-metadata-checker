@@ -322,5 +322,56 @@ public class PageModsTest {
         handler.handleNodeEnd(new NodeEndParsingEvent(editionNodeName));
     }
 
+    /**
+      * Test with bad data where a page sequence number does not start from 1
+      */
+     @Test
+     public void testWithPageNumberDoesNotStartFromOne() throws SQLException, FileNotFoundException {
+         String dataDirS = "badData/pageSequenceNumber/DoesNotStartFrom1";
+         ResultCollector resultCollector = new ResultCollector("foo", "bar");
+         iterateDataDir(dataDirS, resultCollector);
+         final String message = resultCollector.toReport();
+         assertFalse(resultCollector.isSuccess(), message);
+         assertTrue(message.contains("2C-2"), message);
+     }
+
+    /**
+      * Test with bad data where a page sequence number does not start from 1
+      */
+     @Test
+     public void testWithDuplicatePageNumber() throws SQLException, FileNotFoundException {
+         String dataDirS = "badData/pageSequenceNumber/DuplicatePageNumber";
+         ResultCollector resultCollector = new ResultCollector("foo", "bar");
+         iterateDataDir(dataDirS, resultCollector);
+         final String message = resultCollector.toReport();
+         assertFalse(resultCollector.isSuccess(), message);
+         assertTrue(message.contains("2C-2"), message);
+     }
+
+    /**
+      * Test with bad data where a page sequence number does not start from 1
+      */
+     @Test
+     public void testWithMissingPageNumber() throws SQLException, FileNotFoundException {
+         String dataDirS = "badData/pageSequenceNumber/MissingPageNumber";
+         ResultCollector resultCollector = new ResultCollector("foo", "bar");
+         iterateDataDir(dataDirS, resultCollector);
+         final String message = resultCollector.toReport();
+         assertFalse(resultCollector.isSuccess(), message);
+         assertTrue(message.contains("2C-2"), message);
+     }
+
+    /**
+      * Test with bad data where a page sequence number does not start from 1
+      */
+     @Test
+     public void testWithPageNumberInMultipleSections() throws SQLException, FileNotFoundException {
+         String dataDirS = "badData/pageSequenceNumber/MultipleSections";
+         ResultCollector resultCollector = new ResultCollector("foo", "bar");
+         iterateDataDir(dataDirS, resultCollector);
+         final String message = resultCollector.toReport();
+         assertFalse(resultCollector.isSuccess(), message);
+         assertTrue(message.contains("2C-2"), message);
+     }
 
 }
