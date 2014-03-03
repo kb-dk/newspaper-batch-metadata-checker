@@ -20,6 +20,7 @@ import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeBeginsParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeEndParsingEvent;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.ParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.DefaultTreeEventHandler;
 import dk.statsbiblioteket.newspaper.mfpakintegration.batchcontext.BatchContext;
 import dk.statsbiblioteket.util.xml.DOM;
@@ -83,13 +84,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
             try {
                 doValidate(event);
             } catch (Exception e) {    //Fault Barrier
-                resultCollector.addFailure(
-                        event.getName(),
-                        "exception",
-                        getClass().getSimpleName(),
-                        "Error processing page-MODS metadata: " + e.toString(),
-                        getStackTrace(e)
-                );
+                addExceptionFailure(event, "Error processing page-MODS metadata: " + e.toString(), getStackTrace(e));
             }
         }
     }
@@ -108,10 +103,8 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
         try {
             modsDocument = DOM.streamToDOM(event.getData());
             if (modsDocument == null) {
-                resultCollector.addFailure(
-                        event.getName(),
-                        "exception",
-                        getClass().getSimpleName(),
+                addExceptionFailure(
+                        event,
                         "Could not parse xml");
                 return;
             }
@@ -133,12 +126,8 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
      */
     private void validate2C1(AttributeParsingEvent event, Document modsDocument) {
         if (context.getBatchOptions() == null) {
-            resultCollector.addFailure(event.getName(),
-                    "metadata",
-                    getClass().getSimpleName(),
-                    "2C-1: Couldn't read batch options from mfpak. Got null value.",
-                    context.getBatch().getBatchID()
-            );
+            addMetadataFailure(event, "2C-1: Couldn't read batch options from mfpak. Got null value.",
+                               context.getBatch().getBatchID());
             return;
         } else if (!context.getBatchOptions().isOptionB7()) {
             String sectionLabelXpath = "mods:mods/mods:part/mods:detail[@type='sectionLabel']";
@@ -146,10 +135,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
             if (nodes == null || nodes.getLength() == 0) {
                 return;
             } else {
-                resultCollector.addFailure(
-                        event.getName(),
-                        "metadata",
-                        getClass().getSimpleName(),
+                addMetadataFailure(event,
                         "2C-1: Found section entitled " + nodes.item(0).getTextContent() + " for the page "
                                 + event.getName() + " although Option B7 (Section Titles) was not chosen for the batch "
                                 + context.getBatch().getBatchID(),
@@ -159,10 +145,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
             String sectionLabelXpath = "mods:mods/mods:part/mods:detail[@type='sectionLabel']";
             NodeList nodes = MODS_XPATH_SELECTOR.selectNodeList(modsDocument, sectionLabelXpath);
             if (nodes == null || nodes.getLength() == 0) {
-                resultCollector.addFailure(
-                        event.getName(),
-                        "metadata",
-                        getClass().getSimpleName(),
+                addMetadataFailure(event,
                         "2C-1: Did not find section for the page " + event.getName()
                         + " although Option B7 (Section Titles) was chosen for the batch " + context.getBatch().getBatchID(),
                         sectionLabelXpath );
@@ -189,10 +172,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
             displayLabelsInThisEdition.add(name);
         }
         if (!brikExists && hasDisplayLabel) {
-            resultCollector.addFailure(
-                    event.getName(),
-                    "metadata",
-                    getClass().getSimpleName(),
+            addMetadataFailure(event,
                     "2C-10: Did not find symbol " + name + " although it is implied by existence of " +
                             "displayname in corresponding page " + event.getName(),
                     display
@@ -209,9 +189,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
         Set<String> undescribedBriks = new HashSet<>(briksInThisEdition);
         undescribedBriks.removeAll(displayLabelsInThisEdition);
         for (String undescribedBrik : undescribedBriks) {
-            resultCollector.addFailure(event.getName(),
-                                       "metadata",
-                                       getClass().getSimpleName(),
+            addMetadataFailure(event,
                                        "2C-10: The brik-file '" + undescribedBrik
                                                + "' was not mentioned by any MODS metadata displayLabel attribute.");
         }
@@ -229,7 +207,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
      */
     private String getBrikName(String modsFileName) {
         modsFileName = modsFileName.replace(".mods.xml", "");
-        char lastChar = modsFileName.charAt(modsFileName.length() -1);
+        char lastChar = modsFileName.charAt(modsFileName.length() - 1);
         if (String.valueOf(lastChar).matches("[A-Z]")) {
             modsFileName = modsFileName.substring(0, modsFileName.length() -1);
         }
@@ -246,10 +224,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
         final String xpath2C11 = "mods:mods/mods:relatedItem/mods:titleInfo[@type='uniform' and @authority='Statens Avissamling']/mods:title";
         String modsAvisId = MODS_XPATH_SELECTOR.selectString(modsDocument, xpath2C11);
         if (modsAvisId == null || context.getAvisId() == null || !modsAvisId.equals(context.getAvisId())) {
-            resultCollector.addFailure(
-                    event.getName(),
-                    "metadata",
-                    getClass().getSimpleName(),
+            addMetadataFailure(event,
                     "2C-11: avisId mismatch. Document gives " + modsAvisId + " but mfpak gives " + context.getAvisId(),
                     xpath2C11
             );
@@ -271,9 +246,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
         String sequenceNumber = MODS_XPATH_SELECTOR.selectString(modsDocument, xpath2C5);
         String namePattern = ".*-[0]*" + sequenceNumber + ".mods.xml";
         if (sequenceNumber == null || !(event.getName().matches(namePattern))) {
-            resultCollector.addFailure(event.getName(),
-                                    "metadata",
-                                    getClass().getSimpleName(),
+            addMetadataFailure(event,
                                     "2C-5: " + sequenceNumber + " not found in file name. Should match " + namePattern + ".",
                                     xpath2C5
                                     );
@@ -291,9 +264,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
         String reelNumber = MODS_XPATH_SELECTOR.selectString(modsDocument, xpath2C4);
         String reelNumberPatternString = "^" + context.getBatch().getBatchID() + "-" + "[0-9]+$";
         if (reelNumber == null || !reelNumber.matches(reelNumberPatternString)) {
-              resultCollector.addFailure(event.getName(),
-                                    "metadata",
-                                    getClass().getSimpleName(),
+            addMetadataFailure(event,
                                     "2C-4: reel number " + reelNumber + " does not match expected pattern '" + reelNumberPatternString + "'",
                                     xpath2C4
                                     );
@@ -323,9 +294,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
             sectionPageNumbers.put(sectionLabel, pageNumbers);
         }
         if (pageNumbers.contains(pageSequenceNumber)) {
-            resultCollector.addFailure(event.getName(),
-                                  "metadata",
-                                  getClass().getSimpleName(),
+            addMetadataFailure(event,
                                   "2C-2: Duplicate Page sequence number '" + pageSequenceNumber + "' for section '"
                                           + sectionLabel);
 
@@ -337,18 +306,14 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
         for (Map.Entry<String, SortedSet<Integer>> entry : sectionPageNumbers.entrySet()) {
             Integer current = entry.getValue().first();
             if (!current.equals(1)) {
-                resultCollector.addFailure(event.getName(),
-                                      "metadata",
-                                      getClass().getSimpleName(),
+                addMetadataFailure(event,
                                       "2C-2: Page sequence numbers for section '" + entry.getKey()
                                               + "' do not start from 1");
 
             }
             for (Integer pageNumber : entry.getValue()) {
                 if (!pageNumber.equals(current)) {
-                    resultCollector.addFailure(event.getName(),
-                                          "metadata",
-                                          getClass().getSimpleName(),
+                    addMetadataFailure(event,
                                           "2C-2: Page sequence number '" + current + "' for section '" + entry.getKey()
                                                   + "' is missing. Found '" + pageNumber + "' instead");
                     current = pageNumber;
@@ -357,5 +322,50 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
                 current++;
             }
         }
+    }
+
+    /**
+     * Add a metadata failure to the result collector.
+     * @param event The event to add a failure for.
+     * @param description Description of the failure.
+     *                    Should start with the requirement that failed to validate, e.g. C1-1:.
+     */
+    private void addMetadataFailure(ParsingEvent event, String description) {
+        resultCollector.addFailure(event.getName(), "metadata", getClass().getSimpleName(), description);
+    }
+
+    /**
+     * Add a metadata failure to the result collector.
+     * @param event The event to add a failure for.
+     * @param description Description of the failure.
+     *                    Should start with the requirement that failed to validate, e.g. C1-1:.
+     * @param details Details of the failure.
+     */
+    private void addMetadataFailure(ParsingEvent event, String description, String details) {
+        resultCollector.addFailure(event.getName(), "metadata", getClass().getSimpleName(), description, details);
+    }
+
+    /**
+     * Add an exception failure to the result collector.
+     * @param event The event to add a failure for.
+     * @param description Description of the failure.
+     *                    If the exception happened during a specific validation, it should start with the requirement
+     *                    that was being tested, e.g. C1-1:.
+     */
+    private void addExceptionFailure(AttributeParsingEvent event, String description) {
+        resultCollector.addFailure(event.getName(), "exception", getClass().getSimpleName(), description);
+    }
+
+    /**
+     * Add an exception failure to the result collector.
+     * @param event The event to add a failure for.
+     * @param description Description of the failure.
+     *                    If the exception happened during a specific validation, it should start with the requirement
+     *                    that was being tested, e.g. C1-1:.
+     * @param details Detail of the failure.
+     *                Best practice is to record the stack trace of the exception.
+     */
+    private void addExceptionFailure(ParsingEvent event, String description, String details) {
+        resultCollector.addFailure(event.getName(), "exception", getClass().getSimpleName(), description, details);
     }
 }
