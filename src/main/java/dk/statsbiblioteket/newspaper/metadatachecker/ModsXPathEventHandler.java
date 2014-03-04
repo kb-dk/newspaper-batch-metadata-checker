@@ -291,7 +291,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
      * @param modsDocument Document containing parsed MODS.
      */
     private void collect2C2(AttributeParsingEvent event, Document modsDocument) {
-        String sectionLabelXpath = "mods:mods/mods:part/mods:detail[@type='sectionLabel']";
+        String sectionLabelXpath = "mods:mods/mods:part/mods:detail[@type='sectionLabel']/mods:number/text()";
         String sectionLabel = MODS_XPATH_SELECTOR.selectString(modsDocument, sectionLabelXpath);
         String pageSequenceNumberXpath = "mods:mods/mods:part/mods:extent[@unit=\"pages\"]/mods:start";
         Integer pageSequenceNumber = MODS_XPATH_SELECTOR.selectInteger(modsDocument, pageSequenceNumberXpath);
