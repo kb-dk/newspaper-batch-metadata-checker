@@ -362,16 +362,15 @@ public class PageModsTest {
      }
 
     /**
-      * Test with two different sections
+      * Test that page numbers can span two different sections
       */
      @Test
      public void testWithPageNumberInMultipleSections() throws SQLException, FileNotFoundException {
-         String dataDirS = "badData/pageSequenceNumber/MultipleSections";
+         String dataDirS = "goodData/pageSequenceNumber/MultipleSections";
          ResultCollector resultCollector = new ResultCollector("foo", "bar");
          iterateDataDir(dataDirS, resultCollector);
          final String message = resultCollector.toReport();
-         assertFalse(resultCollector.isSuccess(), message);
-         assertTrue(message.contains("2C-2"), message);
+         assertTrue(resultCollector.isSuccess(), message);
      }
 
 }

@@ -4,10 +4,8 @@ import static dk.statsbiblioteket.util.Strings.getStackTrace;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -37,7 +35,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
     private ResultCollector resultCollector;
     private List<String> briksInThisEdition;
     private Set<String> displayLabelsInThisEdition;
-    private Map<String, SortedSet<Integer>> sectionPageNumbers;
+    private SortedSet<Integer> editionPageNumbers;
     private Document batchXmlStructure;
     private static final XPathSelector BATCH_XPATH_SELECTOR = DOM.createXPathSelector();
     private static final XPathSelector MODS_XPATH_SELECTOR = DOM.createXPathSelector("mods", "http://www.loc.gov/mods/v3");
@@ -68,7 +66,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
         if (shortName.matches(EDITION_REGEX)) {
             briksInThisEdition = new ArrayList<String>();
             displayLabelsInThisEdition = new HashSet<>();
-            sectionPageNumbers = new HashMap<>();
+            editionPageNumbers = new TreeSet<>();
             String xpathForBriks = "//node[@name='" + event.getName() + "']/node[ends-with(@shortName, 'brik')]/@shortName";
             NodeList nodeList = BATCH_XPATH_SELECTOR.selectNodeList(batchXmlStructure, xpathForBriks);
             for (int nodeNumber = 0; nodeNumber < nodeList.getLength(); nodeNumber++ ) {
@@ -284,57 +282,43 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
     }
 
     /**
-     * Collect page numbers for a given section, to validate sequence afterwards.
+     * Collect page numbers, to validate sequence afterwards.
      * Will record a failure if a duplicate page number is collected.
      *
      * @param event The parsing event where page numbers are collected.
      * @param modsDocument Document containing parsed MODS.
      */
     private void collect2C2(AttributeParsingEvent event, Document modsDocument) {
-        String sectionLabelXpath = "mods:mods/mods:part/mods:detail[@type='sectionLabel']/mods:number/text()";
-        String sectionLabel = MODS_XPATH_SELECTOR.selectString(modsDocument, sectionLabelXpath);
         String pageSequenceNumberXpath = "mods:mods/mods:part/mods:extent[@unit=\"pages\"]/mods:start";
         Integer pageSequenceNumber = MODS_XPATH_SELECTOR.selectInteger(modsDocument, pageSequenceNumberXpath);
-        SortedSet<Integer> pageNumbers = sectionPageNumbers.get(sectionLabel);
-        if (pageNumbers == null) {
-            pageNumbers = new TreeSet<>();
-            sectionPageNumbers.put(sectionLabel, pageNumbers);
+        if (editionPageNumbers.contains(pageSequenceNumber)) {
+            addMetadataFailure(event, "2C-2: Duplicate Edition sequence number '" + pageSequenceNumber + "'");
         }
-        if (pageNumbers.contains(pageSequenceNumber)) {
-            addMetadataFailure(event,
-                                  "2C-2: Duplicate Page sequence number '" + pageSequenceNumber + "' for section '"
-                                          + sectionLabel);
-
-        }
-        pageNumbers.add(pageSequenceNumber);
+        editionPageNumbers.add(pageSequenceNumber);
     }
 
     /**
-     * Check that page numbers for all collected sections are sequential and start from 1.
-     * Will record a failure if page sequence numbers for a section do not start with one.
-     * Will record a failure if page sequence numbers for are not sequential.
+     * Check that page numbers for edition are sequential and start from 1.
+     * Will record a failure if page sequence numbers do not start with one.
+     * Will record a failure if page sequence numbers are not sequential.
      *
      * @param event The parsing event for the end of an edition.
      */
     private void validate2C2(NodeEndParsingEvent event) {
-        for (Map.Entry<String, SortedSet<Integer>> entry : sectionPageNumbers.entrySet()) {
-            Integer current = entry.getValue().first();
-            if (!current.equals(1)) {
+        Integer current = editionPageNumbers.first();
+        if (!current.equals(1)) {
+            addMetadataFailure(event, "2C-2: Page sequence numbers do not start from 1, but " + current);
+
+        }
+        for (Integer pageNumber : editionPageNumbers) {
+            if (!pageNumber.equals(current)) {
                 addMetadataFailure(event,
-                                      "2C-2: Page sequence numbers for section '" + entry.getKey()
-                                              + "' do not start from 1");
+                                   "2C-2: Page sequence number '" + current + "' is missing. Found '" + pageNumber
+                                           + "' instead");
+                current = pageNumber;
 
             }
-            for (Integer pageNumber : entry.getValue()) {
-                if (!pageNumber.equals(current)) {
-                    addMetadataFailure(event,
-                                          "2C-2: Page sequence number '" + current + "' for section '" + entry.getKey()
-                                                  + "' is missing. Found '" + pageNumber + "' instead");
-                    current = pageNumber;
-
-                }
-                current++;
-            }
+            current++;
         }
     }
 
