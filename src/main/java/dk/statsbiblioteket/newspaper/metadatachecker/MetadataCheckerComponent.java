@@ -4,6 +4,7 @@ import dk.statsbiblioteket.medieplatform.autonomous.AbstractRunnableComponent;
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ConfigConstants;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
+import dk.statsbiblioteket.medieplatform.autonomous.SBOIBasedAbstractRunnableComponent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.EventRunner;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
@@ -18,12 +19,12 @@ import java.util.Properties;
 
 /** Check Metadata of all nodes. */
 public class MetadataCheckerComponent
-        extends AbstractRunnableComponent {
+        extends SBOIBasedAbstractRunnableComponent {
     private Logger log = LoggerFactory.getLogger(getClass());
     private final MfPakDAO mfPakDAO;
 
     /**
-     * Initialise metadata checker component. For used properties {@link AbstractRunnableComponent#createIterator}.
+     * Initialise metadata checker component. For used properties {@link SBOIBasedAbstractRunnableComponent#createIterator}.
      *
      * property fields that are used
      * <ul>
