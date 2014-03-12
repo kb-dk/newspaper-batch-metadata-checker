@@ -11,6 +11,10 @@
     <artifactId>newspaper-batch-metadata-checker</artifactId>
     <version>1.6-SNAPSHOT</version>
 
+    <properties>
+        <autonoumous.component.framework.version>1.6-SNAPSHOT</autonoumous.component.framework.version>
+    </properties>
+
 
     <repositories>
         <repository>
@@ -37,19 +41,19 @@
         <dependency>
             <groupId>dk.statsbiblioteket.newspaper</groupId>
             <artifactId>autonomous-component</artifactId>
-            <version>1.6-SNAPSHOT</version>
+            <version>${autonoumous.component.framework.version}</version>
         </dependency>
         
         <dependency>
             <groupId>dk.statsbiblioteket.newspaper</groupId>
             <artifactId>batch-event-framework-common</artifactId>
-            <version>1.6-SNAPSHOT</version>
+            <version>${autonoumous.component.framework.version}</version>
         </dependency>
 
         <dependency>
             <groupId>dk.statsbiblioteket.newspaper</groupId>
             <artifactId>doms-event-client</artifactId>
-            <version>1.6-SNAPSHOT</version>
+            <version>${autonoumous.component.framework.version}</version>
         </dependency>
 
         <dependency>
