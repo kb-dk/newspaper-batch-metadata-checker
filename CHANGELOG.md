@@ -1,3 +1,10 @@
+1.6
+* Update to newspaper parent pom 1.2
+* Update to version 1.6 of batch event framework
+* Update to version 1.5 of newspaper mfpak integration
+* Improve section title selection
+* Fix section page number checking
+
 1.5
 * Fix bug: Missing brik file metadata was reported on film folders, not just edition folders
 
