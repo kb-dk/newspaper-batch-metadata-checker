@@ -1,5 +1,7 @@
 1.7
 * Check of negativeResolution is 0.0 if and only if there is no ISO test targets 
+* Update to version 1.7 of batch event framework
+* Update to version 1.6 of newspaper mfpak integration
 
 1.6
 * Update to newspaper parent pom 1.2
