@@ -1,3 +1,6 @@
+1.7
+* Check of negativeResolution is 0.0 if and only if there is no ISO test targets 
+
 1.6
 * Update to newspaper parent pom 1.2
 * Update to version 1.6 of batch event framework
