@@ -26,7 +26,7 @@
             <s:assert test="$startDateForComparison &lt;= $endDateForComparison">2E-2 / 2E-3: Start date must be before end date</s:assert>
 
             <!--2E-6: Reduction ratio-->
-            <s:assert test="matches(avis:reductionRatio, '^\s*([1-9]|1[0-9]|2[0-5])x\s*$')">2E-6: Should be a integer (25 or lower) followed by an x (no leading zeroes)</s:assert>
+            <s:assert test="matches(avis:reductionRatio, '^\s*([1-9]([.][0-9])?|1[0-9]([.][0-9])?|2[0-4]([.][0-9])?|25([.]0)?)x\s*$')">2E-6: Should be a integer (25 or lower) followed by an x (no leading zeroes)</s:assert>
 
             <!--2E-7: Original newspaper resolution-->
             <s:assert test="matches(avis:captureResolutionOriginal, '^\s*[1-9][0-9]*\s*$')">2E-7: Original newspaper resolution must be an integer</s:assert>
