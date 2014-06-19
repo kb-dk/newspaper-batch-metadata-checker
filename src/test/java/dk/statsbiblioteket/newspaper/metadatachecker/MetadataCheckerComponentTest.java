@@ -3,13 +3,17 @@ package dk.statsbiblioteket.newspaper.metadatachecker;
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.newspaper.metadatachecker.mockers.MFPakMocker;
 import dk.statsbiblioteket.newspaper.metadatachecker.mockers.MockupIteratorSuper;
+import dk.statsbiblioteket.newspaper.mfpakintegration.batchcontext.BatchContextUtils;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperBatchOptions;
 
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.lang.reflect.Field;
 import java.util.Date;
+import java.util.Map;
 import java.util.Properties;
 
 import static org.mockito.Matchers.eq;
@@ -21,6 +25,14 @@ import java.util.Properties;
 /** Test Metadata checker */
 public class MetadataCheckerComponentTest {
 
+    @BeforeMethod 
+    public void nukeBatchContext() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+        Field contexts = BatchContextUtils.class.getDeclaredField("batchContexts");
+        contexts.setAccessible(true);
+        Map m = (Map) contexts.get(null);
+        m.clear();
+    }
+    
     @Test
     /**
      * Test checking metadata on a "bad" batch.
