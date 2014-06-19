@@ -1,5 +1,26 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.Map;
+
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+import org.w3c.dom.Document;
+
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
@@ -13,25 +34,6 @@ import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperBatchOptions;
 import dk.statsbiblioteket.util.xml.DOM;
 
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
-import org.w3c.dom.Document;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.SQLException;
-import java.util.Date;
-
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
-
 /**
  * Tests for the validity of page-mods metadata are grouped in this class because they are logically connected, even
  * if they are actually distributed in two different places in the code ie
@@ -44,9 +46,17 @@ public class PageModsTest {
     private Document goodBatchXmlStructure;
 
     @BeforeTest
-    public void setUp() {
+    public void setUp() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
         InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("assumed-valid-structure.xml");
         goodBatchXmlStructure = DOM.streamToDOM(is);
+    }
+    
+    @BeforeMethod 
+    public void nukeBatchContext() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+        Field contexts = BatchContextUtils.class.getDeclaredField("batchContexts");
+        contexts.setAccessible(true);
+        Map m = (Map) contexts.get(null);
+        m.clear();
     }
 
 

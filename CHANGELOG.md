@@ -1,3 +1,8 @@
+1.8
+* Update reduction ratio checks to allow for ratios up-to 25.0x, including allowing the use of decimal numbers.
+* Update to version 1.8 of batch event framework
+* Update to version 1.8 of newspaper mfpak integration
+
 1.7
 * Check of negativeResolution is 0.0 if and only if there is no ISO test targets 
 * Update to version 1.7 of batch event framework

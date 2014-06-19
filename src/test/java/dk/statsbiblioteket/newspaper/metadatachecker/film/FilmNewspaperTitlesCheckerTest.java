@@ -1,35 +1,37 @@
 package dk.statsbiblioteket.newspaper.metadatachecker.film;
 
-import dk.statsbiblioteket.medieplatform.autonomous.Batch;
-import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
-import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
-import dk.statsbiblioteket.newspaper.mfpakintegration.batchcontext.BatchContext;
-import dk.statsbiblioteket.newspaper.mfpakintegration.batchcontext.BatchContextUtils;
-import dk.statsbiblioteket.newspaper.metadatachecker.checker.FailureType;
-import dk.statsbiblioteket.newspaper.metadatachecker.mockers.FilmMocker;
-import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
-import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperBatchOptions;
-import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperDateRange;
-import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperEntity;
-import dk.statsbiblioteket.util.xml.DOM;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
-import org.w3c.dom.Document;
-
-import java.io.IOException;
+import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+import org.w3c.dom.Document;
+
+import dk.statsbiblioteket.medieplatform.autonomous.Batch;
+import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
+import dk.statsbiblioteket.newspaper.metadatachecker.checker.FailureType;
+import dk.statsbiblioteket.newspaper.metadatachecker.mockers.FilmMocker;
+import dk.statsbiblioteket.newspaper.mfpakintegration.batchcontext.BatchContext;
+import dk.statsbiblioteket.newspaper.mfpakintegration.batchcontext.BatchContextUtils;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperBatchOptions;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperDateRange;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperEntity;
+import dk.statsbiblioteket.util.xml.DOM;
 
 /**
  *
@@ -51,10 +53,11 @@ public class FilmNewspaperTitlesCheckerTest {
     MfPakDAO dao;
 
     @BeforeTest
-    public void setUp() throws SQLException, ParseException {
+    public void setUp() throws SQLException, ParseException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
         batch = new Batch();
         batch.setBatchID("400022028241");
-                batch.setRoundTripNumber(1);
+        batch.setRoundTripNumber(1);
+                
         dao = mock(MfPakDAO.class);
         when(dao.getBatchNewspaperEntities(batch.getBatchID())).thenReturn(getEntities());
         when(dao.getBatchDateRanges(batch.getBatchID())).thenReturn(new ArrayList<NewspaperDateRange>());
@@ -66,6 +69,14 @@ public class FilmNewspaperTitlesCheckerTest {
         when(dao.getNewspaperID(eq(batch.getBatchID()))).thenReturn("foobar");
         when(dao.getBatchShipmentDate(eq(batch.getBatchID()))).thenReturn(new Date(0));
         
+    }
+    
+    @BeforeMethod 
+    public void nukeBatchContext() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+        Field contexts = BatchContextUtils.class.getDeclaredField("batchContexts");
+        contexts.setAccessible(true);
+        Map m = (Map) contexts.get(null);
+        m.clear();
     }
 
     /**

@@ -2,11 +2,13 @@ package dk.statsbiblioteket.newspaper.metadatachecker.mockers;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Map;
 
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
@@ -22,11 +24,11 @@ import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperDateRang
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperEntity;
 
 import org.testng.AssertJUnit;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertFalse;
@@ -38,6 +40,15 @@ import static org.testng.Assert.assertTrue;
  * See Appendix 2D – metadata per publication and edition.
  */
 public class EditionModsTest {
+    
+    @BeforeMethod 
+    public void nukeBatchContext() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+        Field contexts = BatchContextUtils.class.getDeclaredField("batchContexts");
+        contexts.setAccessible(true);
+        Map m = (Map) contexts.get(null);
+        m.clear();
+    }
+    
     /** Test that we can validate a valid edition xml (mods) file. */
     @Test
     public void testEditionModsGood() throws SQLException, ParseException {
