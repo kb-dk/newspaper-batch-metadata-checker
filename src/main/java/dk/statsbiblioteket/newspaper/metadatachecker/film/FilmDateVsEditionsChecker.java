@@ -27,45 +27,40 @@ public class FilmDateVsEditionsChecker extends XmlAttributeChecker {
     public void validate(AttributeParsingEvent event, Document filmMetaData) {
         String filmStartdate = xPathSelector.selectString(filmMetaData, "/avis:reelMetadata/avis:startDate");
         String filmEnddate = xPathSelector.selectString(filmMetaData, "/avis:reelMetadata/avis:endDate");
+        FuzzyDate filmStart = new FuzzyDate(filmStartdate);
+        FuzzyDate filmEnd = new FuzzyDate(filmEnddate);
+        FuzzyDate editionStart = null;
+        FuzzyDate editionEnd = null;
         String filmID = event.getName()
                              .split("/")[1].replace(".film.xml", "");
         NodeList editions = xPathSelector.selectNodeList(
                 batchXmlStructure,
                 "/node/node[@shortName='" + filmID + "']/node[@shortName!='FILM-ISO-target'][@shortName!='UNMATCHED']");
         for (int index = 0; index < editions.getLength(); index++) {
-            verifyEditionDateContainment(
-                    filmStartdate,
-                    filmEnddate,
-                    editions.item(index)
-                            .getAttributes()
-                            .getNamedItem("shortName")
-                            .getNodeValue(),
-                    filmID,
-                    event);
+            String editionID = editions.item(index).getAttributes().getNamedItem("shortName").getNodeValue();
+            FuzzyDate editionDate = new FuzzyDate(editionID.substring(0, editionID.lastIndexOf('-')));
+            if (editionStart == null || editionDate.compareTo(editionStart) < 0) {
+                editionStart = editionDate;
+            }
+            if (editionEnd == null || editionDate.compareTo(editionEnd) > 0) {
+                editionEnd = editionDate;
+            }
         }
-    }
-
-    /**
-     * Contain the logic for checking whether a given edition is inside of the film start/end dates. Also
-     * handles the registration of check failures.
-     * @param filmStartdate The start date to check against.
-     * @param filmEnddate The end date to check against.
-     * @param editionID The edition date which should be after (or same) the start date and before the end date.
-     * @param filmID For failure information.
-     * @param event For failure information.
-     */
-    protected void verifyEditionDateContainment(String filmStartdate, String filmEnddate, String editionID,
-                                                String filmID, AttributeParsingEvent event) {
-        FuzzyDate filmStart = new FuzzyDate(filmStartdate);
-        FuzzyDate filmEnd = new FuzzyDate(filmEnddate);
-        FuzzyDate editionDate = new FuzzyDate(editionID.substring(0, editionID.lastIndexOf('-')));
-        if (filmStart.compareTo(editionDate) > 0) {
+        if (editionStart == null || editionEnd == null) {
+            // No editions in film, do not check mix dates
+            return;
+        }
+        if (filmStart.compareTo(editionStart) != 0) {
             addFailure(
                     event,
-                    "2E-2: Edition earlier than film start date " + filmStartdate + " in film " + filmID);
+                    "2E-2: Earliest edition date " + editionStart.asString()
+                            + " not the same as film start date " + filmStart.asString());
         }
-        if (filmEnd.compareTo(editionDate) < 0) {
-            addFailure(event, "2E-3: Edition later than film end date " + filmEnddate + " in film " + filmID);
+        if (filmEnd.compareTo(editionEnd) != 0) {
+            addFailure(
+                    event,
+                    "2E-3: Latest edition date " + editionEnd.asString()
+                            + " not the same as film end date " + filmEnd.asString());
         }
     }
 

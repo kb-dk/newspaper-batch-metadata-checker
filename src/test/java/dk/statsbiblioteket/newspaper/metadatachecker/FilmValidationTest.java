@@ -56,6 +56,39 @@ public class FilmValidationTest {
     }
 
     @Test
+    public void shouldSucceedEmptyCreationDate() {
+        final String input = "" +
+                "<avis:reelMetadata xmlns:avis=\"http://www.statsbiblioteket.dk/avisdigitalisering/microfilm/1/0/\">\n" +
+                "    <avis:titles>Adresse Contoirs Efterretninger</avis:titles>\n" +
+                "    <avis:startDate>1795-06</avis:startDate>\n" +
+                "    <avis:endDate>1795-06-15</avis:endDate>\n" +
+                "    <avis:FilmId>400022028241-1</avis:FilmId>\n" +
+                "    <avis:numberOfPictures>14</avis:numberOfPictures>\n" +
+                "    <avis:reductionRatio>15x</avis:reductionRatio>\n" +
+                "    <avis:captureResolutionOriginal measurement=\"pixels/inch\">400</avis:captureResolutionOriginal>\n" +
+                "    <avis:captureResolutionFilm measurement=\"pixels/inch\">6000</avis:captureResolutionFilm>\n" +
+                "    <avis:dateMicrofilmCreated></avis:dateMicrofilmCreated>\n" +
+                "    <avis:resolutionOfNegative>6.3</avis:resolutionOfNegative>\n" +
+                "    <avis:resolutionCommentNegative>No comments</avis:resolutionCommentNegative>\n" +
+                "    <avis:densityReadingNegative>0.11</avis:densityReadingNegative>\n" +
+                "    <avis:densityReadingNegative>0.12</avis:densityReadingNegative>\n" +
+                "    <avis:densityReadingNegative>0.12</avis:densityReadingNegative>\n" +
+                "    <avis:densityReadingNegative>0.12</avis:densityReadingNegative>\n" +
+                "    <avis:densityReadingNegative>0.12</avis:densityReadingNegative>\n" +
+                "    <avis:densityReadingNegative>0.13</avis:densityReadingNegative>\n" +
+                "    <avis:densityReadingNegative>0.12</avis:densityReadingNegative>\n" +
+                "    <avis:densityReadingNegative>0.12</avis:densityReadingNegative>\n" +
+                "    <avis:densityReadingNegative>0.12</avis:densityReadingNegative>\n" +
+                "    <avis:densityReadingNegative>0.12</avis:densityReadingNegative>\n" +
+                "    <avis:averageDensityNegative>0.12</avis:averageDensityNegative>\n" +
+                "    <avis:dminNegative>0.12</avis:dminNegative>\n" +
+                "</avis:reelMetadata>\n";
+        setUp();
+        handleTestEvent(input, resultCollector);
+        assertTrue(resultCollector.isSuccess(), resultCollector.toReport());
+    }
+
+    @Test
     public void shouldFailBcozEmptyComment() {
         final String input = "" +
                 "<avis:reelMetadata xmlns:avis=\"http://www.statsbiblioteket.dk/avisdigitalisering/microfilm/1/0/\">\n" +

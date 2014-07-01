@@ -38,7 +38,7 @@ public class FilmDateVsEditionsCheckerTest {
     public void goodCaseTest() {
         String filmID = "film-1";
         addFilmNode(batchXmlStructure, filmID);
-        addEditionNode(batchXmlStructure, filmID, "2013-10-10-1");
+        addEditionNode(batchXmlStructure, filmID, "2013-10-10-1", "2013-10-11-1", "2013-10-12-2");
         Document filmDoc = createFilmXmlDoc("2013-10-10", "2013-10-12");
         AttributeParsingEvent filmEvent = createFilmEvent(filmID);
         checker.validate(filmEvent, filmDoc);
@@ -46,22 +46,10 @@ public class FilmDateVsEditionsCheckerTest {
     }
 
     @Test
-    public void editionToOldTest() {
+    public void editionTooOldTest() {
         String filmID = "film-1";
         addFilmNode(batchXmlStructure, filmID);
-        addEditionNode(batchXmlStructure, filmID, "2012-10-10-1");
-        Document filmDoc = createFilmXmlDoc("2013-10-10", "2013-10-12");
-        AttributeParsingEvent filmEvent = createFilmEvent(filmID);
-        checker.validate(filmEvent, filmDoc);
-        verifyFailure(filmEvent.getName());
-        verifyNoMoreInteractions(resultCollector);
-    }
-
-    @Test
-    public void editionToYoungTest() {
-        String filmID = "film-1";
-        addFilmNode(batchXmlStructure, filmID);
-        addEditionNode(batchXmlStructure, filmID, "2013-10-13-2");
+        addEditionNode(batchXmlStructure, filmID, "2012-10-10-1", "2013-10-12-1");
         Document filmDoc = createFilmXmlDoc("2013-10-10", "2013-10-12");
         AttributeParsingEvent filmEvent = createFilmEvent(filmID);
         checker.validate(filmEvent, filmDoc);
@@ -70,11 +58,11 @@ public class FilmDateVsEditionsCheckerTest {
     }
 
     @Test
-    public void editionToOldFluzzyTest() {
+    public void editionTooYoungTest() {
         String filmID = "film-1";
         addFilmNode(batchXmlStructure, filmID);
-        addEditionNode(batchXmlStructure, filmID, "2012-10-10-1");
-        Document filmDoc = createFilmXmlDoc("2013-10-00", "2013-10-00");
+        addEditionNode(batchXmlStructure, filmID, "2013-10-10-1", "2013-10-13-2");
+        Document filmDoc = createFilmXmlDoc("2013-10-10", "2013-10-12");
         AttributeParsingEvent filmEvent = createFilmEvent(filmID);
         checker.validate(filmEvent, filmDoc);
         verifyFailure(filmEvent.getName());
@@ -82,11 +70,11 @@ public class FilmDateVsEditionsCheckerTest {
     }
 
     @Test
-    public void editionToYoungFluzzyTest() {
+    public void editionTooOldFuzzyTest() {
         String filmID = "film-1";
         addFilmNode(batchXmlStructure, filmID);
-        addEditionNode(batchXmlStructure, filmID, "2013-11-01-2");
-        Document filmDoc = createFilmXmlDoc("2013-10-00", "2013-10-00");
+        addEditionNode(batchXmlStructure, filmID, "2012-10-10-1", "2013-10-1");
+        Document filmDoc = createFilmXmlDoc("2013-10", "2013-10");
         AttributeParsingEvent filmEvent = createFilmEvent(filmID);
         checker.validate(filmEvent, filmDoc);
         verifyFailure(filmEvent.getName());
@@ -94,33 +82,58 @@ public class FilmDateVsEditionsCheckerTest {
     }
 
     @Test
-    public void verifyEditionDateContainmentGoodcaseTest() {
-        AttributeParsingEvent filmEvent = createFilmEvent("film-1");
-        FilmDateVsEditionsChecker checker = new FilmDateVsEditionsChecker(resultCollector, null, null);
-        checker.verifyEditionDateContainment("2013-10-10", "2013-10-12", "2013-10-11-1", "filmID", filmEvent);
-        verifyNoMoreInteractions(resultCollector);
-        checker.verifyEditionDateContainment("2013-10-10", "2013-10-12", "2013-10-10-1", "filmID", filmEvent);
-        verifyNoMoreInteractions(resultCollector);
-        checker.verifyEditionDateContainment("2013-10-10", "2013-10-12", "2013-10-12-1", "filmID", filmEvent);
-        verifyNoMoreInteractions(resultCollector);
-    }
-
-    @Test
-    public void verifyEditionDateContainmentFuzzyTest() {
-        AttributeParsingEvent filmEvent = createFilmEvent("film-1");
-        FilmDateVsEditionsChecker checker = new FilmDateVsEditionsChecker(resultCollector, null, null);
-        checker.verifyEditionDateContainment("2013-10-10", "2013-10-12", "2013-10-00-1", "filmID", filmEvent);
-        verifyNoMoreInteractions(resultCollector);
-        checker.verifyEditionDateContainment("2013-10-10", "2013-10-12", "2013-00-00-1", "filmID", filmEvent);
+    public void editionTooYoungFuzzyTest() {
+        String filmID = "film-1";
+        addFilmNode(batchXmlStructure, filmID);
+        addEditionNode(batchXmlStructure, filmID, "2013-10-1", "2013-11-01-2");
+        Document filmDoc = createFilmXmlDoc("2013-10", "2013-10");
+        AttributeParsingEvent filmEvent = createFilmEvent(filmID);
+        checker.validate(filmEvent, filmDoc);
+        verifyFailure(filmEvent.getName());
         verifyNoMoreInteractions(resultCollector);
     }
 
     @Test
-    public void verifyEditionDateContainmentBadcaseTest() {
-        AttributeParsingEvent filmEvent = createFilmEvent("film-1");
-        FilmDateVsEditionsChecker checker = new FilmDateVsEditionsChecker(resultCollector, null, null);
-        checker.verifyEditionDateContainment("2013-10-10", "2013-10-12", "2013-10-14-1", "filmID", filmEvent);
-        verify(resultCollector).addFailure(anyString(), anyString(), anyString(), anyString());
+    public void verifyFuzzyEditionContained() {
+        String filmID = "film-1";
+        addFilmNode(batchXmlStructure, filmID);
+        addEditionNode(batchXmlStructure, filmID, "2013-10-01-1", "2013-11-1", "2013-12-31-1");
+        Document filmDoc = createFilmXmlDoc("2013-10-01", "2013-12-31");
+        AttributeParsingEvent filmEvent = createFilmEvent(filmID);
+        checker.validate(filmEvent, filmDoc);
+        verifyNoMoreInteractions(resultCollector);
+    }
+
+    @Test
+    public void verifyFuzzyStartDate() {
+        String filmID = "film-1";
+        addFilmNode(batchXmlStructure, filmID);
+        addEditionNode(batchXmlStructure, filmID, "2013-10-1", "2013-11-1", "2013-12-31-1");
+        Document filmDoc = createFilmXmlDoc("2013-10", "2013-12-31");
+        AttributeParsingEvent filmEvent = createFilmEvent(filmID);
+        checker.validate(filmEvent, filmDoc);
+        verifyNoMoreInteractions(resultCollector);
+    }
+
+    @Test
+    public void verifyFuzzyEndDate() {
+        String filmID = "film-1";
+        addFilmNode(batchXmlStructure, filmID);
+        addEditionNode(batchXmlStructure, filmID, "2013-10-01-1", "2013-11-1", "2013-1");
+        Document filmDoc = createFilmXmlDoc("2013-10-01", "2013");
+        AttributeParsingEvent filmEvent = createFilmEvent(filmID);
+        checker.validate(filmEvent, filmDoc);
+        verifyNoMoreInteractions(resultCollector);
+    }
+
+    @Test
+    public void verifyFuzzyStartAndEndDate() {
+        String filmID = "film-1";
+        addFilmNode(batchXmlStructure, filmID);
+        addEditionNode(batchXmlStructure, filmID, "2013-1", "2013-11-1", "2013-1");
+        Document filmDoc = createFilmXmlDoc("2013", "2013");
+        AttributeParsingEvent filmEvent = createFilmEvent(filmID);
+        checker.validate(filmEvent, filmDoc);
         verifyNoMoreInteractions(resultCollector);
     }
 
@@ -169,12 +182,14 @@ public class FilmDateVsEditionsCheckerTest {
     /**
      * Adds a edition node to the indicated film node in the supplied film xml document.
      */
-    private void addEditionNode(Document doc, String filmID, String newEditionID) {
-        Element editionNode = batchXmlStructure.createElement("node");
-        editionNode.setAttribute("shortName", newEditionID);
+    private void addEditionNode(Document doc, String filmID, String... newEditionIDs) {
+        for (String newEditionID : newEditionIDs) {
+            Element editionNode = batchXmlStructure.createElement("node");
+            editionNode.setAttribute("shortName", newEditionID);
 
-        String xPathStr = "/node/node[@shortName='" + filmID + "']";
-        Node filmNode = DOM.createXPathSelector().selectNodeList(doc, xPathStr).item(0);
-        filmNode.appendChild(editionNode);
+            String xPathStr = "/node/node[@shortName='" + filmID + "']";
+            Node filmNode = DOM.createXPathSelector().selectNodeList(doc, xPathStr).item(0);
+            filmNode.appendChild(editionNode);
+        }
     }
 }
