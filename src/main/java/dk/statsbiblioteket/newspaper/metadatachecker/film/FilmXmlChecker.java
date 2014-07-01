@@ -32,7 +32,6 @@ public class FilmXmlChecker extends XmlFileChecker {
         checkers.add(new FilmNegativeResolutionNoTargetChecker(resultCollector, xpathSelector, batchXmlStructure));
         checkers.add(new FilmIDAgainstFilmNodenameChecker(resultCollector, xpathSelector));
         checkers.add(new FilmNewspaperTitlesChecker(resultCollector, FailureType.METADATA, context));
-        checkers.add(new FilmDateRangeAgainstMfpakChecker(resultCollector, context));
     }
 
     @Override
