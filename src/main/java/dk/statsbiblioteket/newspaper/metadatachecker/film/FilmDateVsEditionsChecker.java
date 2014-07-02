@@ -29,8 +29,8 @@ public class FilmDateVsEditionsChecker extends XmlAttributeChecker {
         String filmEnddate = xPathSelector.selectString(filmMetaData, "/avis:reelMetadata/avis:endDate");
         FuzzyDate filmStart = new FuzzyDate(filmStartdate);
         FuzzyDate filmEnd = new FuzzyDate(filmEnddate);
-        FuzzyDate editionStart = null;
-        FuzzyDate editionEnd = null;
+        FuzzyDate editionsStart = null;
+        FuzzyDate editionsEnd = null;
         String filmID = event.getName()
                              .split("/")[1].replace(".film.xml", "");
         NodeList editions = xPathSelector.selectNodeList(
@@ -39,27 +39,27 @@ public class FilmDateVsEditionsChecker extends XmlAttributeChecker {
         for (int index = 0; index < editions.getLength(); index++) {
             String editionID = editions.item(index).getAttributes().getNamedItem("shortName").getNodeValue();
             FuzzyDate editionDate = new FuzzyDate(editionID.substring(0, editionID.lastIndexOf('-')));
-            if (editionStart == null || editionDate.compareTo(editionStart) < 0) {
-                editionStart = editionDate;
+            if (editionsStart == null || editionDate.compareTo(editionsStart) < 0) {
+                editionsStart = editionDate;
             }
-            if (editionEnd == null || editionDate.compareTo(editionEnd) > 0) {
-                editionEnd = editionDate;
+            if (editionsEnd == null || editionDate.compareTo(editionsEnd) > 0) {
+                editionsEnd = editionDate;
             }
         }
-        if (editionStart == null || editionEnd == null) {
+        if (editionsStart == null || editionsEnd == null) {
             // No editions in film, do not check mix dates
             return;
         }
-        if (filmStart.compareTo(editionStart) != 0) {
+        if (filmStart.compareTo(editionsStart) != 0) {
             addFailure(
                     event,
-                    "2E-2: Earliest edition date " + editionStart.asString()
+                    "2E-2: Earliest edition date " + editionsStart.asString()
                             + " not the same as film start date " + filmStart.asString());
         }
-        if (filmEnd.compareTo(editionEnd) != 0) {
+        if (filmEnd.compareTo(editionsEnd) != 0) {
             addFailure(
                     event,
-                    "2E-3: Latest edition date " + editionEnd.asString()
+                    "2E-3: Latest edition date " + editionsEnd.asString()
                             + " not the same as film end date " + filmEnd.asString());
         }
     }
