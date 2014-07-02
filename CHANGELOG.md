@@ -1,3 +1,6 @@
+1.9
+* Checking of date ranges in film.xml is corrected to reflect first and last date in film.
+
 1.8
 * Update reduction ratio checks to allow for ratios up-to 25.0x, including allowing the use of decimal numbers.
 * Update to version 1.8 of batch event framework
