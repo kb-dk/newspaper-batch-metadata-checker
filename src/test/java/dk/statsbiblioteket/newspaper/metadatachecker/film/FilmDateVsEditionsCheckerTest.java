@@ -116,11 +116,33 @@ public class FilmDateVsEditionsCheckerTest {
     }
 
     @Test
+    public void verifyAnotherFuzzyStartDate() {
+        String filmID = "film-1";
+        addFilmNode(batchXmlStructure, filmID);
+        addEditionNode(batchXmlStructure, filmID, "2013-11-1", "2013-11-02-1", "2013-12-31-1");
+        Document filmDoc = createFilmXmlDoc("2013-11", "2013-12-31");
+        AttributeParsingEvent filmEvent = createFilmEvent(filmID);
+        checker.validate(filmEvent, filmDoc);
+        verifyNoMoreInteractions(resultCollector);
+    }
+
+    @Test
+    public void verifyYetAnotherFuzzyStartDate() {
+        String filmID = "film-1";
+        addFilmNode(batchXmlStructure, filmID);
+        addEditionNode(batchXmlStructure, filmID, "2013-11-02-1", "2013-11-1", "2013-12-31-1");
+        Document filmDoc = createFilmXmlDoc("2013-11", "2013-12-31");
+        AttributeParsingEvent filmEvent = createFilmEvent(filmID);
+        checker.validate(filmEvent, filmDoc);
+        verifyNoMoreInteractions(resultCollector);
+    }
+
+    @Test
     public void verifyFuzzyEndDate() {
         String filmID = "film-1";
         addFilmNode(batchXmlStructure, filmID);
-        addEditionNode(batchXmlStructure, filmID, "2013-10-01-1", "2013-11-1", "2013-1");
-        Document filmDoc = createFilmXmlDoc("2013-10-01", "2013");
+        addEditionNode(batchXmlStructure, filmID, "2012-10-01-1", "2013-11-1", "2013-1");
+        Document filmDoc = createFilmXmlDoc("2012-10-01", "2013");
         AttributeParsingEvent filmEvent = createFilmEvent(filmID);
         checker.validate(filmEvent, filmDoc);
         verifyNoMoreInteractions(resultCollector);

@@ -39,10 +39,10 @@ public class FilmDateVsEditionsChecker extends XmlAttributeChecker {
         for (int index = 0; index < editions.getLength(); index++) {
             String editionID = editions.item(index).getAttributes().getNamedItem("shortName").getNodeValue();
             FuzzyDate editionDate = new FuzzyDate(editionID.substring(0, editionID.lastIndexOf('-')));
-            if (editionsStart == null || editionDate.compareTo(editionsStart) < 0) {
+            if (editionsStart == null || editionDate.before(editionsStart)) {
                 editionsStart = editionDate;
             }
-            if (editionsEnd == null || editionDate.compareTo(editionsEnd) > 0) {
+            if (editionsEnd == null || editionDate.after(editionsEnd)) {
                 editionsEnd = editionDate;
             }
         }
@@ -50,13 +50,13 @@ public class FilmDateVsEditionsChecker extends XmlAttributeChecker {
             // No editions in film, do not check mix dates
             return;
         }
-        if (filmStart.compareTo(editionsStart) != 0) {
+        if (!filmStart.equals(editionsStart)) {
             addFailure(
                     event,
                     "2E-2: Earliest edition date " + editionsStart.asString()
                             + " not the same as film start date " + filmStart.asString());
         }
-        if (filmEnd.compareTo(editionsEnd) != 0) {
+        if (!filmEnd.equals(editionsEnd)) {
             addFailure(
                     event,
                     "2E-3: Latest edition date " + editionsEnd.asString()
