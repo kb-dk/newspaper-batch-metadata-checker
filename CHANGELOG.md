@@ -1,3 +1,6 @@
+1.10
+* Checking of date ranges in film.xml is more specific, 1.9 version had trouble in partial dates.
+
 1.9
 * Checking of date ranges in film.xml is corrected to reflect first and last date in film.
 
