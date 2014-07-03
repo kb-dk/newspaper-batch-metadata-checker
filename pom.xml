@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>newspaper-batch-metadata-checker</artifactId>
-    <version>1.11-SNAPSHOT</version>
+    <version>1.11</version>
 
     <properties>
         <autonoumous.component.framework.version>1.8</autonoumous.component.framework.version>
@@ -145,6 +145,6 @@
         <developerConnection>scm:git:git@github.com:statsbiblioteket/newspaper-batch-metadata-checker
         </developerConnection>
         <url>https://github.com/statsbiblioteket/newspaper-batch-event-framework</url>
-        <tag>HEAD</tag>
+        <tag>newspaper-batch-metadata-checker-1.11</tag>
     </scm>
 </project>
