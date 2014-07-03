@@ -1,3 +1,6 @@
+1.11
+* Fix yet another date range bug, where a partial date and a date in the start/end of the partial interval had no well-defined ordering
+
 1.10
 * Checking of date ranges in film.xml is more specific, 1.9 version had trouble in partial dates.
 
