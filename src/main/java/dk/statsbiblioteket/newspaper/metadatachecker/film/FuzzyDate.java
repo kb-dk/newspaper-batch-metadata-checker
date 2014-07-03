@@ -65,13 +65,23 @@ public final class FuzzyDate implements Comparable<FuzzyDate> {
      * return whether this fuzzy date is before the given fuzzy date.
      */
     public boolean before(FuzzyDate fuzzyDate) {
-        return getMinDate().before(fuzzyDate.getMinDate());
+        Date thisMinDate = getMinDate();
+        Date thatMinDate = fuzzyDate.getMinDate();
+        if (thisMinDate.equals(thatMinDate)) {
+            return getPrecision() < fuzzyDate.getPrecision();
+        }
+        return thisMinDate.before(thatMinDate);
     }
 
     /**
      * return whether this fuzzy date is after the given fuzzy date.
      */
     public boolean after(FuzzyDate fuzzyDate) {
+        Date thisMaxDate = getMaxDate();
+        Date thatMaxDate = fuzzyDate.getMaxDate();
+        if (thisMaxDate.equals(thatMaxDate)) {
+            return getPrecision() < fuzzyDate.getPrecision();
+        }
         return getMaxDate().after(fuzzyDate.getMaxDate());
     }
 
