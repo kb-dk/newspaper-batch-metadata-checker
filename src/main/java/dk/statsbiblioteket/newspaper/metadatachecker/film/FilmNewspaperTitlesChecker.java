@@ -41,7 +41,7 @@ public class FilmNewspaperTitlesChecker extends XmlAttributeChecker {
      * we take first the minimum extent of the film, then the maximum extent. The minimum defines the titles which
      * must be on the film, the maximum defines the titles which may be on the film.
      * @param event The event to base the check on.
-     * @param filmMetaData  the xml to check.
+     * @param filmMetaData The xml to check.
      */
     @Override
     public void validate(AttributeParsingEvent event, Document filmMetaData) {
@@ -67,6 +67,11 @@ public class FilmNewspaperTitlesChecker extends XmlAttributeChecker {
     }
 
 
+    /**
+     * Extract all newspaper titles from given film metadata xml.
+     * @param filmMetaData Xml of film metadata, from which to gather newspaper titles.
+     * @return The newspaper titles that have been gathered.
+     */
     private List<String> getTitlesOnFilm(Document filmMetaData) {
         NodeList titleNodes = filmXPathSelector.selectNodeList(filmMetaData, "/avis:reelMetadata/avis:titles");
         List<String> titlesOnFilm = new ArrayList<>();
