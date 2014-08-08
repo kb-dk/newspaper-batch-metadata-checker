@@ -12,7 +12,6 @@ public class DocumentCache {
     static Logger log = LoggerFactory.getLogger(DocumentCache.class);
 
     public TimeSensitiveCache<String,Document> documentCache = new TimeSensitiveCache<>(100,true,10);
-    private Boolean namespaceAware;
 
     public DocumentCache() {
     }
