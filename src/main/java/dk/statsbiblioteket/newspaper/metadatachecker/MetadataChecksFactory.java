@@ -8,6 +8,7 @@ import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.EventHandlerFactory;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
+import dk.statsbiblioteket.newspaper.metadatachecker.caches.DocumentCache;
 import dk.statsbiblioteket.newspaper.mfpakintegration.batchcontext.BatchContext;
 import dk.statsbiblioteket.newspaper.mfpakintegration.batchcontext.BatchContextUtils;
 import dk.statsbiblioteket.newspaper.metadatachecker.film.FilmXmlChecker;
@@ -89,6 +90,8 @@ public class MetadataChecksFactory
     @Override
     public List<TreeEventHandler> createEventHandlers() {
         ArrayList<TreeEventHandler> treeEventHandlers = new ArrayList<>();
+        DocumentCache documentCache = new DocumentCache();
+
         if (atNinestars) { //This thing adds virtual jpylyzer.xml nodes
             treeEventHandlers.add(new JpylyzingEventHandler(resultCollector, batchFolder, jpylyzerPath));
         }
@@ -96,7 +99,7 @@ public class MetadataChecksFactory
         treeEventHandlers.add(new SchematronValidatorEventHandler(resultCollector, controlPoliciesPath));
         treeEventHandlers.add(new ModsXPathEventHandler(resultCollector, batchContext, batchXmlStructure));
         treeEventHandlers.add(new AltoXPathEventHandler(resultCollector));
-        treeEventHandlers.add(new AltoMixCrossCheckEventHandler(resultCollector));
+        treeEventHandlers.add(new AltoMixCrossCheckEventHandler(resultCollector, documentCache));
         treeEventHandlers.add(new EditionModsEventHandler(resultCollector, batchContext));
         treeEventHandlers.add(new FilmXmlChecker(resultCollector, batchContext, batchXmlStructure));
         treeEventHandlers.add(new MixXmlFileChecker(resultCollector, batchContext, batchXmlStructure));
