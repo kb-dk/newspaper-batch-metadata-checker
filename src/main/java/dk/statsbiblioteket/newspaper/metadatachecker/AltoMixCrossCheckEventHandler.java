@@ -7,6 +7,7 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.DataFileNode
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeBeginsParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeEndParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.DefaultTreeEventHandler;
+import dk.statsbiblioteket.newspaper.metadatachecker.caches.DocumentCache;
 import dk.statsbiblioteket.util.Strings;
 import dk.statsbiblioteket.util.xml.DOM;
 import dk.statsbiblioteket.util.xml.XPathSelector;
@@ -21,13 +22,14 @@ import static dk.statsbiblioteket.util.Strings.getStackTrace;
 /** This class tests that the mix and alto files agree on the image size */
 public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
 
-
     private final ResultCollector resultCollector;
     private XPathSelector xpath;
     private ArrayDeque<SizeSet> sizesStack = new ArrayDeque<>();
+    DocumentCache documentCache;
 
-    public AltoMixCrossCheckEventHandler(ResultCollector resultCollector) {
+    public AltoMixCrossCheckEventHandler(ResultCollector resultCollector, DocumentCache documentCache) {
         this.resultCollector = resultCollector;
+        this.documentCache = documentCache;
 
         xpath = DOM.createXPathSelector(
                 "a", "http://www.loc.gov/standards/alto/ns-v2#", "mix", "http://www.loc.gov/mix/v20");
@@ -94,12 +96,11 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
             if (event.getName()
                      .endsWith(".alto.xml")) {
 
-                extractAltoSizes(asDom(event.getData()), sizes.getAltoSize(), event.getName());
+                extractAltoSizes(documentCache.getDocument(event, true), sizes.getAltoSize(), event.getName());
 
             } else if (event.getName()
                             .endsWith(".mix.xml")) {
-                extractMixSizes(asDom(event.getData()), sizes.getMixSize(), event.getName());
-
+                extractMixSizes(documentCache.getDocument(event, true), sizes.getMixSize(), event.getName());
             }
 
 
