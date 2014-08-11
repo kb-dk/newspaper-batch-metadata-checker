@@ -14,7 +14,6 @@ import dk.statsbiblioteket.util.xml.XPathSelector;
 import org.w3c.dom.Document;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayDeque;
 
 import static dk.statsbiblioteket.util.Strings.getStackTrace;
@@ -118,10 +117,6 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
                     Strings.getStackTrace(e));
         }
 
-    }
-
-    private Document asDom(InputStream data) {
-        return DOM.streamToDOM(data, true);
     }
 
     private void extractMixSizes(Document data, Size size, String name) {
