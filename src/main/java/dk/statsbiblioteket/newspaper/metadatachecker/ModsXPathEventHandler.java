@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import dk.statsbiblioteket.newspaper.metadatachecker.caches.DocumentCache;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -30,7 +31,6 @@ import dk.statsbiblioteket.util.xml.XPathSelector;
  * in the mods file.
  */
 public class ModsXPathEventHandler extends DefaultTreeEventHandler {
-
     public static final String EDITION_REGEX = "^[0-9]{4}((-[0-9]{2})?)*-[0-9]{2}$";
     private ResultCollector resultCollector;
     private List<String> briksInThisEdition;
@@ -40,6 +40,8 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
     private static final XPathSelector BATCH_XPATH_SELECTOR = DOM.createXPathSelector();
     private static final XPathSelector MODS_XPATH_SELECTOR = DOM.createXPathSelector("mods", "http://www.loc.gov/mods/v3");
     private BatchContext context;
+    DocumentCache documentCache;
+
 
     /**
      * Constructor for this class.
@@ -47,11 +49,13 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
      * @param batchXmlStructure the complete structure of this batch as XML.
      * @param context the batch context
      */
-    public ModsXPathEventHandler(ResultCollector resultCollector, BatchContext context, Document batchXmlStructure) {
+    public ModsXPathEventHandler(ResultCollector resultCollector, BatchContext context, Document batchXmlStructure,
+                                 DocumentCache documentCache) {
         this.resultCollector = resultCollector;
         this.batchXmlStructure = batchXmlStructure;
         briksInThisEdition = new ArrayList<>();
         this.context = context;
+        this.documentCache = documentCache;
     }
 
     /**
@@ -99,7 +103,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
     private void doValidate(AttributeParsingEvent event) {
         Document modsDocument;
         try {
-            modsDocument = DOM.streamToDOM(event.getData());
+            modsDocument = documentCache.getDocument(event, false);
             if (modsDocument == null) {
                 addExceptionFailure(
                         event,

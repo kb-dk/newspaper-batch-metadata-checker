@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.Map;
 
+import dk.statsbiblioteket.newspaper.metadatachecker.caches.DocumentCache;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -42,7 +43,6 @@ import dk.statsbiblioteket.util.xml.DOM;
  *
  */
 public class PageModsTest {
-
     private Document goodBatchXmlStructure;
 
     @BeforeTest
@@ -164,12 +164,13 @@ public class PageModsTest {
     @Test
     public void testPageModsGoodXpath() throws InconsistentDatabaseException, SQLException {
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
+        DocumentCache documentCache = new DocumentCache();
         Batch batch = new Batch();
         batch.setBatchID("400022028241");
         batch.setRoundTripNumber(10);
         MfPakDAO dao = getMockMfPakDAO(batch, true);
         BatchContext context = BatchContextUtils.buildBatchContext(dao, batch);
-        ModsXPathEventHandler handler = new ModsXPathEventHandler(resultCollector, context, goodBatchXmlStructure);
+        ModsXPathEventHandler handler = new ModsXPathEventHandler(resultCollector, context, goodBatchXmlStructure, documentCache);
         String editionNodeName = "B400022028240-RT1/400022028240-14/1795-06-15-01";
         handler.handleNodeBegin(new NodeBeginsParsingEvent(editionNodeName));
         AttributeParsingEvent modsEvent = new AttributeParsingEvent("AdresseContoirsEfterretninger-1795-06-15-01-0003B.mods.xml") {
@@ -196,12 +197,14 @@ public class PageModsTest {
       @Test
       public void testPageModsGoodXpathBadOptionB7() throws InconsistentDatabaseException, SQLException {
           ResultCollector resultCollector = new ResultCollector("foo", "bar");
+          DocumentCache documentCache = new DocumentCache();
           Batch batch = new Batch();
           batch.setBatchID("400022028241");
           batch.setRoundTripNumber(10);
           MfPakDAO dao = getMockMfPakDAO(batch, false);
           BatchContext context = BatchContextUtils.buildBatchContext(dao, batch);
-          ModsXPathEventHandler handler = new ModsXPathEventHandler(resultCollector, context, goodBatchXmlStructure);
+          ModsXPathEventHandler handler = new ModsXPathEventHandler(resultCollector, context, goodBatchXmlStructure,
+                  documentCache);
           String editionNodeName = "B400022028240-RT1/400022028240-14/1795-06-15-01";
           handler.handleNodeBegin(new NodeBeginsParsingEvent(editionNodeName));
           AttributeParsingEvent modsEvent = new AttributeParsingEvent("AdresseContoirsEfterretninger-1795-06-15-01-0003B.mods.xml") {
@@ -229,12 +232,13 @@ public class PageModsTest {
     @Test
     public void testPageModsBad1Xpath() throws InconsistentDatabaseException, SQLException {
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
+        DocumentCache documentCache = new DocumentCache();
         Batch batch = new Batch();
         batch.setBatchID("400022028241");
         batch.setRoundTripNumber(10);
         MfPakDAO dao = getMockMfPakDAO(batch, true);
         BatchContext context = BatchContextUtils.buildBatchContext(dao, batch);
-        ModsXPathEventHandler handler = new ModsXPathEventHandler(resultCollector, context, goodBatchXmlStructure);
+        ModsXPathEventHandler handler = new ModsXPathEventHandler(resultCollector, context, goodBatchXmlStructure, documentCache);
         AttributeParsingEvent modsEvent = new AttributeParsingEvent("AdresseContoirsEfterretninger-1795-06-15-01-0010B.mods.xml") {
             @Override
             public InputStream getData() throws IOException {
@@ -312,6 +316,7 @@ public class PageModsTest {
 
     private void iterateDataDir(String dataDirS, ResultCollector resultCollector) throws FileNotFoundException, SQLException {
         Batch batch = new Batch();
+        DocumentCache documentCache = new DocumentCache();
         batch.setBatchID("400022028241");
         batch.setRoundTripNumber(1);
         File dataDir = new File(Thread.currentThread().getContextClassLoader().getResource(dataDirS).getPath());
@@ -319,7 +324,7 @@ public class PageModsTest {
         Document batchStructure = DOM.streamToDOM(new FileInputStream(new File(dataDir, "structure.xml")));
         MfPakDAO dao = getMockMfPakDAO(batch, true);
         BatchContext context = BatchContextUtils.buildBatchContext(dao, batch);
-        ModsXPathEventHandler handler = new ModsXPathEventHandler(resultCollector, context, batchStructure);
+        ModsXPathEventHandler handler = new ModsXPathEventHandler(resultCollector, context, batchStructure, documentCache);
         File fileDir = new File(dataDir, "1795-06-15-02");
         handler.handleNodeBegin(new NodeBeginsParsingEvent(editionNodeName));
         for (File attributeFile: fileDir.listFiles()) {

@@ -97,7 +97,7 @@ public class MetadataChecksFactory
         }
         treeEventHandlers.add(new SchemaValidatorEventHandler(resultCollector));
         treeEventHandlers.add(new SchematronValidatorEventHandler(resultCollector, controlPoliciesPath));
-        treeEventHandlers.add(new ModsXPathEventHandler(resultCollector, batchContext, batchXmlStructure));
+        treeEventHandlers.add(new ModsXPathEventHandler(resultCollector, batchContext, batchXmlStructure, documentCache));
         treeEventHandlers.add(new AltoXPathEventHandler(resultCollector, documentCache));
         treeEventHandlers.add(new AltoMixCrossCheckEventHandler(resultCollector, documentCache));
         treeEventHandlers.add(new EditionModsEventHandler(resultCollector, batchContext, documentCache));
