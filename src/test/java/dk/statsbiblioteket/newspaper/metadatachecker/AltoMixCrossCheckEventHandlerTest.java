@@ -29,7 +29,7 @@ public class AltoMixCrossCheckEventHandlerTest {
         batch.setBatchID(batchId);
         batch.setRoundTripNumber(1);
         AttributeParsingEvent eventMix = MixerMockup.getMixPageAttributeParsingEvent(
-                film, avisID, publishDate, pictureNumber, batch, 2286, 2864, 400, "",15, "microfilm");
+                film, avisID, publishDate, pictureNumber, batch, 2286, 2864, 400, "", 15, "microfilm");
         AttributeParsingEvent eventAlto = AltoMocker.getAltoPageAttributeParsingEvent(
                 film, avisID, publishDate, pictureNumber, batch, 2286, 2864);
         AltoMixCrossCheckEventHandler handler = new AltoMixCrossCheckEventHandler(resultCollector, documentCache);
