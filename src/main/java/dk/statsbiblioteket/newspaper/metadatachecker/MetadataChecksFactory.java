@@ -103,7 +103,7 @@ public class MetadataChecksFactory
         treeEventHandlers.add(new EditionModsEventHandler(resultCollector, batchContext, documentCache));
         treeEventHandlers.add(new FilmXmlChecker(resultCollector, batchContext, batchXmlStructure));
         treeEventHandlers.add(new MixXmlFileChecker(resultCollector, batchContext, batchXmlStructure));
-        treeEventHandlers.add(new MixFilmCrossCheckEventHandler(resultCollector));
+        treeEventHandlers.add(new MixFilmCrossCheckEventHandler(resultCollector, documentCache));
         return treeEventHandlers;
     }
 }

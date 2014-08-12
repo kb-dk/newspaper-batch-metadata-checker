@@ -5,6 +5,7 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributePar
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeBeginsParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeEndParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.DefaultTreeEventHandler;
+import dk.statsbiblioteket.newspaper.metadatachecker.caches.DocumentCache;
 import dk.statsbiblioteket.util.xml.DOM;
 import dk.statsbiblioteket.util.xml.XPathSelector;
 
@@ -17,16 +18,15 @@ import static dk.statsbiblioteket.util.Strings.getStackTrace;
 
 /** This class tests that the mix and film files agree on the sampling frequency */
 public class MixFilmCrossCheckEventHandler extends DefaultTreeEventHandler {
-
-
     private final ResultCollector resultCollector;
     private final XPathSelector xpath;
     private String currentFilmNode = null;
     private Integer filmXmlSamplingFreq = null;
-    
+    DocumentCache documentCache;
 
-    public MixFilmCrossCheckEventHandler(ResultCollector resultCollector) {
+    public MixFilmCrossCheckEventHandler(ResultCollector resultCollector, DocumentCache documentCache) {
         this.resultCollector = resultCollector;
+        this.documentCache = documentCache;
 
         xpath = DOM.createXPathSelector(
                 "avis", "http://www.statsbiblioteket.dk/avisdigitalisering/microfilm/1/0/", 
@@ -109,10 +109,6 @@ public class MixFilmCrossCheckEventHandler extends DefaultTreeEventHandler {
         return isFilmNode;
     }
     
-    private static Document asDom(InputStream data) {
-        return DOM.streamToDOM(data, true);
-    }
-
     /**
      * Read the film sampling frequency from the film.xml file. 
      */
@@ -120,7 +116,7 @@ public class MixFilmCrossCheckEventHandler extends DefaultTreeEventHandler {
         final String filmFrequencyXPath = "/avis:reelMetadata/avis:captureResolutionOriginal";
         Document doc;
         try {
-            doc = asDom(event.getData());
+            doc = documentCache.getDocument(event, true);
             filmXmlSamplingFreq = xpath.selectInteger(doc, filmFrequencyXPath);
             
         } catch (IOException e) {
@@ -140,7 +136,7 @@ public class MixFilmCrossCheckEventHandler extends DefaultTreeEventHandler {
         
         Document doc;
         try {
-            doc = asDom(event.getData());
+            doc = documentCache.getDocument(event, true);
             Integer xFrequency = xpath.selectInteger(doc, xFreqXPath);
             Integer yFrequency = xpath.selectInteger(doc, yFreqXPath);
             

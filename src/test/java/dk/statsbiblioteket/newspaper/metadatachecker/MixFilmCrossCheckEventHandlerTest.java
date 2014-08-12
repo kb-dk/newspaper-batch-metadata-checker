@@ -5,6 +5,7 @@ import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeBeginsParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeEndParsingEvent;
+import dk.statsbiblioteket.newspaper.metadatachecker.caches.DocumentCache;
 import dk.statsbiblioteket.newspaper.metadatachecker.mockers.FilmMocker;
 import dk.statsbiblioteket.newspaper.metadatachecker.mockers.MixerMockup;
 import org.testng.annotations.Test;
@@ -17,6 +18,7 @@ public class MixFilmCrossCheckEventHandlerTest {
     @Test
     public void goodTest() {
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
+        DocumentCache documentCache = new DocumentCache();
 
         final String batchId = "400022028241";
         final String film = "1";
@@ -31,7 +33,7 @@ public class MixFilmCrossCheckEventHandlerTest {
         AttributeParsingEvent filmEvent = FilmMocker.getFilmXmlAttributeParsingEvent(
                 film, avisID, "Adresse Contoirs Efterretninger", "1980-11-01", "1978-10-10", "1978-12-30", batch, 400);
         
-        MixFilmCrossCheckEventHandler handler = new MixFilmCrossCheckEventHandler(resultCollector);
+        MixFilmCrossCheckEventHandler handler = new MixFilmCrossCheckEventHandler(resultCollector, documentCache);
         String goodPath = "B" + batchId + "-RT1/" + batchId + "-" + film; 
         handler.handleNodeBegin(new NodeBeginsParsingEvent(goodPath));
         handler.handleAttribute(filmEvent);
@@ -45,6 +47,7 @@ public class MixFilmCrossCheckEventHandlerTest {
     @Test
     public void badMixResolutionTest() {
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
+        DocumentCache documentCache = new DocumentCache();
 
         final String batchId = "400022028241";
         final String film = "1";
@@ -59,7 +62,7 @@ public class MixFilmCrossCheckEventHandlerTest {
         AttributeParsingEvent filmEvent = FilmMocker.getFilmXmlAttributeParsingEvent(film, avisID, "Adresse Contoirs Efterretninger", 
                 "1980-11-01", "1978-10-10", "1978-12-30", batch, 400);
         
-        MixFilmCrossCheckEventHandler handler = new MixFilmCrossCheckEventHandler(resultCollector);
+        MixFilmCrossCheckEventHandler handler = new MixFilmCrossCheckEventHandler(resultCollector, documentCache);
         String goodPath = "B" + batchId + "-RT1/" + batchId + "-" + film; 
         handler.handleNodeBegin(new NodeBeginsParsingEvent(goodPath));
         handler.handleAttribute(filmEvent);
@@ -76,6 +79,7 @@ public class MixFilmCrossCheckEventHandlerTest {
     @Test
     public void NotInFilmBadMixResolutionTest() {
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
+        DocumentCache documentCache = new DocumentCache();
 
         final String batchId = "400022028241";
         final String film = "1";
@@ -90,7 +94,7 @@ public class MixFilmCrossCheckEventHandlerTest {
         AttributeParsingEvent filmEvent = FilmMocker.getFilmXmlAttributeParsingEvent(film, avisID, "Adresse Contoirs Efterretninger", 
                 "1980-11-01", "1978-10-10", "1978-12-30", batch, 400);
         
-        MixFilmCrossCheckEventHandler handler = new MixFilmCrossCheckEventHandler(resultCollector);
+        MixFilmCrossCheckEventHandler handler = new MixFilmCrossCheckEventHandler(resultCollector, documentCache);
         String notInFilmPath = "B" + batchId + "-RT1/" + "WORKSHIFT-ISO-TARGET"; 
         handler.handleNodeBegin(new NodeBeginsParsingEvent(notInFilmPath));
         handler.handleAttribute(filmEvent);
