@@ -14,6 +14,7 @@ import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
+import dk.statsbiblioteket.newspaper.metadatachecker.caches.DocumentCache;
 import dk.statsbiblioteket.newspaper.mfpakintegration.batchcontext.BatchContext;
 import dk.statsbiblioteket.newspaper.mfpakintegration.batchcontext.BatchContextUtils;
 import dk.statsbiblioteket.newspaper.metadatachecker.EditionModsEventHandler;
@@ -52,10 +53,11 @@ public class EditionModsTest {
     /** Test that we can validate a valid edition xml (mods) file. */
     @Test
     public void testEditionModsGood() throws SQLException, ParseException {
+        DocumentCache documentCache = new DocumentCache();
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
         SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
         BatchContext context = BatchContextUtils.buildBatchContext(getMFPak(), getBatch());
-        TreeEventHandler editionModsEventHandler = new EditionModsEventHandler(resultCollector, context);
+        TreeEventHandler editionModsEventHandler = new EditionModsEventHandler(resultCollector, context, documentCache);
         AttributeParsingEvent editionEvent = new AttributeParsingEvent(
                 "B400022028241-RT1/400022028241-14/1795-06-01/adresseavisen1759-1795-06-01.edition.xml") {
             @Override
@@ -80,11 +82,12 @@ public class EditionModsTest {
     /** Test that we can validate a valid edition xml (mods) file. */
     @Test
     public void testEditionModsBad() throws SQLException, ParseException {
+        DocumentCache documentCache = new DocumentCache();
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
         Batch batch = getBatch();
         TreeEventHandler schematronValidatorEventHandler = new SchematronValidatorEventHandler(resultCollector,null);
         BatchContext context = BatchContextUtils.buildBatchContext(getMFPak(), batch);
-        TreeEventHandler editionModsEventHandler = new EditionModsEventHandler(resultCollector, context);
+        TreeEventHandler editionModsEventHandler = new EditionModsEventHandler(resultCollector, context, documentCache);
         AttributeParsingEvent editionEvent = new AttributeParsingEvent(
                 "B400022028241-RT1/400022028241-14/1795-06-01/adresseavisen1759-1795-06-01.edition.xml") {
             @Override

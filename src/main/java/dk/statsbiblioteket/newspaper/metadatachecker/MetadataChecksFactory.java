@@ -100,7 +100,7 @@ public class MetadataChecksFactory
         treeEventHandlers.add(new ModsXPathEventHandler(resultCollector, batchContext, batchXmlStructure));
         treeEventHandlers.add(new AltoXPathEventHandler(resultCollector, documentCache));
         treeEventHandlers.add(new AltoMixCrossCheckEventHandler(resultCollector, documentCache));
-        treeEventHandlers.add(new EditionModsEventHandler(resultCollector, batchContext));
+        treeEventHandlers.add(new EditionModsEventHandler(resultCollector, batchContext, documentCache));
         treeEventHandlers.add(new FilmXmlChecker(resultCollector, batchContext, batchXmlStructure));
         treeEventHandlers.add(new MixXmlFileChecker(resultCollector, batchContext, batchXmlStructure));
         return treeEventHandlers;

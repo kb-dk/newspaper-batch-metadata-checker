@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 
+import dk.statsbiblioteket.newspaper.metadatachecker.caches.DocumentCache;
 import org.w3c.dom.Document;
 
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
@@ -25,17 +26,19 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
     private static final String YYYY_MM_DD = "yyyy-MM-dd";
     private ResultCollector resultCollector;
     private BatchContext context;
+    DocumentCache documentCache;
 
     /**
      * Constructor for this class.
      *
      * @param resultCollector the result collector to collect errors in
-     * @param mfPakDAO        a DAO object from which one can read relevant external properties of a batch.
-     * @param batch           a batch object representing the batch being analysed.
+     * @param context the context for the batch that is to be worked on
+     * @param documentCache cache to avoid parsing the same DOM more than once
      */
-    public EditionModsEventHandler(ResultCollector resultCollector, BatchContext context) {
+    public EditionModsEventHandler(ResultCollector resultCollector, BatchContext context, DocumentCache documentCache) {
         this.resultCollector = resultCollector;
         this.context = context;
+        this.documentCache = documentCache;
     }
 
     @Override
@@ -50,7 +53,7 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
         XPathSelector xpath = DOM.createXPathSelector("mods", "http://www.loc.gov/mods/v3");
         Document doc;
         try {
-            doc = DOM.streamToDOM(event.getData(), true);
+            doc = documentCache.getDocument(event, true);
             if (doc == null) {
                 resultCollector.addFailure(
                         event.getName(), "exception", getClass().getSimpleName(),
