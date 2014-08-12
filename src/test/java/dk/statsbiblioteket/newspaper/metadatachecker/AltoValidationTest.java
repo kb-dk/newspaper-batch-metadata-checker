@@ -3,6 +3,7 @@ package dk.statsbiblioteket.newspaper.metadatachecker;
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
+import dk.statsbiblioteket.newspaper.metadatachecker.caches.DocumentCache;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -29,12 +30,13 @@ public class AltoValidationTest {
      */
     @Test
     public void testGood2J3() {
+        DocumentCache documentCache = new DocumentCache();
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
         Batch batch = new Batch();
         batch.setBatchID("400022028241");
         batch.setRoundTripNumber(10);
         MfPakDAO dao = mock(MfPakDAO.class);
-        AltoXPathEventHandler handler = new AltoXPathEventHandler(resultCollector);
+        AltoXPathEventHandler handler = new AltoXPathEventHandler(resultCollector, documentCache);
         AttributeParsingEvent altoEvent = new AttributeParsingEvent("B400022028241-RT2/400022028241-14/1795-06-15-01/AdresseContoirsEfterretninger-1795-06-15-01-0012B.alto.xml") {
             @Override
             public InputStream getData() throws IOException {
@@ -56,12 +58,13 @@ public class AltoValidationTest {
      */
     @Test
     public void testBad2J3() {
+        DocumentCache documentCache = new DocumentCache();
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
         Batch batch = new Batch();
         batch.setBatchID("400022028241");
         batch.setRoundTripNumber(10);
         MfPakDAO dao = mock(MfPakDAO.class);
-        AltoXPathEventHandler handler = new AltoXPathEventHandler(resultCollector);
+        AltoXPathEventHandler handler = new AltoXPathEventHandler(resultCollector, documentCache);
         AttributeParsingEvent altoEvent = new AttributeParsingEvent("B400022028241-RT2/400022028241-14/1795-06-15-01/AdresseContoirsEfterretninger-1795-06-15-01-0012B.alto.xml") {
             @Override
             public InputStream getData() throws IOException {
@@ -83,6 +86,7 @@ public class AltoValidationTest {
      */
     @Test
     public void shouldSucceed2J16() {
+        DocumentCache documentCache = new DocumentCache();
         setUp();
         SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
         AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-01/AdresseContoirsEfterretninger-1795-06-01-0006.alto.xml") {
@@ -105,6 +109,7 @@ public class AltoValidationTest {
      */
     @Test
     public void shouldFail2J16() {
+        DocumentCache documentCache = new DocumentCache();
         setUp();
         SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
         AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-01/AdresseContoirsEfterretninger-1795-06-01-0006.alto.xml") {
@@ -129,6 +134,7 @@ public class AltoValidationTest {
       */
      @Test
      public void shouldFail2J16DoubleNested() {
+         DocumentCache documentCache = new DocumentCache();
          setUp();
          SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
          AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-01/AdresseContoirsEfterretninger-1795-06-01-0006.alto.xml") {
@@ -151,6 +157,7 @@ public class AltoValidationTest {
 
     @Test
     public void shouldSucceed() {
+        DocumentCache documentCache = new DocumentCache();
         setUp();
         SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
         AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-01/AdresseContoirsEfterretninger-1795-06-01-0006.alto.xml") {
@@ -171,6 +178,7 @@ public class AltoValidationTest {
 
     @Test
     public void shouldFailDueToMissingMeasurementUnit() {
+        DocumentCache documentCache = new DocumentCache();
         final String input = ""
                 + "<?xml version='1.0' encoding='UTF-8'?>"
                 + "<alto xmlns='http://www.loc.gov/standards/alto/ns-v2#' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/standards/alto alto-v2.0.xsd'>"
@@ -186,6 +194,7 @@ public class AltoValidationTest {
 
     @Test
     public void shouldFailDueToWrongMeasurementUnit() {
+        DocumentCache documentCache = new DocumentCache();
         final String input = ""
                 + "<?xml version='1.0' encoding='UTF-8'?>"
                 + "<alto xmlns='http://www.loc.gov/standards/alto/ns-v2#' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/standards/alto alto-v2.0.xsd'>"
@@ -201,6 +210,7 @@ public class AltoValidationTest {
 
     @Test
     public void shouldFailDueToMissingOCRProcessing() {
+        DocumentCache documentCache = new DocumentCache();
         final String input = ""
                 + "<?xml version='1.0' encoding='UTF-8'?>"
                 + "<alto xmlns='http://www.loc.gov/standards/alto/ns-v2#' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/standards/alto alto-v2.0.xsd'>"
@@ -223,6 +233,7 @@ public class AltoValidationTest {
 
     @Test
     public void shouldFailDueToMissingProcessingStepSettings() {
+        DocumentCache documentCache = new DocumentCache();
         final String input = ""
                 + "<?xml version='1.0' encoding='UTF-8'?>"
                 + "<alto xmlns='http://www.loc.gov/standards/alto/ns-v2#' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/standards/alto alto-v2.0.xsd'>"
@@ -247,6 +258,7 @@ public class AltoValidationTest {
 
     @Test
     public void shouldFailDueToMissingSoftwareName() {
+        DocumentCache documentCache = new DocumentCache();
         final String input = ""
                 + "<?xml version='1.0' encoding='UTF-8'?>"
                 + "<alto xmlns='http://www.loc.gov/standards/alto/ns-v2#' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/standards/alto alto-v2.0.xsd'>"
@@ -271,6 +283,7 @@ public class AltoValidationTest {
 
     @Test
     public void shouldFailDueToMissingSoftwareVersion() {
+        DocumentCache documentCache = new DocumentCache();
         final String input = ""
                 + "<?xml version='1.0' encoding='UTF-8'?>"
                 + "<alto xmlns='http://www.loc.gov/standards/alto/ns-v2#' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/standards/alto alto-v2.0.xsd'>"
@@ -295,6 +308,7 @@ public class AltoValidationTest {
 
     @Test
     public void shouldFailDueToMissingPageHeightAttribute() {
+        DocumentCache documentCache = new DocumentCache();
         final String input = ""
                 + "<?xml version='1.0' encoding='UTF-8'?>"
                 + "<alto xmlns='http://www.loc.gov/standards/alto/ns-v2#' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/standards/alto alto-v2.0.xsd'>"
@@ -311,6 +325,7 @@ public class AltoValidationTest {
 
     @Test
     public void shouldFailDueToEmptyPageHeightAttribute() {
+        DocumentCache documentCache = new DocumentCache();
         final String input = ""
                 + "<?xml version='1.0' encoding='UTF-8'?>"
                 + "<alto xmlns='http://www.loc.gov/standards/alto/ns-v2#' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/standards/alto alto-v2.0.xsd'>"
@@ -327,6 +342,7 @@ public class AltoValidationTest {
 
     @Test
     public void shouldFailDueToMissingPageWidthAttribute() {
+        DocumentCache documentCache = new DocumentCache();
         final String input = ""
                 + "<?xml version='1.0' encoding='UTF-8'?>"
                 + "<alto xmlns='http://www.loc.gov/standards/alto/ns-v2#' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/standards/alto alto-v2.0.xsd'>"
@@ -343,6 +359,7 @@ public class AltoValidationTest {
 
     @Test
     public void shouldFailDueToEmptyPageWidthAttribute() {
+        DocumentCache documentCache = new DocumentCache();
         final String input = ""
                 + "<?xml version='1.0' encoding='UTF-8'?>"
                 + "<alto xmlns='http://www.loc.gov/standards/alto/ns-v2#' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/standards/alto alto-v2.0.xsd'>"
@@ -359,6 +376,7 @@ public class AltoValidationTest {
 
     @Test
     public void shouldFailDueToMissingStringHeightAttribute() {
+        DocumentCache documentCache = new DocumentCache();
         final String input = ""
                 + "<?xml version='1.0' encoding='UTF-8'?>"
                 + "<alto xmlns='http://www.loc.gov/standards/alto/ns-v2#' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/standards/alto alto-v2.0.xsd'>"
@@ -382,6 +400,7 @@ public class AltoValidationTest {
 
     @Test
     public void shouldFailDueToEmptyStringHeightAttribute() {
+        DocumentCache documentCache = new DocumentCache();
         final String input = ""
                 + "<?xml version='1.0' encoding='UTF-8'?>"
                 + "<alto xmlns='http://www.loc.gov/standards/alto/ns-v2#' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/standards/alto alto-v2.0.xsd'>"
@@ -405,6 +424,7 @@ public class AltoValidationTest {
 
     @Test
     public void shouldFailDueToMissingStringWidthAttribute() {
+        DocumentCache documentCache = new DocumentCache();
         final String input = ""
                 + "<?xml version='1.0' encoding='UTF-8'?>"
                 + "<alto xmlns='http://www.loc.gov/standards/alto/ns-v2#' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/standards/alto alto-v2.0.xsd'>"
@@ -428,6 +448,7 @@ public class AltoValidationTest {
 
     @Test
     public void shouldFailDueToEmptyStringWidthAttribute() {
+        DocumentCache documentCache = new DocumentCache();
         final String input = ""
                 + "<?xml version='1.0' encoding='UTF-8'?>"
                 + "<alto xmlns='http://www.loc.gov/standards/alto/ns-v2#' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/standards/alto alto-v2.0.xsd'>"
@@ -451,6 +472,7 @@ public class AltoValidationTest {
 
     @Test
     public void shouldFailDueToMissingStringHPosAttribute() {
+        DocumentCache documentCache = new DocumentCache();
         final String input = ""
                 + "<?xml version='1.0' encoding='UTF-8'?>"
                 + "<alto xmlns='http://www.loc.gov/standards/alto/ns-v2#' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/standards/alto alto-v2.0.xsd'>"
@@ -474,6 +496,7 @@ public class AltoValidationTest {
 
     @Test
     public void shouldFailDueToEmptyStringHPosAttribute() {
+        DocumentCache documentCache = new DocumentCache();
         final String input = ""
                 + "<?xml version='1.0' encoding='UTF-8'?>"
                 + "<alto xmlns='http://www.loc.gov/standards/alto/ns-v2#' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/standards/alto alto-v2.0.xsd'>"
@@ -497,6 +520,7 @@ public class AltoValidationTest {
 
     @Test
     public void shouldFailDueToMissingStringVPosAttribute() {
+        DocumentCache documentCache = new DocumentCache();
         final String input = ""
                 + "<?xml version='1.0' encoding='UTF-8'?>"
                 + "<alto xmlns='http://www.loc.gov/standards/alto/ns-v2#' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/standards/alto alto-v2.0.xsd'>"
@@ -520,6 +544,7 @@ public class AltoValidationTest {
 
     @Test
     public void shouldFailDueToEmptyStringVPosAttribute() {
+        DocumentCache documentCache = new DocumentCache();
         final String input = ""
                 + "<?xml version='1.0' encoding='UTF-8'?>"
                 + "<alto xmlns='http://www.loc.gov/standards/alto/ns-v2#' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/standards/alto alto-v2.0.xsd'>"
@@ -543,6 +568,7 @@ public class AltoValidationTest {
 
     @Test
     public void shouldFailDueToMissingStringContentAttribute() {
+        DocumentCache documentCache = new DocumentCache();
         final String input = ""
                 + "<?xml version='1.0' encoding='UTF-8'?>"
                 + "<alto xmlns='http://www.loc.gov/standards/alto/ns-v2#' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/standards/alto alto-v2.0.xsd'>"
@@ -566,6 +592,7 @@ public class AltoValidationTest {
 
     @Test
     public void shouldFailDueToEmptyStringContentAttribute() {
+        DocumentCache documentCache = new DocumentCache();
         final String input = ""
                 + "<?xml version='1.0' encoding='UTF-8'?>"
                 + "<alto xmlns='http://www.loc.gov/standards/alto/ns-v2#' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/standards/alto alto-v2.0.xsd'>"
@@ -589,6 +616,7 @@ public class AltoValidationTest {
 
     @Test
     public void shouldFailDueToStringContentAttributeContainingTwoWords() {
+        DocumentCache documentCache = new DocumentCache();
         final String input = ""
                 + "<?xml version='1.0' encoding='UTF-8'?>"
                 + "<alto xmlns='http://www.loc.gov/standards/alto/ns-v2#' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/standards/alto alto-v2.0.xsd'>"
@@ -612,6 +640,7 @@ public class AltoValidationTest {
 
     @Test
     public void shouldFailDueToStringContentAttributeContainingTwoWordsStillAllowingWhitespaceAsPrefixOrPostfix() {
+        DocumentCache documentCache = new DocumentCache();
         final String input = ""
                 + "<?xml version='1.0' encoding='UTF-8'?>"
                 + "<alto xmlns='http://www.loc.gov/standards/alto/ns-v2#' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/standards/alto alto-v2.0.xsd'>"
@@ -635,6 +664,7 @@ public class AltoValidationTest {
 
     @Test
     public void shouldPassWhenStringContentAttributeContainsWhitespaceAsPrefixOrPostfix() {
+        DocumentCache documentCache = new DocumentCache();
         final String input = ""
                 + "<?xml version='1.0' encoding='UTF-8'?>"
                 + "<alto xmlns='http://www.loc.gov/standards/alto/ns-v2#' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/standards/alto alto-v2.0.xsd'>"

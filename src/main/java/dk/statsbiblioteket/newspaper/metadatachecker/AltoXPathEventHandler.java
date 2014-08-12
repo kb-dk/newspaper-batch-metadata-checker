@@ -1,5 +1,6 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
+import dk.statsbiblioteket.newspaper.metadatachecker.caches.DocumentCache;
 import dk.statsbiblioteket.util.Strings;
 
 import java.io.IOException;
@@ -16,15 +17,16 @@ import dk.statsbiblioteket.util.xml.XPathSelector;
  *
  */
 public class AltoXPathEventHandler extends DefaultTreeEventHandler {
-
     private ResultCollector resultCollector;
+    DocumentCache documentCache;
 
     /**
      * Constructor for this class.
      * @param resultCollector the result collector to collect errors in
      */
-    public AltoXPathEventHandler(ResultCollector resultCollector) {
+    public AltoXPathEventHandler(ResultCollector resultCollector, DocumentCache documentCache) {
         this.resultCollector = resultCollector;
+        this.documentCache = documentCache;
     }
 
     @Override
@@ -48,7 +50,7 @@ public class AltoXPathEventHandler extends DefaultTreeEventHandler {
         XPathSelector xpath = DOM.createXPathSelector("alto", "http://www.loc.gov/standards/alto/ns-v2#");
         Document doc;
         try {
-            doc = DOM.streamToDOM(event.getData());
+            doc = documentCache.getDocument(event, false);
             if (doc == null) {
                 resultCollector
                         .addFailure(event.getName(), "exception", getClass().getSimpleName(), "Could not parse xml");
