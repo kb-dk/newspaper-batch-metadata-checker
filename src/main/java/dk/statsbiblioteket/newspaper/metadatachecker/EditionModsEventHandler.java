@@ -26,7 +26,7 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
     private static final String YYYY_MM_DD = "yyyy-MM-dd";
     private ResultCollector resultCollector;
     private BatchContext context;
-    DocumentCache documentCache;
+    private DocumentCache documentCache;
 
     /**
      * Constructor for this class.

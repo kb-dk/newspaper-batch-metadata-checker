@@ -18,7 +18,7 @@ import dk.statsbiblioteket.util.xml.XPathSelector;
  */
 public class AltoXPathEventHandler extends DefaultTreeEventHandler {
     private ResultCollector resultCollector;
-    DocumentCache documentCache;
+    private DocumentCache documentCache;
 
     /**
      * Constructor for this class.

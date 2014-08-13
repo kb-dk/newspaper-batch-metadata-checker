@@ -17,7 +17,7 @@ import org.w3c.dom.Document;
 public abstract class XmlFileChecker extends DefaultTreeEventHandler {
     protected final ResultCollector resultCollector;
     private List<XmlAttributeChecker> checkers;
-    DocumentCache documentCache;
+    private DocumentCache documentCache;
 
     public XmlFileChecker(ResultCollector resultCollector, DocumentCache documentCache) {
         this.resultCollector = resultCollector;

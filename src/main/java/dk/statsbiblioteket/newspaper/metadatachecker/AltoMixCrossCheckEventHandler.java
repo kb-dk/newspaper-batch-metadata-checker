@@ -24,7 +24,7 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
     private final ResultCollector resultCollector;
     private XPathSelector xpath;
     private ArrayDeque<SizeSet> sizesStack = new ArrayDeque<>();
-    DocumentCache documentCache;
+    private DocumentCache documentCache;
 
     public AltoMixCrossCheckEventHandler(ResultCollector resultCollector, DocumentCache documentCache) {
         this.resultCollector = resultCollector;

@@ -28,7 +28,7 @@ public class SchematronValidatorEventHandler extends DefaultTreeEventHandler {
     /** A map from file postfix to a known schema for that file. */
     private static final Map<String, String> POSTFIX_TO_XSD;
     private static final Map<String, String> POSTFIX_TO_TYPE;
-    DocumentCache documentCache;
+    private DocumentCache documentCache;
 
     /**
      * Statically initialise the Map to the hardcoded names of the schematron files.

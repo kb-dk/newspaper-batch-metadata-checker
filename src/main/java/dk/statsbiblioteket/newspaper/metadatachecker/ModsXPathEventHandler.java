@@ -40,7 +40,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
     private static final XPathSelector BATCH_XPATH_SELECTOR = DOM.createXPathSelector();
     private static final XPathSelector MODS_XPATH_SELECTOR = DOM.createXPathSelector("mods", "http://www.loc.gov/mods/v3");
     private BatchContext context;
-    DocumentCache documentCache;
+    private DocumentCache documentCache;
 
 
     /**

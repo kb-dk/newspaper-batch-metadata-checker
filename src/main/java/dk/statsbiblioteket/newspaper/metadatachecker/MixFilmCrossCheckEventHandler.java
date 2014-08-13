@@ -21,7 +21,7 @@ public class MixFilmCrossCheckEventHandler extends DefaultTreeEventHandler {
     private final XPathSelector xpath;
     private String currentFilmNode = null;
     private Integer filmXmlSamplingFreq = null;
-    DocumentCache documentCache;
+    private DocumentCache documentCache;
 
     public MixFilmCrossCheckEventHandler(ResultCollector resultCollector, DocumentCache documentCache) {
         this.resultCollector = resultCollector;
