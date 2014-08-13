@@ -8,7 +8,6 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributePar
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.DefaultTreeEventHandler;
 import dk.statsbiblioteket.newspaper.metadatachecker.caches.DocumentCache;
 import dk.statsbiblioteket.util.Strings;
-import dk.statsbiblioteket.util.xml.DOM;
 import org.w3c.dom.Document;
 
 /**
@@ -42,7 +41,7 @@ public abstract class XmlFileChecker extends DefaultTreeEventHandler {
     private void doValidate(AttributeParsingEvent event) {
         Document doc;
         try {
-            doc = documentCache.getDocument(event, true);
+            doc = documentCache.getDocument(event);
             if (doc == null) {
                 resultCollector.addFailure(
                         event.getName(), "exception", getClass().getSimpleName(),

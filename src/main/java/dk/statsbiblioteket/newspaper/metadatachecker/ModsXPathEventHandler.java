@@ -103,7 +103,7 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
     private void doValidate(AttributeParsingEvent event) {
         Document modsDocument;
         try {
-            modsDocument = documentCache.getDocument(event, false);
+            modsDocument = documentCache.getDocument(event);
             if (modsDocument == null) {
                 addExceptionFailure(
                         event,

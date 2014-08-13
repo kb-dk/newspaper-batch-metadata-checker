@@ -16,11 +16,11 @@ public class DocumentCache {
     public DocumentCache() {
     }
 
-    public synchronized Document getDocument(AttributeParsingEvent event, Boolean namespaceAware)
+    public synchronized Document getDocument(AttributeParsingEvent event)
             throws IOException {
         Document document = documentCache.get(event.getName());
         if (document == null) {
-            document = DOM.streamToDOM(event.getData(), namespaceAware);
+            document = DOM.streamToDOM(event.getData(), true);
             documentCache.put(event.getName(), document);
         }
         return document;

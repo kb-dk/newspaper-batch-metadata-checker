@@ -99,7 +99,7 @@ public class SchematronValidatorEventHandler extends DefaultTreeEventHandler {
                                     String schematronFile) {
         Document doc;
         try {
-            doc = documentCache.getDocument(event, false);
+            doc = documentCache.getDocument(event);
             if (doc == null) {
                 resultCollector.addFailure(event.getName(),
                                            "exception",

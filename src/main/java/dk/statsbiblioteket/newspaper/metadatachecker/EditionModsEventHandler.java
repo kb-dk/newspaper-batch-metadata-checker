@@ -53,7 +53,7 @@ public class EditionModsEventHandler extends DefaultTreeEventHandler {
         XPathSelector xpath = DOM.createXPathSelector("mods", "http://www.loc.gov/mods/v3");
         Document doc;
         try {
-            doc = documentCache.getDocument(event, true);
+            doc = documentCache.getDocument(event);
             if (doc == null) {
                 resultCollector.addFailure(
                         event.getName(), "exception", getClass().getSimpleName(),

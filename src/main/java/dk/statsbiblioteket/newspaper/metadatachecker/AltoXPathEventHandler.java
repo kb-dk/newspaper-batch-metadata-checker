@@ -50,7 +50,7 @@ public class AltoXPathEventHandler extends DefaultTreeEventHandler {
         XPathSelector xpath = DOM.createXPathSelector("alto", "http://www.loc.gov/standards/alto/ns-v2#");
         Document doc;
         try {
-            doc = documentCache.getDocument(event, false);
+            doc = documentCache.getDocument(event);
             if (doc == null) {
                 resultCollector
                         .addFailure(event.getName(), "exception", getClass().getSimpleName(), "Could not parse xml");

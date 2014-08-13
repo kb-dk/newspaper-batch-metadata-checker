@@ -95,11 +95,11 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
             if (event.getName()
                      .endsWith(".alto.xml")) {
 
-                extractAltoSizes(documentCache.getDocument(event, true), sizes.getAltoSize(), event.getName());
+                extractAltoSizes(documentCache.getDocument(event), sizes.getAltoSize(), event.getName());
 
             } else if (event.getName()
                             .endsWith(".mix.xml")) {
-                extractMixSizes(documentCache.getDocument(event, true), sizes.getMixSize(), event.getName());
+                extractMixSizes(documentCache.getDocument(event), sizes.getMixSize(), event.getName());
             }
 
 

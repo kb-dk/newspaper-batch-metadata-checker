@@ -12,7 +12,6 @@ import dk.statsbiblioteket.util.xml.XPathSelector;
 import org.w3c.dom.Document;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import static dk.statsbiblioteket.util.Strings.getStackTrace;
 
@@ -116,7 +115,7 @@ public class MixFilmCrossCheckEventHandler extends DefaultTreeEventHandler {
         final String filmFrequencyXPath = "/avis:reelMetadata/avis:captureResolutionOriginal";
         Document doc;
         try {
-            doc = documentCache.getDocument(event, true);
+            doc = documentCache.getDocument(event);
             filmXmlSamplingFreq = xpath.selectInteger(doc, filmFrequencyXPath);
             
         } catch (IOException e) {
@@ -136,7 +135,7 @@ public class MixFilmCrossCheckEventHandler extends DefaultTreeEventHandler {
         
         Document doc;
         try {
-            doc = documentCache.getDocument(event, true);
+            doc = documentCache.getDocument(event);
             Integer xFrequency = xpath.selectInteger(doc, xFreqXPath);
             Integer yFrequency = xpath.selectInteger(doc, yFreqXPath);
             
