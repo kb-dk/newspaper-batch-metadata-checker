@@ -6,6 +6,7 @@ import com.phloc.schematron.pure.SchematronResourcePure;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.DefaultTreeEventHandler;
+import dk.statsbiblioteket.newspaper.metadatachecker.caches.DocumentCache;
 import dk.statsbiblioteket.util.Strings;
 import dk.statsbiblioteket.util.xml.DOM;
 import org.oclc.purl.dsdl.svrl.FailedAssert;
@@ -27,6 +28,7 @@ public class SchematronValidatorEventHandler extends DefaultTreeEventHandler {
     /** A map from file postfix to a known schema for that file. */
     private static final Map<String, String> POSTFIX_TO_XSD;
     private static final Map<String, String> POSTFIX_TO_TYPE;
+    DocumentCache documentCache;
 
     /**
      * Statically initialise the Map to the hardcoded names of the schematron files.
@@ -65,9 +67,10 @@ public class SchematronValidatorEventHandler extends DefaultTreeEventHandler {
      * @param controlPoliciesPath path to the control policies. If null, use default control policies
      */
     public SchematronValidatorEventHandler(ResultCollector resultCollector,
-                                           String controlPoliciesPath) {
+                                           String controlPoliciesPath, DocumentCache documentCache) {
         log.debug("Initialising {}", getClass().getName());
         this.resultCollector = resultCollector;
+        this.documentCache = documentCache;
 
         Document controlPoliciesDocument;
         if (controlPoliciesPath != null) {
@@ -96,7 +99,7 @@ public class SchematronValidatorEventHandler extends DefaultTreeEventHandler {
                                     String schematronFile) {
         Document doc;
         try {
-            doc = DOM.streamToDOM(event.getData());
+            doc = documentCache.getDocument(event, false);
             if (doc == null) {
                 resultCollector.addFailure(event.getName(),
                                            "exception",

@@ -4,6 +4,7 @@ package dk.statsbiblioteket.newspaper.metadatachecker.mix;
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
+import dk.statsbiblioteket.newspaper.metadatachecker.caches.DocumentCache;
 import dk.statsbiblioteket.newspaper.metadatachecker.mockers.MixerMockup;
 import dk.statsbiblioteket.newspaper.metadatachecker.SchematronValidatorEventHandler;
 import org.testng.annotations.BeforeTest;
@@ -35,13 +36,14 @@ public class MixSchematronValidationTest {
         final String publishDate = "1795-06";
         final String pictureNumber = "0006";
         final Batch batch = new Batch();
+        DocumentCache documentCache = new DocumentCache();
         batch.setBatchID(batchId);
         batch.setRoundTripNumber(1);
         AttributeParsingEvent event = MixerMockup.getMixPageAttributeParsingEvent(
                 film, avisID, publishDate, pictureNumber, batch, 9304, 11408, 400, "7ed748249def3bcaadd825ae17dc817a",15,
                 "microfilm");
 
-        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
+        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null, documentCache);
         handler.handleAttribute(event);
         assertTrue(resultCollector.isSuccess(), resultCollector.toReport());
     }
@@ -551,7 +553,8 @@ public class MixSchematronValidationTest {
     }
 
     private void handleTestEvent(final String input, ResultCollector resultCollector) {
-        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
+        DocumentCache documentCache = new DocumentCache();
+        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null, documentCache);
         AttributeParsingEvent event = new AttributeParsingEvent("test.mix.xml") {
             @Override
             public InputStream getData() throws IOException {

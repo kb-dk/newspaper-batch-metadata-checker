@@ -7,6 +7,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import dk.statsbiblioteket.newspaper.metadatachecker.caches.DocumentCache;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -353,7 +354,8 @@ public class FilmValidationTest {
     }
 
     private void handleTestEvent(final String input, ResultCollector resultCollector) {
-        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
+        DocumentCache documentCache = new DocumentCache();
+        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null, documentCache);
         AttributeParsingEvent event = new AttributeParsingEvent("test.film.xml") {
             @Override
             public InputStream getData() throws IOException {

@@ -96,7 +96,7 @@ public class MetadataChecksFactory
             treeEventHandlers.add(new JpylyzingEventHandler(resultCollector, batchFolder, jpylyzerPath));
         }
         treeEventHandlers.add(new SchemaValidatorEventHandler(resultCollector));
-        treeEventHandlers.add(new SchematronValidatorEventHandler(resultCollector, controlPoliciesPath));
+        treeEventHandlers.add(new SchematronValidatorEventHandler(resultCollector, controlPoliciesPath, documentCache));
         treeEventHandlers.add(new ModsXPathEventHandler(resultCollector, batchContext, batchXmlStructure, documentCache));
         treeEventHandlers.add(new AltoXPathEventHandler(resultCollector, documentCache));
         treeEventHandlers.add(new AltoMixCrossCheckEventHandler(resultCollector, documentCache));

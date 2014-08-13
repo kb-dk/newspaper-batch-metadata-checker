@@ -88,7 +88,7 @@ public class AltoValidationTest {
     public void shouldSucceed2J16() {
         DocumentCache documentCache = new DocumentCache();
         setUp();
-        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
+        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null, documentCache);
         AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-01/AdresseContoirsEfterretninger-1795-06-01-0006.alto.xml") {
             @Override
             public InputStream getData() throws IOException {
@@ -111,7 +111,7 @@ public class AltoValidationTest {
     public void shouldFail2J16() {
         DocumentCache documentCache = new DocumentCache();
         setUp();
-        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
+        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null, documentCache);
         AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-01/AdresseContoirsEfterretninger-1795-06-01-0006.alto.xml") {
             @Override
             public InputStream getData() throws IOException {
@@ -136,7 +136,7 @@ public class AltoValidationTest {
      public void shouldFail2J16DoubleNested() {
          DocumentCache documentCache = new DocumentCache();
          setUp();
-         SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
+         SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null, documentCache);
          AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-01/AdresseContoirsEfterretninger-1795-06-01-0006.alto.xml") {
              @Override
              public InputStream getData() throws IOException {
@@ -159,7 +159,7 @@ public class AltoValidationTest {
     public void shouldSucceed() {
         DocumentCache documentCache = new DocumentCache();
         setUp();
-        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
+        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null, documentCache);
         AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-01/AdresseContoirsEfterretninger-1795-06-01-0006.alto.xml") {
             @Override
             public InputStream getData() throws IOException {
@@ -687,7 +687,8 @@ public class AltoValidationTest {
     }
 
     private void handleTestEvent(final String input, ResultCollector resultCollector) {
-        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
+        DocumentCache documentCache = new DocumentCache();
+        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null, documentCache);
         AttributeParsingEvent event = new AttributeParsingEvent("test.alto.xml") {
             @Override
             public InputStream getData() throws IOException {

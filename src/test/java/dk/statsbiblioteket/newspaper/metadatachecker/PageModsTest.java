@@ -65,8 +65,9 @@ public class PageModsTest {
      */
     @Test
     public void testPageModsGoodSch() {
+        DocumentCache documentCache = new DocumentCache();
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
-        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
+        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null, documentCache);
         AttributeParsingEvent modsEvent = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-15-01/AdresseContoirsEfterretninger-1795-06-15-01-0010B.mods.xml") {
             @Override
             public InputStream getData() throws IOException {
@@ -89,8 +90,9 @@ public class PageModsTest {
      */
     @Test
     public void testPageModsBad1Sch() {
+        DocumentCache documentCache = new DocumentCache();
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
-        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
+        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null, documentCache);
         AttributeParsingEvent modsEvent = new AttributeParsingEvent("AdresseContoirsEfterretninger-1795-06-15-01-0010B.mods.xml") {
             @Override
             public InputStream getData() throws IOException {
@@ -116,8 +118,9 @@ public class PageModsTest {
      */
     @Test
     public void testPageModsBad2Sch() {
+        DocumentCache documentCache = new DocumentCache();
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
-        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
+        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null, documentCache);
         AttributeParsingEvent modsEvent = new AttributeParsingEvent("AdresseContoirsEfterretninger-1795-06-15-01-0003B.mods.xml") {
             @Override
             public InputStream getData() throws IOException {
