@@ -6,6 +6,7 @@ import java.util.List;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.DefaultTreeEventHandler;
+import dk.statsbiblioteket.newspaper.metadatachecker.caches.DocumentCache;
 import dk.statsbiblioteket.util.Strings;
 import dk.statsbiblioteket.util.xml.DOM;
 import org.w3c.dom.Document;
@@ -17,10 +18,11 @@ import org.w3c.dom.Document;
 public abstract class XmlFileChecker extends DefaultTreeEventHandler {
     protected final ResultCollector resultCollector;
     private List<XmlAttributeChecker> checkers;
+    DocumentCache documentCache;
 
-
-    public XmlFileChecker(ResultCollector resultCollector) {
+    public XmlFileChecker(ResultCollector resultCollector, DocumentCache documentCache) {
         this.resultCollector = resultCollector;
+        this.documentCache = documentCache;
     }
 
     @Override
@@ -40,7 +42,7 @@ public abstract class XmlFileChecker extends DefaultTreeEventHandler {
     private void doValidate(AttributeParsingEvent event) {
         Document doc;
         try {
-            doc = DOM.streamToDOM(event.getData(), true);
+            doc = documentCache.getDocument(event, true);
             if (doc == null) {
                 resultCollector.addFailure(
                         event.getName(), "exception", getClass().getSimpleName(),

@@ -3,6 +3,7 @@ package dk.statsbiblioteket.newspaper.metadatachecker.film;
 import java.util.ArrayList;
 import java.util.List;
 
+import dk.statsbiblioteket.newspaper.metadatachecker.caches.DocumentCache;
 import org.w3c.dom.Document;
 
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
@@ -22,8 +23,8 @@ public class FilmXmlChecker extends XmlFileChecker {
 
     private List<XmlAttributeChecker> checkers;
 
-    public FilmXmlChecker(ResultCollector resultCollector, BatchContext context, Document batchXmlStructure) {
-        super(resultCollector);
+    public FilmXmlChecker(ResultCollector resultCollector, BatchContext context, Document batchXmlStructure, DocumentCache documentCache) {
+        super(resultCollector, documentCache);
         XPathSelector xpathSelector = DOM.createXPathSelector("avis",
                 "http://www.statsbiblioteket.dk/avisdigitalisering/microfilm/1/0/");
         checkers = new ArrayList<>();

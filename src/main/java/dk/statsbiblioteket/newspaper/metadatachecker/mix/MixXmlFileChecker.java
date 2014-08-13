@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import dk.statsbiblioteket.newspaper.metadatachecker.caches.DocumentCache;
 import org.w3c.dom.Document;
 
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
@@ -16,8 +17,8 @@ public class MixXmlFileChecker extends XmlFileChecker {
     private final Date shipmentDate;
 
 
-    public MixXmlFileChecker(ResultCollector resultCollector, BatchContext context, Document batchXmlStructure) {
-        super(resultCollector);
+    public MixXmlFileChecker(ResultCollector resultCollector, BatchContext context, Document batchXmlStructure, DocumentCache documentCache) {
+        super(resultCollector, documentCache);
         this.batchXmlStructure = batchXmlStructure;
         this.shipmentDate = context.getShipmentDate();
     }
