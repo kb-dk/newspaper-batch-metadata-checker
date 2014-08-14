@@ -5,6 +5,7 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributePar
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeBeginsParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeEndParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
+import dk.statsbiblioteket.newspaper.metadatachecker.caches.DocumentCache;
 import dk.statsbiblioteket.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,7 @@ public class SchemaValidatorEventHandler implements TreeEventHandler {
     private static final Map<String, String> POSTFIX_TO_XSD;
     private static final Map<String, String> POSTFIX_TO_TYPE;
     private static final Map<String, String> POSTFIX_TO_MESSAGE_PREFIX;
+    DocumentCache documentCache;
 
     static {
         Map<String, String> postfixToXsd = new HashMap<>();
@@ -76,9 +78,10 @@ public class SchemaValidatorEventHandler implements TreeEventHandler {
      *
      * @param resultCollector The collector to collect results in.
      */
-    public SchemaValidatorEventHandler(ResultCollector resultCollector) {
+    public SchemaValidatorEventHandler(ResultCollector resultCollector, DocumentCache documentCache) {
         log.debug("Initialising {}", getClass().getName());
         this.resultCollector = resultCollector;
+        this.documentCache = documentCache;
     }
 
     @Override
@@ -140,8 +143,8 @@ public class SchemaValidatorEventHandler implements TreeEventHandler {
                     }
                 });
 
-                //TODO put this back in documentCache
                 Document doc = saxParser.parse(data);
+                documentCache.cacheDocument(event, doc);
 
         } catch (SAXParseException e) {
             resultCollector.addFailure(event.getName(),

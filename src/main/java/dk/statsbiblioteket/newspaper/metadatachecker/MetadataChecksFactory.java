@@ -95,7 +95,7 @@ public class MetadataChecksFactory
         if (atNinestars) { //This thing adds virtual jpylyzer.xml nodes
             treeEventHandlers.add(new JpylyzingEventHandler(resultCollector, batchFolder, jpylyzerPath));
         }
-        treeEventHandlers.add(new SchemaValidatorEventHandler(resultCollector));
+        treeEventHandlers.add(new SchemaValidatorEventHandler(resultCollector, documentCache));
         treeEventHandlers.add(new SchematronValidatorEventHandler(resultCollector, controlPoliciesPath, documentCache));
         treeEventHandlers.add(new ModsXPathEventHandler(resultCollector, batchContext, batchXmlStructure, documentCache));
         treeEventHandlers.add(new AltoXPathEventHandler(resultCollector, documentCache));
