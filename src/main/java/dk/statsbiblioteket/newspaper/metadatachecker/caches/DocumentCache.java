@@ -26,4 +26,8 @@ public class DocumentCache {
         }
         return document;
     }
+
+    public synchronized void cacheDocument(AttributeParsingEvent event, Document document) {
+        documentCache.put(event.getName(), document);
+    }
 }
