@@ -1,19 +1,21 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeBeginsParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeEndParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
 import dk.statsbiblioteket.util.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import javax.xml.XMLConstants;
-import javax.xml.transform.stream.StreamSource;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
@@ -114,10 +116,33 @@ public class SchemaValidatorEventHandler implements TreeEventHandler {
     private void checkSchema(AttributeParsingEvent event,
                              String schemaFile) {
         log.debug("Checking '{}' with schema '{}'", event.getName(), schemaFile);
-        try {
-            InputStream data = event.getData();
-            Validator validator = createValidator(schemaFile);
-            validator.validate(new StreamSource(data));
+
+            try {
+                InputStream data = event.getData();
+                DocumentBuilderFactory spf = DocumentBuilderFactory.newInstance();
+
+                spf.setSchema(getSchema(schemaFile));
+                spf.setNamespaceAware(true);
+                DocumentBuilder saxParser = spf.newDocumentBuilder();
+                saxParser.setErrorHandler(new ErrorHandler() {
+                    @Override
+                    public void warning(SAXParseException exception) throws SAXException {
+                    }
+
+                    @Override
+                    public void error(SAXParseException exception) throws SAXException {
+                        throw exception;
+                    }
+
+                    @Override
+                    public void fatalError(SAXParseException exception) throws SAXException {
+                        throw exception;
+                    }
+                });
+
+                //TODO put this back in documentCache
+                Document doc = saxParser.parse(data);
+
         } catch (SAXParseException e) {
             resultCollector.addFailure(event.getName(),
                                        getType(event.getName()),
