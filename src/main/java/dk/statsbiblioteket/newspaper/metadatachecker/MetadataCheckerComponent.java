@@ -73,8 +73,8 @@ public class MetadataCheckerComponent
                 resultCollector,
                 batchXmlStructure);
         List<TreeEventHandler> eventHandlers = metadataChecksFactory.createEventHandlers();
-        EventRunner eventRunner = new EventRunner(createIterator(batch));
-        eventRunner.runEvents(eventHandlers, resultCollector);
+        EventRunner eventRunner = new EventRunner(createIterator(batch), eventHandlers, resultCollector);
+        eventRunner.run();
         log.info("Done validating '{}', success: {}", batch.getFullID(), resultCollector.isSuccess());
     }
 

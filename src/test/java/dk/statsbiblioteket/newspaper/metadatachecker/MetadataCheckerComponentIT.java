@@ -37,7 +37,7 @@ public class MetadataCheckerComponentIT {
         properties.load(new FileInputStream(pathToProperties));
 
         TreeIterator iterator = getIterator();
-        EventRunner batchStructureChecker = new EventRunner(iterator);
+
         ResultCollector resultCollector = new ResultCollector(getClass().getSimpleName(), "v0.1");
         Batch batch = new Batch();
         batch.setBatchID(TEST_BATCH_ID);
@@ -62,7 +62,10 @@ public class MetadataCheckerComponentIT {
                 new MfPakDAO(mfPakConfiguration),
                 batch,
                 batchXmlManifest);
-        batchStructureChecker.runEvents(eventHandlerFactory.createEventHandlers(), resultCollector);
+        EventRunner batchStructureChecker = new EventRunner(iterator,
+                eventHandlerFactory.createEventHandlers(),
+                resultCollector);
+        batchStructureChecker.run();
         assertTrue(resultCollector.isSuccess(), resultCollector.toReport());
         //Assert.fail();
     }

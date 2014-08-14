@@ -1,5 +1,21 @@
 package dk.statsbiblioteket.newspaper.metadatachecker.mockers;
 
+import dk.statsbiblioteket.medieplatform.autonomous.Batch;
+import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.DefaultTreeEventHandler;
+import dk.statsbiblioteket.newspaper.metadatachecker.EditionModsEventHandler;
+import dk.statsbiblioteket.newspaper.metadatachecker.SchematronValidatorEventHandler;
+import dk.statsbiblioteket.newspaper.mfpakintegration.batchcontext.BatchContext;
+import dk.statsbiblioteket.newspaper.mfpakintegration.batchcontext.BatchContextUtils;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperBatchOptions;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperDateRange;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperEntity;
+import org.testng.AssertJUnit;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
@@ -9,23 +25,6 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
-
-import dk.statsbiblioteket.medieplatform.autonomous.Batch;
-import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
-import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
-import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
-import dk.statsbiblioteket.newspaper.mfpakintegration.batchcontext.BatchContext;
-import dk.statsbiblioteket.newspaper.mfpakintegration.batchcontext.BatchContextUtils;
-import dk.statsbiblioteket.newspaper.metadatachecker.EditionModsEventHandler;
-import dk.statsbiblioteket.newspaper.metadatachecker.SchematronValidatorEventHandler;
-import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
-import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperBatchOptions;
-import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperDateRange;
-import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperEntity;
-
-import org.testng.AssertJUnit;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -55,7 +54,7 @@ public class EditionModsTest {
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
         SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null);
         BatchContext context = BatchContextUtils.buildBatchContext(getMFPak(), getBatch());
-        TreeEventHandler editionModsEventHandler = new EditionModsEventHandler(resultCollector, context);
+        DefaultTreeEventHandler editionModsEventHandler = new EditionModsEventHandler(resultCollector, context);
         AttributeParsingEvent editionEvent = new AttributeParsingEvent(
                 "B400022028241-RT1/400022028241-14/1795-06-01/adresseavisen1759-1795-06-01.edition.xml") {
             @Override
@@ -82,9 +81,9 @@ public class EditionModsTest {
     public void testEditionModsBad() throws SQLException, ParseException {
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
         Batch batch = getBatch();
-        TreeEventHandler schematronValidatorEventHandler = new SchematronValidatorEventHandler(resultCollector,null);
+        DefaultTreeEventHandler schematronValidatorEventHandler = new SchematronValidatorEventHandler(resultCollector,null);
         BatchContext context = BatchContextUtils.buildBatchContext(getMFPak(), batch);
-        TreeEventHandler editionModsEventHandler = new EditionModsEventHandler(resultCollector, context);
+        DefaultTreeEventHandler editionModsEventHandler = new EditionModsEventHandler(resultCollector, context);
         AttributeParsingEvent editionEvent = new AttributeParsingEvent(
                 "B400022028241-RT1/400022028241-14/1795-06-01/adresseavisen1759-1795-06-01.edition.xml") {
             @Override
