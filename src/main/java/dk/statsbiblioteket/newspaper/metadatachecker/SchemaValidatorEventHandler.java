@@ -35,7 +35,7 @@ public class SchemaValidatorEventHandler implements TreeEventHandler {
     private static final Map<String, String> POSTFIX_TO_XSD;
     private static final Map<String, String> POSTFIX_TO_TYPE;
     private static final Map<String, String> POSTFIX_TO_MESSAGE_PREFIX;
-    DocumentCache documentCache;
+    private DocumentCache documentCache;
 
     static {
         Map<String, String> postfixToXsd = new HashMap<>();
