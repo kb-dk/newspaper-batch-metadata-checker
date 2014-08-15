@@ -122,12 +122,12 @@ public class SchemaValidatorEventHandler implements TreeEventHandler {
 
             try {
                 InputStream data = event.getData();
-                DocumentBuilderFactory spf = DocumentBuilderFactory.newInstance();
+                DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 
-                spf.setSchema(getSchema(schemaFile));
-                spf.setNamespaceAware(true);
-                DocumentBuilder saxParser = spf.newDocumentBuilder();
-                saxParser.setErrorHandler(new ErrorHandler() {
+                documentBuilderFactory.setSchema(getSchema(schemaFile));
+                documentBuilderFactory.setNamespaceAware(true);
+                DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+                documentBuilder.setErrorHandler(new ErrorHandler() {
                     @Override
                     public void warning(SAXParseException exception) throws SAXException {
                     }
@@ -143,7 +143,7 @@ public class SchemaValidatorEventHandler implements TreeEventHandler {
                     }
                 });
 
-                Document doc = saxParser.parse(data);
+                Document doc = documentBuilder.parse(data);
                 documentCache.cacheDocument(event, doc);
 
         } catch (SAXParseException e) {
