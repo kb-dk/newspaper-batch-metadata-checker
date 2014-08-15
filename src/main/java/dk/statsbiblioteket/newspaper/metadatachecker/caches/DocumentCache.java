@@ -11,7 +11,7 @@ import java.io.IOException;
 public class DocumentCache {
     static Logger log = LoggerFactory.getLogger(DocumentCache.class);
 
-    public TimeSensitiveCache<String,Document> documentCache = new TimeSensitiveCache<>(100,true,20);
+    public TimeSensitiveCache<String,Document> documentCache = new TimeSensitiveCache<>(10000,true,20);
 
     public DocumentCache() {
     }
