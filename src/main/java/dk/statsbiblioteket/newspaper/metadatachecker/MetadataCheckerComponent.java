@@ -4,7 +4,9 @@ import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ConfigConstants;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.TreeProcessorAbstractRunnableComponent;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.ParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.EventRunner;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.MultiThreadedEventRunner;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 import dk.statsbiblioteket.util.xml.DOM;
@@ -15,6 +17,7 @@ import org.w3c.dom.Document;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.Executors;
 
 /** Check Metadata of all nodes. */
 public class MetadataCheckerComponent
@@ -73,8 +76,25 @@ public class MetadataCheckerComponent
                 resultCollector,
                 batchXmlStructure);
         List<TreeEventHandler> eventHandlers = metadataChecksFactory.createEventHandlers();
-        EventRunner eventRunner = new EventRunner(createIterator(batch));
-        eventRunner.runEvents(eventHandlers, resultCollector);
+        EventRunner eventRunner = new MultiThreadedEventRunner(createIterator(batch),
+                eventHandlers,
+                resultCollector,
+                new MultiThreadedEventRunner.EventCondition() {
+                    @Override
+                    public boolean shouldFork(ParsingEvent event) {
+                        String[] splits = event.getName().split("/");
+                        return splits.length == 4;
+                    }
+
+                    @Override
+                    public boolean shouldJoin(ParsingEvent event) {
+                        String[] splits = event.getName().split("/");
+                        return splits.length == 3;
+                    }
+                },
+                Executors.newFixedThreadPool(Integer.parseInt(getProperties().getProperty(ConfigConstants.THREADS_PER_BATCH,
+                        "1"))));
+        eventRunner.run();
         log.info("Done validating '{}', success: {}", batch.getFullID(), resultCollector.isSuccess());
     }
 

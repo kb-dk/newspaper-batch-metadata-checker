@@ -1,29 +1,29 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
-import static dk.statsbiblioteket.util.Strings.getStackTrace;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
-import dk.statsbiblioteket.newspaper.metadatachecker.caches.DocumentCache;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeBeginsParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeEndParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.ParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.DefaultTreeEventHandler;
+import dk.statsbiblioteket.newspaper.metadatachecker.caches.DocumentCache;
 import dk.statsbiblioteket.newspaper.mfpakintegration.batchcontext.BatchContext;
 import dk.statsbiblioteket.util.xml.DOM;
 import dk.statsbiblioteket.util.xml.XPathSelector;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
+import static dk.statsbiblioteket.util.Strings.getStackTrace;
 
 /**
  * This class uses xpath to validate metadata requirements for mods files that do no otherwise fit into the schematron
@@ -32,15 +32,17 @@ import dk.statsbiblioteket.util.xml.XPathSelector;
  */
 public class ModsXPathEventHandler extends DefaultTreeEventHandler {
     public static final String EDITION_REGEX = "^[0-9]{4}((-[0-9]{2})?)*-[0-9]{2}$";
-    private ResultCollector resultCollector;
+    private final ResultCollector resultCollector;
+    private final Document batchXmlStructure;
+    private static final XPathSelector BATCH_XPATH_SELECTOR = DOM.createXPathSelector();
+    private static final XPathSelector MODS_XPATH_SELECTOR = DOM.createXPathSelector("mods", "http://www.loc.gov/mods/v3");
+    private final BatchContext context;
+    private final DocumentCache documentCache;
+
+
     private List<String> briksInThisEdition;
     private Set<String> displayLabelsInThisEdition;
     private SortedSet<Integer> editionPageNumbers;
-    private Document batchXmlStructure;
-    private static final XPathSelector BATCH_XPATH_SELECTOR = DOM.createXPathSelector();
-    private static final XPathSelector MODS_XPATH_SELECTOR = DOM.createXPathSelector("mods", "http://www.loc.gov/mods/v3");
-    private BatchContext context;
-    private DocumentCache documentCache;
 
 
     /**
@@ -68,9 +70,9 @@ public class ModsXPathEventHandler extends DefaultTreeEventHandler {
 
         String shortName = getLastTokenInPath(event.getName());
         if (shortName.matches(EDITION_REGEX)) {
-            briksInThisEdition = new ArrayList<String>();
-            displayLabelsInThisEdition = new HashSet<>();
-            editionPageNumbers = new TreeSet<>();
+            briksInThisEdition = Collections.synchronizedList(new ArrayList<String>());
+            displayLabelsInThisEdition = Collections.synchronizedSet(new HashSet<String>());
+            editionPageNumbers = Collections.synchronizedSortedSet(new TreeSet<Integer>());
             String xpathForBriks = "//node[@name='" + event.getName() + "']/node[ends-with(@shortName, 'brik')]/@shortName";
             NodeList nodeList = BATCH_XPATH_SELECTOR.selectNodeList(batchXmlStructure, xpathForBriks);
             for (int nodeNumber = 0; nodeNumber < nodeList.getLength(); nodeNumber++ ) {

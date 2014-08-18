@@ -14,7 +14,6 @@ import dk.statsbiblioteket.util.xml.XPathSelector;
 import org.w3c.dom.Document;
 
 import java.io.IOException;
-import java.util.ArrayDeque;
 
 import static dk.statsbiblioteket.util.Strings.getStackTrace;
 
@@ -22,9 +21,11 @@ import static dk.statsbiblioteket.util.Strings.getStackTrace;
 public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
 
     private final ResultCollector resultCollector;
-    private XPathSelector xpath;
-    private ArrayDeque<SizeSet> sizesStack = new ArrayDeque<>();
-    private DocumentCache documentCache;
+    private final XPathSelector xpath;
+
+
+    private static final ThreadLocal<SizeSet> sizes = new ThreadLocal<>();
+    private final DocumentCache documentCache;
 
     public AltoMixCrossCheckEventHandler(ResultCollector resultCollector, DocumentCache documentCache) {
         this.resultCollector = resultCollector;
@@ -41,9 +42,9 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
      * @param event
      */
     @Override
-    public void handleNodeBegin(NodeBeginsParsingEvent event) {
+    public  void handleNodeBegin(NodeBeginsParsingEvent event) {
         if (!(event instanceof DataFileNodeBeginsParsingEvent)) {
-            sizesStack.push(new SizeSet(event.getName()));
+            sizes.set(new SizeSet(event.getName()));
         }
     }
 
@@ -53,12 +54,12 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
      * @param event
      */
     @Override
-    public void handleNodeEnd(NodeEndParsingEvent event) {
+    public  void handleNodeEnd(NodeEndParsingEvent event) {
         if (!(event instanceof DataFileNodeEndsParsingEvent)) {
-            SizeSet sizes = sizesStack.pop();
-            verify(sizes, resultCollector);
+            verify(sizes.get(), resultCollector);
         }
     }
+
 
     /**
      * Compare the alto sizes and the mix sizes, if both are > 0. If less than 0, we assume that they have not been
@@ -88,18 +89,17 @@ public class AltoMixCrossCheckEventHandler extends DefaultTreeEventHandler {
     }
 
     @Override
-    public void handleAttribute(AttributeParsingEvent event) {
+    public  void handleAttribute(AttributeParsingEvent event) {
 
-        SizeSet sizes = sizesStack.peek();
         try {
             if (event.getName()
                      .endsWith(".alto.xml")) {
 
-                extractAltoSizes(documentCache.getDocument(event), sizes.getAltoSize(), event.getName());
+                extractAltoSizes(documentCache.getDocument(event), sizes.get().getAltoSize(), event.getName());
 
             } else if (event.getName()
                             .endsWith(".mix.xml")) {
-                extractMixSizes(documentCache.getDocument(event), sizes.getMixSize(), event.getName());
+                extractMixSizes(documentCache.getDocument(event), sizes.get().getMixSize(), event.getName());
             }
 
 

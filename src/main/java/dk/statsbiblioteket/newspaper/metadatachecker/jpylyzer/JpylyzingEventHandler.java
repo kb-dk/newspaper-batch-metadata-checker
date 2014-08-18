@@ -7,7 +7,8 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.DataFileNode
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.InMemoryAttributeParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeBeginsParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeEndParsingEvent;
-import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.InjectingTreeEventHandler;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.EventRunner;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
 import dk.statsbiblioteket.util.Bytes;
 import dk.statsbiblioteket.util.Streams;
 import dk.statsbiblioteket.util.Strings;
@@ -24,7 +25,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
 /** The jpylyzer metadata content checker checker */
-public class JpylyzingEventHandler extends InjectingTreeEventHandler {
+public class JpylyzingEventHandler implements TreeEventHandler {
 
     /** Name of content file in jp2 virtual folder */
     public static final String CONTENTS = "/contents";
@@ -35,25 +36,13 @@ public class JpylyzingEventHandler extends InjectingTreeEventHandler {
     /** The result collector results are collected in. */
     private final ResultCollector resultCollector;
     /** Double flags indicating if we are in a virtual jp2 folder */
-    private boolean isInDataFile;
-    private String datafile;
+    private static final ThreadLocal<String> datafile = new ThreadLocal<String>();
+    private static final ThreadLocal<Boolean> isInDataFile = new ThreadLocal<Boolean>();
+
+
     /** Path to the jpylyzer executable */
     private final String jpylyzerPath;
 
-
-    /**
-     * Construct a new JpylyzerValidatorEventHandler.
-     *
-     * @param resultCollector the result collector
-     * @param batchFolder     the folder where the batches live
-     */
-    public JpylyzingEventHandler(ResultCollector resultCollector,
-                                 String batchFolder) {
-        this.batchFolder = batchFolder;
-        this.resultCollector = resultCollector;
-        jpylyzerPath = "jpylyzer.py";
-
-    }
 
     /**
      * Extended constructor for the validator. This should be used if we want the validator to be able to
@@ -74,6 +63,7 @@ public class JpylyzingEventHandler extends InjectingTreeEventHandler {
         } else {
             this.jpylyzerPath = "jpylyzer.py";
         }
+
     }
 
     /**
@@ -82,10 +72,10 @@ public class JpylyzingEventHandler extends InjectingTreeEventHandler {
      * @param event the node begins event
      */
     @Override
-    public void handleNodeBegin(NodeBeginsParsingEvent event) {
+    public void handleNodeBegin(NodeBeginsParsingEvent event, EventRunner runner) {
         if (event instanceof DataFileNodeBeginsParsingEvent) {
-            isInDataFile = true;
-            datafile = event.getName();
+            isInDataFile.set(true);
+            datafile.set(event.getName());
         }
     }
 
@@ -95,10 +85,10 @@ public class JpylyzingEventHandler extends InjectingTreeEventHandler {
      * @param event the node ends event
      */
     @Override
-    public void handleNodeEnd(NodeEndParsingEvent event) {
+    public void handleNodeEnd(NodeEndParsingEvent event, EventRunner runner) {
         if (event instanceof DataFileNodeEndsParsingEvent) {
-            isInDataFile = false;
-            datafile = null;
+            isInDataFile.set(false);
+            datafile.set(null);
         }
     }
 
@@ -111,16 +101,16 @@ public class JpylyzingEventHandler extends InjectingTreeEventHandler {
      * @param event the attribute event
      */
     @Override
-    public void handleAttribute(AttributeParsingEvent event) {
+    public void handleAttribute(AttributeParsingEvent event, EventRunner runner) {
         try {
-            if (isInDataFile) {
+            if (isInDataFile.get() != null && isInDataFile.get()) {
 
                 if (event.getName().endsWith(CONTENTS)) {
                     log.debug("Encountered event {}", event.getName());
 
-                    File filePath = new File(batchFolder, datafile);
+                    File filePath = new File(batchFolder, datafile.get());
                     byte[] jpylizerOutput = toByteArray(jpylize(filePath));
-                    pushInjectedEvent(new InMemoryAttributeParsingEvent(getJpylyzerName(datafile),
+                    runner.pushEvent(new InMemoryAttributeParsingEvent(getJpylyzerName(datafile.get()),
                                                                         jpylizerOutput,
                                                                         md5sum(jpylizerOutput)));
 
@@ -159,7 +149,7 @@ public class JpylyzingEventHandler extends InjectingTreeEventHandler {
     }
 
     @Override
-    public void handleFinish() {
+    public void handleFinish(EventRunner runner) {
         //Anything to do here?
     }
 

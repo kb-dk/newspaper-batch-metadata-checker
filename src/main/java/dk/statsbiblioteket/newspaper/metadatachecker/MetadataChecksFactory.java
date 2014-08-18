@@ -1,22 +1,21 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.EventHandlerFactory;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
 import dk.statsbiblioteket.newspaper.metadatachecker.caches.DocumentCache;
-import dk.statsbiblioteket.newspaper.mfpakintegration.batchcontext.BatchContext;
-import dk.statsbiblioteket.newspaper.mfpakintegration.batchcontext.BatchContextUtils;
 import dk.statsbiblioteket.newspaper.metadatachecker.film.FilmXmlChecker;
 import dk.statsbiblioteket.newspaper.metadatachecker.jpylyzer.JpylyzingEventHandler;
 import dk.statsbiblioteket.newspaper.metadatachecker.mix.MixXmlFileChecker;
+import dk.statsbiblioteket.newspaper.mfpakintegration.batchcontext.BatchContext;
+import dk.statsbiblioteket.newspaper.mfpakintegration.batchcontext.BatchContextUtils;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
-
 import org.w3c.dom.Document;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /** A factory for checks to do on metadata. */
 public class MetadataChecksFactory

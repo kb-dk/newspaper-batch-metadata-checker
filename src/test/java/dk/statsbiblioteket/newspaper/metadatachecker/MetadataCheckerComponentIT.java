@@ -3,9 +3,11 @@ package dk.statsbiblioteket.newspaper.metadatachecker;
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ConfigConstants;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.ParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.TreeIterator;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.EventHandlerFactory;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.EventRunner;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.MultiThreadedEventRunner;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.filesystem.transforming.TransformingIteratorForFileSystems;
 import dk.statsbiblioteket.newspaper.mfpakintegration.configuration.MfPakConfiguration;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
@@ -18,6 +20,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.Properties;
+import java.util.concurrent.Executors;
 
 import static org.testng.Assert.assertTrue;
 
@@ -37,8 +40,9 @@ public class MetadataCheckerComponentIT {
         properties.load(new FileInputStream(pathToProperties));
 
         TreeIterator iterator = getIterator();
-        EventRunner batchStructureChecker = new EventRunner(iterator);
+
         ResultCollector resultCollector = new ResultCollector(getClass().getSimpleName(), "v0.1");
+
         Batch batch = new Batch();
         batch.setBatchID(TEST_BATCH_ID);
         batch.setRoundTripNumber(1);
@@ -62,7 +66,24 @@ public class MetadataCheckerComponentIT {
                 new MfPakDAO(mfPakConfiguration),
                 batch,
                 batchXmlManifest);
-        batchStructureChecker.runEvents(eventHandlerFactory.createEventHandlers(), resultCollector);
+        EventRunner eventRunner = new MultiThreadedEventRunner(iterator,
+                eventHandlerFactory.createEventHandlers(),
+                resultCollector,
+                new MultiThreadedEventRunner.EventCondition() {
+                    @Override
+                    public boolean shouldFork(ParsingEvent event) {
+                        String[] splits = event.getName().split("/");
+                        return splits.length == 4;
+                    }
+
+                    @Override
+                    public boolean shouldJoin(ParsingEvent event) {
+                        String[] splits = event.getName().split("/");
+                        return splits.length == 3;
+                    }
+                },
+                Executors.newFixedThreadPool(4));
+        eventRunner.run();
         assertTrue(resultCollector.isSuccess(), resultCollector.toReport());
         //Assert.fail();
     }

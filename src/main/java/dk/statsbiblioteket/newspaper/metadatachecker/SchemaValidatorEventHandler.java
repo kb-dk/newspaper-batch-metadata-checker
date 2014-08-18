@@ -4,7 +4,7 @@ import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeBeginsParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeEndParsingEvent;
-import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.DefaultTreeEventHandler;
 import dk.statsbiblioteket.newspaper.metadatachecker.caches.DocumentCache;
 import dk.statsbiblioteket.util.Strings;
 import org.slf4j.Logger;
@@ -30,7 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /** Check xml data of known file postfixes against xsd schemas. */
-public class SchemaValidatorEventHandler implements TreeEventHandler {
+public class SchemaValidatorEventHandler extends DefaultTreeEventHandler {
     /** A map from file postfix to a known schema for that file. */
     private static final Map<String, String> POSTFIX_TO_XSD;
     private static final Map<String, String> POSTFIX_TO_TYPE;

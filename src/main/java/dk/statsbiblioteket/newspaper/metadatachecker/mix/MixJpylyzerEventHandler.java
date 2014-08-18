@@ -10,10 +10,10 @@ import org.w3c.dom.Document;
  * This class validates the mix information vs. the jpylyzer information
  */
 public class MixJpylyzerEventHandler extends XmlAttributeChecker {
-    private Integer mixFileSize = null;
-    private Integer mixWidth = null;
-    private Integer mixHeight = null;
-    private AttributeParsingEvent foundMix = null;
+    private static final ThreadLocal<Integer> mixFileSize = new ThreadLocal<Integer>();
+    private static final ThreadLocal<Integer> mixWidth = new ThreadLocal<Integer>();
+    private static final ThreadLocal<Integer> mixHeight = new ThreadLocal<Integer>();
+    private static final ThreadLocal<AttributeParsingEvent> foundMix = new ThreadLocal<AttributeParsingEvent>();
 
 
     /**
@@ -32,7 +32,7 @@ public class MixJpylyzerEventHandler extends XmlAttributeChecker {
 
         String jpylyzerFileSizeXpath = "/jpylyzer/fileInfo/fileSizeInBytes";
         Integer jpylyzerFileSize = XPATH.selectInteger(doc, jpylyzerFileSizeXpath);
-        if (!jpylyzerFileSize.equals(mixFileSize)) {
+        if (!jpylyzerFileSize.equals(mixFileSize.get())) {
             addFailure(
                     event,
                     "2K-2: The file size from jpylyzer does not match what is reported in the mix file"
@@ -41,7 +41,7 @@ public class MixJpylyzerEventHandler extends XmlAttributeChecker {
 
         String jpylyzerHeightXpath = "/jpylyzer/properties/jp2HeaderBox/imageHeaderBox/height";
         Integer jpylyzerHeight = XPATH.selectInteger(doc, jpylyzerHeightXpath);
-        if (!jpylyzerHeight.equals(mixHeight)) {
+        if (!jpylyzerHeight.equals(mixHeight.get())) {
             addFailure(
                     event,
                     "2K-10: The picture height from jpylyzer does not match what is reported in the mix file"
@@ -50,33 +50,33 @@ public class MixJpylyzerEventHandler extends XmlAttributeChecker {
 
         String jpylyzerWidthXpath = "/jpylyzer/properties/jp2HeaderBox/imageHeaderBox/width";
         Integer jpylyzerWidth = XPATH.selectInteger(doc, jpylyzerWidthXpath);
-        if (!jpylyzerWidth.equals(mixWidth)) {
+        if (!jpylyzerWidth.equals(mixWidth.get())) {
             addFailure(
                     event,
                     "2K-9: The picture width from jpylyzer does not match what is reported in the mix file"
                     );
         }
-        foundMix = null;
+        foundMix.set(null);
 
 
     }
 
     protected void handleMix(AttributeParsingEvent event, Document doc) {
-        if (foundMix != null) {
-            addFailure(foundMix, "2K: No corresponding jpylyzer analysis found");
+        if (foundMix.get() != null) {
+            addFailure(foundMix.get(), "2K: No corresponding jpylyzer analysis found");
         }
 
-        foundMix = event;
+        foundMix.set(event);
 
         final String mixFileSizeXpath = "/mix:mix/mix:BasicDigitalObjectInformation/mix:fileSize";
-        this.mixFileSize = XPATH.selectInteger(doc, mixFileSizeXpath);
+        this.mixFileSize.set(XPATH.selectInteger(doc, mixFileSizeXpath));
 
 
         String mixWidthXpath = "/mix:mix/mix:BasicImageInformation/mix:BasicImageCharacteristics/mix:imageWidth";
-        this.mixWidth = XPATH.selectInteger(doc, mixWidthXpath);
+        this.mixWidth.set(XPATH.selectInteger(doc, mixWidthXpath));
 
         String mixHeightXpath = "/mix:mix/mix:BasicImageInformation/mix:BasicImageCharacteristics/mix:imageHeight";
-        this.mixHeight = XPATH.selectInteger(doc, mixHeightXpath);
+        this.mixHeight.set(XPATH.selectInteger(doc, mixHeightXpath));
     }
 
     @Override
