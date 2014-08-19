@@ -5,13 +5,25 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributePar
 import dk.statsbiblioteket.newspaper.metadatachecker.checker.FailureType;
 import dk.statsbiblioteket.newspaper.metadatachecker.checker.XmlAttributeChecker;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MixChecksumChecker extends XmlAttributeChecker {
-    private Document batchXmlStructure;
+
+    private Map<String,String> jp2Checksums= new HashMap<>();
 
     public MixChecksumChecker(ResultCollector resultCollector, Document batchXmlStructure) {
         super(resultCollector, FailureType.METADATA);
-        this.batchXmlStructure = batchXmlStructure;
+        NodeList contentNodes = XPATH.selectNodeList(batchXmlStructure, "//attribute[@shortName='contents']");
+        for (int i = 0; i < contentNodes.getLength(); i++) {
+            Node node = contentNodes.item(i);
+            String checksum = node.getAttributes().getNamedItem("checksum").getTextContent();
+            String name = node.getAttributes().getNamedItem("name").getTextContent();
+            jp2Checksums.put(name,checksum);
+        }
     }
 
     @Override
@@ -27,7 +39,9 @@ public class MixChecksumChecker extends XmlAttributeChecker {
         String mixPath = event.getName();
         String jp2Path = mixPath.replaceAll(".mix.xml$", "")
                                 .concat(".jp2/contents");
-        String treeMd5sum = XPATH.selectString(batchXmlStructure, "//attribute[@name='" + jp2Path + "']/@checksum");
+        //this select is expensive, like 1000 times more expensive than the other mix checkers
+        //String treeMd5sum = XPATH.selectString(batchXmlStructure, "//attribute[@name='" + jp2Path + "']/@checksum");
+        String treeMd5sum = jp2Checksums.get(jp2Path);
 
         if (!mixMd5sum.equalsIgnoreCase(treeMd5sum)) {
             addFailure(
