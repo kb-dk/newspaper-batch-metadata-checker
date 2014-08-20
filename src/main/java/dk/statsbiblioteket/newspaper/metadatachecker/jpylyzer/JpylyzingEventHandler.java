@@ -29,7 +29,7 @@ public class JpylyzingEventHandler implements TreeEventHandler {
 
     /** Name of content file in jp2 virtual folder */
     public static final String CONTENTS = "/contents";
-    /*8Folder where the batch lives. Used because jpylyzer must work on the absolute path to the file*/
+    /** Folder where the batch lives. Used because jpylyzer must work on the absolute path to the file*/
     private final String batchFolder;
     /** Logger */
     private final Logger log = LoggerFactory.getLogger(JpylyzingEventHandler.class);
