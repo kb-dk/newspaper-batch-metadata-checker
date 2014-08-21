@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Date;
 
 public class ChecksumCheckEventHandler extends DefaultTreeEventHandler {
     private ResultCollector resultCollector;
@@ -63,10 +62,4 @@ public class ChecksumCheckEventHandler extends DefaultTreeEventHandler {
     private String calculateChecksum(InputStream stream) throws IOException {
         return Bytes.toHex(Checksums.md5(stream));
     }
-
-    @Override
-    public void handleFinish() {
-        resultCollector.setTimestamp(new Date());
-    }
-
 }
