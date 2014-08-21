@@ -7,7 +7,7 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.InMemoryAttr
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeBeginsParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeEndParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.TreeIterator;
-import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.EventRunner;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.InjectingTreeEventHandler;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.filesystem.transforming.TransformingIteratorForFileSystems;
 import dk.statsbiblioteket.newspaper.metadatachecker.MetadataCheckerComponent;
@@ -78,19 +78,19 @@ public class MockupIteratorSuper extends MetadataCheckerComponent {
             public List<TreeEventHandler> createEventHandlers() {
                 List<TreeEventHandler> defaultHandlers = super.createEventHandlers();
                 defaultHandlers.add(
-                        new TreeEventHandler() {
+                        new InjectingTreeEventHandler() {
                             public static final String CONTENTS = "/contents";
 
                             @Override
-                            public void handleNodeBegin(NodeBeginsParsingEvent event, EventRunner runner) {
+                            public void handleNodeBegin(NodeBeginsParsingEvent event) {
                             }
 
                             @Override
-                            public void handleNodeEnd(NodeEndParsingEvent event, EventRunner runner) {
+                            public void handleNodeEnd(NodeEndParsingEvent event) {
                             }
 
                             @Override
-                            public void handleAttribute(AttributeParsingEvent event, EventRunner runner) {
+                            public void handleAttribute(AttributeParsingEvent event) {
                                 if (event.getName()
                                          .endsWith(CONTENTS)) {
                                     byte[] jpylizerOutput = new byte[0];
@@ -106,7 +106,7 @@ public class MockupIteratorSuper extends MetadataCheckerComponent {
                                         if (resourceAsStream != null) {
                                             jpylizerOutput = toByteArray(
                                                     resourceAsStream);
-                                            runner.pushEvent(
+                                            pushEvent(
                                                     new InMemoryAttributeParsingEvent(
                                                             getJpylyzerName(event.getName()),
                                                             jpylizerOutput,
@@ -143,7 +143,7 @@ public class MockupIteratorSuper extends MetadataCheckerComponent {
                             }
 
                             @Override
-                            public void handleFinish(EventRunner runner) {
+                            public void handleFinish() {
                             }
                         });
                 return defaultHandlers;

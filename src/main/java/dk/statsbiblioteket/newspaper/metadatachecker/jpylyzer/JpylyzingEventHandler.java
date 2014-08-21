@@ -7,8 +7,7 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.DataFileNode
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.InMemoryAttributeParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeBeginsParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeEndParsingEvent;
-import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.EventRunner;
-import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.TreeEventHandler;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.InjectingTreeEventHandler;
 import dk.statsbiblioteket.util.Bytes;
 import dk.statsbiblioteket.util.Streams;
 import dk.statsbiblioteket.util.Strings;
@@ -25,7 +24,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
 /** The jpylyzer metadata content checker checker */
-public class JpylyzingEventHandler implements TreeEventHandler {
+public class JpylyzingEventHandler extends InjectingTreeEventHandler {
 
     /** Name of content file in jp2 virtual folder */
     public static final String CONTENTS = "/contents";
@@ -72,7 +71,7 @@ public class JpylyzingEventHandler implements TreeEventHandler {
      * @param event the node begins event
      */
     @Override
-    public void handleNodeBegin(NodeBeginsParsingEvent event, EventRunner runner) {
+    public void handleNodeBegin(NodeBeginsParsingEvent event) {
         if (event instanceof DataFileNodeBeginsParsingEvent) {
             isInDataFile.set(true);
             datafile.set(event.getName());
@@ -85,7 +84,7 @@ public class JpylyzingEventHandler implements TreeEventHandler {
      * @param event the node ends event
      */
     @Override
-    public void handleNodeEnd(NodeEndParsingEvent event, EventRunner runner) {
+    public void handleNodeEnd(NodeEndParsingEvent event) {
         if (event instanceof DataFileNodeEndsParsingEvent) {
             isInDataFile.set(false);
             datafile.set(null);
@@ -101,7 +100,7 @@ public class JpylyzingEventHandler implements TreeEventHandler {
      * @param event the attribute event
      */
     @Override
-    public void handleAttribute(AttributeParsingEvent event, EventRunner runner) {
+    public void handleAttribute(AttributeParsingEvent event) {
         try {
             if (isInDataFile.get() != null && isInDataFile.get()) {
 
@@ -110,9 +109,9 @@ public class JpylyzingEventHandler implements TreeEventHandler {
 
                     File filePath = new File(batchFolder, datafile.get());
                     byte[] jpylizerOutput = toByteArray(jpylize(filePath));
-                    runner.pushEvent(new InMemoryAttributeParsingEvent(getJpylyzerName(datafile.get()),
-                                                                        jpylizerOutput,
-                                                                        md5sum(jpylizerOutput)));
+                    pushEvent(new InMemoryAttributeParsingEvent(getJpylyzerName(datafile.get()),
+                            jpylizerOutput,
+                            md5sum(jpylizerOutput)));
 
                 }
             }
@@ -149,7 +148,7 @@ public class JpylyzingEventHandler implements TreeEventHandler {
     }
 
     @Override
-    public void handleFinish(EventRunner runner) {
+    public void handleFinish() {
         //Anything to do here?
     }
 
