@@ -91,7 +91,10 @@ public class MetadataChecksFactory
         ArrayList<TreeEventHandler> treeEventHandlers = new ArrayList<>();
         DocumentCache documentCache = new DocumentCache();
 
-        if (atNinestars) { //This thing adds virtual jpylyzer.xml nodes
+        if (atNinestars) {
+            treeEventHandlers.add(new ChecksumCheckEventHandler(resultCollector));
+
+            //This thing adds virtual jpylyzer.xml nodes
             treeEventHandlers.add(new JpylyzingEventHandler(resultCollector, batchFolder, jpylyzerPath));
         }
         treeEventHandlers.add(new SchemaValidatorEventHandler(resultCollector, documentCache));
