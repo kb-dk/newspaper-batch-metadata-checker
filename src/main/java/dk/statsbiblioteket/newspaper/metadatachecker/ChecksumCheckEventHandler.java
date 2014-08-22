@@ -5,7 +5,6 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributePar
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.DefaultTreeEventHandler;
 import dk.statsbiblioteket.util.Bytes;
 import dk.statsbiblioteket.util.Checksums;
-import dk.statsbiblioteket.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.IOException;
@@ -34,8 +33,7 @@ public class ChecksumCheckEventHandler extends DefaultTreeEventHandler {
         } catch (IOException e) {
             log.warn("Error getting checksum in {}", attributeEvent.getName(), e);
             resultCollector.addFailure(attributeEvent.getName(), CHECKSUM, getClass().getSimpleName(),
-                    "2F-O1: Error getting checksum: " + e.toString(),
-                    Strings.getStackTrace(e));
+                    "2F-O1: Error getting checksum: " + e.toString());
             return;
         }
 
@@ -45,8 +43,7 @@ public class ChecksumCheckEventHandler extends DefaultTreeEventHandler {
         } catch (IOException e) {
             log.warn("Error calculating checksum on data in {}", attributeEvent.getName(), e);
             resultCollector.addFailure(attributeEvent.getName(), CHECKSUM, getClass().getSimpleName(),
-                    "2F-O1: Error calculating checksum on data: " + e.toString(),
-                    Strings.getStackTrace(e));
+                    "2F-O1: Error calculating checksum on data: " + e.toString());
             return;
         }
 
