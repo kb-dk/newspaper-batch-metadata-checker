@@ -57,34 +57,36 @@ public class MetadataCheckerComponentIT {
         mfPakConfiguration.setDatabaseUrl(properties.getProperty(ConfigConstants.MFPAK_URL));
         mfPakConfiguration.setDatabaseUser(properties.getProperty(ConfigConstants.MFPAK_USER));
         mfPakConfiguration.setDatabasePassword(properties.getProperty(ConfigConstants.MFPAK_PASSWORD));
-        EventHandlerFactory eventHandlerFactory = new MetadataChecksFactory(
-                resultCollector,
-                true,
-                getBatchFolder().getParentFile().getAbsolutePath(),
-                getJpylyzerPath(),
-                null,
-                new MfPakDAO(mfPakConfiguration),
-                batch,
-                batchXmlManifest);
-        EventRunner eventRunner = new MultiThreadedEventRunner(iterator,
-                eventHandlerFactory.createEventHandlers(),
-                resultCollector,
-                new MultiThreadedEventRunner.EventCondition() {
-                    @Override
-                    public boolean shouldFork(ParsingEvent event) {
-                        String[] splits = event.getName().split("/");
-                        return splits.length == 4;
-                    }
+        try (       final MfPakDAO mfPakDAO = new MfPakDAO(mfPakConfiguration)) {
+            EventHandlerFactory eventHandlerFactory = new MetadataChecksFactory(resultCollector,
+                    true,
+                    getBatchFolder().getParentFile().getAbsolutePath(),
+                    getJpylyzerPath(),
+                    null,
+                    mfPakDAO,
+                    batch,
+                    batchXmlManifest);
+            EventRunner eventRunner = new MultiThreadedEventRunner(iterator,
+                    eventHandlerFactory.createEventHandlers(),
+                    resultCollector,
+                    new MultiThreadedEventRunner.EventCondition() {
+                        @Override
+                        public boolean shouldFork(ParsingEvent event) {
+                            String[] splits = event.getName().split("/");
+                            return splits.length == 4;
+                        }
 
-                    @Override
-                    public boolean shouldJoin(ParsingEvent event) {
-                        String[] splits = event.getName().split("/");
-                        return splits.length == 3;
-                    }
-                },
-                Executors.newFixedThreadPool(4));
-        eventRunner.run();
-        assertTrue(resultCollector.isSuccess(), resultCollector.toReport());
+                        @Override
+                        public boolean shouldJoin(ParsingEvent event) {
+                            String[] splits = event.getName().split("/");
+                            return splits.length == 3;
+                        }
+                    },
+                    Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()));
+            eventRunner.run();
+            mfPakDAO.close();
+            assertTrue(resultCollector.isSuccess(), resultCollector.toReport());
+        }
         //Assert.fail();
     }
 

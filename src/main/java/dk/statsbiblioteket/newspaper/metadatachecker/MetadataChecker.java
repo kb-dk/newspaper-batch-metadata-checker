@@ -42,10 +42,11 @@ public class MetadataChecker {
         mfPakConfiguration.setDatabasePassword(properties.getProperty(ConfigConstants.MFPAK_PASSWORD));
 
         //make a new runnable component from the properties
-        RunnableComponent component = new MetadataCheckerComponent(properties, new MfPakDAO(mfPakConfiguration));
-
-        CallResult result = SBOIDomsAutonomousComponentUtils.startAutonomousComponent(properties, component);
-        log.info(result.toString());
-        return result.containsFailures();
+        try (final MfPakDAO mfPakDAO = new MfPakDAO(mfPakConfiguration)) {
+            RunnableComponent component = new MetadataCheckerComponent(properties, mfPakDAO);
+            CallResult result = SBOIDomsAutonomousComponentUtils.startAutonomousComponent(properties, component);
+            log.info(result.toString());
+            return result.containsFailures();
+        }
     }
 }
