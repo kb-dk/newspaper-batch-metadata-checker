@@ -57,7 +57,7 @@ public class MetadataCheckerComponentIT {
         mfPakConfiguration.setDatabaseUrl(properties.getProperty(ConfigConstants.MFPAK_URL));
         mfPakConfiguration.setDatabaseUser(properties.getProperty(ConfigConstants.MFPAK_USER));
         mfPakConfiguration.setDatabasePassword(properties.getProperty(ConfigConstants.MFPAK_PASSWORD));
-        try (       final MfPakDAO mfPakDAO = new MfPakDAO(mfPakConfiguration)) {
+        try (final MfPakDAO mfPakDAO = new MfPakDAO(mfPakConfiguration)) {
             EventHandlerFactory eventHandlerFactory = new MetadataChecksFactory(resultCollector,
                     true,
                     getBatchFolder().getParentFile().getAbsolutePath(),
