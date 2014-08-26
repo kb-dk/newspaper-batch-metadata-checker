@@ -15,6 +15,7 @@ import org.w3c.dom.Document;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -45,6 +46,9 @@ public class MetadataChecksFactory
                                  Document batchXmlStructure, Set<Checks> disabledChecks) {
         this.resultCollector = resultCollector;
         this.batchXmlStructure = batchXmlStructure;
+        if (disabledChecks == null){
+            disabledChecks = new HashSet<>();
+        }
         this.disabledChecks = disabledChecks;
         try {
             this.batchContext = BatchContextUtils.buildBatchContext(mfPakDAO, batch);
