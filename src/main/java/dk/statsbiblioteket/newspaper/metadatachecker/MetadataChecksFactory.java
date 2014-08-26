@@ -94,8 +94,10 @@ public class MetadataChecksFactory
                 treeEventHandlers.add(new ChecksumCheckEventHandler(resultCollector));
             }
 
-            //This thing adds virtual jpylyzer.xml nodes
-            treeEventHandlers.add(new JpylyzingEventHandler(resultCollector, batchFolder, jpylyzerPath));
+            if (!disabledChecks.contains(Checks.JPYLYZER)) {
+                //This thing adds virtual jpylyzer.xml nodes
+                treeEventHandlers.add(new JpylyzingEventHandler(resultCollector, batchFolder, jpylyzerPath));
+            }
         }
         if (!disabledChecks.contains(Checks.ALTO_XPATH)) {
             treeEventHandlers.add(new SchemaValidatorEventHandler(resultCollector, documentCache));
