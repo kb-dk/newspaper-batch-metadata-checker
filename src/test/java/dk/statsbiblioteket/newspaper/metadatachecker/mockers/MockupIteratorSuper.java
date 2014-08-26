@@ -41,7 +41,7 @@ public class MockupIteratorSuper extends MetadataCheckerComponent {
      * @param mfPakDAO   a DAO or stub.
      */
     public MockupIteratorSuper(Properties properties, MfPakDAO mfPakDAO) {
-        super(properties, mfPakDAO);
+        super(properties, mfPakDAO, null);
         this.mfPakDAO = mfPakDAO;
     }
 
@@ -73,7 +73,7 @@ public class MockupIteratorSuper extends MetadataCheckerComponent {
     @Override
     protected MetadataChecksFactory getMetadataChecksFactory(Batch batch, ResultCollector resultCollector,
                                                              Document batchXmlStructure) {
-        return new MetadataChecksFactory(resultCollector, mfPakDAO, batch, batchXmlStructure) {
+        return new MetadataChecksFactory(resultCollector, mfPakDAO, batch, batchXmlStructure, null) {
             @Override
             public List<TreeEventHandler> createEventHandlers() {
                 List<TreeEventHandler> defaultHandlers = super.createEventHandlers();

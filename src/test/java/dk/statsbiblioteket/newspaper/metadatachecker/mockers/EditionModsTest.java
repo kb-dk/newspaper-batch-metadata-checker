@@ -54,7 +54,7 @@ public class EditionModsTest {
     public void testEditionModsGood() throws SQLException, ParseException {
         DocumentCache documentCache = new DocumentCache();
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
-        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null, documentCache);
+        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, documentCache);
         BatchContext context = BatchContextUtils.buildBatchContext(getMFPak(), getBatch());
         DefaultTreeEventHandler editionModsEventHandler = new EditionModsEventHandler(resultCollector, context, documentCache);
         AttributeParsingEvent editionEvent = new AttributeParsingEvent(
@@ -84,7 +84,8 @@ public class EditionModsTest {
         DocumentCache documentCache = new DocumentCache();
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
         Batch batch = getBatch();
-        DefaultTreeEventHandler schematronValidatorEventHandler = new SchematronValidatorEventHandler(resultCollector,null,documentCache);
+        DefaultTreeEventHandler schematronValidatorEventHandler = new SchematronValidatorEventHandler(resultCollector,
+                documentCache);
         BatchContext context = BatchContextUtils.buildBatchContext(getMFPak(), batch);
         DefaultTreeEventHandler editionModsEventHandler = new EditionModsEventHandler(resultCollector, context, documentCache);
         AttributeParsingEvent editionEvent = new AttributeParsingEvent(

@@ -15,8 +15,10 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 import java.io.InputStream;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.Executors;
 
 /** Check Metadata of all nodes. */
@@ -24,6 +26,7 @@ public class MetadataCheckerComponent
         extends TreeProcessorAbstractRunnableComponent {
     private Logger log = LoggerFactory.getLogger(getClass());
     private final MfPakDAO mfPakDAO;
+    private final Set<MetadataChecksFactory.Checks> disabledChecks;
 
     /**
      * Initialise metadata checker component. For used properties {@link TreeProcessorAbstractRunnableComponent#createIterator}.
@@ -40,9 +43,13 @@ public class MetadataCheckerComponent
      * @param properties Properties for initialising component.
      * @param mfPakDAO a DAO object from which one can read relevant external properties of a batch.
      */
-    public MetadataCheckerComponent(Properties properties, MfPakDAO mfPakDAO) {
+    public MetadataCheckerComponent(Properties properties, MfPakDAO mfPakDAO, Set<MetadataChecksFactory.Checks> disabledChecks) {
         super(properties);
         this.mfPakDAO = mfPakDAO;
+        if (disabledChecks == null){
+            disabledChecks = new HashSet<>();
+        }
+        this.disabledChecks = disabledChecks;
     }
 
     @Override
@@ -103,17 +110,17 @@ public class MetadataCheckerComponent
         boolean atNinestars =
                 Boolean.parseBoolean(getProperties().getProperty(ConfigConstants.AT_NINESTARS, Boolean.FALSE.toString()));
         MetadataChecksFactory metadataChecksFactory;
+
         if (atNinestars) {
             String jpylyzerPath = getProperties().getProperty(ConfigConstants.JPYLYZER_PATH);
             String batchFolder = getProperties().getProperty(ConfigConstants.ITERATOR_FILESYSTEM_BATCHES_FOLDER);
-            String controlPoliciesPath = getProperties().getProperty(ConfigConstants.SCAPE_CONTROL_POLICIES_PATH);
             metadataChecksFactory = new MetadataChecksFactory(resultCollector,
-                                                              atNinestars,
+                                                              true,
                                                               batchFolder,
                                                               jpylyzerPath,
-                                                              controlPoliciesPath, mfPakDAO, batch, batchXmlStructure);
+                    mfPakDAO, batch, batchXmlStructure,disabledChecks);
         } else {
-            metadataChecksFactory = new MetadataChecksFactory(resultCollector, mfPakDAO, batch, batchXmlStructure);
+            metadataChecksFactory = new MetadataChecksFactory(resultCollector, mfPakDAO, batch, batchXmlStructure,disabledChecks);
         }
         return metadataChecksFactory;
     }

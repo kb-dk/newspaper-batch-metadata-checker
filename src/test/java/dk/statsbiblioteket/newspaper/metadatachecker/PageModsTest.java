@@ -1,10 +1,22 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
+import dk.statsbiblioteket.medieplatform.autonomous.Batch;
+import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeBeginsParsingEvent;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeEndParsingEvent;
+import dk.statsbiblioteket.medieplatform.autonomous.iterator.filesystem.FileAttributeParsingEvent;
+import dk.statsbiblioteket.newspaper.metadatachecker.caches.DocumentCache;
+import dk.statsbiblioteket.newspaper.mfpakintegration.batchcontext.BatchContext;
+import dk.statsbiblioteket.newspaper.mfpakintegration.batchcontext.BatchContextUtils;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.InconsistentDatabaseException;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperBatchOptions;
+import dk.statsbiblioteket.util.xml.DOM;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+import org.w3c.dom.Document;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,24 +28,11 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.Map;
 
-import dk.statsbiblioteket.newspaper.metadatachecker.caches.DocumentCache;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
-import org.w3c.dom.Document;
-
-import dk.statsbiblioteket.medieplatform.autonomous.Batch;
-import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
-import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
-import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeBeginsParsingEvent;
-import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.NodeEndParsingEvent;
-import dk.statsbiblioteket.medieplatform.autonomous.iterator.filesystem.FileAttributeParsingEvent;
-import dk.statsbiblioteket.newspaper.mfpakintegration.batchcontext.BatchContext;
-import dk.statsbiblioteket.newspaper.mfpakintegration.batchcontext.BatchContextUtils;
-import dk.statsbiblioteket.newspaper.mfpakintegration.database.InconsistentDatabaseException;
-import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
-import dk.statsbiblioteket.newspaper.mfpakintegration.database.NewspaperBatchOptions;
-import dk.statsbiblioteket.util.xml.DOM;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 /**
  * Tests for the validity of page-mods metadata are grouped in this class because they are logically connected, even
@@ -67,7 +66,7 @@ public class PageModsTest {
     public void testPageModsGoodSch() {
         DocumentCache documentCache = new DocumentCache();
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
-        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null, documentCache);
+        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, documentCache);
         AttributeParsingEvent modsEvent = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-15-01/AdresseContoirsEfterretninger-1795-06-15-01-0010B.mods.xml") {
             @Override
             public InputStream getData() throws IOException {
@@ -92,7 +91,7 @@ public class PageModsTest {
     public void testPageModsBad1Sch() {
         DocumentCache documentCache = new DocumentCache();
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
-        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null, documentCache);
+        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, documentCache);
         AttributeParsingEvent modsEvent = new AttributeParsingEvent("AdresseContoirsEfterretninger-1795-06-15-01-0010B.mods.xml") {
             @Override
             public InputStream getData() throws IOException {
@@ -120,7 +119,7 @@ public class PageModsTest {
     public void testPageModsBad2Sch() {
         DocumentCache documentCache = new DocumentCache();
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
-        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null, documentCache);
+        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, documentCache);
         AttributeParsingEvent modsEvent = new AttributeParsingEvent("AdresseContoirsEfterretninger-1795-06-15-01-0003B.mods.xml") {
             @Override
             public InputStream getData() throws IOException {

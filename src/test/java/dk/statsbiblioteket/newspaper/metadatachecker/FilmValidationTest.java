@@ -355,7 +355,7 @@ public class FilmValidationTest {
 
     private void handleTestEvent(final String input, ResultCollector resultCollector) {
         DocumentCache documentCache = new DocumentCache();
-        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null, documentCache);
+        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, documentCache);
         AttributeParsingEvent event = new AttributeParsingEvent("test.film.xml") {
             @Override
             public InputStream getData() throws IOException {

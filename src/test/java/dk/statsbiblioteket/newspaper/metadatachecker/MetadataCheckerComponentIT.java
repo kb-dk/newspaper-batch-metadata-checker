@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.util.HashSet;
 import java.util.Properties;
 import java.util.concurrent.Executors;
 
@@ -62,10 +63,9 @@ public class MetadataCheckerComponentIT {
                     true,
                     getBatchFolder().getParentFile().getAbsolutePath(),
                     getJpylyzerPath(),
-                    null,
                     mfPakDAO,
                     batch,
-                    batchXmlManifest);
+                    batchXmlManifest, new HashSet<MetadataChecksFactory.Checks>());
             EventRunner eventRunner = new MultiThreadedEventRunner(iterator,
                     eventHandlerFactory.createEventHandlers(),
                     resultCollector,

@@ -43,7 +43,7 @@ public class MixSchematronValidationTest {
                 film, avisID, publishDate, pictureNumber, batch, 9304, 11408, 400, "7ed748249def3bcaadd825ae17dc817a",15,
                 "microfilm");
 
-        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null, documentCache);
+        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, documentCache);
         handler.handleAttribute(event);
         assertTrue(resultCollector.isSuccess(), resultCollector.toReport());
     }
@@ -554,7 +554,7 @@ public class MixSchematronValidationTest {
 
     private void handleTestEvent(final String input, ResultCollector resultCollector) {
         DocumentCache documentCache = new DocumentCache();
-        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, null, documentCache);
+        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, documentCache);
         AttributeParsingEvent event = new AttributeParsingEvent("test.mix.xml") {
             @Override
             public InputStream getData() throws IOException {

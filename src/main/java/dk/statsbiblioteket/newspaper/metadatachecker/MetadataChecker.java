@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Properties;
 
 /** This component checks metadata for validity. */
@@ -43,7 +44,7 @@ public class MetadataChecker {
 
         //make a new runnable component from the properties
         try (final MfPakDAO mfPakDAO = new MfPakDAO(mfPakConfiguration)) {
-            RunnableComponent component = new MetadataCheckerComponent(properties, mfPakDAO);
+            RunnableComponent component = new MetadataCheckerComponent(properties, mfPakDAO, new HashSet<MetadataChecksFactory.Checks>());
             CallResult result = SBOIDomsAutonomousComponentUtils.startAutonomousComponent(properties, component);
             log.info(result.toString());
             return result.containsFailures();

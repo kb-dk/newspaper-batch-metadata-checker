@@ -8,15 +8,12 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributePar
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.DefaultTreeEventHandler;
 import dk.statsbiblioteket.newspaper.metadatachecker.caches.DocumentCache;
 import dk.statsbiblioteket.util.Strings;
-import dk.statsbiblioteket.util.xml.DOM;
 import org.oclc.purl.dsdl.svrl.FailedAssert;
 import org.oclc.purl.dsdl.svrl.SchematronOutputType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
@@ -62,27 +59,13 @@ public class SchematronValidatorEventHandler extends DefaultTreeEventHandler {
 
     /**
      * Initialise the event handler with the collector to collect results in.
+     *  @param resultCollector     The collector to collect results in.
      *
-     * @param resultCollector     The collector to collect results in.
-     * @param controlPoliciesPath path to the control policies. If null, use default control policies
      */
-    public SchematronValidatorEventHandler(ResultCollector resultCollector,
-                                           String controlPoliciesPath, DocumentCache documentCache) {
+    public SchematronValidatorEventHandler(ResultCollector resultCollector, DocumentCache documentCache) {
         log.debug("Initialising {}", getClass().getName());
         this.resultCollector = resultCollector;
         this.documentCache = documentCache;
-
-        Document controlPoliciesDocument;
-        if (controlPoliciesPath != null) {
-            try {
-                controlPoliciesDocument = DOM.streamToDOM(new FileInputStream(controlPoliciesPath));
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException("Failed to load control policies from '" + controlPoliciesPath + "'", e);
-            }
-        } else {
-            controlPoliciesDocument = DOM.streamToDOM(Thread.currentThread().getContextClassLoader()
-                                                            .getResourceAsStream("defaultControlPolicies.xml"));
-        }
     }
 
     @Override
