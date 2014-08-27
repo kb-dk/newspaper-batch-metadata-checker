@@ -12,7 +12,7 @@
     <version>1.12-SNAPSHOT</version>
 
     <properties>
-        <autonoumous.component.framework.version>1.10-SNAPSHOT</autonoumous.component.framework.version>
+        <autonoumous.component.framework.version>1.10</autonoumous.component.framework.version>
     </properties>
 
     <repositories>
@@ -75,7 +75,7 @@
         <dependency>
             <groupId>dk.statsbiblioteket.newspaper</groupId>
             <artifactId>newspaper-mfpak-integration</artifactId>
-            <version>1.10-SNAPSHOT</version>
+            <version>1.10</version>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>

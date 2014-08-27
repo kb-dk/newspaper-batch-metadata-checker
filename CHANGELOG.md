@@ -1,3 +1,13 @@
+1.12
+* Add caching for XML documents, for speed-up improvements
+* Use DOM parsing rather than SAX parsing for schema validation, for speed-up improvements
+* Make the metadata checker multithreaded
+* Add a checksum checker in the same style as metadata checks (for use in the 9* tool)
+* Remove stacktraces from reported results, stacktraces are logged instead
+* Allow for toggleable metadata checks (for use in the 9* tool)
+* Update to version 1.10 of batch event framework
+* Update to version 1.10 of newspaper mfpak integration
+
 1.11
 * Fix yet another date range bug, where a partial date and a date in the start/end of the partial interval had no well-defined ordering
 
