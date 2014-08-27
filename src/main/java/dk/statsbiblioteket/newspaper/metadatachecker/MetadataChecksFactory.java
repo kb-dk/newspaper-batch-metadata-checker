@@ -23,6 +23,7 @@ import java.util.Set;
 public class MetadataChecksFactory
         implements EventHandlerFactory {
 
+    /** This enum contains all the checkers that can be disabled. */
     public enum Checks{
         ALTO_XPATH,ALTO_MIX,CHECKSUM,EDITION_MODS,MIX_FILM,MODS_XPATH,SCHEMATRON,SCHEMA_VALIDATOR,MIX_XML,FILM_XML,JPYLYZER;
     }
@@ -37,7 +38,7 @@ public class MetadataChecksFactory
 
     /**
      * Initialise the MetadataChecksFactory with a result collector to collect errors in.
-     *  @param resultCollector The result collector to collect errors in.
+     * @param resultCollector The result collector to collect errors in.
      * @param mfPakDAO        a DAO object from which one can read relevant external properties of a batch.
      * @param batch           a batch object representing the batch being analysed.
      * @param disabledChecks  a set of enums detailing the checks to be disabled
@@ -68,7 +69,7 @@ public class MetadataChecksFactory
      * @param jpylyzerPath        the path to the jpylyzer executable. If null, jpylyzer will be used from the PATH
      * @param mfPakDAO            a DAO object from which one can read relevant external properties of a batch.
      * @param batch               a batch object representing the batch being analysed.
-     * @param disabledChecks
+     * @param disabledChecks      a set of enums detailing the checks to be disabled
      */
     public MetadataChecksFactory(ResultCollector resultCollector, boolean atNinestars, String batchFolder, String jpylyzerPath,
                                  MfPakDAO mfPakDAO, Batch batch, Document batchXmlStructure, Set<Checks> disabledChecks) {

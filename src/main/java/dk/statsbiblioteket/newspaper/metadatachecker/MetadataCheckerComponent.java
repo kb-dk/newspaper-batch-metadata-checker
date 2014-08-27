@@ -42,6 +42,7 @@ public class MetadataCheckerComponent
      *
      * @param properties Properties for initialising component.
      * @param mfPakDAO a DAO object from which one can read relevant external properties of a batch.
+     * @param disabledChecks  a set of enums detailing the checks to be disabled
      */
     public MetadataCheckerComponent(Properties properties, MfPakDAO mfPakDAO, Set<MetadataChecksFactory.Checks> disabledChecks) {
         super(properties);
