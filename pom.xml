@@ -11,10 +11,6 @@
     <artifactId>newspaper-batch-metadata-checker</artifactId>
     <version>1.13-SNAPSHOT</version>
 
-    <properties>
-        <autonoumous.component.framework.version>1.12-SNAPSHOT</autonoumous.component.framework.version>
-    </properties>
-
     <repositories>
         <repository>
             <id>phloc.com</id>
@@ -37,16 +33,11 @@
             <version>2.6.2</version>
         </dependency>
 
-        <dependency>
-            <groupId>dk.statsbiblioteket.newspaper</groupId>
-            <artifactId>newspaper-batch-event-framework-common</artifactId>
-            <version>${autonoumous.component.framework.version}</version>
-        </dependency>
-        
+
         <dependency>
             <groupId>dk.statsbiblioteket.newspaper</groupId>
             <artifactId>tree-processor-runnable-component</artifactId>
-            <version>${autonoumous.component.framework.version}</version>
+            <version>1.12-SNAPSHOT</version>
         </dependency>
 
 
