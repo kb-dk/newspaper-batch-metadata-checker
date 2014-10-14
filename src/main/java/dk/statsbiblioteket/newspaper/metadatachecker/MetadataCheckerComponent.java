@@ -65,7 +65,7 @@ public class MetadataCheckerComponent
      * @param batch The batch to check
      * @param resultCollector Collector to get the result.
      */
-    public void doWorkOnBatch(Batch batch,
+    public void doWorkOnItem(Batch batch,
                               ResultCollector resultCollector)
             throws
             Exception {

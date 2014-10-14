@@ -37,7 +37,7 @@ public class MetadataCheckerComponentTest {
     /**
      * Test checking metadata on a "bad" batch.
      */
-    public void testDoWorkOnBatchBad() throws Exception {
+    public void testdoWorkOnItemBad() throws Exception {
 
 
         MfPakDAO mfPakDAO = mock(MfPakDAO.class);
@@ -59,7 +59,7 @@ public class MetadataCheckerComponentTest {
         TestResultCollector result = new TestResultCollector(
                 metadataCheckerComponent.getComponentName(), metadataCheckerComponent.getComponentVersion());
 
-        metadataCheckerComponent.doWorkOnBatch(batch, result);
+        metadataCheckerComponent.doWorkOnItem(batch, result);
 
         // Assert errors
         Assert.assertFalse(result.isSuccess(), result.toReport() + "\n");
@@ -84,7 +84,7 @@ public class MetadataCheckerComponentTest {
     /**
      * Test checking on a "good" batch.
      */
-    public void testDoWorkOnBatchGood() throws Exception {
+    public void testdoWorkOnItemGood() throws Exception {
         Properties properties = new Properties(System.getProperties());
         properties.setProperty("atNinestars","true");
         properties.setProperty("jpylyzerPath",getJpylyzerPath());
@@ -94,7 +94,7 @@ public class MetadataCheckerComponentTest {
                 metadataCheckerComponent.getComponentName(), metadataCheckerComponent.getComponentVersion());
         Batch batch = new Batch("400022028241");
         batch.setRoundTripNumber(1);
-        metadataCheckerComponent.doWorkOnBatch(batch, result);
+        metadataCheckerComponent.doWorkOnItem(batch, result);
         Assert.assertTrue(result.isSuccess(), result.toReport() + "\n");
     }
 

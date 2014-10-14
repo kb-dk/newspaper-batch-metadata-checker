@@ -1,6 +1,6 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
-import dk.statsbiblioteket.medieplatform.autonomous.SBOIDomsAutonomousComponentUtils;
+import dk.statsbiblioteket.medieplatform.autonomous.NewspaperBatchAutonomousComponentUtils;
 import dk.statsbiblioteket.medieplatform.autonomous.CallResult;
 import dk.statsbiblioteket.medieplatform.autonomous.ConfigConstants;
 import dk.statsbiblioteket.medieplatform.autonomous.RunnableComponent;
@@ -25,7 +25,7 @@ public class MetadataChecker {
      * @param args the arguments.
      *
      * @throws Exception
-     * @see SBOIDomsAutonomousComponentUtils#parseArgs(String[])
+     * @see NewspaperBatchAutonomousComponentUtils#parseArgs(String[])
      */
     public static void main(String... args) throws Exception {
         System.exit(doMain(args));
@@ -35,7 +35,7 @@ public class MetadataChecker {
         log.info("Starting with args {}", new Object[]{args});
 
         //Parse the args to a properties construct
-        Properties properties = SBOIDomsAutonomousComponentUtils.parseArgs(args);
+        Properties properties = NewspaperBatchAutonomousComponentUtils.parseArgs(args);
 
         MfPakConfiguration mfPakConfiguration = new MfPakConfiguration();
         mfPakConfiguration.setDatabaseUrl(properties.getProperty(ConfigConstants.MFPAK_URL));
@@ -45,7 +45,7 @@ public class MetadataChecker {
         //make a new runnable component from the properties
         try (final MfPakDAO mfPakDAO = new MfPakDAO(mfPakConfiguration)) {
             RunnableComponent component = new MetadataCheckerComponent(properties, mfPakDAO, new HashSet<MetadataChecksFactory.Checks>());
-            CallResult result = SBOIDomsAutonomousComponentUtils.startAutonomousComponent(properties, component);
+            CallResult result = NewspaperBatchAutonomousComponentUtils.startAutonomousComponent(properties, component);
             log.info(result.toString());
             return result.containsFailures();
         }
