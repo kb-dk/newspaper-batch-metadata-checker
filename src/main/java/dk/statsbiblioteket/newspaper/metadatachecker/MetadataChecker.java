@@ -1,5 +1,6 @@
 package dk.statsbiblioteket.newspaper.metadatachecker;
 
+import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.NewspaperBatchAutonomousComponentUtils;
 import dk.statsbiblioteket.medieplatform.autonomous.CallResult;
 import dk.statsbiblioteket.medieplatform.autonomous.ConfigConstants;
@@ -44,7 +45,7 @@ public class MetadataChecker {
 
         //make a new runnable component from the properties
         try (final MfPakDAO mfPakDAO = new MfPakDAO(mfPakConfiguration)) {
-            RunnableComponent component = new MetadataCheckerComponent(properties, mfPakDAO, new HashSet<MetadataChecksFactory.Checks>());
+            RunnableComponent<Batch> component = new MetadataCheckerComponent(properties, mfPakDAO, new HashSet<MetadataChecksFactory.Checks>());
             CallResult result = NewspaperBatchAutonomousComponentUtils.startAutonomousComponent(properties, component);
             log.info(result.toString());
             return result.containsFailures();
