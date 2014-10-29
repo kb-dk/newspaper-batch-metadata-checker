@@ -119,8 +119,13 @@ public class MetadataCheckerComponentIT {
     public TreeIterator getIterator() throws URISyntaxException {
         File file = getBatchFolder();
         System.out.println(file);
-        return new TransformingIteratorForFileSystems(file, "\\.", ".*\\.jp2$", ".md5",
-                                                      Arrays.asList("transfer_complete", "transfer_acknowledged"));
+        return new TransformingIteratorForFileSystems(file,
+                                                      TransformingIteratorForFileSystems.GROUPING_PATTERN_DEFAULT_VALUE,
+                                                      TransformingIteratorForFileSystems.DATA_FILE_PATTERN_JP2_VALUE,
+                                                      TransformingIteratorForFileSystems.CHECKSUM_POSTFIX_DEFAULT_VALUE,
+                                                      Arrays.asList(
+                                                              TransformingIteratorForFileSystems.IGNORED_FILES_DEFAULT_VALUE
+                                                                      .split(",")));
     }
 
     private File getBatchFolder() {

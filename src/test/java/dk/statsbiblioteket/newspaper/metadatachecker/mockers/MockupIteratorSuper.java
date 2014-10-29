@@ -61,8 +61,14 @@ public class MockupIteratorSuper extends MetadataCheckerComponent {
                       .getResource("scratch")
                       .getFile());
         File batchDir = new File(dataDir, batch.getFullID());
-        return new TransformingIteratorForFileSystems(batchDir, Pattern.quote("."), ".*\\.jp2$", ".md5",
-                                                      Arrays.asList("transfer_complete", "transfer_acknowledged"));
+        return new TransformingIteratorForFileSystems(batchDir,
+                                                      TransformingIteratorForFileSystems.GROUPING_PATTERN_DEFAULT_VALUE,
+                                                      TransformingIteratorForFileSystems.DATA_FILE_PATTERN_JP2_VALUE,
+
+                                                      TransformingIteratorForFileSystems.CHECKSUM_POSTFIX_DEFAULT_VALUE,
+                                                      Arrays.asList(
+                                                              TransformingIteratorForFileSystems.IGNORED_FILES_DEFAULT_VALUE
+                                                                      .split(",")));
     }
 
     @Override
