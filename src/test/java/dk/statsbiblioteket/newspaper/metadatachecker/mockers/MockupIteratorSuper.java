@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.regex.Pattern;
@@ -60,7 +61,8 @@ public class MockupIteratorSuper extends MetadataCheckerComponent {
                       .getResource("scratch")
                       .getFile());
         File batchDir = new File(dataDir, batch.getFullID());
-        return new TransformingIteratorForFileSystems(batchDir, Pattern.quote("."), ".*\\.jp2$", ".md5");
+        return new TransformingIteratorForFileSystems(batchDir, Pattern.quote("."), ".*\\.jp2$", ".md5",
+                                                      Arrays.asList("transfer_complete", "transfer_acknowledged"));
     }
 
     @Override

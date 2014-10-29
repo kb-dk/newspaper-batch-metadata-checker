@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.concurrent.Executors;
@@ -118,7 +119,8 @@ public class MetadataCheckerComponentIT {
     public TreeIterator getIterator() throws URISyntaxException {
         File file = getBatchFolder();
         System.out.println(file);
-        return new TransformingIteratorForFileSystems(file, "\\.", ".*\\.jp2$", ".md5");
+        return new TransformingIteratorForFileSystems(file, "\\.", ".*\\.jp2$", ".md5",
+                                                      Arrays.asList("transfer_complete", "transfer_acknowledged"));
     }
 
     private File getBatchFolder() {
