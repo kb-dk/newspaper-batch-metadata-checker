@@ -1,3 +1,6 @@
+1.13
+* Use newest version of batch event framework. No functional changes for this module.
+
 1.12
 * Add caching for XML documents, for speed-up improvements
 * Use DOM parsing rather than SAX parsing for schema validation, for speed-up improvements
