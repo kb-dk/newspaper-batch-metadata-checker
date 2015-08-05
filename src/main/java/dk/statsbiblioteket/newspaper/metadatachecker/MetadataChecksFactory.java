@@ -104,7 +104,7 @@ public class MetadataChecksFactory
                 treeEventHandlers.add(new JpylyzingEventHandler(resultCollector, batchFolder, jpylyzerPath));
             }
         }
-        if (!disabledChecks.contains(Checks.ALTO_XPATH)) {
+        if (!disabledChecks.contains(Checks.SCHEMA_VALIDATOR)) {
             treeEventHandlers.add(new SchemaValidatorEventHandler(resultCollector, documentCache));
         }
         if (!disabledChecks.contains(Checks.SCHEMATRON)) {
