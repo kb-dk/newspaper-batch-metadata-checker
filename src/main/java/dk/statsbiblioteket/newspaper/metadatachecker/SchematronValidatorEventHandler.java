@@ -23,32 +23,10 @@ import java.util.Map;
 public class SchematronValidatorEventHandler extends DefaultTreeEventHandler {
 
     /** A map from file postfix to a known schema for that file. */
-    private static final Map<String, String> POSTFIX_TO_XSD;
-    private static final Map<String, String> POSTFIX_TO_TYPE;
+    private  final Map<String, String> POSTFIX_TO_XSD;
+    private  final Map<String, String> POSTFIX_TO_TYPE;
     private DocumentCache documentCache;
 
-    /**
-     * Statically initialise the Map to the hardcoded names of the schematron files.
-     */
-    static {
-        Map<String, String> postfixToSch = new HashMap<>();
-        postfixToSch.put(".alto.xml", "alto.sch");
-        postfixToSch.put(".mix.xml", "mix.sch");
-        postfixToSch.put(".mods.xml", "mods.sch");
-        postfixToSch.put(".edition.xml", "edition-mods.sch");
-        postfixToSch.put(".film.xml", "film.sch");
-        postfixToSch.put(".jpylyzer.xml", "sb-jp2.sch");
-        POSTFIX_TO_XSD = Collections.unmodifiableMap(postfixToSch);
-
-        Map<String, String> postfixToType = new HashMap<>();
-        postfixToType.put(".alto.xml", "metadata");
-        postfixToType.put(".mix.xml", "metadata");
-        postfixToType.put(".mods.xml", "metadata");
-        postfixToType.put(".edition.xml", "metadata");
-        postfixToType.put(".film.xml", "metadata");
-        postfixToType.put(".jpylyzer.xml", "jp2file");
-        POSTFIX_TO_TYPE = Collections.unmodifiableMap(postfixToType);
-    }
 
     /** A map of parsed schemas for a given schema file name. */
     static Map<String, SchematronResourcePure> schematrons = new HashMap<>();
@@ -59,13 +37,38 @@ public class SchematronValidatorEventHandler extends DefaultTreeEventHandler {
 
     /**
      * Initialise the event handler with the collector to collect results in.
-     *  @param resultCollector     The collector to collect results in.
+     * @param resultCollector     The collector to collect results in.
+     * @param postfix_to_xsd
+     * @param postfix_to_type
      *
      */
-    public SchematronValidatorEventHandler(ResultCollector resultCollector, DocumentCache documentCache) {
+    public SchematronValidatorEventHandler(ResultCollector resultCollector, DocumentCache documentCache, Map<String, String> postfix_to_xsd, Map<String, String> postfix_to_type) {
+        POSTFIX_TO_XSD = postfix_to_xsd;
+        POSTFIX_TO_TYPE = postfix_to_type;
         log.debug("Initialising {}", getClass().getName());
         this.resultCollector = resultCollector;
         this.documentCache = documentCache;
+    }
+
+    public SchematronValidatorEventHandler(ResultCollector resultCollector, DocumentCache documentCache) {
+        this.resultCollector = resultCollector;
+        this.documentCache = documentCache;
+        POSTFIX_TO_XSD = new HashMap<>();
+        POSTFIX_TO_XSD.put(".alto.xml", "alto.sch");
+        POSTFIX_TO_XSD.put(".mix.xml", "mix.sch");
+        POSTFIX_TO_XSD.put(".mods.xml", "mods.sch");
+        POSTFIX_TO_XSD.put(".edition.xml", "edition-mods.sch");
+        POSTFIX_TO_XSD.put(".film.xml", "film.sch");
+        POSTFIX_TO_XSD.put(".jpylyzer.xml", "sb-jp2.sch");
+
+        POSTFIX_TO_TYPE = new HashMap<>();
+        POSTFIX_TO_TYPE.put(".alto.xml", "metadata");
+        POSTFIX_TO_TYPE.put(".mix.xml", "metadata");
+        POSTFIX_TO_TYPE.put(".mods.xml", "metadata");
+        POSTFIX_TO_TYPE.put(".edition.xml", "metadata");
+        POSTFIX_TO_TYPE.put(".film.xml", "metadata");
+        POSTFIX_TO_TYPE.put(".jpylyzer.xml", "jp2file");
+
     }
 
     @Override

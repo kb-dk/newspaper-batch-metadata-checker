@@ -32,38 +32,13 @@ import java.util.Map;
 /** Check xml data of known file postfixes against xsd schemas. */
 public class SchemaValidatorEventHandler extends DefaultTreeEventHandler {
     /** A map from file postfix to a known schema for that file. */
-    private static final Map<String, String> POSTFIX_TO_XSD;
-    private static final Map<String, String> POSTFIX_TO_TYPE;
-    private static final Map<String, String> POSTFIX_TO_MESSAGE_PREFIX;
+    private  final Map<String, String> POSTFIX_TO_XSD;
+    private  final Map<String, String> POSTFIX_TO_TYPE;
+    private  final Map<String, String> POSTFIX_TO_MESSAGE_PREFIX;
     private DocumentCache documentCache;
 
     static {
-        Map<String, String> postfixToXsd = new HashMap<>();
-        postfixToXsd.put(".alto.xml", "alto-v2.0.xsd");
-        postfixToXsd.put(".mix.xml", "mix.xsd");
-        postfixToXsd.put(".mods.xml", "mods-3-1.xsd");
-        postfixToXsd.put(".edition.xml", "mods-3-1.xsd");
-        postfixToXsd.put(".film.xml", "film.xsd");
-        postfixToXsd.put(".jpylyzer.xml", "jpylyzer.xsd");
-        POSTFIX_TO_XSD = Collections.unmodifiableMap(postfixToXsd);
 
-        Map<String, String> postfixToType = new HashMap<>();
-        postfixToType.put(".alto.xml", "metadata");
-        postfixToType.put(".mix.xml", "metadata");
-        postfixToType.put(".mods.xml", "metadata");
-        postfixToType.put(".edition.xml", "metadata");
-        postfixToType.put(".film.xml", "metadata");
-        postfixToType.put(".jpylyzer.xml", "jp2file");
-        POSTFIX_TO_TYPE = Collections.unmodifiableMap(postfixToType);
-
-        Map<String, String> postfixToMessagePrefix = new HashMap<>();
-        postfixToMessagePrefix.put(".alto.xml", "2J: ");
-        postfixToMessagePrefix.put(".mix.xml", "2K: ");
-        postfixToMessagePrefix.put(".mods.xml", "2C: ");
-        postfixToMessagePrefix.put(".edition.xml", "2D: ");
-        postfixToMessagePrefix.put(".film.xml", "2E: ");
-        postfixToMessagePrefix.put(".jpylyzer.xml", "2B: ");
-        POSTFIX_TO_MESSAGE_PREFIX = Collections.unmodifiableMap(postfixToMessagePrefix);
     }
 
     /** Logger */
@@ -77,11 +52,47 @@ public class SchemaValidatorEventHandler extends DefaultTreeEventHandler {
      * Initialise the event handler with the collector to collect results in.
      *
      * @param resultCollector The collector to collect results in.
+     * @param postfix_to_xsd
+     * @param postfix_to_type
+     * @param postfix_to_message_prefix
      */
-    public SchemaValidatorEventHandler(ResultCollector resultCollector, DocumentCache documentCache) {
+    public SchemaValidatorEventHandler(ResultCollector resultCollector, DocumentCache documentCache, Map<String, String> postfix_to_xsd, Map<String, String> postfix_to_type, Map<String, String> postfix_to_message_prefix) {
+        POSTFIX_TO_XSD = postfix_to_xsd;
+        POSTFIX_TO_TYPE = postfix_to_type;
+        POSTFIX_TO_MESSAGE_PREFIX = postfix_to_message_prefix;
         log.debug("Initialising {}", getClass().getName());
         this.resultCollector = resultCollector;
         this.documentCache = documentCache;
+    }
+
+    public SchemaValidatorEventHandler(ResultCollector resultCollector, DocumentCache documentCache) {
+        POSTFIX_TO_XSD = new HashMap<>();
+        POSTFIX_TO_XSD.put(".alto.xml", "alto-v2.0.xsd");
+        POSTFIX_TO_XSD.put(".mix.xml", "mix.xsd");
+        POSTFIX_TO_XSD.put(".mods.xml", "mods-3-1.xsd");
+        POSTFIX_TO_XSD.put(".edition.xml", "mods-3-1.xsd");
+        POSTFIX_TO_XSD.put(".film.xml", "film.xsd");
+        POSTFIX_TO_XSD.put(".jpylyzer.xml", "jpylyzer.xsd");
+
+        POSTFIX_TO_TYPE = new HashMap<>();
+        POSTFIX_TO_TYPE.put(".alto.xml", "metadata");
+        POSTFIX_TO_TYPE.put(".mix.xml", "metadata");
+        POSTFIX_TO_TYPE.put(".mods.xml", "metadata");
+        POSTFIX_TO_TYPE.put(".edition.xml", "metadata");
+        POSTFIX_TO_TYPE.put(".film.xml", "metadata");
+        POSTFIX_TO_TYPE.put(".jpylyzer.xml", "jp2file");
+
+        POSTFIX_TO_MESSAGE_PREFIX = new HashMap<>();
+        POSTFIX_TO_MESSAGE_PREFIX.put(".alto.xml", "2J: ");
+        POSTFIX_TO_MESSAGE_PREFIX.put(".mix.xml", "2K: ");
+        POSTFIX_TO_MESSAGE_PREFIX.put(".mods.xml", "2C: ");
+        POSTFIX_TO_MESSAGE_PREFIX.put(".edition.xml", "2D: ");
+        POSTFIX_TO_MESSAGE_PREFIX.put(".film.xml", "2E: ");
+        POSTFIX_TO_MESSAGE_PREFIX.put(".jpylyzer.xml", "2B: ");
+
+        this.documentCache = documentCache;
+        this.resultCollector = resultCollector;
+
     }
 
     @Override
