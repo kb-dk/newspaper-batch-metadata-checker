@@ -124,7 +124,7 @@ public class JpylyzingEventHandler extends InjectingTreeEventHandler {
         }
     }
 
-    private String getJpylyzerName(String jp2Name) {
+    protected String getJpylyzerName(String jp2Name) {
         return jp2Name.replaceFirst("\\.jp2$", ".jpylyzer.xml");
     }
 
