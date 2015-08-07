@@ -20,8 +20,6 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.Properties;
-
 /** Test Metadata checker */
 public class MetadataCheckerComponentTest {
 
