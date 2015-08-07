@@ -51,7 +51,7 @@ public class PageModsTest {
         InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("assumed-valid-structure.xml");
         goodBatchXmlStructure = DOM.streamToDOM(is);
         attributeConfigs = new HashMap<>();
-        attributeConfigs.put(".mods.xml",new AttributeSpec(".mods.xml","mods-3-1.xsd","mods.sch","2C: ","metadata"));
+        attributeConfigs.put(".mods.xml",new AttributeSpec(".mods.xml", "mods-3-1.xsd", "mods.sch","2C: ","metadata"));
 
     }
     

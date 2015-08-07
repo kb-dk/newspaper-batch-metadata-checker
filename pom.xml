@@ -14,6 +14,7 @@
 
     <modules>
         <module>newspaper-batch-metadata-checker-component</module>
+        <module>newspaper-batch-metadata-checker-checkers</module>
     </modules>
 
     <repositories>
@@ -28,6 +29,43 @@
             </snapshots>
         </repository>
     </repositories>
+
+    <dependencyManagement>
+        <dependencies>
+            <!--schematron. This must be the first dependency, reason unknown-->
+            <dependency>
+                <groupId>com.phloc</groupId>
+                <artifactId>phloc-schematron</artifactId>
+                <version>2.7.1</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>dk.statsbiblioteket.newspaper</groupId>
+                <artifactId>tree-processor-runnable-component</artifactId>
+                <version>2.10-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>dk.statsbiblioteket.newspaper</groupId>
+                <artifactId>newspaper-autonomous-component</artifactId>
+                <version>2.10-SNAPSHOT</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>dk.statsbiblioteket.newspaper</groupId>
+                <artifactId>newspaper-mfpak-integration</artifactId>
+                <version>2.3-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>1.9.5</version>
+            </dependency>
+
+        </dependencies>
+
+    </dependencyManagement>
 
 
 

@@ -27,7 +27,7 @@ public class AltoValidationTest {
     public void setUp() {
         resultCollector = new ResultCollector("test", "test");
         attributeConfigs = new HashMap<>();
-        attributeConfigs.put(".alto.xml",new AttributeSpec(".alto.xml","alto-v2.0.xsd","alto.sch","2J: ","metadata"));
+        attributeConfigs.put(".alto.xml",new AttributeSpec(".alto.xml", "alto-v2.0.xsd", "alto.sch","2J: ","metadata"));
 
 
     }
@@ -171,7 +171,7 @@ public class AltoValidationTest {
             @Override
             public InputStream getData() throws IOException {
                 return Thread.currentThread().getContextClassLoader().getResourceAsStream(
-                        "scratch/B400022028240-RT1/400022028240-14/1795-06-01/AdresseContoirsEfterretninger-1795-06-01-0006.alto.xml");
+                        "AdresseContoirsEfterretninger-1795-06-01-0006.alto.xml");
             }
 
             @Override

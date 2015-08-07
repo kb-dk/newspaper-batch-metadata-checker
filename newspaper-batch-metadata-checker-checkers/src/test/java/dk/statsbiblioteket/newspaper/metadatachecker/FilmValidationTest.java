@@ -25,7 +25,7 @@ public class FilmValidationTest {
     @BeforeTest
     public void setUp() {
         resultCollector = new ResultCollector("test", "test");
-        attributeConfigs.put(".film.xml",new AttributeSpec(".film.xml","film.xsd","film.sch","2E: ","metadata"));
+        attributeConfigs.put(".film.xml",new AttributeSpec(".film.xml", "film.xsd", "film.sch","2E: ","metadata"));
     }
 
     @Test

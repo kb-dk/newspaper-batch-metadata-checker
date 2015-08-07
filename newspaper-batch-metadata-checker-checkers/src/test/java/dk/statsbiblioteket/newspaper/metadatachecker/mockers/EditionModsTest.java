@@ -48,7 +48,7 @@ public class EditionModsTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        attributeConfigs.put(".edition.xml",new AttributeSpec(".edition.xml","mods-3-1.xsd","edition-mods.sch","2D: ","metadata"));
+        attributeConfigs.put(".edition.xml",new AttributeSpec(".edition.xml", "mods-3-1.xsd", "edition-mods.sch","2D: ","metadata"));
     }
 
     @BeforeMethod

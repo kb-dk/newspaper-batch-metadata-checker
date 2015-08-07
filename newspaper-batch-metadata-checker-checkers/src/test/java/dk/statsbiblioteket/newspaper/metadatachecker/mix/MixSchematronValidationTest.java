@@ -30,7 +30,7 @@ public class MixSchematronValidationTest {
     @BeforeTest
     public void setUp() {
         resultCollector = new ResultCollector("test", "test");
-        attributeConfigs.put(".mix.xml",new AttributeSpec(".mix.xml","mix.xsd","mix.sch","2K: ","metadata"));
+        attributeConfigs.put(".mix.xml",new AttributeSpec(".mix.xml", "mix.xsd", "mix.sch","2K: ","metadata"));
 
     }
 
