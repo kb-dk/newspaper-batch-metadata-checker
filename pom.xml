@@ -15,6 +15,7 @@
     <modules>
         <module>newspaper-batch-metadata-checker-component</module>
         <module>newspaper-batch-metadata-checker-checkers</module>
+        <module>newspaper-batch-metadata-checker-common</module>
     </modules>
 
     <repositories>

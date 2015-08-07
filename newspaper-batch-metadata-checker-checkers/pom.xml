@@ -14,16 +14,11 @@
 
 
     <dependencies>
-        <!--schematron. This must be the first dependency, reason unknown-->
-        <dependency>
-            <groupId>com.phloc</groupId>
-            <artifactId>phloc-schematron</artifactId>
-        </dependency>
-
 
         <dependency>
             <groupId>dk.statsbiblioteket.newspaper</groupId>
-            <artifactId>tree-processor-runnable-component</artifactId>
+            <artifactId>newspaper-batch-metadata-checker-common</artifactId>
+            <version>1.14-SNAPSHOT</version>
         </dependency>
 
         <dependency>
