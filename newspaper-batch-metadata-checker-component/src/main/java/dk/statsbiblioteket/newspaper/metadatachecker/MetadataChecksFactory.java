@@ -141,7 +141,7 @@ public class MetadataChecksFactory
         return treeEventHandlers;
     }
 
-    static Map<String, AttributeSpec> getAttributeValidationConfig() {
+    public static Map<String, AttributeSpec> getAttributeValidationConfig() {
         Map<String, AttributeSpec> attributeConfigs = new HashMap<>();
         attributeConfigs.put(".alto.xml",new AttributeSpec(".alto.xml", "alto-v2.0.xsd", "alto.sch","2J: ","metadata"));
         attributeConfigs.put(".mix.xml",new AttributeSpec(".mix.xml", "mix.xsd", "mix.sch","2K: ","metadata"));
