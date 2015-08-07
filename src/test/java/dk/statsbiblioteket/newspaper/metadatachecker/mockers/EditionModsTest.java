@@ -4,6 +4,7 @@ import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.eventhandlers.DefaultTreeEventHandler;
+import dk.statsbiblioteket.newspaper.metadatachecker.AttributeSpec;
 import dk.statsbiblioteket.newspaper.metadatachecker.EditionModsEventHandler;
 import dk.statsbiblioteket.newspaper.metadatachecker.SchematronValidatorEventHandler;
 import dk.statsbiblioteket.newspaper.metadatachecker.caches.DocumentCache;
@@ -25,6 +26,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.mockito.Matchers.any;
@@ -40,8 +42,16 @@ import static org.testng.Assert.assertTrue;
  * See Appendix 2D – metadata per publication and edition.
  */
 public class EditionModsTest {
-    
-    @BeforeMethod 
+
+    Map<String, AttributeSpec> attributeConfigs = new HashMap<>();
+
+
+    @BeforeMethod
+    public void setUp() throws Exception {
+        attributeConfigs.put(".edition.xml",new AttributeSpec(".edition.xml","mods-3-1.xsd","edition-mods.sch","2D: ","metadata"));
+    }
+
+    @BeforeMethod
     public void nukeBatchContext() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
         Field contexts = BatchContextUtils.class.getDeclaredField("batchContexts");
         contexts.setAccessible(true);
@@ -54,7 +64,7 @@ public class EditionModsTest {
     public void testEditionModsGood() throws SQLException, ParseException {
         DocumentCache documentCache = new DocumentCache();
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
-        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, documentCache);
+        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, documentCache,attributeConfigs);
         BatchContext context = BatchContextUtils.buildBatchContext(getMFPak(), getBatch());
         DefaultTreeEventHandler editionModsEventHandler = new EditionModsEventHandler(resultCollector, context, documentCache);
         AttributeParsingEvent editionEvent = new AttributeParsingEvent(
@@ -85,7 +95,7 @@ public class EditionModsTest {
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
         Batch batch = getBatch();
         DefaultTreeEventHandler schematronValidatorEventHandler = new SchematronValidatorEventHandler(resultCollector,
-                documentCache);
+                documentCache,attributeConfigs);
         BatchContext context = BatchContextUtils.buildBatchContext(getMFPak(), batch);
         DefaultTreeEventHandler editionModsEventHandler = new EditionModsEventHandler(resultCollector, context, documentCache);
         AttributeParsingEvent editionEvent = new AttributeParsingEvent(

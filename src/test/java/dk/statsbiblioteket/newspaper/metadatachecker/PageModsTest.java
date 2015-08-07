@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.mockito.Matchers.anyString;
@@ -43,11 +44,15 @@ import static org.testng.Assert.assertTrue;
  */
 public class PageModsTest {
     private Document goodBatchXmlStructure;
+    private HashMap<String, AttributeSpec> attributeConfigs;
 
     @BeforeTest
     public void setUp() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
         InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("assumed-valid-structure.xml");
         goodBatchXmlStructure = DOM.streamToDOM(is);
+        attributeConfigs = new HashMap<>();
+        attributeConfigs.put(".mods.xml",new AttributeSpec(".mods.xml","mods-3-1.xsd","mods.sch","2C: ","metadata"));
+
     }
     
     @BeforeMethod 
@@ -66,7 +71,7 @@ public class PageModsTest {
     public void testPageModsGoodSch() {
         DocumentCache documentCache = new DocumentCache();
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
-        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, documentCache);
+        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, documentCache,attributeConfigs);
         AttributeParsingEvent modsEvent = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-15-01/AdresseContoirsEfterretninger-1795-06-15-01-0010B.mods.xml") {
             @Override
             public InputStream getData() throws IOException {
@@ -91,7 +96,7 @@ public class PageModsTest {
     public void testPageModsBad1Sch() {
         DocumentCache documentCache = new DocumentCache();
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
-        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, documentCache);
+        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, documentCache,attributeConfigs);
         AttributeParsingEvent modsEvent = new AttributeParsingEvent("AdresseContoirsEfterretninger-1795-06-15-01-0010B.mods.xml") {
             @Override
             public InputStream getData() throws IOException {
@@ -119,7 +124,7 @@ public class PageModsTest {
     public void testPageModsBad2Sch() {
         DocumentCache documentCache = new DocumentCache();
         ResultCollector resultCollector = new ResultCollector("foo", "bar");
-        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, documentCache);
+        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, documentCache,attributeConfigs);
         AttributeParsingEvent modsEvent = new AttributeParsingEvent("AdresseContoirsEfterretninger-1795-06-15-01-0003B.mods.xml") {
             @Override
             public InputStream getData() throws IOException {

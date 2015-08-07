@@ -4,6 +4,7 @@ package dk.statsbiblioteket.newspaper.metadatachecker.mix;
 import dk.statsbiblioteket.medieplatform.autonomous.Batch;
 import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
+import dk.statsbiblioteket.newspaper.metadatachecker.AttributeSpec;
 import dk.statsbiblioteket.newspaper.metadatachecker.caches.DocumentCache;
 import dk.statsbiblioteket.newspaper.metadatachecker.mockers.MixerMockup;
 import dk.statsbiblioteket.newspaper.metadatachecker.SchematronValidatorEventHandler;
@@ -13,6 +14,8 @@ import org.testng.annotations.Test;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
@@ -21,10 +24,14 @@ import static org.testng.Assert.assertTrue;
 public class MixSchematronValidationTest {
 
     private ResultCollector resultCollector = null;
+    Map<String, AttributeSpec> attributeConfigs = new HashMap<>();
+
 
     @BeforeTest
     public void setUp() {
         resultCollector = new ResultCollector("test", "test");
+        attributeConfigs.put(".mix.xml",new AttributeSpec(".mix.xml","mix.xsd","mix.sch","2K: ","metadata"));
+
     }
 
     @Test
@@ -43,7 +50,7 @@ public class MixSchematronValidationTest {
                 film, avisID, publishDate, pictureNumber, batch, 9304, 11408, 400, "7ed748249def3bcaadd825ae17dc817a",15,
                 "microfilm");
 
-        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, documentCache);
+        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, documentCache,attributeConfigs);
         handler.handleAttribute(event);
         assertTrue(resultCollector.isSuccess(), resultCollector.toReport());
     }
@@ -554,7 +561,7 @@ public class MixSchematronValidationTest {
 
     private void handleTestEvent(final String input, ResultCollector resultCollector) {
         DocumentCache documentCache = new DocumentCache();
-        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, documentCache);
+        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, documentCache,attributeConfigs);
         AttributeParsingEvent event = new AttributeParsingEvent("test.mix.xml") {
             @Override
             public InputStream getData() throws IOException {

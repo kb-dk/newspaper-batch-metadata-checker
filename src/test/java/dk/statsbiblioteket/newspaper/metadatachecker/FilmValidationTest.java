@@ -6,6 +6,8 @@ import static org.testng.Assert.assertFalse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import dk.statsbiblioteket.newspaper.metadatachecker.caches.DocumentCache;
 import org.testng.annotations.BeforeTest;
@@ -17,10 +19,13 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributePar
 
 public class FilmValidationTest {
     private ResultCollector resultCollector = null;
+    Map<String, AttributeSpec> attributeConfigs = new HashMap<>();
+
 
     @BeforeTest
     public void setUp() {
         resultCollector = new ResultCollector("test", "test");
+        attributeConfigs.put(".film.xml",new AttributeSpec(".film.xml","film.xsd","film.sch","2E: ","metadata"));
     }
 
     @Test
@@ -355,7 +360,7 @@ public class FilmValidationTest {
 
     private void handleTestEvent(final String input, ResultCollector resultCollector) {
         DocumentCache documentCache = new DocumentCache();
-        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, documentCache);
+        SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, documentCache,attributeConfigs);
         AttributeParsingEvent event = new AttributeParsingEvent("test.film.xml") {
             @Override
             public InputStream getData() throws IOException {

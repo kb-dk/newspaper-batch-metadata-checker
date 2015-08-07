@@ -15,8 +15,10 @@ import org.w3c.dom.Document;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /** A factory for checks to do on metadata. */
@@ -93,6 +95,7 @@ public class MetadataChecksFactory
         ArrayList<TreeEventHandler> treeEventHandlers = new ArrayList<>();
         DocumentCache documentCache = new DocumentCache();
 
+        Map<String, AttributeSpec> attributeConfigs = getAttributeValidationConfig();
 
         if (atNinestars) {
             if (!disabledChecks.contains(Checks.CHECKSUM)) {
@@ -105,10 +108,10 @@ public class MetadataChecksFactory
             }
         }
         if (!disabledChecks.contains(Checks.SCHEMA_VALIDATOR)) {
-            treeEventHandlers.add(new SchemaValidatorEventHandler(resultCollector, documentCache));
+            treeEventHandlers.add(new SchemaValidatorEventHandler(resultCollector, documentCache, attributeConfigs));
         }
         if (!disabledChecks.contains(Checks.SCHEMATRON)) {
-            treeEventHandlers.add(new SchematronValidatorEventHandler(resultCollector, documentCache));
+            treeEventHandlers.add(new SchematronValidatorEventHandler(resultCollector, documentCache, attributeConfigs));
         }
         if (!disabledChecks.contains(Checks.MODS_XPATH)) {
             treeEventHandlers.add(new ModsXPathEventHandler(resultCollector,
@@ -136,5 +139,16 @@ public class MetadataChecksFactory
         }
 
         return treeEventHandlers;
+    }
+
+    static Map<String, AttributeSpec> getAttributeValidationConfig() {
+        Map<String, AttributeSpec> attributeConfigs = new HashMap<>();
+        attributeConfigs.put(".alto.xml",new AttributeSpec(".alto.xml","alto-v2.0.xsd","alto.sch","2J: ","metadata"));
+        attributeConfigs.put(".mix.xml",new AttributeSpec(".mix.xml","mix.xsd","mix.sch","2K: ","metadata"));
+        attributeConfigs.put(".mods.xml",new AttributeSpec(".mods.xml","mods-3-1.xsd","mods.sch","2C: ","metadata"));
+        attributeConfigs.put(".edition.xml",new AttributeSpec(".edition.xml","mods-3-1.xsd","edition-mods.sch","2D: ","metadata"));
+        attributeConfigs.put(".film.xml",new AttributeSpec(".film.xml","film.xsd","film.sch","2E: ","metadata"));
+        attributeConfigs.put(".jpylyzer.xml",new AttributeSpec(".jpylyzer.xml","jpylyzer.xsd","sb-jp2.sch","2B: ","jp2file"));
+        return attributeConfigs;
     }
 }
