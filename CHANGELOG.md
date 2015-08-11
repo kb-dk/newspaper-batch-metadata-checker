@@ -1,3 +1,6 @@
+1.14
+* Split into modules. The produces autonomous component is now called newspaper-batch-metadata-checker-component rather than newspaper-batch-metadata-checker
+
 1.13
 * Use newest version of item event framework. No functional changes for this module.
 * Configuration has been extended and changed and example config has been updated. Please update your configuration files.
