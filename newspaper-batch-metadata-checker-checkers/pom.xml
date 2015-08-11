@@ -18,7 +18,7 @@
         <dependency>
             <groupId>dk.statsbiblioteket.newspaper</groupId>
             <artifactId>newspaper-batch-metadata-checker-common</artifactId>
-            <version>1.14-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>

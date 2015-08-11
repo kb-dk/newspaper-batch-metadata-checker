@@ -17,7 +17,7 @@
         <dependency>
             <groupId>dk.statsbiblioteket.newspaper</groupId>
             <artifactId>newspaper-batch-metadata-checker-checkers</artifactId>
-            <version>1.14-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <!--schematron. This must be the first dependency, reason unknown-->
         <dependency>
