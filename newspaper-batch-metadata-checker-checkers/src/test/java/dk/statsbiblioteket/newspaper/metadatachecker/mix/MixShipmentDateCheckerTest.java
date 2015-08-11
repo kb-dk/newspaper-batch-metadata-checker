@@ -7,6 +7,7 @@ import dk.statsbiblioteket.newspaper.metadatachecker.mockers.MixerMockup;
 import dk.statsbiblioteket.newspaper.metadatachecker.checker.XmlAttributeChecker;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
 import dk.statsbiblioteket.util.xml.DOM;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.w3c.dom.Document;
@@ -26,14 +27,13 @@ public class MixShipmentDateCheckerTest {
 
     private ResultCollector resultCollector = null;
 
-    @BeforeTest
-    public void setUp() {
+    @BeforeMethod
+    public void setupResultCollector() {
         resultCollector = new ResultCollector("test", "test");
     }
 
     @Test
     public void testXpathValidationScannedDate() throws ParseException, SQLException, IOException {
-        setUp();
         final String batchId = "400022028241";
         final String film = "1";
         final String avisID = "adresseavisen1759";
@@ -64,7 +64,6 @@ public class MixShipmentDateCheckerTest {
 
     @Test
     public void testXpathValidationScannedBeforeShipment() throws ParseException, SQLException, IOException {
-        setUp();
         final String batchId = "400022028241";
         final String film = "1";
         final String avisID = "adresseavisen1759";

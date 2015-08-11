@@ -21,7 +21,7 @@ public class FilmIDAgainstFilmNodenameCheckerTest {
     private FilmIDAgainstFilmNodenameChecker checker;
 
     @BeforeMethod
-    public void setup() {
+    public void initialise() {
         resultCollector = mock(ResultCollector.class);
         XPathSelector xpathSelector = DOM.createXPathSelector("avis",
                 "http://www.statsbiblioteket.dk/avisdigitalisering/microfilm/1/0/");

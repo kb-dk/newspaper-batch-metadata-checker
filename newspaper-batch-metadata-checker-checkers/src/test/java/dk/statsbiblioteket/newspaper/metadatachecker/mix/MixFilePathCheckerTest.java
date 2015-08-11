@@ -6,6 +6,7 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributePar
 import dk.statsbiblioteket.newspaper.metadatachecker.mockers.MixerMockup;
 import dk.statsbiblioteket.newspaper.metadatachecker.checker.XmlAttributeChecker;
 import dk.statsbiblioteket.util.xml.DOM;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.w3c.dom.Document;
@@ -21,14 +22,13 @@ public class MixFilePathCheckerTest {
 
     private ResultCollector resultCollector = null;
 
-    @BeforeTest
-    public void setUp() {
+    @BeforeMethod
+    public void setupResultCollector() {
         resultCollector = new ResultCollector("test", "test");
     }
 
     @Test
     public void testXpathValidationObjectIdentifierWorkshift() throws ParseException, SQLException, IOException {
-        setUp();
         final String batchId = "400022028241";
         final Batch batch = new Batch();
         batch.setBatchID(batchId);
@@ -48,7 +48,6 @@ public class MixFilePathCheckerTest {
 
     @Test
     public void testXpathValidationObjectIdentifierWorkshiftBad() throws ParseException, SQLException, IOException {
-        setUp();
         final String batchId = "400022028241";
         final Batch batch = new Batch();
         batch.setBatchID(batchId);
@@ -71,7 +70,6 @@ public class MixFilePathCheckerTest {
 
     @Test
     public void testXpathValidationObjectIdentifier() throws ParseException, SQLException, IOException {
-        setUp();
         final String batchId = "400022028241";
         final String film = "1";
         final String avisID = "adresseavisen1759";
@@ -105,7 +103,6 @@ public class MixFilePathCheckerTest {
 
     @Test
     public void testXpathValidationObjectIdentifierBad() throws ParseException, SQLException, IOException {
-        setUp();
         final String batchId = "400022028241";
         final String film = "1";
         final String avisID = "adresseavisen1759";
@@ -144,7 +141,6 @@ public class MixFilePathCheckerTest {
 
     @Test
     public void testXpathSourceInformationBad() throws ParseException, SQLException, IOException {
-        setUp();
         final String batchId = "400022028241";
         final String film = "1";
         final String avisID = "adresseavisen1759";
@@ -171,7 +167,6 @@ public class MixFilePathCheckerTest {
 
     @Test
     public void testXpathWorkshiftSourceInformationBad() throws ParseException, SQLException, IOException {
-        setUp();
         final String batchId = "400022028241";
         final Batch batch = new Batch();
         batch.setBatchID(batchId);

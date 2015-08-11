@@ -8,6 +8,7 @@ import dk.statsbiblioteket.newspaper.metadatachecker.AttributeSpec;
 import dk.statsbiblioteket.newspaper.metadatachecker.caches.DocumentCache;
 import dk.statsbiblioteket.newspaper.metadatachecker.mockers.MixerMockup;
 import dk.statsbiblioteket.newspaper.metadatachecker.SchematronValidatorEventHandler;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -27,7 +28,7 @@ public class MixSchematronValidationTest {
     Map<String, AttributeSpec> attributeConfigs = new HashMap<>();
 
 
-    @BeforeTest
+    @BeforeMethod
     public void setUp() {
         resultCollector = new ResultCollector("test", "test");
         attributeConfigs.put(".mix.xml",new AttributeSpec(".mix.xml", "mix.xsd", "mix.sch","2K: ","metadata"));
@@ -36,7 +37,6 @@ public class MixSchematronValidationTest {
 
     @Test
     public void shouldSucceed() {
-        setUp();
         final String batchId = "400022028241";
         final String film = "1";
         final String avisID = "adresseavisen1759";
@@ -118,7 +118,6 @@ public class MixSchematronValidationTest {
                              "  </mix:BasicDigitalObjectInformation>" +
                              "</mix:mix>";
 
-        setUp();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -134,7 +133,6 @@ public class MixSchematronValidationTest {
                              "  </mix:BasicDigitalObjectInformation>" +
                              "</mix:mix>";
 
-        setUp();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -167,7 +165,6 @@ public class MixSchematronValidationTest {
                              "  </mix:BasicDigitalObjectInformation>" +
                              "</mix:mix>";
 
-        setUp();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -184,7 +181,6 @@ public class MixSchematronValidationTest {
                              "  </mix:BasicDigitalObjectInformation>" +
                              "</mix:mix>";
 
-        setUp();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -218,7 +214,6 @@ public class MixSchematronValidationTest {
                              "  </mix:BasicDigitalObjectInformation>" +
                              "</mix:mix>";
 
-        setUp();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -236,7 +231,6 @@ public class MixSchematronValidationTest {
                              "  </mix:BasicImageInformation>" +
                              "</mix:mix>";
 
-        setUp();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -254,7 +248,6 @@ public class MixSchematronValidationTest {
                              "  </mix:BasicImageInformation>" +
                              "</mix:mix>";
 
-        setUp();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -270,7 +263,6 @@ public class MixSchematronValidationTest {
                              "  </mix:ImageCaptureMetadata>" +
                              "</mix:mix>";
 
-        setUp();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -286,7 +278,6 @@ public class MixSchematronValidationTest {
                              "  </mix:ImageCaptureMetadata>" +
                              "</mix:mix>";
 
-        setUp();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -311,7 +302,6 @@ public class MixSchematronValidationTest {
                              "  </mix:ImageCaptureMetadata>" +
                              "</mix:mix>";
 
-        setUp();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -336,7 +326,6 @@ public class MixSchematronValidationTest {
                              "  </mix:ImageCaptureMetadata>" +
                              "</mix:mix>";
 
-        setUp();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -361,7 +350,6 @@ public class MixSchematronValidationTest {
                              "  </mix:ImageCaptureMetadata>" +
                              "</mix:mix>";
 
-        setUp();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -386,7 +374,6 @@ public class MixSchematronValidationTest {
                              "  </mix:ImageCaptureMetadata>" +
                              "</mix:mix>";
 
-        setUp();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -411,7 +398,6 @@ public class MixSchematronValidationTest {
                              "  </mix:ImageCaptureMetadata>" +
                              "</mix:mix>";
 
-        setUp();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -436,7 +422,6 @@ public class MixSchematronValidationTest {
                              "  </mix:ImageCaptureMetadata>" +
                              "</mix:mix>";
 
-        setUp();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -456,7 +441,6 @@ public class MixSchematronValidationTest {
                              "  </mix:ImageAssessmentMetadata>" +
                              "</mix:mix>";
 
-        setUp();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -476,7 +460,6 @@ public class MixSchematronValidationTest {
                              "  </mix:ImageAssessmentMetadata>" +
                              "</mix:mix>";
 
-        setUp();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -496,7 +479,6 @@ public class MixSchematronValidationTest {
                              "  </mix:ImageAssessmentMetadata>" +
                              "</mix:mix>";
 
-        setUp();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -516,7 +498,6 @@ public class MixSchematronValidationTest {
                              "  </mix:ImageAssessmentMetadata>" +
                              "</mix:mix>";
 
-        setUp();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -535,7 +516,6 @@ public class MixSchematronValidationTest {
                              "  </mix:ImageAssessmentMetadata>" +
                              "</mix:mix>";
 
-        setUp();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -554,7 +534,6 @@ public class MixSchematronValidationTest {
                              "  </mix:ImageAssessmentMetadata>" +
                              "</mix:mix>";
 
-        setUp();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }

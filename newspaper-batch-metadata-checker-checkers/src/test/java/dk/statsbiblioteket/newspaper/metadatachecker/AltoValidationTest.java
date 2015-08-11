@@ -5,6 +5,7 @@ import dk.statsbiblioteket.medieplatform.autonomous.ResultCollector;
 import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributeParsingEvent;
 import dk.statsbiblioteket.newspaper.metadatachecker.caches.DocumentCache;
 import dk.statsbiblioteket.newspaper.mfpakintegration.database.MfPakDAO;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -23,8 +24,8 @@ public class AltoValidationTest {
     Map<String, AttributeSpec> attributeConfigs;
     private ResultCollector resultCollector = null;
 
-    @BeforeTest
-    public void setUp() {
+    @BeforeMethod
+    public void initialise() {
         resultCollector = new ResultCollector("test", "test");
         attributeConfigs = new HashMap<>();
         attributeConfigs.put(".alto.xml",new AttributeSpec(".alto.xml", "alto-v2.0.xsd", "alto.sch","2J: ","metadata"));
@@ -94,7 +95,7 @@ public class AltoValidationTest {
     @Test
     public void shouldSucceed2J16() {
         DocumentCache documentCache = new DocumentCache();
-        setUp();
+        initialise();
         SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, documentCache,attributeConfigs);
         AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-01/AdresseContoirsEfterretninger-1795-06-01-0006.alto.xml") {
             @Override
@@ -117,7 +118,7 @@ public class AltoValidationTest {
     @Test
     public void shouldFail2J16() {
         DocumentCache documentCache = new DocumentCache();
-        setUp();
+        initialise();
         SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, documentCache,attributeConfigs);
         AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-01/AdresseContoirsEfterretninger-1795-06-01-0006.alto.xml") {
             @Override
@@ -142,7 +143,7 @@ public class AltoValidationTest {
      @Test
      public void shouldFail2J16DoubleNested() {
          DocumentCache documentCache = new DocumentCache();
-         setUp();
+         initialise();
          SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, documentCache,attributeConfigs);
          AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-01/AdresseContoirsEfterretninger-1795-06-01-0006.alto.xml") {
              @Override
@@ -165,7 +166,7 @@ public class AltoValidationTest {
     @Test
     public void shouldSucceed() {
         DocumentCache documentCache = new DocumentCache();
-        setUp();
+        initialise();
         SchematronValidatorEventHandler handler = new SchematronValidatorEventHandler(resultCollector, documentCache,attributeConfigs);
         AttributeParsingEvent event = new AttributeParsingEvent("B400022028241-RT1/400022028241-14/1795-06-01/AdresseContoirsEfterretninger-1795-06-01-0006.alto.xml") {
             @Override
@@ -193,7 +194,7 @@ public class AltoValidationTest {
                 + "  </Description>"
                 + "</alto>";
 
-        setUp();
+        initialise();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -208,7 +209,7 @@ public class AltoValidationTest {
                 + "  </Description>"
                 + "</alto>";
 
-        setUp();
+        initialise();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -230,7 +231,7 @@ public class AltoValidationTest {
                 + "  </Description>"
                 + "</alto>";
 
-        setUp();
+        initialise();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -254,7 +255,7 @@ public class AltoValidationTest {
                 + "  </Description>"
                 + "</alto>";
 
-        setUp();
+        initialise();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -278,7 +279,7 @@ public class AltoValidationTest {
                 + "  </Description>"
                 + "</alto>";
 
-        setUp();
+        initialise();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -302,7 +303,7 @@ public class AltoValidationTest {
                 + "  </Description>"
                 + "</alto>";
 
-        setUp();
+        initialise();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -318,7 +319,7 @@ public class AltoValidationTest {
                 + "  </Layout>"
                 + "</alto>";
 
-        setUp();
+        initialise();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -334,7 +335,7 @@ public class AltoValidationTest {
                 + "  </Layout>"
                 + "</alto>";
 
-        setUp();
+        initialise();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -350,7 +351,7 @@ public class AltoValidationTest {
                 + "  </Layout>"
                 + "</alto>";
 
-        setUp();
+        initialise();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -366,7 +367,7 @@ public class AltoValidationTest {
                 + "  </Layout>"
                 + "</alto>";
 
-        setUp();
+        initialise();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -389,7 +390,7 @@ public class AltoValidationTest {
                 + "  </Layout>"
                 + "</alto>";
 
-        setUp();
+        initialise();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -412,7 +413,7 @@ public class AltoValidationTest {
                 + "  </Layout>"
                 + "</alto>";
 
-        setUp();
+        initialise();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -435,7 +436,7 @@ public class AltoValidationTest {
                 + "  </Layout>"
                 + "</alto>";
 
-        setUp();
+        initialise();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -458,7 +459,7 @@ public class AltoValidationTest {
                 + "  </Layout>"
                 + "</alto>";
 
-        setUp();
+        initialise();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -481,7 +482,7 @@ public class AltoValidationTest {
                 + "  </Layout>"
                 + "</alto>";
 
-        setUp();
+        initialise();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -504,7 +505,7 @@ public class AltoValidationTest {
                 + "  </Layout>"
                 + "</alto>";
 
-        setUp();
+        initialise();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -527,7 +528,7 @@ public class AltoValidationTest {
                 + "  </Layout>"
                 + "</alto>";
 
-        setUp();
+        initialise();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -550,7 +551,7 @@ public class AltoValidationTest {
                 + "  </Layout>"
                 + "</alto>";
 
-        setUp();
+        initialise();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -573,7 +574,7 @@ public class AltoValidationTest {
                 + "  </Layout>"
                 + "</alto>";
 
-        setUp();
+        initialise();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -596,7 +597,7 @@ public class AltoValidationTest {
                 + "  </Layout>"
                 + "</alto>";
 
-        setUp();
+        initialise();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -619,7 +620,7 @@ public class AltoValidationTest {
                 + "  </Layout>"
                 + "</alto>";
 
-        setUp();
+        initialise();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -642,7 +643,7 @@ public class AltoValidationTest {
                 + "  </Layout>"
                 + "</alto>";
 
-        setUp();
+        initialise();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess());
     }
@@ -665,7 +666,7 @@ public class AltoValidationTest {
                 + "  </Layout>"
                 + "</alto>";
 
-        setUp();
+        initialise();
         handleTestEvent(input, resultCollector);
         assertTrue(resultCollector.isSuccess());
     }

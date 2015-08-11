@@ -47,7 +47,7 @@ public class PageModsTest {
     private HashMap<String, AttributeSpec> attributeConfigs;
 
     @BeforeTest
-    public void setUp() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+    public void initialise() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
         InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("assumed-valid-structure.xml");
         goodBatchXmlStructure = DOM.streamToDOM(is);
         attributeConfigs = new HashMap<>();

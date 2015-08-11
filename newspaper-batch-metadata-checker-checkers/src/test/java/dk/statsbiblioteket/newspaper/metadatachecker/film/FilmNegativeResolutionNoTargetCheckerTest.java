@@ -29,7 +29,7 @@ public class FilmNegativeResolutionNoTargetCheckerTest {
     @BeforeMethod
     public void setup() {
         resultCollector = mock(ResultCollector.class);
-        batchXmlStructure = createBatchXmlStructure();
+        batchXmlStructure = DOM.stringToDOM("<node></node>");
         XPathSelector xpathSelector = DOM.createXPathSelector("avis",
                 "http://www.statsbiblioteket.dk/avisdigitalisering/microfilm/1/0/");
         checker = new FilmNegativeResolutionNoTargetChecker(resultCollector, xpathSelector, batchXmlStructure);
@@ -77,11 +77,6 @@ public class FilmNegativeResolutionNoTargetCheckerTest {
         checker.validate(filmEvent, filmDoc);
         verifyFailure(filmEvent.getName());
         verifyNoMoreInteractions(resultCollector);
-    }
-
-    private Document createBatchXmlStructure() {
-        String batchXmlStructure = "<node></node>";
-        return DOM.stringToDOM(batchXmlStructure);
     }
 
 

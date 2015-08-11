@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import dk.statsbiblioteket.newspaper.metadatachecker.caches.DocumentCache;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -22,8 +23,8 @@ public class FilmValidationTest {
     Map<String, AttributeSpec> attributeConfigs = new HashMap<>();
 
 
-    @BeforeTest
-    public void setUp() {
+    @BeforeMethod
+    public void initialise() {
         resultCollector = new ResultCollector("test", "test");
         attributeConfigs.put(".film.xml",new AttributeSpec(".film.xml", "film.xsd", "film.sch","2E: ","metadata"));
     }
@@ -56,7 +57,6 @@ public class FilmValidationTest {
                 "    <avis:averageDensityNegative>0.12</avis:averageDensityNegative>\n" +
                 "    <avis:dminNegative>0.12</avis:dminNegative>\n" +
                 "</avis:reelMetadata>\n";
-        setUp();
         handleTestEvent(input, resultCollector);
         assertTrue(resultCollector.isSuccess(), resultCollector.toReport());
     }
@@ -89,7 +89,6 @@ public class FilmValidationTest {
                 "    <avis:averageDensityNegative>0.12</avis:averageDensityNegative>\n" +
                 "    <avis:dminNegative>0.12</avis:dminNegative>\n" +
                 "</avis:reelMetadata>\n";
-        setUp();
         handleTestEvent(input, resultCollector);
         assertTrue(resultCollector.isSuccess(), resultCollector.toReport());
     }
@@ -122,7 +121,6 @@ public class FilmValidationTest {
                 "    <avis:averageDensityNegative>0.12</avis:averageDensityNegative>\n" +
                 "    <avis:dminNegative>0.12</avis:dminNegative>\n" +
                 "</avis:reelMetadata>\n";
-        setUp();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess(), resultCollector.toReport());
     }
@@ -155,7 +153,6 @@ public class FilmValidationTest {
                 "    <avis:averageDensityNegative>0.12</avis:averageDensityNegative>\n" +
                 "    <avis:dminNegative>0.12</avis:dminNegative>\n" +
                 "</avis:reelMetadata>\n";
-        setUp();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess(), resultCollector.toReport());
     }
@@ -188,7 +185,6 @@ public class FilmValidationTest {
                 "    <avis:averageDensityNegative>0.12</avis:averageDensityNegative>\n" +
                 "    <avis:dminNegative>0.12</avis:dminNegative>\n" +
                 "</avis:reelMetadata>\n";
-        setUp();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess(), resultCollector.toReport());
     }
@@ -221,7 +217,6 @@ public class FilmValidationTest {
                 "    <avis:averageDensityNegative>0.12</avis:averageDensityNegative>\n" +
                 "    <avis:dminNegative>0.12</avis:dminNegative>\n" +
                 "</avis:reelMetadata>\n";
-        setUp();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess(), resultCollector.toReport());
     }
@@ -254,7 +249,6 @@ public class FilmValidationTest {
                 "    <avis:averageDensityNegative>0.12</avis:averageDensityNegative>\n" +
                 "    <avis:dminNegative>0.12</avis:dminNegative>\n" +
                 "</avis:reelMetadata>\n";
-        setUp();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess(), resultCollector.toReport());
     }
@@ -287,7 +281,6 @@ public class FilmValidationTest {
                 "    <avis:averageDensityNegative>0.12</avis:averageDensityNegative>\n" +
                 "    <avis:dminNegative>0.12</avis:dminNegative>\n" +
                 "</avis:reelMetadata>\n";
-        setUp();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess(), resultCollector.toReport());
     }
@@ -320,7 +313,6 @@ public class FilmValidationTest {
                 "    <avis:averageDensityNegative>0.12</avis:averageDensityNegative>\n" +
                 "    <avis:dminNegative>0.12</avis:dminNegative>\n" +
                 "</avis:reelMetadata>\n";
-        setUp();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess(), resultCollector.toReport());
     }
@@ -353,7 +345,6 @@ public class FilmValidationTest {
                 "    <avis:averageDensityNegative>0.12</avis:averageDensityNegative>\n" +
                 "    <avis:dminNegative>0.12</avis:dminNegative>\n" +
                 "</avis:reelMetadata>\n";
-        setUp();
         handleTestEvent(input, resultCollector);
         assertFalse(resultCollector.isSuccess(), resultCollector.toReport());
     }

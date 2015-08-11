@@ -53,11 +53,14 @@ public class FilmNewspaperTitlesCheckerTest {
     MfPakDAO dao;
 
     @BeforeTest
-    public void setUp() throws SQLException, ParseException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+    public void setupBatch() {
         batch = new Batch();
         batch.setBatchID("400022028241");
         batch.setRoundTripNumber(1);
-                
+    }
+
+    @BeforeTest
+    public void setupMFPak() throws SQLException, ParseException {
         dao = mock(MfPakDAO.class);
         when(dao.getBatchNewspaperEntities(batch.getBatchID())).thenReturn(getEntities());
         when(dao.getBatchDateRanges(batch.getBatchID())).thenReturn(new ArrayList<NewspaperDateRange>());
@@ -68,7 +71,17 @@ public class FilmNewspaperTitlesCheckerTest {
         when(dao.getBatchOptions(eq(batch.getBatchID()))).thenReturn(options);
         when(dao.getNewspaperID(eq(batch.getBatchID()))).thenReturn("foobar");
         when(dao.getBatchShipmentDate(eq(batch.getBatchID()))).thenReturn(new Date(0));
-        
+    }
+
+    private List<NewspaperEntity> getEntities() throws ParseException {
+        List<NewspaperEntity> entities = new ArrayList<>();
+        entities.add(getNewspaperEntity("1900-06-01", "1920-03-15", 1));
+        entities.add(getNewspaperEntity("1920-03-16", "1920-04-15", 2));
+        entities.add(getNewspaperEntity("1920-04-16", "1920-05-15", 3));
+        entities.add(getNewspaperEntity("1920-05-16", "1930-03-15", 4));
+        entities.add(getNewspaperEntity("1930-03-16", "1930-04-15", 5));
+        entities.add(getNewspaperEntity("1930-04-16", "3050-06-01", 6));
+        return entities;
     }
     
     @BeforeMethod 
@@ -303,16 +316,6 @@ public class FilmNewspaperTitlesCheckerTest {
     }
 
 
-    private List<NewspaperEntity> getEntities() throws ParseException {
-        List<NewspaperEntity> entities = new ArrayList<>();
-        entities.add(getNewspaperEntity("1900-06-01", "1920-03-15", 1));
-        entities.add(getNewspaperEntity("1920-03-16", "1920-04-15", 2));
-        entities.add(getNewspaperEntity("1920-04-16", "1920-05-15", 3));
-        entities.add(getNewspaperEntity("1920-05-16", "1930-03-15", 4));
-        entities.add(getNewspaperEntity("1930-03-16", "1930-04-15", 5));
-        entities.add(getNewspaperEntity("1930-04-16", "3050-06-01", 6));
-        return entities;
-    }
 
     private NewspaperEntity getNewspaperEntity(String start, String end, int title) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

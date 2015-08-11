@@ -23,13 +23,12 @@ public class MixJpylyzerEventHandlerTest {
     private ResultCollector resultCollector = null;
 
     @BeforeTest
-    public void setUp() {
+    public void setupResultCollector() {
         resultCollector = new ResultCollector("test", "test");
     }
 
     @Test
     public void testJpylyzerGood() throws ParseException, SQLException, IOException {
-        setUp();
         final String batchId = "400022028241";
         final String film = "1";
         final String avisID = "adresseavisen1759";
@@ -69,7 +68,6 @@ public class MixJpylyzerEventHandlerTest {
 
     @Test
     public void testJpylyzerSizeBad() throws ParseException, SQLException, IOException {
-        setUp();
         final String batchId = "400022028241";
         final String film = "1";
         final String avisID = "adresseavisen1759";
@@ -114,7 +112,6 @@ public class MixJpylyzerEventHandlerTest {
 
     @Test
     public void testJpylyzerWidthBad() throws ParseException, SQLException, IOException {
-        setUp();
         final String batchId = "400022028241";
         final String film = "1";
         final String avisID = "adresseavisen1759";
@@ -158,7 +155,6 @@ public class MixJpylyzerEventHandlerTest {
 
     @Test
     public void testJpylyzerHeightBad() throws ParseException, SQLException, IOException {
-        setUp();
         final String batchId = "400022028241";
         final String film = "1";
         final String avisID = "adresseavisen1759";

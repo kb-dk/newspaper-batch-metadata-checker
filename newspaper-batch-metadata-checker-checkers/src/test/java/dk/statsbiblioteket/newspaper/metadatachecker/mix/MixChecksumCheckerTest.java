@@ -6,6 +6,7 @@ import dk.statsbiblioteket.medieplatform.autonomous.iterator.common.AttributePar
 import dk.statsbiblioteket.newspaper.metadatachecker.mockers.MixerMockup;
 import dk.statsbiblioteket.newspaper.metadatachecker.checker.XmlAttributeChecker;
 import dk.statsbiblioteket.util.xml.DOM;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.w3c.dom.Document;
@@ -21,14 +22,13 @@ public class MixChecksumCheckerTest {
 
     private ResultCollector resultCollector = null;
 
-    @BeforeTest
-    public void setUp() {
+    @BeforeMethod
+    public void setupResultCollector() {
         resultCollector = new ResultCollector("test", "test");
     }
 
     @Test
     public void testChecksumGood() throws ParseException, SQLException, IOException {
-        setUp();
         final String batchId = "400022028241";
         final String film = "1";
         final String avisID = "adresseavisen1759";
@@ -55,7 +55,6 @@ public class MixChecksumCheckerTest {
 
     @Test
       public void testChecksumBad() throws ParseException, SQLException, IOException {
-          setUp();
           final String batchId = "400022028241";
           final String film = "1";
           final String avisID = "adresseavisen1759";
