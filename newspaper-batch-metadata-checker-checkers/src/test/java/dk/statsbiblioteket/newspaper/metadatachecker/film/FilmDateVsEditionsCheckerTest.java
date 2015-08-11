@@ -26,23 +26,13 @@ public class FilmDateVsEditionsCheckerTest {
     private FilmDateVsEditionsChecker checker;
 
     @BeforeMethod
-    public void mockResultCollector() {
+    public void setupEnvironment() {
         resultCollector = mock(ResultCollector.class);
-    }
-
-    @BeforeMethod(dependsOnMethods = {"mockResultCollector"})
-    private void createBatchXmlStructure() {
         batchXmlStructure = DOM.stringToDOM("<node></node>");
-    }
-
-    @BeforeMethod(dependsOnMethods = {"createBatchXmlStructure","mockResultCollector"})
-    private void initialiseChecker(){
         XPathSelector xpathSelector = DOM.createXPathSelector("avis",
                 "http://www.statsbiblioteket.dk/avisdigitalisering/microfilm/1/0/");
         checker = new FilmDateVsEditionsChecker(resultCollector, xpathSelector, batchXmlStructure);
     }
-
-
 
     @Test
     public void goodCaseTest() {

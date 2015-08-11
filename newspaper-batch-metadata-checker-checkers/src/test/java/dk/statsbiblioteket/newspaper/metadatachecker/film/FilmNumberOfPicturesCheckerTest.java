@@ -26,7 +26,7 @@ public class FilmNumberOfPicturesCheckerTest {
     private FilmNumberOfPicturesChecker checker;
 
     @BeforeMethod
-    public void setup() {
+    public void setupEnvironment() {
         resultCollector = mock(ResultCollector.class);
         batchXmlStructure = DOM.stringToDOM("<node></node>");
         XPathSelector xpathSelector = DOM.createXPathSelector("avis",
